@@ -8,7 +8,6 @@
 
 puts "---------- SEEDING STARTED ----------"
 
-Publication.create([{doi: "10.1038/nphys1170", title: "Quantum tomography: Measured measurement"}])
-Publication.create([{doi: "10.1002/0470841559.ch1", title: "Internetworking LANs and WANs (Second Edition)"}])
+Publication.create([{title: "Information Preservation and Weather Forecasting for Black Holes", pdf_url:"https://arxiv.org/pdf/1401.5761.pdf"}])
 
 puts "---------- SEEDING COMPLETED ----------"
