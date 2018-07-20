@@ -15,9 +15,10 @@ ActiveRecord::Schema.define(version: 2018_07_18_090558) do
   create_table "publications", force: :cascade do |t|
     t.string "doi"
     t.string "title"
-    t.string "storage_path"
+    t.string "subject"
     t.string "pdf_url"
-    t.string "pdf_download_path"
+    t.string "storage_url"
+    t.string "pdf_download_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

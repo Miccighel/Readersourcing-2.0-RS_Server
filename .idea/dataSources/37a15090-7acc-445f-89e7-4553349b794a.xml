@@ -66,7 +66,7 @@
       <Position>3</Position>
       <DataType>varchar|0s</DataType>
     </column>
-    <column id="22" parent="7" name="storage_path">
+    <column id="22" parent="7" name="storage_url">
       <Position>4</Position>
       <DataType>varchar|0s</DataType>
     </column>
@@ -74,7 +74,7 @@
       <Position>5</Position>
       <DataType>varchar|0s</DataType>
     </column>
-    <column id="24" parent="7" name="pdf_download_path">
+    <column id="24" parent="7" name="pdf_download_url">
       <Position>6</Position>
       <DataType>varchar|0s</DataType>
     </column>

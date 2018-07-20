@@ -2,8 +2,12 @@ Rails.application.routes.draw do
 
 	scope format: true, constraints: {format: 'json'} do
 		resources :publications do
-			member do
+			collection do
 				post :fetch
+				get :random
+			end
+			member do
+				get :refresh
 			end
 		end
 		resources :ratings
