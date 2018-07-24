@@ -17,8 +17,11 @@ ActiveRecord::Schema.define(version: 2018_07_18_090558) do
     t.string "title"
     t.string "subject"
     t.string "pdf_url"
-    t.string "storage_url"
+    t.string "pdf_storage_url"
+    t.string "pdf_name"
     t.string "pdf_download_url"
+    t.string "pdf_name_link"
+    t.string "pdf_download_url_link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
