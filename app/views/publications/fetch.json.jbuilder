@@ -1,1 +1,0 @@
-json.pdf_download_url_link @publication.pdf_download_url_link

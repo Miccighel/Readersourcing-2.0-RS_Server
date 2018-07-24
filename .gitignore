@@ -21,7 +21,7 @@
 /storage/*
 
 # Ignore public files in development
-/public/*
+/public/publication/*
 
 .byebug_history
 

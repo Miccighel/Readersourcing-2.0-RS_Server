@@ -22,6 +22,7 @@ class PublicationsController < ApplicationController
 	def create
 		@publication = Publication.new(publication_params)
 		if @publication.save
+			@publication.fetch
 			render :show, status: :created, location: @publication
 		else
 			render json: @publication.errors, status: :unprocessable_entity
@@ -33,11 +34,15 @@ class PublicationsController < ApplicationController
 		if Publication.exists?(pdf_url: publication_params[:pdf_url])
 			@publication = Publication.find_by_pdf_url(publication_params[:pdf_url])
 			@publication.fetch
-			render :fetch, status: :ok, location: @publication
+			render :show, status: :ok, location: @publication
 		else
-			@publication = Publication.create(pdf_url: publication_params[:pdf_url])
-			@publication.fetch
-			render :fetch, status: :created, location: @publication
+			@publication = Publication.new(pdf_url: publication_params[:pdf_url])
+			if @publication.save
+				@publication.fetch
+				render :show, status: :created, location: @publication
+			else
+				render json: @publication.errors, status: :unprocessable_entity
+			end
 		end
 
 	end
@@ -51,6 +56,7 @@ class PublicationsController < ApplicationController
 	# PATCH/PUT /publications/1.json
 	def update
 		if @publication.update(publication_params)
+			@publication.fetch
 			render :show, status: :ok, location: @publication
 		else
 			render json: @publication.errors, status: :unprocessable_entity

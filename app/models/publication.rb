@@ -6,8 +6,9 @@ class Publication < ApplicationRecord
 	has_many :ratings, dependent: :destroy
 
 	def fetch
-
 		load_paths
+
+		# FETCHING OF PDF FILE STARTS HERE
 
 		logger.info "Fetching publication from: #{pdf_url}"
 		FileUtils::mkdir_p absolute_pdf_storage_url
@@ -23,11 +24,11 @@ class Publication < ApplicationRecord
 
 		logger.info "Reading metadata from: #{absolute_pdf_download_url}"
 		reader = PDF::Reader.new(absolute_pdf_download_url)
-		if !reader.info[:Title].blank? and title.blank?
+		unless reader.info[:Title].blank?
 			logger.info "Title found"
 			update_attribute(:title, reader.info[:Title])
 		end
-		if !reader.info[:Subject].blank? and subject.blank?
+		unless reader.info[:Subject].blank?
 			logger.info "Subject found"
 			update_attribute(:subject, reader.info[:Subject])
 		end
