@@ -6,7 +6,17 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-puts "########## SEEDING STARTED ##########"
+puts "@@@@@@@@@@ SEEDING STARTED @@@@@@@@@@"
+
+puts "########## USERS SEEDING STARTED ##########"
+
+puts "---------- CREATING USER 1 ----------"
+
+puts "---------- CREATION COMPLETED ----------"
+
+puts "########## USERS SEEDING COMPLETED ##########"
+
+puts "########## PUBLICATIONS SEEDING STARTED ##########"
 
 p1 = Publication.new({pdf_url: "https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf"})
 p2 = Publication.new({pdf_url: "https://arxiv.org/pdf/1611.04642.pdf"})
@@ -45,7 +55,9 @@ p6.save
 p6.fetch
 puts "---------- FETCHING COMPLETED ----------"
 
-puts "########## SEEDING COMPLETED ##########"
+puts "########## PUBLICATIONS SEEDING COMPLETED ##########"
+
+puts "@@@@@@@@@@ SEEDING COMPLETED @@@@@@@@@@"
 
 
 

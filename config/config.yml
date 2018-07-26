@@ -1,7 +1,7 @@
 production:
 
 development:
-  pdf_x_readersourcing_path: E:\Dropbox\Documenti\Progetti\R@SM\R@SM-PDFxReadersourcing\target\PDFxReadersourcing-1.0-SNAPSHOT-jar-with-dependencies.jar
+  pdf_x_readersourcing_path: E:\Dropbox\Documenti\Progetti\R@SM\R@SM-ReadersourcingServerSide\lib\PDFxReadersourcing-1.0-SNAPSHOT-jar-with-dependencies.jar
   pdf_x_readersourcing_link_suffix: "-Link"
 
 test:
