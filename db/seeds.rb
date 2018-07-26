@@ -12,6 +12,9 @@ puts "########## USERS SEEDING STARTED ##########"
 
 puts "---------- CREATING USER 1 ----------"
 
+mario_rossi = User.new(first_name: "Mario", last_name: "Rossi", email: 'mail@mail.com', password: '123456', password_confirmation: '123456')
+mario_rossi.save
+
 puts "---------- CREATION COMPLETED ----------"
 
 puts "########## USERS SEEDING COMPLETED ##########"

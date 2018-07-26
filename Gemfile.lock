@@ -74,6 +74,7 @@ GEM
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
+    jwt (2.1.0)
     loofah (2.2.2)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -131,6 +132,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (12.3.1)
     ruby-rc4 (0.1.5)
+    simple_command (0.0.9)
     sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -162,10 +164,12 @@ DEPENDENCIES
   byebug
   capistrano-rails
   jbuilder (~> 2.5)
+  jwt
   pdf-reader
   puma (~> 3.11)
   rack-cors
   rails (~> 5.2.0)
+  simple_command
   sqlite3
   tzinfo-data
 

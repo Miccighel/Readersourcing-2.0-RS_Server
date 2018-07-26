@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+	post 'authenticate', to: 'authentication#authenticate'
+
 	scope format: true, constraints: {format: 'json'} do
 		resources :publications do
 			collection do
