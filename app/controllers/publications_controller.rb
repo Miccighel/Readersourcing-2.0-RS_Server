@@ -50,7 +50,7 @@ class PublicationsController < ApplicationController
 	# GET /publications/1/refresh.json
 	def refresh
 		@publication.fetch
-		render :fetch, status: :ok, location: @publication
+		render :show, status: :ok, location: @publication
 	end
 
 	# PATCH/PUT /publications/1.json
