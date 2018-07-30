@@ -4,6 +4,9 @@ class CreatePublications < ActiveRecord::Migration[5.2]
 			t.string :doi
 			t.string :title
 			t.string :subject
+			t.string :author
+			t.string :creator
+			t.string :producer
 			t.string :pdf_url
 			t.string :pdf_storage_url
 			t.string :pdf_name

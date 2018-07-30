@@ -16,6 +16,9 @@ ActiveRecord::Schema.define(version: 2018_07_18_090558) do
     t.string "doi"
     t.string "title"
     t.string "subject"
+    t.string "author"
+    t.string "creator"
+    t.string "producer"
     t.string "pdf_url"
     t.string "pdf_storage_url"
     t.string "pdf_name"
@@ -40,6 +43,7 @@ ActiveRecord::Schema.define(version: 2018_07_18_090558) do
     t.string "first_name"
     t.string "last_name"
     t.string "email"
+    t.string "orcid"
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -65,6 +65,7 @@ class PublicationsController < ApplicationController
 
 	# DELETE /publications/1.json
 	def destroy
+		@publication.remove_files
 		@publication.destroy
 	end
 
@@ -75,6 +76,6 @@ class PublicationsController < ApplicationController
 	end
 
 	def publication_params
-		params.require(:publication).permit(:doi, :title, :subject, :pdf_url)
+		params.require(:publication).permit(:doi, :title, :subject, :creator, :author, :pdf_url)
 	end
 end
