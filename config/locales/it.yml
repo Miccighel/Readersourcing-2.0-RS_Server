@@ -1,0 +1,42 @@
+it:
+  activerecord:
+    errors:
+      models:
+        publication:
+          attributes:
+            doi:
+              taken: "già inserito per un'altra pubblicazione"
+              invalid: "non valido"
+        user:
+          attributes:
+            email:
+              taken: "già scelta da un altro utente"
+            orcid:
+              taken: "già scelto da un altro utente"
+              invalid: "non valido"
+  errors:
+    messages:
+      record_invalid: "validazione fallita: %{errors}"
+      accepted: "deve essere accettato"
+      blank: "non può essere vuoto"
+      confirmation: "non corrispondente"
+      empty: "non può essere vuoto"
+      equal_to: "deve essere uguale a %{count}"
+      even: "deve essere pari"
+      exclusion: "è riservato"
+      greater_than: "deve essere maggiore di %{count}}"
+      greater_than_or_equal_to: "deve essere maggiore o uguale a %{count}"
+      inclusion: "non è incluso nella lista"
+      invalid: "non è valido"
+      less_than: "deve essere minore di %{count}"
+      less_than_or_equal_to: "deve essere minore o uguale a %{count}"
+      not_a_number: "non è un numero"
+      odd: "deve essere dispari"
+      taken: "già utilizzato"
+      too_long: "troppo lungo (massimo %{count} caratteri)"
+      too_short: "troppo corto (minimo %{count} caratteri)"
+      wrong_length: "lunghezza errata (deve essere di {{count}} caratteri)"
+      required: "deve esistere"
+
+
+

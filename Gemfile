@@ -13,6 +13,7 @@ gem 'rack-cors'
 gem 'pdf-reader'
 gem 'jwt'
 gem 'simple_command'
+gem 'nokogiri'
 
 group :development, :test do
 	gem 'sqlite3'

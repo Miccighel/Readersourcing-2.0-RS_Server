@@ -5,18 +5,29 @@ class Publication < ApplicationRecord
 	attr_accessor :absolute_pdf_storage_url, :absolute_pdf_download_url, :absolute_pdf_download_url_link
 	has_many :ratings, dependent: :destroy
 
-	validates :doi, uniqueness: true, allow_nil: true
-	validates :pdf_url, presence: true, uniqueness: true
-	validates :pdf_url, format: {with: URI.regexp}, if: Proc.new {|publication| publication.pdf_url.present?}
+	validates :doi, uniqueness: true, allow_nil: true, format: {with: /\b(10[.][0-9]{4,}(?:[.][0-9]+)*\/(?:(?!["&\'<>])\S)+)\b/}
+	validates :doi, uniqueness: true, allow_nil: true, format: {with: /\b(10[.][0-9]{4,}(?:[.][0-9]+)*\/(?:(?!["&\'<>])[[:graph:]])+)\b/}
+	validates :pdf_url, presence: true, uniqueness: true, format: {with: URI.regexp}, if: Proc.new {|publication| publication.pdf_url.present?}
 
 	def fetch
-		load_paths
 
 		# FETCHING OF PDF FILE STARTS HERE
 
-		logger.info "Fetching publication from: #{pdf_url}"
-		FileUtils::mkdir_p absolute_pdf_storage_url
+		logger.info "Fetching file from: #{pdf_url}"
 		publication = open(pdf_url)
+		if publication.meta['content-disposition'] != nil
+			logger.info "Content disposition meta tag detected. Reading file name from there"
+			filename = publication.meta['content-disposition'].match(/filename=(\"?)(.+)\1/)[2]
+		else
+			logger.info "Content disposition meta tag not detected. Reading file name from url"
+			filename = pdf_url.to_s.split('/')[-1]
+		end
+		if filename == nil
+			raise "Filename is still null, something went wrong"
+		end
+		load_pdf_paths(filename)
+		logger.info "File name: #{filename}"
+		FileUtils::mkdir_p absolute_pdf_storage_url
 		bytes_expected = publication.meta['content-length'].to_i
 		bytes_copied = IO.copy_stream(publication, absolute_pdf_download_url)
 		if bytes_expected != bytes_copied
@@ -31,7 +42,7 @@ class Publication < ApplicationRecord
 		begin
 			if !reader.info[:doi].blank?
 				logger.info "DOI found"
-				update_attribute(:doi, reader.info[:doi])
+				update_attribute(:doi, reader.info[:doi].chomp("doi:"))
 			else
 				update_attribute(:doi, nil)
 			end
@@ -126,8 +137,8 @@ class Publication < ApplicationRecord
 
 	private
 
-	def load_paths
-		pdf_name_without_ext = pdf_url.to_s.split('/')[-1].chomp(".pdf").to_s.gsub('%2', '-')
+	def load_pdf_paths(pdf_name)
+		pdf_name_without_ext = pdf_name.chomp(".pdf").to_s.gsub('%2', '-')
 		pdf_name = "#{pdf_name_without_ext}.pdf"
 		update_attribute(:pdf_storage_url, "publication/#{id}/")
 		update_attribute(:pdf_download_url, "#{pdf_storage_url}#{pdf_name}")

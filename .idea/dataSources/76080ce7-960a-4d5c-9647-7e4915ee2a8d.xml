@@ -220,21 +220,25 @@
       <Position>4</Position>
       <DataType>varchar|0s</DataType>
     </column>
-    <column id="58" parent="12" name="password_digest">
+    <column id="58" parent="12" name="orcid">
       <Position>5</Position>
       <DataType>varchar|0s</DataType>
     </column>
-    <column id="59" parent="12" name="created_at">
+    <column id="59" parent="12" name="password_digest">
       <Position>6</Position>
-      <DataType>datetime|0s</DataType>
-      <NotNull>1</NotNull>
+      <DataType>varchar|0s</DataType>
     </column>
-    <column id="60" parent="12" name="updated_at">
+    <column id="60" parent="12" name="created_at">
       <Position>7</Position>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="61" parent="12">
+    <column id="61" parent="12" name="updated_at">
+      <Position>8</Position>
+      <DataType>datetime|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <key id="62" parent="12">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
