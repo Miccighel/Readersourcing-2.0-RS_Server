@@ -11,6 +11,16 @@ class PublicationsController < ApplicationController
 	def show
 	end
 
+	# POST /publications/lookup.json
+	def lookup
+		@publication = Publication.find_by_pdf_url(publication_params[:pdf_url])
+		if @publication
+			render :show, status: :found, location: @publication
+		else
+			head :not_found
+		end
+	end
+
 	# GET /publications/random.json
 	def random
 		publication_id = Publication.pluck(:id).shuffle[0]

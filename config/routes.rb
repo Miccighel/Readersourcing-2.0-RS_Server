@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 			collection do
 				post :fetch
 				get :random
+				post :lookup
 			end
 			member do
 				get :refresh

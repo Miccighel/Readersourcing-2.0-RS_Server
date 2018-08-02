@@ -14,7 +14,6 @@ class RatingsController < ApplicationController
 	# POST /ratings.json
 	def create
 		@rating = Rating.new(rating_params)
-
 		if @rating.save
 			render :show, status: :created, location: @rating
 		else
