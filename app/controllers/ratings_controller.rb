@@ -13,7 +13,18 @@ class RatingsController < ApplicationController
 
 	# POST /ratings.json
 	def create
-		@rating = Rating.new(rating_params)
+		@rating = Rating.new
+		@rating.score = rating_params[:score]
+		@rating.user = current_user
+		publication = Publication.find_by_pdf_url(rating_params[:pdf_url])
+		if publication
+			@rating.publication = publication
+		else
+			publication = Publication.new
+			publication.pdf_url = rating_params[:pdf_url]
+			publication.save
+			@rating.publication = publication
+		end
 		if @rating.save
 			render :show, status: :created, location: @rating
 		else
@@ -41,15 +52,11 @@ class RatingsController < ApplicationController
 		@rating = Rating.find(params[:id])
 	end
 
-	def set_user
-		@user = User.find(params[:user_id])
-	end
-
 	def set_publication
 		@rating = Publication.find(params[:publication_id])
 	end
 
 	def rating_params
-		params.require(:rating).permit(:score, :user_id, :publication_id)
+		params.require(:rating).permit(:score, :user_id, :publication_id, :pdf_url)
 	end
 end
