@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9a6b8f29-73b1-4a52-8365-fef6e2fbe1bf" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.generators" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.generators" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.rakeTasks" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.rakeTasks" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/R@SM-ReadersourcingServerSide.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/R@SM-ReadersourcingServerSide.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/ratings_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/ratings_controller.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/rating.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/rating.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gemfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile.lock" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,15 +15,15 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@db_seed__R_SM_ReadersourcingServerSide.rcov" NAME="db:seed: R@SM-ReadersourcingServerSide Coverage Results" MODIFIED="1532012701732" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
     <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@Puma__Dev_.rcov" NAME="Puma (Dev) Coverage Results" MODIFIED="1533220070014" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
-    <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@Reset___Migrate.rcov" NAME="Reset + Migrate Coverage Results" MODIFIED="1531830741059" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
     <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@db_reset__R_SM_ReadersourcingServerSide.rcov" NAME="db:reset: R@SM-ReadersourcingServerSide Coverage Results" MODIFIED="1531830873898" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
-    <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@db_migrate__R_SM_ReadersourcingServerSide.rcov" NAME="db:migrate: R@SM-ReadersourcingServerSide Coverage Results" MODIFIED="1532012685697" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
-    <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@Routes.rcov" NAME="Routes Coverage Results" MODIFIED="1532611187592" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
     <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@routes__R_SM_ReadersourcingServerSide.rcov" NAME="routes: R@SM-ReadersourcingServerSide Coverage Results" MODIFIED="1531907210243" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
+    <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@Routes.rcov" NAME="Routes Coverage Results" MODIFIED="1532611187592" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
     <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@Migrate.rcov" NAME="Migrate Coverage Results" MODIFIED="1533216440520" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
+    <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@Reset___Migrate.rcov" NAME="Reset + Migrate Coverage Results" MODIFIED="1531830741059" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
     <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@Seed.rcov" NAME="Seed Coverage Results" MODIFIED="1533216461284" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
+    <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@db_seed__R_SM_ReadersourcingServerSide.rcov" NAME="db:seed: R@SM-ReadersourcingServerSide Coverage Results" MODIFIED="1532012701732" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
+    <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@db_migrate__R_SM_ReadersourcingServerSide.rcov" NAME="db:migrate: R@SM-ReadersourcingServerSide Coverage Results" MODIFIED="1532012685697" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -49,6 +51,13 @@
         <item name="Dev" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="main: schema" type="90513b60:SqliteImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="Dev" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="main: schema" type="90513b60:SqliteImplModel$Schema" />
+        <item name="publications: table" type="ffe0bd85:SqliteImplModel$Table" />
       </path>
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
@@ -126,6 +135,28 @@
         </counts>
       </usages-collector>
     </session>
+    <session id="-1529423170">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="5" />
+          <entry key="project.open.time.5" value="1" />
+          <entry key="project.open.time.6" value="3" />
+          <entry key="project.open.time.7" value="1" />
+          <entry key="project.opened" value="5" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="jbuilder" value="2" />
+          <entry key="rb" value="5" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Ruby" value="7" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FavoritesManager">
     <favorites_list name="R@SM-ReadersourcingServerSide" />
@@ -135,8 +166,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/controllers/publications_controller.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="11" column="7" selection-start-line="11" selection-start-column="7" selection-end-line="11" selection-end-column="7" />
+            <state relative-caret-position="1617">
+              <caret line="77" column="33" lean-forward="true" selection-start-line="77" selection-start-column="33" selection-end-line="77" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -144,7 +175,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/models/publication.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2856">
+            <state relative-caret-position="84">
               <caret line="136" selection-start-line="136" selection-end-line="136" />
             </state>
           </provider>
@@ -162,7 +193,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/controllers/ratings_controller.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
+            <state relative-caret-position="525">
               <caret line="25" selection-start-line="25" selection-end-line="25" />
             </state>
           </provider>
@@ -177,7 +208,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/views/ratings/_rating.json.jbuilder">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="42">
@@ -189,7 +220,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/controllers/users_controller.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="42">
+            <state relative-caret-position="-336">
               <caret line="2" column="50" selection-start-line="2" selection-start-column="50" selection-end-line="2" selection-end-column="50" />
             </state>
           </provider>
@@ -198,8 +229,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/models/user.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="5" column="110" selection-start-line="5" selection-start-column="61" selection-end-line="5" selection-end-column="110" />
+            <state relative-caret-position="189">
+              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
             </state>
           </provider>
         </entry>
@@ -217,12 +248,21 @@
         <entry file="file://$PROJECT_DIR$/app/controllers/authentication_controller.rb">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="84">
-              <caret line="4" column="24" selection-start-line="4" selection-start-column="24" selection-end-line="4" selection-end-column="24" />
+              <caret line="4" column="24" lean-forward="true" selection-start-line="4" selection-start-column="24" selection-end-line="4" selection-end-column="24" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/commands/authenticate_user.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="63">
+              <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/controllers/application_controller.rb">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="84">
@@ -232,10 +272,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/commands/authorize_api_request.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="693">
+              <caret line="33" selection-start-line="33" selection-end-line="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/json_web_token.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="63">
-              <caret line="3" selection-start-line="3" selection-end-line="3" />
+            <state relative-caret-position="84">
+              <caret line="4" column="52" lean-forward="true" selection-start-line="4" selection-start-column="52" selection-end-line="4" selection-end-column="52" />
             </state>
           </provider>
         </entry>
@@ -243,7 +292,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/db/seeds.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
+            <state relative-caret-position="21">
               <caret line="18" selection-start-line="18" selection-end-line="18" />
             </state>
           </provider>
@@ -415,20 +464,7 @@
               <item name="R@SM-ReadersourcingServerSide" type="b2602c69:ProjectViewProjectNode" />
               <item name="R@SM-ReadersourcingServerSide" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="R@SM-ReadersourcingServerSide" type="b2602c69:ProjectViewProjectNode" />
-              <item name="R@SM-ReadersourcingServerSide" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="R@SM-ReadersourcingServerSide" type="b2602c69:ProjectViewProjectNode" />
-              <item name="R@SM-ReadersourcingServerSide" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="ratings" type="462c0819:PsiDirectoryNode" />
+              <item name="commands" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="R@SM-ReadersourcingServerSide" type="b2602c69:ProjectViewProjectNode" />
@@ -449,20 +485,7 @@
             <path>
               <item name="R@SM-ReadersourcingServerSide" type="b2602c69:ProjectViewProjectNode" />
               <item name="R@SM-ReadersourcingServerSide" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="R@SM-ReadersourcingServerSide" type="b2602c69:ProjectViewProjectNode" />
-              <item name="R@SM-ReadersourcingServerSide" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="publication" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="R@SM-ReadersourcingServerSide" type="b2602c69:ProjectViewProjectNode" />
-              <item name="R@SM-ReadersourcingServerSide" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="publication" type="462c0819:PsiDirectoryNode" />
-              <item name="8" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -478,9 +501,10 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
     <property name="last.edited.regexp" value="10.1594/PANGAEA.726855" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="com.chrisrm.idea.config" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -675,6 +699,11 @@
       <workItem from="1533202363572" duration="3538000" />
       <workItem from="1533213310579" duration="3227000" />
       <workItem from="1533220000082" duration="1427000" />
+      <workItem from="1533558694495" duration="331000" />
+      <workItem from="1533559062005" duration="35000" />
+      <workItem from="1533559114336" duration="690000" />
+      <workItem from="1533559825323" duration="751000" />
+      <workItem from="1533631297370" duration="10144000" />
     </task>
     <servers />
   </component>
@@ -693,7 +722,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="111964000" />
+    <option name="totallyTimeSpent" value="123915000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -708,7 +737,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49924585" visible="true" weight="0.21215352" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49924585" visible="true" weight="0.18336888" />
       <window_info id="Structure" order="1" sideWeight="0.5007542" side_tool="true" weight="0.1818792" />
       <window_info id="Favorites" order="2" sideWeight="0.5007542" side_tool="true" weight="0.1818792" />
       <window_info anchor="bottom" id="Messages" order="0" weight="0.32997763" />
@@ -738,21 +767,7 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/models/file_manager.rb" />
-    <entry file="file://$PROJECT_DIR$/Rakefile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/activerecord-5.2.0/lib/active_record/querying.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="4" column="4" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://C:/Ruby24-x64/lib/ruby/gems/2.4.0/gems/activerecord-5.2.0/lib/active_record/querying.rb" />
     <entry file="file://$APPLICATION_HOME_DIR$/rubystubs24/kernel.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="279">
@@ -770,15 +785,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/log/development.log">
-      <provider selected="true" editor-type-id="LogFileEditorProvider">
-        <state relative-caret-position="-139751" />
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/log/development.log" />
     <entry file="file://$PROJECT_DIR$/app/views/publications/fetch.json.jbuilder" />
-    <entry file="file://$PROJECT_DIR$/log/Execution.log">
-      <provider selected="true" editor-type-id="LogFileEditorProvider" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/log/Execution.log" />
     <entry file="file://$PROJECT_DIR$/public/robots.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="21">
@@ -795,20 +804,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/db/migrate/20180726124710_add_password_digest_to_user.rb" />
     <entry file="file://$PROJECT_DIR$/db/migrate/20180726124746_create_users.rb" />
-    <entry file="file://$PROJECT_DIR$/app/commands/authenticate_user.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="19" column="58" selection-start-line="19" selection-start-column="58" selection-end-line="19" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/commands/authorize_api_request.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="693">
-          <caret line="33" selection-start-line="33" selection-end-line="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/initializers/application_controller_renderer.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
@@ -849,9 +844,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/76080ce7-960a-4d5c-9647-7e4915ee2a8d/console.sql">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/76080ce7-960a-4d5c-9647-7e4915ee2a8d/console.sql" />
     <entry file="file://$PROJECT_DIR$/db/migrate/20180718090329_create_users.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="147">
@@ -876,34 +869,17 @@
     <entry file="file://$PROJECT_DIR$/app/views/publications/index.json.jbuilder">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/publications/show.json.jbuilder">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/publication.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2856">
-          <caret line="136" selection-start-line="136" selection-end-line="136" />
+    <entry file="das://76080ce7-960a-4d5c-9647-7e4915ee2a8d/schema/main/table/ratings">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/publications/_publication.json.jbuilder">
+    <entry file="file://$PROJECT_DIR$/app/models/rating.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="9" column="31" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/users_controller.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" column="50" selection-start-line="2" selection-start-column="50" selection-end-line="2" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/user.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="5" column="110" selection-start-line="5" selection-start-column="61" selection-end-line="5" selection-end-column="110" />
+        <state relative-caret-position="63">
+          <caret line="3" column="27" selection-start-line="3" selection-start-column="27" selection-end-line="3" selection-end-column="27" />
         </state>
       </provider>
     </entry>
@@ -911,27 +887,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="42">
           <caret line="2" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/authentication_controller.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="4" column="24" selection-start-line="4" selection-start-column="24" selection-end-line="4" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/application_controller.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/json_web_token.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
         </state>
       </provider>
     </entry>
@@ -987,45 +942,103 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/ratings/_rating.json.jbuilder">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/publication.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="136" selection-start-line="136" selection-end-line="136" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/publications/_publication.json.jbuilder">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="9" column="31" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/ratings/show.json.jbuilder">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/publications/show.json.jbuilder">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/application_record.rb">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/publications_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="11" column="7" selection-start-line="11" selection-start-column="7" selection-end-line="11" selection-end-column="7" />
+        <state relative-caret-position="1617">
+          <caret line="77" column="33" lean-forward="true" selection-start-line="77" selection-start-column="33" selection-end-line="77" selection-end-column="33" />
         </state>
       </provider>
     </entry>
-    <entry file="das://76080ce7-960a-4d5c-9647-7e4915ee2a8d/schema/main/table/ratings">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/rating.rb">
+    <entry file="file://$PROJECT_DIR$/app/commands/authenticate_user.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="63">
-          <caret line="3" column="27" selection-start-line="3" selection-start-column="27" selection-end-line="3" selection-end-column="27" />
+          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/commands/authorize_api_request.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="693">
+          <caret line="33" selection-start-line="33" selection-end-line="33" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/db/seeds.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
+        <state relative-caret-position="21">
           <caret line="18" selection-start-line="18" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/json_web_token.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="4" column="52" lean-forward="true" selection-start-line="4" selection-start-column="52" selection-end-line="4" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/users_controller.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-336">
+          <caret line="2" column="50" selection-start-line="2" selection-start-column="50" selection-end-line="2" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/user.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/ratings_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
+        <state relative-caret-position="525">
           <caret line="25" selection-start-line="25" selection-end-line="25" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/ratings/_rating.json.jbuilder">
+    <entry file="file://$PROJECT_DIR$/app/controllers/authentication_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
+        <state relative-caret-position="84">
+          <caret line="4" column="24" lean-forward="true" selection-start-line="4" selection-start-column="24" selection-end-line="4" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/application_controller.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
         </state>
       </provider>
     </entry>
