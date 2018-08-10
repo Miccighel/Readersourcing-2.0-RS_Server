@@ -1,6 +1,6 @@
 class PublicationsController < ApplicationController
 
-	before_action :set_publication, only: [:show, :update, :destroy, :refresh]
+	before_action :set_publication, only: [:show, :update, :destroy, :refresh, :is_rated]
 
 	# GET /publications.json
 	def index
@@ -26,6 +26,16 @@ class PublicationsController < ApplicationController
 		publication_id = Publication.pluck(:id).shuffle[0]
 		@publication = Publication.find(publication_id)
 		render :show, status: :ok, location: @publication
+	end
+
+	# GET /publications/1/is_rated.json
+	def is_rated
+		rating = @publication.is_rated(current_user)
+		if rating != nil
+			render rating, status: :ok
+		else
+			head :not_found
+		end
 	end
 
 	# POST /publications.json

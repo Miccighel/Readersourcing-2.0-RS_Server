@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 			end
 			member do
 				get :refresh
+				get :is_rated
 			end
 		end
 		resources :ratings

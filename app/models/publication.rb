@@ -9,6 +9,17 @@ class Publication < ApplicationRecord
 	validates :doi, uniqueness: true, allow_nil: true, format: {with: /\b(10[.][0-9]{4,}(?:[.][0-9]+)*\/(?:(?!["&\'<>])[[:graph:]])+)\b/}
 	validates :pdf_url, presence: true, uniqueness: true, format: {with: URI.regexp}, if: Proc.new {|publication| publication.pdf_url.present?}
 
+	def is_rated(user)
+		logger.info "Starting to look for ratings given by user #{user.id}"
+		self.ratings.each do |rating|
+			if rating.user == user
+				logger.info "Rating given by user #{user.id} found"
+				return rating
+			end
+		end
+		nil
+	end
+
 	def fetch
 
 		# FETCHING OF PDF FILE STARTS HERE
