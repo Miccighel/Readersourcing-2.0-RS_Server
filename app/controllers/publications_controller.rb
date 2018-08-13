@@ -1,6 +1,7 @@
 class PublicationsController < ApplicationController
 
 	before_action :set_publication, only: [:show, :update, :destroy, :refresh, :is_rated]
+	before_action :set_error_manager, only: [:lookup, :is_rated]
 
 	# GET /publications.json
 	def index
@@ -17,7 +18,8 @@ class PublicationsController < ApplicationController
 		if @publication
 			render :show, status: :found, location: @publication
 		else
-			head :not_found
+			@error_manager.add_error(I18n.t("models.publications.errors.messages.lookup_error"))
+			render partial: "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
 		end
 	end
 
@@ -34,7 +36,8 @@ class PublicationsController < ApplicationController
 		if rating != nil
 			render rating, status: :ok
 		else
-			head :not_found
+			@error_manager.add_error(I18n.t("models.publications.errors.messages.is_rated_error"))
+			render partial: "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
 		end
 	end
 
@@ -93,6 +96,10 @@ class PublicationsController < ApplicationController
 
 	def set_publication
 		@publication = Publication.find(params[:id])
+	end
+
+	def set_error_manager
+		@error_manager = ErrorManager.new
 	end
 
 	def publication_params
