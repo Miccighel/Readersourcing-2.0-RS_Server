@@ -3,6 +3,8 @@ class PublicationsController < ApplicationController
 	before_action :set_publication, only: [:show, :update, :destroy, :refresh, :is_rated]
 	before_action :set_error_manager, only: [:lookup, :is_rated]
 
+	skip_before_action :authenticate_request, only: :rate
+
 	# GET /publications.json
 	def index
 		@publications = Publication.all
@@ -45,7 +47,7 @@ class PublicationsController < ApplicationController
 	def create
 		@publication = Publication.new(publication_params)
 		if @publication.save
-			@publication.fetch
+			@publication.fetch rating_data(@publication)
 			render :show, status: :created, location: @publication
 		else
 			render json: @publication.errors, status: :unprocessable_entity
@@ -56,12 +58,12 @@ class PublicationsController < ApplicationController
 	def fetch
 		if Publication.exists?(pdf_url: publication_params[:pdf_url])
 			@publication = Publication.find_by_pdf_url(publication_params[:pdf_url])
-			@publication.fetch
+			@publication.fetch rating_data(@publication)
 			render :show, status: :ok, location: @publication
 		else
 			@publication = Publication.new(pdf_url: publication_params[:pdf_url])
 			if @publication.save
-				@publication.fetch
+				@publication.fetch rating_data(@publication)
 				render :show, status: :created, location: @publication
 			else
 				render json: @publication.errors, status: :unprocessable_entity
@@ -76,10 +78,19 @@ class PublicationsController < ApplicationController
 		render :show, status: :ok, location: @publication
 	end
 
+	# GET /rate/:pubId/:authToken
+	def rate
+		@publication = Publication.find(params[:pubId])
+		@encrypted_auth_token = decrypt params[:authToken]
+		puts "Publication: #{@publication}"
+		puts "Encrypted Auth Token: #{@encrypted_auth_token}"
+		# User.find(decoded_auth_token[:user_id]) if decoded_auth_token
+	end
+
 	# PATCH/PUT /publications/1.json
 	def update
 		if @publication.update(publication_params)
-			@publication.fetch
+			@publication.fetch rating_data(@publication)
 			render :show, status: :ok, location: @publication
 		else
 			render json: @publication.errors, status: :unprocessable_entity
@@ -93,6 +104,14 @@ class PublicationsController < ApplicationController
 	end
 
 	private
+
+	def rating_data(publication)
+		rating_data  = Hash.new
+		rating_data[:authToken] = encrypt request.headers["Authorization"]
+		rating_data[:pubId] = publication.id
+		rating_data[:url] = rate_url(rating_data[:pubId], rating_data[:authToken])
+		rating_data
+	end
 
 	def set_publication
 		@publication = Publication.find(params[:id])

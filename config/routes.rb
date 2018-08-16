@@ -5,9 +5,10 @@ Rails.application.routes.draw do
 	scope format: true, constraints: {format: 'json'} do
 		resources :publications do
 			collection do
-				post :fetch
 				get :random
 				post :lookup
+				post :fetch
+				get :rate
 			end
 			member do
 				get :refresh
@@ -17,5 +18,7 @@ Rails.application.routes.draw do
 		resources :ratings
 		resources :users
 	end
+
+	get 'rate/:pubId/:authToken/', to: 'publications#rate', as: :rate, constraints: {:format => 'html'}
 
 end

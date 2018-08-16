@@ -20,7 +20,7 @@ class Publication < ApplicationRecord
 		nil
 	end
 
-	def fetch
+	def fetch(rating_data)
 
 		# FETCHING OF PDF FILE STARTS HERE
 
@@ -127,9 +127,13 @@ class Publication < ApplicationRecord
 			logger.info "with options:"
 			logger.info "-pIn: #{absolute_pdf_download_url}"
 			logger.info "-pOut: #{absolute_pdf_storage_url}"
+			logger.info "-u: #{rating_data[:url]}"
+			logger.info "-c: Click here"
+			logger.info "-pId: #{rating_data[:pubId]}"
+			logger.info "-a: #{rating_data[:authToken]}"
 			logger.info "Complete command:"
-			logger.info "java -jar #{APP_CONFIG['pdf_x_readersourcing_path']} -pIn #{absolute_pdf_download_url} -pOut #{absolute_pdf_storage_url} "
-			output = %x( java -jar #{APP_CONFIG['pdf_x_readersourcing_path']} -pIn #{absolute_pdf_download_url} -pOut #{absolute_pdf_storage_url} )
+			logger.info "java -jar #{APP_CONFIG['pdf_x_readersourcing_path']} -pIn #{absolute_pdf_download_url} -pOut #{absolute_pdf_storage_url} -u #{rating_data[:url]} -c \"Click here\""
+			output = %x( java -jar #{APP_CONFIG['pdf_x_readersourcing_path']} -pIn #{absolute_pdf_download_url} -pOut #{absolute_pdf_storage_url} -u #{rating_data[:url]} -c "Click here")
 			logger.info output
 			logger.info "PDFxReadersourcing execution completed"
 			File.delete(absolute_pdf_download_url)
