@@ -13,6 +13,5 @@
 #= require parsleyjs/dist/parsley.min
 #= require parsleyjs/dist/i18n/it
 #= require general
-#= require rating
-#= require_tree.
+#= require_tree
 #= require_self

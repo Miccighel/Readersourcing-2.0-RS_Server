@@ -1,5 +1,8 @@
 class ApplicationController < ActionController::API
 
+	include ::ActionView::Layouts
+	include ::ActionController::RequestForgeryProtection
+
 	before_action :authenticate_request
 	attr_reader :current_user
 

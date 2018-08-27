@@ -22,6 +22,7 @@ Rails.application.routes.draw do
 		resources :users
 	end
 
+	post 'load', to: 'ratings#load', as: :load, constraints: {:format => 'html'}
 	get 'rate/:pubId/:authToken/', to: 'ratings#rate', as: :rate, constraints: {:format => 'html'}
 
 end

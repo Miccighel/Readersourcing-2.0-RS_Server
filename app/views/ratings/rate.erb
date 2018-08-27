@@ -1,15 +1,3 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
-	<%= stylesheet_link_tag 'application', media: 'all' %>
-</head>
-<body>
 <section id="rating-sect" class="bar bg-gray-dark no-mb color-white">
 	<div class="container">
 		<div class="row">
@@ -18,35 +6,35 @@
 				<p class="lead mb-0">Assegna un voto a questa pubblicazione.</p>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-md-12 text-center">
-				<input
-					id="rating-slider"
-					data-slider-id='ratingSlider'
-					data-slider-min="0"
-					data-slider-max="100"
-					data-slider-step="1"
-					data-slider-value="50"
-					data-tooltip="hide"
-					title="Rating Slider"
-					/>
+		<%= form_for @rating, url: load_path do |f| %>
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<%=
+						f.text_field :score,
+						             id: 'rating-slider',
+						             "data-slider-id": "ratingSlider",
+						             "data-slider-max": "100",
+						             "data-slider-min": "0",
+						             "data-slider-step": "1",
+						             "data-slider-value": "50",
+						             "data-tooltip": "hide",
+						             "title": "Rating Slider"
+					%>
+					<br/>
+				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-12 text-center mt-3">
-				<h1 id="rating-text"><span id="rating-text-value">50</span></h1>
+			<div class="row">
+				<div class="col-md-12 text-center mt-3">
+					<h1 id="rating-text"><span id="rating-text-value">50</span></h1>
+				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-12 text-center">
-				<button type="button" id="vote-btn" class="btn btn-primary">
-					<i class="fa fa-refresh fa-spin reload-icon"></i>
-					Vota
-				</button>
+			<div class="row">
+				<div class="col-sm-12 text-center">
+					<%= button_tag(type: 'submit', id: "vote-btn", class: "btn btn-primary") do %>
+						<i class="fa fa-refresh fa-spin reload-icon"></i>Vota
+					<% end %>
+				</div>
 			</div>
-		</div>
+		<% end %>
 	</div>
 </section>
-<%= javascript_include_tag 'application' %>
-</body>
-</html>
