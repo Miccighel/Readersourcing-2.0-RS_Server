@@ -20,6 +20,7 @@ class RatingsController < ApplicationController
 		@rating = Rating.new
 		puts "Publication: #{@publication}"
 		puts "Encrypted Auth Token: #{@encrypted_auth_token}"
+		render :rate
 		# User.find(decoded_auth_token[:user_id]) if decoded_auth_token
 	end
 

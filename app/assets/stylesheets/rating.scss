@@ -1,0 +1,17 @@
+/* ////////// GENERAL SECTION ////////// */
+
+body, html {
+    background-color: rgb(85, 85, 85);
+}
+
+/* ////////// VOTE SLIDER SECTION ////////// */
+
+#rating-slider .slider-selection {
+    background: white;
+}
+
+.slider-handle {
+    background-image: -webkit-linear-gradient(top, #467fbf 0%, #467fbf 100%) !important;
+    background-image: -o-linear-gradient(top, #467fbf 0%, #467fbf 100%) !important;
+    background-image: linear-gradient(to bottom, #467fbf 0%, #467fbf 100%) !important;
+}
