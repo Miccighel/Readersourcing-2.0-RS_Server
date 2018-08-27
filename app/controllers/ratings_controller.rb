@@ -2,6 +2,8 @@ class RatingsController < ApplicationController
 
 	before_action :set_rating, only: [:show, :update, :destroy]
 
+	skip_before_action :authenticate_request, only: :rate
+
 	# GET /ratings.json
 	def index
 		@ratings = Rating.all
@@ -9,6 +11,16 @@ class RatingsController < ApplicationController
 
 	# GET /ratings/1.json
 	def show
+	end
+
+	# GET /rate/:pubId/:authToken
+	def rate
+		@publication = Publication.find(params[:pubId])
+		@encrypted_auth_token = decrypt params[:authToken]
+		@rating = Rating.new
+		puts "Publication: #{@publication}"
+		puts "Encrypted Auth Token: #{@encrypted_auth_token}"
+		# User.find(decoded_auth_token[:user_id]) if decoded_auth_token
 	end
 
 	# POST /ratings.json

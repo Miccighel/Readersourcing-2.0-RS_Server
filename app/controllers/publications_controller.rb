@@ -3,8 +3,6 @@ class PublicationsController < ApplicationController
 	before_action :set_publication, only: [:show, :update, :destroy, :refresh, :is_rated]
 	before_action :set_error_manager, only: [:lookup, :is_rated]
 
-	skip_before_action :authenticate_request, only: :rate
-
 	# GET /publications.json
 	def index
 		@publications = Publication.all
@@ -76,15 +74,6 @@ class PublicationsController < ApplicationController
 	def refresh
 		@publication.fetch
 		render :show, status: :ok, location: @publication
-	end
-
-	# GET /rate/:pubId/:authToken
-	def rate
-		@publication = Publication.find(params[:pubId])
-		@encrypted_auth_token = decrypt params[:authToken]
-		puts "Publication: #{@publication}"
-		puts "Encrypted Auth Token: #{@encrypted_auth_token}"
-		# User.find(decoded_auth_token[:user_id]) if decoded_auth_token
 	end
 
 	# PATCH/PUT /publications/1.json

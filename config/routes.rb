@@ -8,17 +8,20 @@ Rails.application.routes.draw do
 				get :random
 				post :lookup
 				post :fetch
-				get :rate
 			end
 			member do
 				get :refresh
 				get :is_rated
 			end
 		end
-		resources :ratings
+		resources :ratings do
+			collection do
+				get :rate
+			end
+		end
 		resources :users
 	end
 
-	get 'rate/:pubId/:authToken/', to: 'publications#rate', as: :rate, constraints: {:format => 'html'}
+	get 'rate/:pubId/:authToken/', to: 'ratings#rate', as: :rate, constraints: {:format => 'html'}
 
 end
