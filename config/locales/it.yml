@@ -36,7 +36,6 @@ it:
         messages:
           lookup_error: "Pubblicazione non disponibile per l'URL corrente."
           is_rated_error: "Non è stato trovato alcun voto espresso dall'utente correntemente collegato per la pubblicazione."
-
   activerecord:
     errors:
       models:
@@ -75,6 +74,9 @@ it:
       too_short: "troppo corto (minimo %{count} caratteri)"
       wrong_length: "lunghezza errata (deve essere di {{count}} caratteri)"
       required: "deve esistere"
-
-
-
+      not_the_same_user: "I dati inseriti non sono quelli dell'utente che ha generato il collegamento all'interno del file PDF. Se sei quell'utente, riprova"
+      rating_already_given: "Hai già assegnato un giudizio alla pubblicazione."
+      rating_unsuccessful: "Qualcosa è andato storto durante l'assegnamento del giudizio. Per favore, riprova."
+  confirmations:
+    messages:
+      rating_successful: "Giudizio assegnato correttamente alla pubblicazione."

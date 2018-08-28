@@ -1,14 +1,14 @@
 <section id="rating-sect" class="bar bg-gray-dark no-mb color-white">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-12 heading text-center">
+			<div class="col-12 heading text-center">
 				<h1>R@SM</h1>
 				<p class="lead mb-0">Assegna un voto a questa pubblicazione.</p>
 			</div>
 		</div>
-		<%= form_for @rating, url: load_path do |f| %>
+		<%= form_for @rating, url: load_path, html: {"data-parsley-validate" => ''} do |f| %>
 			<div class="row">
-				<div class="col-md-12 text-center">
+				<div class="col-12 text-center">
 					<%=
 						f.text_field :score,
 						             id: 'rating-slider',
@@ -24,17 +24,40 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12 text-center mt-3">
+				<div class="col-12 text-center mt-3">
 					<h1 id="rating-text"><span id="rating-text-value">50</span></h1>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-sm-12 text-center">
-					<%= button_tag(type: 'submit', id: "vote-btn", class: "btn btn-primary") do %>
+				<div class="col-12 text-center mt-2">
+					<h4>Valida la tua utenza</h4>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-4 offset-4 text-center">
+					<div class="form-group mt-2">
+						<label for="email">Email</label>
+						<%= email_field_tag "email", "mail@mail.com", class: "form-control form-control-light", id: "email", placeholder: "Email", required: true, data: {"parsley-type":"email"} %>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-4 offset-4 text-center">
+					<div class="form-group mt-2">
+						<label for="email">Password</label>
+						<%= password_field_tag "password", "123456", class: "form-control form-control-light", id: "password", placeholder: "Password", required: true, data: {"parsley-minlength":"6"} %>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12 text-center">
+					<%= button_tag(type: 'submit', id: "vote-btn", class: "btn btn-primary mt-3") do %>
 						<i class="fa fa-refresh fa-spin reload-icon"></i>Vota
 					<% end %>
 				</div>
 			</div>
+			<%= hidden_field_tag "pubId", @publication.id %>
+			<%= hidden_field_tag "userId", @user.id %>
 		<% end %>
 	</div>
 </section>

@@ -15,7 +15,7 @@ gem 'jwt'
 gem 'simple_command'
 gem 'nokogiri'
 
-gem 'sass-rails'
+gem 'sassc'
 gem 'uglifier'
 gem 'coffee-rails'
 
