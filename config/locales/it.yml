@@ -51,6 +51,22 @@ it:
             orcid:
               taken: "già scelto da un altro utente"
               invalid: "non valido"
+  labels:
+    otherwise: "Oppure"
+    try_again: "Riprova"
+    close_page: "Chiudi la pagina"
+    delete_and_rate: "Elimina e riassegna"
+  information:
+    messages:
+      rate: "Assegna un voto a questa pubblicazione."
+      try_again: "Desideri tentare nuovamente?"
+      rate_again: "Desideri riassegnare il giudizio?"
+      mail_confirmation: "Riceverai una conferma via mail."
+      not_the_same_user: "Se sei tale utente, prova nuovamente ad inserire i tuoi dati."
+      validate_user: "Valida la tua utenza"
+  confirmations:
+    messages:
+      rating_successful: "Giudizio assegnato correttamente alla pubblicazione."
   errors:
     messages:
       record_invalid: "validazione fallita: %{errors}"
@@ -74,9 +90,8 @@ it:
       too_short: "troppo corto (minimo %{count} caratteri)"
       wrong_length: "lunghezza errata (deve essere di {{count}} caratteri)"
       required: "deve esistere"
-      not_the_same_user: "I dati inseriti non sono quelli dell'utente che ha generato il collegamento all'interno del file PDF. Se sei quell'utente, riprova"
+      not_the_same_user: "I dati inseriti non sono quelli dell'utente che ha generato il collegamento all'interno del file."
       rating_already_given: "Hai già assegnato un giudizio alla pubblicazione."
       rating_unsuccessful: "Qualcosa è andato storto durante l'assegnamento del giudizio. Per favore, riprova."
-  confirmations:
-    messages:
-      rating_successful: "Giudizio assegnato correttamente alla pubblicazione."
+      unauthorized: "Attenzione, non sei autorizzato a procedere."
+      expired_token: "Il collegamento cliccato contiene un token scaduto. <br/ >Per procedere, devi rigenerare il documento e cliccare sul nuovo collegamento."

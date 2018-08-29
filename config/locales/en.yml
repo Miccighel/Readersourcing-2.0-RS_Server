@@ -36,11 +36,26 @@ en:
         messages:
           lookup_error: "Publication not available for the given URL."
           is_rated_error: "There isn't any rating given to the publication by the logged in user."
+  labels:
+    otherwise: "Otherwise"
+    try_again: "Try again"
+    close_page: "Close page"
+    delete_and_rate: "Delete and rate again"
+  confirmations:
+    messages:
+      rating_successful: "Rating successfully given to the publication."
+  information:
+    messages:
+      rate: "Rate this publication."
+      try_again: "Do you want to try again?"
+      rate_again: "Do you want to give a new rating?"
+      mail_confirmation: "you will get an email confirmation."
+      not_the_same_user: "If you're that user, insert your login data again."
+      validate_user: "Validate yourself"
   errors:
     messages:
       rating_already_given: "You have already rated the publication."
       rating_unsuccessful: "Something went wrong during rating assignment. Please, try again."
-      not_the_same_user: "The data doesn't match with the ones of the user that has created the link inside the PDF file. If you're that user, try again"
-  confirmations:
-    messages:
-      rating_successful: "Rating successfully given to the publication."
+      not_the_same_user: "The data doesn't match with the ones of the user that has created the link inside the file."
+      unauthorized: "Attention, you're not authorized to proceed."
+      expired_token: "The clicked link contains an expired token. <br />To proceed, you must regenerate the document and click the new link."

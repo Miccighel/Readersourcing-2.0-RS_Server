@@ -15,16 +15,29 @@ class RatingsController < ApplicationController
 
     # GET /rate/:pubId/:authToken
     def rate
+        delete_old_rating = params[:delete]
         @publication = Publication.find(params[:pubId])
+        @crypted_auth_token = params[:authToken]
         auth_token = decrypt(params[:authToken])
-        @payload = JsonWebToken.decode(auth_token)
-        @user = User.find(@payload[:user_id])
+        payload = JsonWebToken.decode(auth_token)
+        expiration_time = Time.at payload[:exp]
+        @user = User.find(payload[:user_id])
         @rating = Rating.new
         logger.info "Publication: #{@publication}"
+        logger.info "Crypted Auth Token: #{@crypted_auth_token}"
         logger.info "Auth Token: #{auth_token}"
-        logger.info "Payload: #{@payload}"
+        logger.info "Payload: #{payload}"
+        logger.info "Expiration Time: #{expiration_time}"
+        logger.info "Current Time: #{Time.now}"
         logger.info "User: #{@user}"
-        render :rate
+        if Time.now < expiration_time
+            if delete_old_rating
+                Rating.where(user_id: @user.id, publication_id: @publication.id).destroy_all
+            end
+            render :rate
+        else
+            render :'shared/unauthorized', locals: {message: I18n.t("errors.messages.expired_token")}
+        end
     end
 
     # POST /ratings.json
@@ -50,28 +63,31 @@ class RatingsController < ApplicationController
 
     # POST /load
     def load
-        requesting_user = User.find params[:userId]
+        @crypted_auth_token = params[:cryptedAuthToken]
+        inserted_email = params[:email]
+        inserted_password = params[:password]
         publication = Publication.find params[:pubId]
-        if User.exists?(email: params[:email])
-            logged_user = User.find_by_email params[:email]
-            if requesting_user.id == logged_user.id and requesting_user.email == logged_user.email and BCrypt::Password.new(logged_user.password_digest) == params[:password]
+        requesting_user = User.find params[:userId]
+        if User.exists?(email: inserted_email)
+            logged_user = User.find_by_email inserted_email
+            if requesting_user.id == logged_user.id and requesting_user.email == logged_user.email and BCrypt::Password.new(logged_user.password_digest) == inserted_password
                 if Rating.exists?(user_id: requesting_user.id, publication_id: publication.id)
-                    render :already_given
+                    render :already_given, locals: {pubId: publication.id}
                 else
                     @rating = Rating.new rating_params
                     @rating.publication = publication
                     @rating.user = requesting_user
                     if @rating.save
-                        render :successful
+                        render :successful, locals: {pubId: publication.id}
                     else
-                        render :unsuccessful
+                        render :unsuccessful, locals: {pubId: publication.id}
                     end
                 end
             else
-                render :not_the_same_user
+                render :not_the_same_user, locals: {pubId: publication.id}
             end
         else
-            render :not_the_same_user
+            render :not_the_same_user, locals: {pubId: publication.id}
         end
     end
 

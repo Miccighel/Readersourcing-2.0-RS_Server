@@ -1,0 +1,17 @@
+<section class="bar bg-gray-dark no-mb color-white">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="heading text-center">
+					<h1><%= I18n.t("errors.messages.unauthorized") %></h1>
+					<p class="lead mb-0"><%= raw message %></p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 text-center mt-1">
+				<%= link_to I18n.t("labels.close_page"), "", :onclick => 'window.close();', class: "btn btn-primary" %>
+			</div>
+		</div>
+	</div>
+</section>

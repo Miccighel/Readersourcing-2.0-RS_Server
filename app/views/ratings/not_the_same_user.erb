@@ -4,7 +4,23 @@
 			<div class="col-md-12">
 				<div class="heading text-center">
 					<h1><%= I18n.t("errors.messages.not_the_same_user") %></h1>
+					<p class="lead mb-0"><%= I18n.t("information.messages.not_the_same_user") %></p>
 				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 text-center">
+				<%= link_to tag.button(I18n.t("labels.try_again"), class: 'btn btn-primary'), rate_path(pubId, @crypted_auth_token), method: :get %>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 text-center mt-3">
+				<h4>Oppure</h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 text-center mt-1">
+				<%= link_to I18n.t("labels.close_page"), "", :onclick => 'window.close();', class: "btn btn-primary" %>
 			</div>
 		</div>
 	</div>
