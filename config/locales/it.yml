@@ -67,6 +67,7 @@ it:
   confirmations:
     messages:
       rating_successful: "Giudizio assegnato correttamente alla pubblicazione."
+      password_update_successful: "Aggiornamento della password completato con successo."
   errors:
     messages:
       record_invalid: "validazione fallita: %{errors}"
@@ -95,3 +96,4 @@ it:
       rating_unsuccessful: "Qualcosa è andato storto durante l'assegnamento del giudizio. Per favore, riprova."
       unauthorized: "Attenzione, non sei autorizzato a procedere."
       expired_token: "Il collegamento cliccato contiene un token scaduto. <br/ >Per procedere, devi rigenerare il documento e cliccare sul nuovo collegamento."
+      password_does_not_match: "Le due password inserite non corrispondono. Riprova."

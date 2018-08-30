@@ -45,7 +45,7 @@ class PublicationsController < ApplicationController
 	def create
 		@publication = Publication.new(publication_params)
 		if @publication.save
-			@publication.fetch rating_data(@publication)
+			@publication.fetch encrypted_auth_token
 			render :show, status: :created, location: @publication
 		else
 			render json: @publication.errors, status: :unprocessable_entity
@@ -56,12 +56,12 @@ class PublicationsController < ApplicationController
 	def fetch
 		if Publication.exists?(pdf_url: publication_params[:pdf_url])
 			@publication = Publication.find_by_pdf_url(publication_params[:pdf_url])
-			@publication.fetch rating_data(@publication)
+			@publication.fetch encrypted_auth_token
 			render :show, status: :ok, location: @publication
 		else
 			@publication = Publication.new(pdf_url: publication_params[:pdf_url])
 			if @publication.save
-				@publication.fetch rating_data(@publication)
+				@publication.fetch encrypted_auth_token
 				render :show, status: :created, location: @publication
 			else
 				render json: @publication.errors, status: :unprocessable_entity
@@ -72,14 +72,14 @@ class PublicationsController < ApplicationController
 
 	# GET /publications/1/refresh.json
 	def refresh
-		@publication.fetch
+		@publication.fetch encrypted_auth_token
 		render :show, status: :ok, location: @publication
 	end
 
 	# PATCH/PUT /publications/1.json
 	def update
 		if @publication.update(publication_params)
-			@publication.fetch rating_data(@publication)
+			@publication.fetch encrypted_auth_token
 			render :show, status: :ok, location: @publication
 		else
 			render json: @publication.errors, status: :unprocessable_entity
@@ -94,12 +94,8 @@ class PublicationsController < ApplicationController
 
 	private
 
-	def rating_data(publication)
-		rating_data  = Hash.new
-		rating_data[:authToken] = encrypt request.headers["Authorization"]
-		rating_data[:pubId] = publication.id
-		rating_data[:url] = rate_url(rating_data[:pubId], rating_data[:authToken])
-		rating_data
+	def encrypted_auth_token
+		encrypt request.headers["Authorization"]
 	end
 
 	def set_publication

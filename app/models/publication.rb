@@ -20,7 +20,7 @@ class Publication < ApplicationRecord
 		nil
 	end
 
-	def fetch(rating_data)
+	def fetch(encrypted_auth_token)
 
 		# FETCHING OF PDF FILE STARTS HERE
 
@@ -119,6 +119,8 @@ class Publication < ApplicationRecord
 
 		# EDITING OF PDF FILE WITH PDFxREADERSOURCING STARTS HERE
 
+		rating_data = rating_data encrypted_auth_token
+
 		logger.info "Checking again existence of: #{absolute_pdf_download_url}"
 		if File.exist?(absolute_pdf_download_url)
 			logger.info "File exists"
@@ -172,6 +174,16 @@ class Publication < ApplicationRecord
 
 	def absolute_pdf_download_url_link
 		Rails.public_path.join(pdf_download_url_link)
+	end
+
+	private
+
+	def rating_data(encrypted_auth_token)
+		rating_data  = Hash.new
+		rating_data[:authToken] = encrypted_auth_token
+		rating_data[:pubId] = self.id
+		rating_data[:url] = Rails.application.routes.url_helpers.rate_path(rating_data[:pubId], rating_data[:authToken])
+		rating_data
 	end
 
 end

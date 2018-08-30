@@ -19,7 +19,11 @@ Rails.application.routes.draw do
 				get :rate
 			end
 		end
-		resources :users
+		resources :users do
+            collection do
+                post :password
+            end
+        end
 	end
 
 	post 'load', to: 'ratings#load', as: :load, constraints: {:format => 'html'}

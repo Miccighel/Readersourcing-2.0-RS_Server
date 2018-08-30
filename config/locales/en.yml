@@ -44,6 +44,7 @@ en:
   confirmations:
     messages:
       rating_successful: "Rating successfully given to the publication."
+      password_update_successful: "Password update completed successfully."
   information:
     messages:
       rate: "Rate this publication."
@@ -59,3 +60,4 @@ en:
       not_the_same_user: "The data doesn't match with the ones of the user that has created the link inside the file."
       unauthorized: "Attention, you're not authorized to proceed."
       expired_token: "The clicked link contains an expired token. <br />To proceed, you must regenerate the document and click the new link."
+      password_does_not_match: "The inserted passwords don't match. Please, try again."
