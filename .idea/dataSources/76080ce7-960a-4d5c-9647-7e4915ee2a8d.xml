@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="Dev">
-  <database-model serializer="dbm" rdbms="SQLITE" format-version="4.9">
+  <database-model serializer="dbm" rdbms="SQLITE" format-version="4.11">
     <root id="1">
       <ServerVersion>3.20.1</ServerVersion>
     </root>
@@ -238,7 +238,15 @@
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="62" parent="12">
+    <column id="62" parent="12" name="reset_password_token">
+      <Position>9</Position>
+      <DataType>varchar|0s</DataType>
+    </column>
+    <column id="63" parent="12" name="reset_password_sent_at">
+      <Position>10</Position>
+      <DataType>datetime|0s</DataType>
+    </column>
+    <key id="64" parent="12">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>

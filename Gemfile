@@ -14,6 +14,7 @@ gem 'pdf-reader'
 gem 'jwt'
 gem 'simple_command'
 gem 'nokogiri'
+gem 'mailcatcher'
 
 gem 'sassc'
 gem 'uglifier'

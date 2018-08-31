@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_18_090558) do
+ActiveRecord::Schema.define(version: 2018_08_31_092631) do
 
   create_table "publications", force: :cascade do |t|
     t.string "doi"
@@ -47,6 +47,8 @@ ActiveRecord::Schema.define(version: 2018_07_18_090558) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
   end
 
 end

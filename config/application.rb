@@ -36,5 +36,6 @@ module RSmReadersourcingserverside
     config.api_only = true
 	config.assets.enabled = true
 	config.eager_load_paths << Rails.root.join('lib')
+	config.action_mailer.default_url_options = { host: 'localhost:3000' }
   end
 end

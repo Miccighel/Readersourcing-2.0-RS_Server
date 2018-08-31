@@ -2,7 +2,6 @@ class UsersController < ApplicationController
 
 	skip_before_action :authenticate_request, only: :create
 
-	before_action :set_error_manager, only: [:password]
 	before_action :set_user, only: [:show, :update, :destroy]
 
 	# GET /users.json
@@ -21,23 +20,6 @@ class UsersController < ApplicationController
 			render :show, status: :created, location: @user
 		else
 			render json: @user.errors, status: :unprocessable_entity
-		end
-	end
-
-	# POST /users/password.json
-	def password
-		inserted_password = user_params[:password]
-		inserted_password_confirmation = user_params[:password_confirmation]
-		if inserted_password == inserted_password_confirmation
-			current_user.password = inserted_password
-			if current_user.save
-				render partial: "shared/success", status: :ok, locals: {message: I18n.t("confirmations.messages.password_update_successful")}
-			else
-				render json: @user.errors, status: :unprocessable_entity
-			end
-		else
-			@error_manager.add_error(I18n.t("errors.messages.password_does_not_match"))
-			render partial: "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
 		end
 	end
 

@@ -1,0 +1,7 @@
+<h1>Gentile <%= @user.first_name %>,</h1>
+<p>
+	Per ottenere una nuova password è sufficiente cliccare sul seguente link. Riceverai una mail contenente la password.
+	Per la tua sicurezza, modificala al primo accesso alla piattaforma.
+</p>
+<p><a href="<%= reset_url(email: @user.email, reset_token: @reset_token) %>">Ottieni una nuova password</a></p>
+<p>Il team di R@SM</p>
