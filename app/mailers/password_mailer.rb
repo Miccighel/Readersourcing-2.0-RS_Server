@@ -1,5 +1,16 @@
 class PasswordMailer < ApplicationMailer
 
+	def update(user)
+		@user = user
+		mail(
+			from: 'R@SM <from.example.com>',
+			to: "#{@user.first_name} #{@user.last_name} <#{@user.email}>",
+			subject: 'R@SM - Aggiornamento Password',
+			:template_path => 'passwords',
+			:template_name => 'update'
+		)
+	end
+
 	def forgot(user, reset_token)
 		@user = user
 		@reset_token = reset_token

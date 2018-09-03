@@ -11,6 +11,7 @@ class PasswordsController < ApplicationController
 		if inserted_password == inserted_password_confirmation
 			current_user.password = inserted_password
 			if current_user.save
+				PasswordMailer.update(current_user).deliver
 				render partial: "shared/success", status: :ok, locals: {message: I18n.t("confirmations.messages.password_update_successful")}
 			else
 				render json: current_user.errors, status: :unprocessable_entity
