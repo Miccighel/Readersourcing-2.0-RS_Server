@@ -67,7 +67,7 @@ it:
   confirmations:
     messages:
       rating_successful: "Giudizio assegnato correttamente alla pubblicazione."
-      password_update_successful: "Aggiornamento della password completato con successo."
+      password_update_successful: "La tua password è stata aggiornata con successo."
   errors:
     messages:
       record_invalid: "validazione fallita: %{errors}"
@@ -97,3 +97,28 @@ it:
       unauthorized: "Attenzione, non sei autorizzato a procedere."
       expired_token: "Il collegamento cliccato contiene un token scaduto. <br/ >Per procedere, devi rigenerare il documento e cliccare sul nuovo collegamento."
       password_does_not_match: "Le due password inserite non corrispondono. Riprova."
+  mails:
+    labels:
+      platform_name: "R@SM"
+      dear: "Gentile"
+      cheers: "Saluti"
+      team: "Il Team di R@SM"
+      new_password: "Ottieni una nuova password"
+      view_publication: "Vai alla pubblicazione"
+    subject:
+      password_update: "Aggiornamento Password"
+      password_reset: "Reset Password"
+      password_recovery: "Recupero Password"
+      rating_confirm: "Conferma Assegnamento Giudizio"
+      registration_confirm: "Conferma Registrazione"
+    password:
+      to_get_a_new_one: "Per ottenere una nuova password è sufficiente cliccare sul seguente link. Riceverai una mail contenente la password."
+      edit_first_access: "Per la tua sicurezza, modificala al primo accesso alla piattaforma."
+      reset_successful: "La tua password è stata resettata con successo. Quella nuova è:"
+      update_successful: "La tua password è stata aggiornata con successo."
+    rating:
+      delete_rating: "Ti ricordiamo che puoi eliminare tale giudizio in qualsiasi momento dall'interfaccia."
+      given_rating_1: "Hai assegnato con successo un giudizio pari a"
+      given_rating_2: "alla pubblicazione disponibile al collegamento sottostante."
+    user:
+      registration_successful: "La tua registrazione è stata completata con successo. Benvenuto sulla nostra piattaforma."

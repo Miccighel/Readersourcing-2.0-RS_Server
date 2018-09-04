@@ -5,9 +5,9 @@ class RatingMailer < ApplicationMailer
 		@score = score
 		@link = link
 		mail(
-			from: 'R@SM <from.example.com>',
+			from: "#{I18n.t("mails.labels.platform_name")} <from.example.com>",
 			to: "#{@user.first_name} #{@user.last_name} <#{@user.email}>",
-			subject: 'R@SM - Conferma Assegnamento Giudizio',
+			subject: "#{I18n.t("mails.labels.platform_name")} - #{I18n.t("mails.subject.rating_confirm")}",
 			:template_path => 'ratings',
 			:template_name => 'confirm'
 		)

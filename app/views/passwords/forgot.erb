@@ -1,7 +1,8 @@
-<h1>Gentile <%= @user.first_name %>,</h1>
+<h1><%= I18n.t "mails.labels.dear" %> <%= @user.first_name %>,</h1>
 <p>
-	Per ottenere una nuova password è sufficiente cliccare sul seguente link. Riceverai una mail contenente la password.
-	Per la tua sicurezza, modificala al primo accesso alla piattaforma.
+	<%= I18n.t "mails.password.to_get_a_new_one" %>
+	<%= I18n.t "mails.password.edit_first_access" %>
 </p>
-<p><a href="<%= reset_url(email: @user.email, reset_token: @reset_token) %>">Ottieni una nuova password</a></p>
-<p>Il team di R@SM</p>
+<p><a href="<%= reset_url(email: @user.email, reset_token: @reset_token) %>"><%= I18n.t "mails.labels.new_password" %></a></p>
+<p><%= I18n.t "mails.labels.cheers" %></p>
+<p><%= I18n.t "mails.labels.team" %></p>

@@ -1,7 +1,8 @@
-<h1>Gentile <%= @user.first_name %>,</h1>
+<h1><%= I18n.t "mails.labels.dear" %> <%= @user.first_name %>,</h1>
 <p>
-	Hai assegnato con successo un giudizio pari a <i><%= @score %></i> per la pubblicazione disponibile <a href="<%= @link %>">a questo collegamento</a>.
+	<%= I18n.t "mails.rating.given_rating_1" %><i> <%= @score %> </i><%= I18n.t "mails.rating.given_rating_2" %>
 </p>
-<p>Ti ricordiamo che puoi eliminare tale giudizio in qualsiasi momento dall'interfaccia.</p>
-<p>Saluti,</p>
-<p>Il team di R@SM</p>
+<p><a href="<%= @link %>"></a><%= I18n.t "mails.labels.view_publication" %></p>
+<p><%= I18n.t "mails.rating.delete_rating" %></p>
+<p><%= I18n.t "mails.labels.cheers" %></p>
+<p><%= I18n.t "mails.labels.team" %></p>

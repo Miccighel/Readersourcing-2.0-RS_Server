@@ -1,6 +1,7 @@
-<h1>Gentile <%= @user.first_name %>,</h1>
+<h1><%= I18n.t "mails.labels.dear" %> <%= @user.first_name %>,</h1>
 <p>
-	La tua password è stata resettata con successo. Quella nuova è: <strong><%= @new_password %></strong>
+	<%= I18n.t "mails.password.reset_successful" %> <strong><%= @new_password %></strong>
 </p>
-<p>Ti raccomandiamo di modificarla al primo accesso utile. </p>
-<p>Il team di R@SM</p>
+<p>  <%= I18n.t "mails.password.edit_first_access" %></p>
+<p><%= I18n.t "mails.labels.cheers" %></p>
+<p><%= I18n.t "mails.labels.team" %></p>
