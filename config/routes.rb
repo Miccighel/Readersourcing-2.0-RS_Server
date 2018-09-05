@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 				get :rate
 			end
 		end
+		resources :users
 	end
 
 	post 'load', to: 'ratings#load', as: :load, constraints: {:format => 'html'}

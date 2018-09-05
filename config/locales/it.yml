@@ -68,8 +68,11 @@ it:
     messages:
       rating_successful: "Giudizio assegnato correttamente alla pubblicazione."
       password_update_successful: "La tua password è stata aggiornata con successo."
+      reset_mail_sent: "Mail per il reset della password inviata correttamente. Controlla la tua casella di posta."
+      new_password_mail_sent: "Mail contenente nuova password inviata correttamente. Controlla la tua casella di posta."
   errors:
     messages:
+      invalid_credentials: "Credenziali non valide. Per favore, riprova."
       record_invalid: "validazione fallita: %{errors}"
       accepted: "deve essere accettato"
       blank: "non può essere vuoto"
@@ -97,6 +100,8 @@ it:
       unauthorized: "Attenzione, non sei autorizzato a procedere."
       expired_token: "Il collegamento cliccato contiene un token scaduto. <br/ >Per procedere, devi rigenerare il documento e cliccare sul nuovo collegamento."
       password_does_not_match: "Le due password inserite non corrispondono. Riprova."
+      email_not_present: "Indirizzo mail non individuato. Per favore, controllalo e riprova."
+      invalid_link: "Collegamento non valido o scaduto. Prova a generarne un altro."
   mails:
     labels:
       platform_name: "R@SM"

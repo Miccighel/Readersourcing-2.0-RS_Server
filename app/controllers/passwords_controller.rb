@@ -26,16 +26,16 @@ class PasswordsController < ApplicationController
 	def forgot
 		email = params[:email]
 		if email.blank?
-			@error_manager.add_error('Email not present')
+			@error_manager.add_error(I18n.t("errors.messages.email_not_present"))
 			render partial: "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
 		end
 		user = User.find_by(email: email)
 		if user.present?
 			user.generate_password_token!
 			PasswordMailer.forgot(user, user.reset_password_token).deliver
-			render partial: "shared/success", status: :ok, locals: {message: "Mail per il reset della password inviata correttamente."}
+			render partial: "shared/success", status: :ok, locals: {message: I18n.t("confirmations.messages.reset_mail_sent")}
 		else
-			@error_manager.add_error('Email address not found. Please check and try again.')
+			@error_manager.add_error(I18n.t("errors.messages.email_not_present"))
 			render partial: "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
 		end
 	end
@@ -58,12 +58,12 @@ class PasswordsController < ApplicationController
 			puts new_password
 			if user.reset_password!(new_password)
 				PasswordMailer.reset(user, new_password).deliver
-				render partial: "shared/success", status: :ok, locals: {message: "Mail contenente nuova password inviata correttamente."}
+				render partial: "shared/success", status: :ok, locals: {message: I18n.t("confirmations.messages.new_password_mail_sent")}
 			else
 				render json: user.errors, status: :unprocessable_entity
 			end
 		else
-			render json: {error: ['Link not valid or expired. Try generating a new link.']}, status: :not_found
+			render json: {error: [I18n.t("errors.messages.invalid_link")]}, status: :not_found
 		end
 	end
 
