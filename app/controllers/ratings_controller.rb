@@ -48,6 +48,7 @@ class RatingsController < ApplicationController
 	def create
 		@rating = Rating.new
 		@rating.score = rating_params[:score]
+		@rating.anonymous = rating_params[:anonymous]
 		@rating.user = current_user
 		publication = Publication.find_by_pdf_url(rating_params[:pdf_url])
 		if publication
@@ -122,6 +123,6 @@ class RatingsController < ApplicationController
 	end
 
 	def rating_params
-		params.require(:rating).permit(:score, :user_id, :publication_id, :pdf_url)
+		params.require(:rating).permit(:score, :anonymous, :user_id, :publication_id, :pdf_url)
 	end
 end

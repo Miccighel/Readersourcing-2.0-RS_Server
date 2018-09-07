@@ -29,7 +29,15 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-12 text-center mt-2">
+				<div class="col-12 text-center">
+					<%= f.check_box :anonymous, id: "anonymize-check", class:'form-check-input' %>
+					<label class="form-check-label" for="anonymize-check">
+						<%= I18n.t "labels.anonimyze" %>
+					</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12 text-center mt-3">
 					<h4><%= I18n.t("information.messages.validate_user") %></h4>
 				</div>
 			</div>

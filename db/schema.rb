@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 2018_08_31_092631) do
 
   create_table "ratings", force: :cascade do |t|
     t.integer "score"
+    t.boolean "anonymous", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"

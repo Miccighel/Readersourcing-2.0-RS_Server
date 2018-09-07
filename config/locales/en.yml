@@ -41,6 +41,7 @@ en:
     try_again: "Try again"
     close_page: "Close page"
     delete_and_rate: "Delete and rate again"
+    anonimyze: "Anonymize"
   confirmations:
     messages:
       rating_successful: "Rating successfully given to the publication."
