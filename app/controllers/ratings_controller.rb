@@ -60,6 +60,15 @@ class RatingsController < ApplicationController
 			@rating.publication = publication
 		end
 		if @rating.save
+
+			sm_strategy = SMStrategy.new(@rating)
+			readersourcing = Readersourcing.new(sm_strategy)
+			readersourcing.compute_scores
+
+			true_review_strategy = TrueReviewStrategy.new
+			readersourcing = Readersourcing.new(true_review_strategy)
+			readersourcing.compute_scores
+
 			RatingMailer.confirm(current_user, @rating.score, publication.pdf_url).deliver
 			render :show, status: :created, location: @rating
 		else
@@ -84,6 +93,15 @@ class RatingsController < ApplicationController
 					@rating.publication = publication
 					@rating.user = requesting_user
 					if @rating.save
+
+						sm_strategy = SMStrategy.new(@rating)
+						readersourcing = Readersourcing.new(sm_strategy)
+						readersourcing.compute_scores
+
+						true_review_strategy = TrueReviewStrategy.new
+						readersourcing = Readersourcing.new(true_review_strategy)
+						readersourcing.compute_scores
+
 						RatingMailer.confirm(requesting_user, @rating.score, publication.pdf_url).deliver
 						render :successful, locals: {pubId: publication.id}
 					else

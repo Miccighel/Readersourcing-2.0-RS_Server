@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 				get :random
 				post :lookup
 				post :fetch
+				get :aggregate
 			end
 			member do
 				get :refresh

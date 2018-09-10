@@ -152,6 +152,17 @@ class Publication < ApplicationRecord
 		FileUtils.rm_rf(absolute_pdf_storage_url)
 	end
 
+	def other_users(current_user)
+		other_users = Set.new
+		self.ratings.each do |rating|
+			other_user = rating.user
+			if other_user != current_user
+				other_users.add other_user
+			end
+		end
+		other_users
+	end
+
 	private
 
 	def load_pdf_paths(pdf_name)
@@ -176,10 +187,8 @@ class Publication < ApplicationRecord
 		Rails.public_path.join(pdf_download_url_link)
 	end
 
-	private
-
 	def rating_data(encrypted_auth_token)
-		rating_data  = Hash.new
+		rating_data = Hash.new
 		rating_data[:authToken] = encrypted_auth_token
 		rating_data[:pubId] = self.id
 		rating_data[:url] = Rails.application.routes.url_helpers.rate_path(rating_data[:pubId], rating_data[:authToken])
@@ -187,3 +196,5 @@ class Publication < ApplicationRecord
 	end
 
 end
+
+

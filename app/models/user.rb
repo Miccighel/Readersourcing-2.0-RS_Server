@@ -31,6 +31,10 @@ class User < ApplicationRecord
 		save!
 	end
 
+	def given_rating(publication)
+		Rating.where(user_id: self.id, publication_id: publication.id).first
+	end
+
 	private
 
 	def generate_token

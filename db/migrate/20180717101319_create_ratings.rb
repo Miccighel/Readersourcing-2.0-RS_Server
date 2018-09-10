@@ -3,6 +3,7 @@ class CreateRatings < ActiveRecord::Migration[5.2]
 		create_table :ratings do |t|
 			t.integer :score
 			t.boolean :anonymous, default: false
+			t.decimal :goodness, default: 0.0
 			t.timestamps
 		end
 	end

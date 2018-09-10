@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_31_092631) do
+ActiveRecord::Schema.define(version: 2018_07_18_090558) do
 
   create_table "publications", force: :cascade do |t|
     t.string "doi"
@@ -25,6 +25,8 @@ ActiveRecord::Schema.define(version: 2018_08_31_092631) do
     t.string "pdf_download_url"
     t.string "pdf_name_link"
     t.string "pdf_download_url_link"
+    t.decimal "steadiness", default: "0.0"
+    t.decimal "score", default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -32,6 +34,7 @@ ActiveRecord::Schema.define(version: 2018_08_31_092631) do
   create_table "ratings", force: :cascade do |t|
     t.integer "score"
     t.boolean "anonymous", default: false
+    t.decimal "goodness", default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
@@ -46,10 +49,12 @@ ActiveRecord::Schema.define(version: 2018_08_31_092631) do
     t.string "email"
     t.string "orcid"
     t.string "password_digest"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
+    t.decimal "steadiness", default: "0.0"
+    t.decimal "score", default: "0.000001"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

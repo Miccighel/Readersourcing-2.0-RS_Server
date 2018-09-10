@@ -21,14 +21,14 @@ puts "########## REAL USERS SEEDING COMPLETED ##########"
 
 puts "########## FAKE USERS SEEDING STARTED ##########"
 
-30.times do |index|
-	puts "---------- CREATING FAKE USER #{index} ----------"
+ 5.times do |index|
+ 	puts "---------- CREATING FAKE USER #{index} ----------"
 
-	fake_user = User.new(first_name: "FirstName#{index}", last_name: "LastName#{index}", email: "Email#{index}@mail.com", password: '123456', password_confirmation: '123456')
-	fake_user.save
+ 	fake_user = User.new(first_name: "FirstName#{index}", last_name: "LastName#{index}", email: "Email#{index}@mail.com", password: '123456', password_confirmation: '123456')
+ 	fake_user.save
 
-	puts "---------- CREATION COMPLETED ----------"
-end
+ 	puts "---------- CREATION COMPLETED ----------"
+ end
 
 puts "########## FAKE USERS SEEDING COMPLETED #########"
 
@@ -71,18 +71,23 @@ puts "########## PUBLICATIONS SEEDING COMPLETED ##########"
 
 puts "########## FAKE RATINGS SEEDING STARTED ##########"
 
-1000.times do |index|
+80.times do |index|
 	puts "---------- CREATING FAKE RATING #{index} ----------"
-	random_publication_id = Publication.pluck(:id).shuffle[0]
-	random_user_id = User.pluck(:id).shuffle[0]
-	fake_rating = Rating.new
-	fake_rating.score = rand(0..100)
-	fake_rating.publication_id = random_publication_id
-	fake_rating.user_id = random_user_id
-	fake_rating.save
 
-	puts "---------- CREATION COMPLETED ----------"
-end
+ 	random_publication_id = Publication.pluck(:id).shuffle[0]
+ 	random_user_id = User.pluck(:id).shuffle[0]
+ 	fake_rating = Rating.new
+ 	fake_rating.score = rand(0..100)
+ 	fake_rating.publication_id = random_publication_id
+ 	fake_rating.user_id = random_user_id
+ 	fake_rating.save
+
+	sm_strategy = SMStrategy.new(fake_rating)
+	readersourcing = Readersourcing.new(sm_strategy)
+	readersourcing.compute_scores
+
+ 	puts "---------- CREATION COMPLETED ----------"
+ end
 
 puts "########## FAKE RATING SEEDING COMPLETED #########"
 
