@@ -14,6 +14,8 @@ puts "---------- CREATING USER 1 ----------"
 
 mario_rossi = User.new(first_name: "Mario", last_name: "Rossi", email: 'mail@mail.com', orcid:'0000-0002-1825-0097', password: '123456', password_confirmation: '123456')
 mario_rossi.save
+luca_bianchi = User.new(first_name: "Luca", last_name: "Bianchi", email: 'bianchi@mail.com', orcid:'0000-0002-1825-009X', password: '123456', password_confirmation: '123456')
+luca_bianchi.save
 
 puts "---------- CREATION COMPLETED ----------"
 
@@ -21,7 +23,7 @@ puts "########## REAL USERS SEEDING COMPLETED ##########"
 
 puts "########## FAKE USERS SEEDING STARTED ##########"
 
- 5.times do |index|
+ 15.times do |index|
  	puts "---------- CREATING FAKE USER #{index} ----------"
 
  	fake_user = User.new(first_name: "FirstName#{index}", last_name: "LastName#{index}", email: "Email#{index}@mail.com", password: '123456', password_confirmation: '123456')
@@ -71,23 +73,94 @@ puts "########## PUBLICATIONS SEEDING COMPLETED ##########"
 
 puts "########## FAKE RATINGS SEEDING STARTED ##########"
 
-80.times do |index|
-	puts "---------- CREATING FAKE RATING #{index} ----------"
+# 300.times do |index|
+# 	puts "---------- CREATING FAKE RATING #{index} ----------"
+#
+#  	random_publication_id = Publication.pluck(:id).shuffle[0]
+#  	random_user_id = User.pluck(:id).shuffle[0]
+#  	fake_rating = Rating.new
+#  	fake_rating.score = rand(30..100)
+#  	fake_rating.publication_id = random_publication_id
+#  	fake_rating.user_id = random_user_id
+#  	fake_rating.save
+#
+# 	sm_strategy = SMStrategy.new(fake_rating)
+# 	readersourcing = Readersourcing.new(sm_strategy)
+# 	readersourcing.compute_scores
+#
+# 	tr_strategy = TrueReviewStrategy.new(Publication.find(random_publication_id).ratings_history)
+# 	readersourcing = Readersourcing.new(tr_strategy)
+# 	readersourcing.compute_scores
+#
+#  	puts "---------- CREATION COMPLETED ----------"
+#  end
 
- 	random_publication_id = Publication.pluck(:id).shuffle[0]
- 	random_user_id = User.pluck(:id).shuffle[0]
- 	fake_rating = Rating.new
- 	fake_rating.score = rand(0..100)
- 	fake_rating.publication_id = random_publication_id
- 	fake_rating.user_id = random_user_id
- 	fake_rating.save
+publication_id_1 = 1
+publication_id_2 = 2
+user_id_1 = 1
+user_id_2 = 2
+user_id_3 = 3
+user_id_4 = 4
 
-	sm_strategy = SMStrategy.new(fake_rating)
-	readersourcing = Readersourcing.new(sm_strategy)
-	readersourcing.compute_scores
+rating_1 = Rating.new
+rating_1.score = 80
+rating_1.user_id = user_id_1
+rating_1.publication_id = publication_id_1
+rating_1.save
 
- 	puts "---------- CREATION COMPLETED ----------"
- end
+sm_strategy = SMStrategy.new(rating_1)
+readersourcing = Readersourcing.new(sm_strategy)
+readersourcing.compute_scores
+
+rating_2 = Rating.new
+rating_2.score = 20
+rating_2.user_id = user_id_2
+rating_2.publication_id = publication_id_1
+rating_2.save
+
+sm_strategy = SMStrategy.new(rating_2)
+readersourcing = Readersourcing.new(sm_strategy)
+readersourcing.compute_scores
+
+rating_3 = Rating.new
+rating_3.score = 20
+rating_3.user_id = user_id_3
+rating_3.publication_id = publication_id_1
+rating_3.save
+
+sm_strategy = SMStrategy.new(rating_3)
+readersourcing = Readersourcing.new(sm_strategy)
+readersourcing.compute_scores
+
+rating_4 = Rating.new
+rating_4.score = 50
+rating_4.user_id = user_id_3
+rating_4.publication_id = publication_id_2
+rating_4.save
+
+sm_strategy = SMStrategy.new(rating_4)
+readersourcing = Readersourcing.new(sm_strategy)
+readersourcing.compute_scores
+
+rating_5 = Rating.new
+rating_5.score = 50
+rating_5.user_id = user_id_4
+rating_5.publication_id = publication_id_2
+rating_5.save
+
+sm_strategy = SMStrategy.new(rating_5)
+readersourcing = Readersourcing.new(sm_strategy)
+readersourcing.compute_scores
+
+rating_6 = Rating.new
+rating_6.score = 80
+rating_6.user_id = user_id_4
+rating_6.publication_id = publication_id_1
+rating_6.save
+
+sm_strategy = SMStrategy.new(rating_6)
+readersourcing = Readersourcing.new(sm_strategy)
+readersourcing.compute_scores
 
 puts "########## FAKE RATING SEEDING COMPLETED #########"
 

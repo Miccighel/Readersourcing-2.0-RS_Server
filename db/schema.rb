@@ -35,6 +35,8 @@ ActiveRecord::Schema.define(version: 2018_07_18_090558) do
     t.integer "score"
     t.boolean "anonymous", default: false
     t.decimal "goodness", default: "0.0"
+    t.decimal "informativeness", default: "0.0"
+    t.decimal "accuracy_loss", default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
@@ -53,6 +55,7 @@ ActiveRecord::Schema.define(version: 2018_07_18_090558) do
     t.datetime "reset_password_sent_at"
     t.decimal "steadiness", default: "0.0"
     t.decimal "score", default: "0.000001"
+    t.decimal "bonus", default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

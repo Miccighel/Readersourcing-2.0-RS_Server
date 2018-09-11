@@ -163,6 +163,10 @@ class Publication < ApplicationRecord
 		other_users
 	end
 
+	def ratings_history
+		Rating.where(publication_id: self.id).order(created_at: :asc).all
+	end
+
 	private
 
 	def load_pdf_paths(pdf_name)

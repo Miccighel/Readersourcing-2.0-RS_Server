@@ -60,15 +60,14 @@ class RatingsController < ApplicationController
 			@rating.publication = publication
 		end
 		if @rating.save
-
+			logger.info "Computing scores with SM Model"
 			sm_strategy = SMStrategy.new(@rating)
 			readersourcing = Readersourcing.new(sm_strategy)
 			readersourcing.compute_scores
-
-			true_review_strategy = TrueReviewStrategy.new
+			logger.info "Computing scores with TrueReview Model"
+			true_review_strategy = TrueReviewStrategy.new(@rating.publication.ratings_history)
 			readersourcing = Readersourcing.new(true_review_strategy)
 			readersourcing.compute_scores
-
 			RatingMailer.confirm(current_user, @rating.score, publication.pdf_url).deliver
 			render :show, status: :created, location: @rating
 		else
@@ -93,15 +92,14 @@ class RatingsController < ApplicationController
 					@rating.publication = publication
 					@rating.user = requesting_user
 					if @rating.save
-
+						logger.info "Computing scores with SM Model"
 						sm_strategy = SMStrategy.new(@rating)
 						readersourcing = Readersourcing.new(sm_strategy)
 						readersourcing.compute_scores
-
+						logger.info "Computing scores with TrueReview Model"
 						true_review_strategy = TrueReviewStrategy.new
 						readersourcing = Readersourcing.new(true_review_strategy)
 						readersourcing.compute_scores
-
 						RatingMailer.confirm(requesting_user, @rating.score, publication.pdf_url).deliver
 						render :successful, locals: {pubId: publication.id}
 					else
@@ -119,6 +117,14 @@ class RatingsController < ApplicationController
 	# PATCH/PUT /ratings/1.json
 	def update
 		if @rating.update(rating_params)
+			logger.info "Computing scores with SM Model"
+			sm_strategy = SMStrategy.new(@rating)
+			readersourcing = Readersourcing.new(sm_strategy)
+			readersourcing.compute_scores
+			logger.info "Computing scores with TrueReview Model"
+			true_review_strategy = TrueReviewStrategy.new
+			readersourcing = Readersourcing.new(true_review_strategy)
+			readersourcing.compute_scores
 			render :show, status: :ok, location: @rating
 		else
 			render json: @rating.errors, status: :unprocessable_entity

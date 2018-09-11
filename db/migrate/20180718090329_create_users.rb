@@ -10,6 +10,7 @@ class CreateUsers < ActiveRecord::Migration[5.2]
 			t.datetime :reset_password_sent_at
 			t.decimal :steadiness, default: 0.0
 			t.decimal :score, default: 0.000001
+			t.decimal :bonus, default: 0.0
 			t.timestamps
 		end
 	end
