@@ -97,7 +97,7 @@ class RatingsController < ApplicationController
 						readersourcing = Readersourcing.new(sm_strategy)
 						readersourcing.compute_scores
 						logger.info "Computing scores with TrueReview Model"
-						true_review_strategy = TrueReviewStrategy.new
+						true_review_strategy = TrueReviewStrategy.new(@rating.publication.ratings_history)
 						readersourcing = Readersourcing.new(true_review_strategy)
 						readersourcing.compute_scores
 						RatingMailer.confirm(requesting_user, @rating.score, publication.pdf_url).deliver
@@ -122,7 +122,7 @@ class RatingsController < ApplicationController
 			readersourcing = Readersourcing.new(sm_strategy)
 			readersourcing.compute_scores
 			logger.info "Computing scores with TrueReview Model"
-			true_review_strategy = TrueReviewStrategy.new
+			true_review_strategy = TrueReviewStrategy.new(@rating.publication.ratings_history)
 			readersourcing = Readersourcing.new(true_review_strategy)
 			readersourcing.compute_scores
 			render :show, status: :ok, location: @rating

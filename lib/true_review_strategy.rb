@@ -5,29 +5,34 @@ class TrueReviewStrategy < ReadersourcingStrategy
 	end
 
 	def compute
-		# FOR EVERY RATING Xi
 		scores = []
-		@ratings.each {|rating| scores.push rating.normalize_score}
+		users = []
+		# FOR EACH RATING Xi
+		@ratings.each do |rating|
+			scores.push rating.normalize_score
+			users.push rating.user
+		end
 		@ratings.each_with_index do |rating, index|
 			if index > 0 and index < (@ratings.size - 1)
-				puts "Rating data"
-				puts "ID: #{rating.id}"
-				puts "Score: #{rating.normalize_score}"
-				puts "Created At: #{rating.created_at}"
-				puts "Informativeness: #{rating.informativeness}"
-				puts "Accuracy Loss: #{rating.accuracy_loss}"
-
 				past_ratings = scores[0..(index - 1)]
 				future_ratings = scores[(index + 1)..(@ratings.size - 1)]
 				qi_past = mean(past_ratings)
 				qi_future = mean(future_ratings)
+
 				rating.informativeness = quadratic_loss(qi_past, qi_future)
 				rating.accuracy_loss = quadratic_loss(rating.normalize_score, qi_future)
+				rating.bonus = rating.informativeness * logistic_fuction(rating.accuracy_loss)
 				rating.save
 
-				puts "Updated Informativeness #{rating.informativeness}"
-				puts "Updated Accuracy Loss #{rating.accuracy_loss}"
+				puts "Informativeness: #{rating.informativeness}"
+				puts "Accuracy Loss: #{rating.accuracy_loss}"
+				puts "Rating Bonus: #{rating.bonus}"
 			end
+		end
+		users.each do |user|
+			user.bonus = 0
+			user.given_ratings.each {|rating| user.bonus = user.bonus + rating.bonus}
+			user.save
 		end
 	end
 
@@ -39,6 +44,11 @@ class TrueReviewStrategy < ReadersourcingStrategy
 
 	def quadratic_loss(a, b)
 		(a - b) ** 2
+	end
+
+	def logistic_fuction(value)
+		# https://en.wikipedia.org/wiki/Logistic_function
+		1 / 1 + (Math.exp((-1 * (value - 0.5))))
 	end
 
 end

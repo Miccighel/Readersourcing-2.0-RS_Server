@@ -3,7 +3,7 @@ class User < ApplicationRecord
 	has_many :ratings, dependent: :destroy
 
 	validates :email, presence: true, length: {maximum: 255}, format: {with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i}, uniqueness: {case_sensitive: false}
-	validates :orcid,  length: {maximum: 19}, format: {with: /[0-9]{4}-[0-9]{4}-[0-9]{4}-([0-9]{3}X|[0-9]{4})/}, uniqueness: true, allow_nil: true
+	validates :orcid, length: {maximum: 19}, format: {with: /[0-9]{4}-[0-9]{4}-[0-9]{4}-([0-9]{3}X|[0-9]{4})/}, uniqueness: true, allow_nil: true
 	has_secure_password
 
 	def password
@@ -33,6 +33,10 @@ class User < ApplicationRecord
 
 	def given_rating(publication)
 		Rating.where(user_id: self.id, publication_id: publication.id).first
+	end
+
+	def given_ratings
+		Rating.where(user_id: self.id).all
 	end
 
 	private
