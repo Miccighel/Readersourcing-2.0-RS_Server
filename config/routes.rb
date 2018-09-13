@@ -15,12 +15,16 @@ Rails.application.routes.draw do
 				get :is_rated
 			end
 		end
-		resources :ratings do
+		resources :ratings, except: [:destroy] do
 			collection do
 				get :rate
 			end
 		end
-		resources :users
+		resources :users do
+			collection do
+				post :info
+			end
+		end
 	end
 
 	post 'load', to: 'ratings#load', as: :load, constraints: {:format => 'html'}

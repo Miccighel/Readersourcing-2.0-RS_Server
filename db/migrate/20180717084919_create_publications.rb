@@ -14,7 +14,8 @@ class CreatePublications < ActiveRecord::Migration[5.2]
 			t.string :pdf_name_link
 			t.string :pdf_download_url_link
 			t.decimal :steadiness, default: 0.0
-			t.decimal :score, default: 0.0
+			t.decimal :score_sm, default: 0.0
+			t.decimal :score_tr, default: 0.0
 			t.timestamps
 		end
 	end

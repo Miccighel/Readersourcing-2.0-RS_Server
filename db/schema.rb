@@ -26,7 +26,8 @@ ActiveRecord::Schema.define(version: 2018_07_18_090558) do
     t.string "pdf_name_link"
     t.string "pdf_download_url_link"
     t.decimal "steadiness", default: "0.0"
-    t.decimal "score", default: "0.0"
+    t.decimal "score_sm", default: "0.0"
+    t.decimal "score_tr", default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

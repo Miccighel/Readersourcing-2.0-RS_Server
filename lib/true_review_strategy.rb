@@ -1,17 +1,21 @@
 class TrueReviewStrategy < ReadersourcingStrategy
 
-	def initialize(ratings)
-		@ratings = ratings
+	def initialize(publication)
+		@publication = publication
+		@ratings = publication.ratings_history
 	end
 
 	def compute
+
 		scores = []
 		users = []
+
 		# FOR EACH RATING Xi
 		@ratings.each do |rating|
 			scores.push rating.normalize_score
 			users.push rating.user
 		end
+
 		@ratings.each_with_index do |rating, index|
 			if index > 0 and index < (@ratings.size - 1)
 				past_ratings = scores[0..(index - 1)]
@@ -29,9 +33,18 @@ class TrueReviewStrategy < ReadersourcingStrategy
 				puts "Rating Bonus: #{rating.bonus}"
 			end
 		end
+
+		puts "Publication score at time t(i) #{@publication.score_tr}"
+		@publication.score_tr = mean(scores)
+		@publication.save
+		puts "Publication score at time t(i+1) #{@publication.score_tr}"
+
 		users.each do |user|
-			user.bonus = 0
-			user.given_ratings.each {|rating| user.bonus = user.bonus + rating.bonus}
+			puts "User bonus at time t(i) #{user.bonus}"
+			bonuses = []
+			user.given_ratings.each {|rating| bonuses.push rating.bonus}
+			user.bonus = mean(bonuses)
+			puts "User bonus at time t(i+1) #{user.bonus}"
 			user.save
 		end
 	end
