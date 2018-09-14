@@ -20,7 +20,9 @@ class Publication < ApplicationRecord
 		nil
 	end
 
-	def fetch(encrypted_auth_token)
+	def fetch(request_data)
+
+		data = build_data(request_data)
 
 		# FETCHING OF PDF FILE STARTS HERE
 
@@ -36,11 +38,11 @@ class Publication < ApplicationRecord
 		if filename == nil
 			raise "Filename is still null, something went wrong"
 		end
-		load_pdf_paths(filename)
+		load_pdf_paths(filename, data[:host])
 		logger.info "File name: #{filename}"
-		FileUtils::mkdir_p absolute_pdf_storage_url
+		FileUtils::mkdir_p absolute_pdf_storage_path
 		bytes_expected = publication.meta['content-length'].to_i
-		bytes_copied = IO.copy_stream(publication, absolute_pdf_download_url)
+		bytes_copied = IO.copy_stream(publication, absolute_pdf_download_path)
 		if bytes_expected != bytes_copied
 			raise "Expected #{bytes_expected} bytes but got #{bytes_copied}"
 		end
@@ -48,8 +50,8 @@ class Publication < ApplicationRecord
 
 		# METADATA READING STARTS HERE
 
-		logger.info "Reading metadata from: #{absolute_pdf_download_url}"
-		reader = PDF::Reader.new(absolute_pdf_download_url)
+		logger.info "Reading metadata from: #{absolute_pdf_download_path}"
+		reader = PDF::Reader.new(absolute_pdf_download_path)
 		begin
 			if !reader.info[:doi].blank?
 				logger.info "DOI found"
@@ -118,38 +120,36 @@ class Publication < ApplicationRecord
 		end
 
 		# EDITING OF PDF FILE WITH PDFxREADERSOURCING STARTS HERE
-
-		rating_data = rating_data encrypted_auth_token
-
-		logger.info "Checking again existence of: #{absolute_pdf_download_url}"
-		if File.exist?(absolute_pdf_download_url)
+		#
+		logger.info "Checking again existence of: #{absolute_pdf_download_path}"
+		if File.exist?(absolute_pdf_download_path)
 			logger.info "File exists"
 			logger.info "PDFxReadersourcing execution started"
 			logger.info "Path: #{APP_CONFIG['pdf_x_readersourcing_path']}"
 			logger.info "with options:"
-			logger.info "-pIn: #{absolute_pdf_download_url}"
-			logger.info "-pOut: #{absolute_pdf_storage_url}"
-			logger.info "-u: #{rating_data[:url]}"
+			logger.info "-pIn: #{absolute_pdf_download_path}"
+			logger.info "-pOut: #{absolute_pdf_storage_path}"
+			logger.info "-u: #{data[:url]}"
 			logger.info "-c: Click here"
-			logger.info "-pId: #{rating_data[:pubId]}"
-			logger.info "-a: #{rating_data[:authToken]}"
+			logger.info "-pId: #{data[:pubId]}"
+			logger.info "-a: #{data[:authToken]}"
 			logger.info "Complete command:"
-			logger.info "java -jar #{APP_CONFIG['pdf_x_readersourcing_path']} -pIn #{absolute_pdf_download_url} -pOut #{absolute_pdf_storage_url} -u #{rating_data[:url]} -c \"Click here\""
-			output = %x( java -jar #{APP_CONFIG['pdf_x_readersourcing_path']} -pIn #{absolute_pdf_download_url} -pOut #{absolute_pdf_storage_url} -u #{rating_data[:url]} -c "Click here")
+			logger.info "java -jar #{APP_CONFIG['pdf_x_readersourcing_path']} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:url]} -c \"Click here\""
+			output = %x( java -jar #{APP_CONFIG['pdf_x_readersourcing_path']} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:url]} -c "Click here")
 			logger.info output
 			logger.info "PDFxReadersourcing execution completed"
-			File.delete(absolute_pdf_download_url)
+			File.delete(absolute_pdf_download_path)
 			logger.info "Modified file"
 			logger.info "Name: #{pdf_name_link}"
-			logger.info "Download url: #{pdf_download_url_link}"
+			logger.info "Download path: #{pdf_download_path_link}"
 		else
-			raise "File does not exists at #{absolute_pdf_download_url}"
+			raise "File does not exists at #{absolute_pdf_download_path}"
 		end
 	end
 
 	def remove_files
-		logger.info "Deleting folder at: #{absolute_pdf_storage_url}"
-		FileUtils.rm_rf(absolute_pdf_storage_url)
+		logger.info "Deleting folder at: #{absolute_pdf_storage_path}"
+		FileUtils.rm_rf(absolute_pdf_storage_path)
 	end
 
 	def other_users(current_user)
@@ -169,34 +169,37 @@ class Publication < ApplicationRecord
 
 	private
 
-	def load_pdf_paths(pdf_name)
+	def load_pdf_paths(pdf_name, host)
 		pdf_name_without_ext = pdf_name.chomp(".pdf").to_s.gsub('%2', '-')
 		pdf_name = "#{pdf_name_without_ext}.pdf"
-		update_attribute(:pdf_storage_url, "publication/#{id}/")
-		update_attribute(:pdf_download_url, "#{pdf_storage_url}#{pdf_name}")
+		update_attribute(:pdf_storage_path, "publication/#{id}/")
+		update_attribute(:pdf_download_path, "#{pdf_storage_path}#{pdf_name}")
+		update_attribute(:pdf_download_url, "#{host}#{pdf_storage_path}#{pdf_name}")
 		update_attribute(:pdf_name, pdf_name)
-		update_attribute(:pdf_download_url_link, "#{pdf_storage_url}#{pdf_name_without_ext}#{APP_CONFIG['pdf_x_readersourcing_link_suffix']}.pdf")
+		update_attribute(:pdf_download_path_link, "#{pdf_storage_path}#{pdf_name_without_ext}#{APP_CONFIG['pdf_x_readersourcing_link_suffix']}.pdf")
+		update_attribute(:pdf_download_url_link, "#{host}#{pdf_storage_path}#{pdf_name_without_ext}#{APP_CONFIG['pdf_x_readersourcing_link_suffix']}.pdf")
 		update_attribute(:pdf_name_link, "#{pdf_name_without_ext}#{APP_CONFIG['pdf_x_readersourcing_link_suffix']}.pdf")
 	end
 
-	def absolute_pdf_storage_url
-		Rails.public_path.join(pdf_storage_url)
+	def absolute_pdf_storage_path
+		Rails.public_path.join(pdf_storage_path)
 	end
 
-	def absolute_pdf_download_url
-		Rails.public_path.join(pdf_download_url)
+	def absolute_pdf_download_path
+		Rails.public_path.join(pdf_download_path)
 	end
 
-	def absolute_pdf_download_url_link
-		Rails.public_path.join(pdf_download_url_link)
+	def absolute_pdf_download_path_link
+		Rails.public_path.join(pdf_download_path_link)
 	end
 
-	def rating_data(encrypted_auth_token)
-		rating_data = Hash.new
-		rating_data[:authToken] = encrypted_auth_token
-		rating_data[:pubId] = self.id
-		rating_data[:url] = Rails.application.routes.url_helpers.rate_path(rating_data[:pubId], rating_data[:authToken])
-		rating_data
+	def build_data(request_data)
+		data = Hash.new
+		data[:authToken] = request_data.values[0]
+		data[:host] = request_data.values[1]
+		data[:pubId] = self.id
+		data[:url] = Rails.application.routes.url_helpers.rate_path(data[:pubId], data[:authToken])
+		data
 	end
 
 end

@@ -8,21 +8,21 @@
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-md-12 text-center mt-3">
-				<h4><%= I18n.t("information.messages.rate_again") %></h4>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-12 text-center">
-				<%= link_to tag.button(I18n.t("labels.delete_and_rate"), class: 'btn btn-primary'), rate_path(pubId, @crypted_auth_token, delete: true), method: :get %>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-12 text-center mt-3">
-				<h4>Oppure</h4>
-			</div>
-		</div>
+<!--		<div class="row">-->
+<!--			<div class="col-md-12 text-center mt-3">-->
+<!--				<h4><%#= I18n.t("information.messages.rate_again") %></h4>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--		<div class="row">-->
+<!--			<div class="col-12 text-center">-->
+				<%#= link_to tag.button(I18n.t("labels.delete_and_rate"), class: 'btn btn-primary'), rate_path(pubId, @crypted_auth_token, delete: true), method: :get %>
+<!--			</div>-->
+<!--		</div>-->
+<!--		<div class="row">-->
+<!--			<div class="col-12 text-center mt-3">-->
+<!--				<h4>Oppure</h4>-->
+<!--			</div>-->
+<!--		</div>-->
 		<div class="row">
 			<div class="col-12 text-center mt-1">
 				<%= link_to I18n.t("labels.close_page"), "", :onclick => 'window.close();', class: "btn btn-primary" %>

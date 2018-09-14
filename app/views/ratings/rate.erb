@@ -45,7 +45,7 @@
 				<div class="col-4 offset-4 text-center">
 					<div class="form-group mt-2">
 						<label for="email">Email</label>
-						<%= email_field_tag "email", "mail@mail.com", class: "form-control form-control-light", id: "email", placeholder: "Email", required: true, data: {"parsley-type":"email"} %>
+						<%= email_field_tag "email", "mail@mail.com", class: "form-control form-control-light", id: "email", placeholder: "Email", required: true, build_data: {"parsley-type":"email"} %>
 					</div>
 				</div>
 			</div>
@@ -53,7 +53,7 @@
 				<div class="col-4 offset-4 text-center">
 					<div class="form-group mt-2">
 						<label for="email">Password</label>
-						<%= password_field_tag "password", "123456", class: "form-control form-control-light", id: "password", placeholder: "Password", required: true, data: {"parsley-minlength":"6"} %>
+						<%= password_field_tag "password", "123456", class: "form-control form-control-light", id: "password", placeholder: "Password", required: true, build_data: {"parsley-minlength":"6"} %>
 					</div>
 				</div>
 			</div>

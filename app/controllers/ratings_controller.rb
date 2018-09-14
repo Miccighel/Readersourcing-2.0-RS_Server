@@ -4,7 +4,7 @@ class RatingsController < ApplicationController
 
 	layout "application", only: [:rate, :load]
 
-	before_action :set_rating, only: [:show, :update, :destroy]
+	before_action :set_rating, only: [:show, :update]
 
 	skip_before_action :authenticate_request, only: [:rate, :load]
 
@@ -37,8 +37,13 @@ class RatingsController < ApplicationController
 		if Time.now < expiration_time
 			if delete_old_rating
 				Rating.where(user_id: @user.id, publication_id: @publication.id).destroy_all
+			else
+				if Rating.exists?(user_id: @user.id, publication_id: @publication.id)
+					render :already_given, locals: {pubId: @publication.id}
+				else
+					render :rate
+				end
 			end
-			render :rate
 		else
 			render :'shared/unauthorized', locals: {message: I18n.t("errors.messages.expired_token")}
 		end

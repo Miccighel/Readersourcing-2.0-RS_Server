@@ -48,30 +48,33 @@ p4 = Publication.new({pdf_url: "https://innovation-entrepreneurship.springeropen
 p5 = Publication.new({pdf_url: "https://geochemicaltransactions.springeropen.com/track/pdf/10.1186/s12932-018-0056-5"})
 
 auth_token = "bf9c15d6a6ad390c36915fe31649d1c66dfc836fc5a8739ea7c0823f0879a730$$RpkBx+0OSzzQWvis2/cLJ9eqDpkXibVcERKSG1ZLHOYvmuHJTcO4JJEQBC2h5bauj85OUU3CSTb7iZvrGx2KxMKm/b9c5KAo+KwfSfmQOj4uIclTAk12o3Wp2k/UVgSMU9NMyxFmb6S/5+YKkH+7gD+5k9fKeQ==--4vM+DLuTaxGyv5ce--pkUJwp+xPVgORbtUMGugxA=="
+data = Hash.new
+data[:authToken] = auth_token
+data[:host] = "http://localhost:3000/"
 
 puts "---------- FETCHING FILE FOR PUBLICATION 1 ----------"
 p1.save
-p1.fetch auth_token
+p1.fetch data
 puts "---------- FETCHING COMPLETED ----------"
 
 puts "---------- FETCHING FILE FOR PUBLICATION 2 ----------"
 p2.save
-p2.fetch auth_token
+p2.fetch data
 puts "---------- FETCHING COMPLETED ----------"
 
 puts "---------- FETCHING FILE FOR PUBLICATION 3 ----------"
 p3.save
-p3.fetch auth_token
+p3.fetch data
 puts "---------- FETCHING COMPLETED ----------"
 
 puts "---------- FETCHING FILE FOR PUBLICATION 4 ----------"
 p4.save
-p4.fetch auth_token
+p4.fetch data
 puts "---------- FETCHING COMPLETED ----------"
 
 puts "---------- FETCHING FILE FOR PUBLICATION 5 ----------"
 p5.save
-p5.fetch auth_token
+p5.fetch data
 puts "---------- FETCHING COMPLETED ----------"
 
 puts "########## PUBLICATIONS SEEDING COMPLETED ##########"

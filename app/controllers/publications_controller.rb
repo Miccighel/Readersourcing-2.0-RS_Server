@@ -6,6 +6,7 @@ class PublicationsController < ApplicationController
 	# GET /publications.json
 	def index
 		@publications = Publication.all
+		puts @host
 	end
 
 	# GET /publications/1.json
@@ -45,7 +46,7 @@ class PublicationsController < ApplicationController
 	def create
 		@publication = Publication.new(publication_params)
 		if @publication.save
-			@publication.fetch encrypted_auth_token
+			@publication.fetch request_data
 			render :show, status: :created, location: @publication
 		else
 			render json: @publication.errors, status: :unprocessable_entity
@@ -56,12 +57,12 @@ class PublicationsController < ApplicationController
 	def fetch
 		if Publication.exists?(pdf_url: publication_params[:pdf_url])
 			@publication = Publication.find_by_pdf_url(publication_params[:pdf_url])
-			@publication.fetch encrypted_auth_token
+			@publication.fetch request_data
 			render :show, status: :ok, location: @publication
 		else
 			@publication = Publication.new(pdf_url: publication_params[:pdf_url])
 			if @publication.save
-				@publication.fetch encrypted_auth_token
+				@publication.fetch request_data
 				render :show, status: :created, location: @publication
 			else
 				render json: @publication.errors, status: :unprocessable_entity
@@ -72,14 +73,14 @@ class PublicationsController < ApplicationController
 
 	# GET /publications/1/refresh.json
 	def refresh
-		@publication.fetch encrypted_auth_token
+		@publication.fetch request_data
 		render :show, status: :ok, location: @publication
 	end
 
 	# PATCH/PUT /publications/1.json
 	def update
 		if @publication.update(publication_params)
-			@publication.fetch encrypted_auth_token
+			@publication.fetch request_data
 			render :show, status: :ok, location: @publication
 		else
 			render json: @publication.errors, status: :unprocessable_entity
@@ -94,8 +95,11 @@ class PublicationsController < ApplicationController
 
 	private
 
-	def encrypted_auth_token
-		encrypt request.headers["Authorization"]
+	def request_data
+		request_data = Hash.new
+		request_data["authToken"] =  encrypt request.headers["Authorization"]
+		request_data["host"] =  "#{request.protocol}#{request.host_with_port}/"
+		request_data
 	end
 
 	def set_publication
