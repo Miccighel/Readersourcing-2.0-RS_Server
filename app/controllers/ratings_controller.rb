@@ -24,6 +24,7 @@ class RatingsController < ApplicationController
 		@crypted_auth_token = params[:authToken]
 		auth_token = decrypt(params[:authToken])
 		payload = JsonWebToken.decode(auth_token)
+		puts payload
 		expiration_time = Time.at payload[:exp]
 		@user = User.find(payload[:user_id])
 		@rating = Rating.new
@@ -65,14 +66,7 @@ class RatingsController < ApplicationController
 			@rating.publication = publication
 		end
 		if @rating.save
-			logger.info "Computing scores with SM Model"
-			sm_strategy = SMStrategy.new(@rating)
-			readersourcing = Readersourcing.new(sm_strategy)
-			readersourcing.compute_scores
-			logger.info "Computing scores with TrueReview Model"
-			true_review_strategy = TrueReviewStrategy.new(@rating.publication)
-			readersourcing = Readersourcing.new(true_review_strategy)
-			readersourcing.compute_scores
+			@rating.compute_scores
 			RatingMailer.confirm(current_user, @rating.score, publication.pdf_url).deliver
 			render :show, status: :created, location: @rating
 		else
@@ -97,14 +91,7 @@ class RatingsController < ApplicationController
 					@rating.publication = publication
 					@rating.user = requesting_user
 					if @rating.save
-						logger.info "Computing scores with SM Model"
-						sm_strategy = SMStrategy.new(@rating)
-						readersourcing = Readersourcing.new(sm_strategy)
-						readersourcing.compute_scores
-						logger.info "Computing scores with TrueReview Model"
-						true_review_strategy = TrueReviewStrategy.new(@rating.publication)
-						readersourcing = Readersourcing.new(true_review_strategy)
-						readersourcing.compute_scores
+						@rating.compute_scores
 						RatingMailer.confirm(requesting_user, @rating.score, publication.pdf_url).deliver
 						render :successful, locals: {pubId: publication.id}
 					else
@@ -122,14 +109,7 @@ class RatingsController < ApplicationController
 	# PATCH/PUT /ratings/1.json
 	def update
 		if @rating.update(rating_params)
-			logger.info "Computing scores with SM Model"
-			sm_strategy = SMStrategy.new(@rating)
-			readersourcing = Readersourcing.new(sm_strategy)
-			readersourcing.compute_scores
-			logger.info "Computing scores with TrueReview Model"
-			true_review_strategy = TrueReviewStrategy.new(@rating.publication)
-			readersourcing = Readersourcing.new(true_review_strategy)
-			readersourcing.compute_scores
+			@rating.compute_scores
 			render :show, status: :ok, location: @rating
 		else
 			render json: @rating.errors, status: :unprocessable_entity

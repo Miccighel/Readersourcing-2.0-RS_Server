@@ -7,7 +7,7 @@ class Readersourcing
 	end
 
 	def compute_scores
-		@strategy.compute
+		@strategy.compute_scores
 	end
 
 end

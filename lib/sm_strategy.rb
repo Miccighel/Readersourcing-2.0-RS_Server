@@ -6,7 +6,7 @@ class SMStrategy < ReadersourcingStrategy
 		@publication = @rating.publication
 	end
 
-	def compute
+	def compute_scores
 
 		puts "Saving values at time t(i)"
 

@@ -1,11 +1,11 @@
 class TrueReviewStrategy < ReadersourcingStrategy
 
-	def initialize(publication)
-		@publication = publication
-		@ratings = publication.ratings_history
+	def initialize(rating)
+		@publication = rating.publication
+		@ratings = rating.publication.ratings_history
 	end
 
-	def compute
+	def compute_scores
 
 		scores = []
 		users = []
