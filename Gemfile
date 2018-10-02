@@ -16,7 +16,6 @@ gem 'simple_command'
 gem 'nokogiri'
 gem 'mailcatcher'
 
-gem 'sassc'
 gem 'uglifier'
 gem 'coffee-rails'
 

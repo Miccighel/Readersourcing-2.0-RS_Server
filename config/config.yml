@@ -2,9 +2,9 @@ production:
 
 development:
   # PATH NZXT
-  #rs_pdf: M:\Dropbox\Documenti\Progetti\R@SM\R@SM-ReadersourcingServerSide\lib\PDFxReadersourcing-1.0-SNAPSHOT-jar-with-dependencies.jar
+  # rs_pdf: M:\Dropbox\Documenti\Progetti\Uniud\Readersourcing-2.0\RS_Server\lib\RS_PDF-1.0-jar-with-dependencies.jar
   #PATH SANTECH C37
-  rs_pdf: E:\Dropbox\Documenti\Progetti\R@SM\R@SM-ReadersourcingServerSide\lib\PDFxReadersourcing-1.0-SNAPSHOT-jar-with-dependencies.jar
+  rs_pdf: E:\Dropbox\Documenti\Progetti\Uniud\Readersourcing-2.0\RS_Server\lib\RS_PDF-1.0-jar-with-dependencies.jar
   rs_pdf_link_suffix: "-Link"
 
 test:
