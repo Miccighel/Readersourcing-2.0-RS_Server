@@ -125,7 +125,7 @@ class Publication < ApplicationRecord
 		if File.exist?(absolute_pdf_download_path)
 			logger.info "File exists"
 			logger.info "PDFxReadersourcing execution started"
-			logger.info "Path: #{APP_CONFIG['pdf_x_readersourcing_path']}"
+			logger.info "Path: #{APP_CONFIG['rs_pdf']}"
 			logger.info "with options:"
 			logger.info "-pIn: #{absolute_pdf_download_path}"
 			logger.info "-pOut: #{absolute_pdf_storage_path}"
@@ -134,8 +134,8 @@ class Publication < ApplicationRecord
 			logger.info "-pId: #{data[:pubId]}"
 			logger.info "-a: #{data[:authToken]}"
 			logger.info "Complete command:"
-			logger.info "java -jar #{APP_CONFIG['pdf_x_readersourcing_path']} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:url]} -c \"Click here\""
-			output = %x( java -jar #{APP_CONFIG['pdf_x_readersourcing_path']} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:url]} -c "Click here")
+			logger.info "java -jar #{APP_CONFIG['rs_pdf']} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:url]} -c \"Click here\""
+			output = %x( java -jar #{APP_CONFIG['rs_pdf']} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:url]} -c "Click here")
 			logger.info output
 			logger.info "PDFxReadersourcing execution completed"
 			File.delete(absolute_pdf_download_path)
@@ -176,9 +176,9 @@ class Publication < ApplicationRecord
 		update_attribute(:pdf_download_path, "#{pdf_storage_path}#{pdf_name}")
 		update_attribute(:pdf_download_url, "#{host}#{pdf_storage_path}#{pdf_name}")
 		update_attribute(:pdf_name, pdf_name)
-		update_attribute(:pdf_download_path_link, "#{pdf_storage_path}#{pdf_name_without_ext}#{APP_CONFIG['pdf_x_readersourcing_link_suffix']}.pdf")
-		update_attribute(:pdf_download_url_link, "#{host}#{pdf_storage_path}#{pdf_name_without_ext}#{APP_CONFIG['pdf_x_readersourcing_link_suffix']}.pdf")
-		update_attribute(:pdf_name_link, "#{pdf_name_without_ext}#{APP_CONFIG['pdf_x_readersourcing_link_suffix']}.pdf")
+		update_attribute(:pdf_download_path_link, "#{pdf_storage_path}#{pdf_name_without_ext}#{APP_CONFIG['rs_pdf_link_suffix']}.pdf")
+		update_attribute(:pdf_download_url_link, "#{host}#{pdf_storage_path}#{pdf_name_without_ext}#{APP_CONFIG['rs_pdf_link_suffix']}.pdf")
+		update_attribute(:pdf_name_link, "#{pdf_name_without_ext}#{APP_CONFIG['rs_pdf_link_suffix']}.pdf")
 	end
 
 	def absolute_pdf_storage_path
