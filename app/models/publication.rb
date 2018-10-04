@@ -124,7 +124,7 @@ class Publication < ApplicationRecord
 		logger.info "Checking again existence of: #{absolute_pdf_download_path}"
 		if File.exist?(absolute_pdf_download_path)
 			logger.info "File exists"
-			logger.info "PDFxReadersourcing execution started"
+			logger.info "RS_Rate execution started"
 			logger.info "Path: #{APP_CONFIG['rs_pdf']}"
 			logger.info "with options:"
 			logger.info "-pIn: #{absolute_pdf_download_path}"
@@ -137,7 +137,7 @@ class Publication < ApplicationRecord
 			logger.info "java -jar #{APP_CONFIG['rs_pdf']} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:url]} -c \"Click here\""
 			output = %x( java -jar #{APP_CONFIG['rs_pdf']} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:url]} -c "Click here")
 			logger.info output
-			logger.info "PDFxReadersourcing execution completed"
+			logger.info "RS_Rate execution completed"
 			File.delete(absolute_pdf_download_path)
 			logger.info "Modified file"
 			logger.info "Name: #{pdf_name_link}"
