@@ -7,7 +7,6 @@ gem 'rails', '~> 5.2.0'
 gem 'puma', '~> 3.11'
 gem 'jbuilder', '~> 2.5'
 gem 'bcrypt', '~> 3.1.7'
-gem 'capistrano-rails', group: :development
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'rack-cors'
 gem 'pdf-reader'
@@ -20,7 +19,7 @@ gem 'uglifier'
 gem 'coffee-rails'
 
 group :development, :test do
-	gem 'sqlite3'
+	gem 'pg'
 	gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
 
