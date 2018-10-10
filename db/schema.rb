@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 2018_07_18_090558) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "publications", force: :cascade do |t|
     t.string "doi"
     t.string "title"
@@ -43,8 +46,8 @@ ActiveRecord::Schema.define(version: 2018_07_18_090558) do
     t.decimal "bonus", default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
-    t.integer "publication_id"
+    t.bigint "user_id"
+    t.bigint "publication_id"
     t.index ["publication_id"], name: "index_ratings_on_publication_id"
     t.index ["user_id"], name: "index_ratings_on_user_id"
   end
@@ -64,4 +67,6 @@ ActiveRecord::Schema.define(version: 2018_07_18_090558) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "ratings", "publications"
+  add_foreign_key "ratings", "users"
 end
