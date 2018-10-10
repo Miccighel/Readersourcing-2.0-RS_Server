@@ -14,16 +14,12 @@ gem 'jwt'
 gem 'simple_command'
 gem 'nokogiri'
 gem 'mailcatcher'
-
 gem 'uglifier'
 gem 'coffee-rails'
+gem 'pg'
 
 group :development, :test do
-	gem 'pg'
 	gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-end
-
-group :development do
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

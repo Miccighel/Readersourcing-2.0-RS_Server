@@ -1,13 +1,18 @@
-postgres:
-  image: postgres:10.5
-  ports:
-  - "5432"
-app:
-  build: .
-  command: rails server -p 3000 -b '0.0.0.0'
-  volumes:
-  - .:/app
-  ports:
-  - "3000:3000"
-  links:
-  - postgres
+version: '3'
+services:
+  rs_server_webapp:
+    build: .
+    image: rs_server_webapp:latest
+    command: rails server -p 3000 -b '0.0.0.0'
+    volumes:
+    - .:/app
+    ports:
+    - "3000:3000"
+    links:
+    - rs_server_database
+    container_name: webapp
+  rs_server_database:
+    image: postgres:10.5
+    ports:
+    - "5432"
+    container_name: postgres
