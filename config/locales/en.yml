@@ -69,10 +69,10 @@ en:
       invalid_link: "Link not valid or expired. Try generating a new link."
   mails:
     labels:
-      platform_name: "R@SM"
+      platform_name: "Readersourcing 2.0"
       dear: "Dear"
       cheers: "Cheers"
-      team: "The R@SM Team"
+      team: "The Readersourcing 2.0 Team"
       new_password: "Get a new password"
       view_publication: "Go to the publication"
     subject:

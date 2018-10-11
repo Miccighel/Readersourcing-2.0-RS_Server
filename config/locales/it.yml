@@ -105,10 +105,10 @@ it:
       invalid_link: "Collegamento non valido o scaduto. Prova a generarne un altro."
   mails:
     labels:
-      platform_name: "R@SM"
+      platform_name: "Readersourcing 2.0"
       dear: "Gentile"
       cheers: "Saluti"
-      team: "Il Team di R@SM"
+      team: "Il Team di Readersourcing 2.0"
       new_password: "Ottieni una nuova password"
       view_publication: "Vai alla pubblicazione"
     subject:
