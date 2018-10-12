@@ -1,4 +1,4 @@
-class SMStrategy < ReadersourcingStrategy
+class RsmStrategy < ReadersourcingStrategy
 
 	def initialize(rating)
 		@rating = rating
@@ -11,7 +11,7 @@ class SMStrategy < ReadersourcingStrategy
 		puts "Saving values at time t(i)"
 
 		old_publication_steadiness = @publication.steadiness
-		old_publication_score = @publication.score_sm
+		old_publication_score = @publication.score_rsm
 		old_user_steadiness = @user.steadiness
 		old_rating_goodness = 1 - Math.sqrt((@rating.normalize_score - old_publication_score).abs)
 		old_user_score = @user.score
@@ -25,13 +25,13 @@ class SMStrategy < ReadersourcingStrategy
 		puts "Updating values at time t(i+1)"
 
 		@publication.steadiness = old_publication_steadiness + @user.score
-		@publication.score_sm = ((old_publication_steadiness * old_publication_score) + (old_user_score * @rating.normalize_score)) / @publication.steadiness
+		@publication.score_rsm = ((old_publication_steadiness * old_publication_score) + (old_user_score * @rating.normalize_score)) / @publication.steadiness
 		@user.steadiness = old_user_steadiness + @publication.steadiness
-		@rating.goodness =  1 - Math.sqrt((@rating.normalize_score - @publication.score_sm).abs)
+		@rating.goodness =  1 - Math.sqrt((@rating.normalize_score - @publication.score_rsm).abs)
 		@user.score = ((old_user_steadiness * old_user_score) + (@publication.steadiness * @rating.goodness)) / @user.steadiness
 
 		puts "Publication steadiness at time t(i+1) #{@publication.steadiness}"
-		puts "Publication score at time t(i+1) #{@publication.score_sm}"
+		puts "Publication score at time t(i+1) #{@publication.score_rsm}"
 		puts "User steadiness at time t(i+1) #{@user.steadiness}"
 		puts "Rating goodness at time t(i+1) #{@rating.goodness}"
 		puts "User score at time t(i+1) #{@user.score}"
@@ -57,7 +57,7 @@ class SMStrategy < ReadersourcingStrategy
 
 			puts "Updating previous values at time t(i+1)"
 
-			old_rating.goodness =  1 - Math.sqrt((old_rating.normalize_score - @publication.score_sm).abs)
+			old_rating.goodness =  1 - Math.sqrt((old_rating.normalize_score - @publication.score_rsm).abs)
 			previous_user.steadiness = old_previous_user_steadiness + old_user_score
 			previous_user.score = ((old_previous_user_steadiness * old_previous_user_score) - (old_publication_steadiness * old_rating_goodness) + (@publication.steadiness * old_rating.goodness)) / previous_user.steadiness
 

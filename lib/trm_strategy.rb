@@ -1,4 +1,4 @@
-class TrueReviewStrategy < ReadersourcingStrategy
+class TrmStrategy < ReadersourcingStrategy
 
 	def initialize(rating)
 		@publication = rating.publication
@@ -34,10 +34,10 @@ class TrueReviewStrategy < ReadersourcingStrategy
 			end
 		end
 
-		puts "Publication score at time t(i) #{@publication.score_tr}"
-		@publication.score_tr = mean(scores)
+		puts "Publication score at time t(i) #{@publication.score_trm}"
+		@publication.score_trm = mean(scores)
 		@publication.save
-		puts "Publication score at time t(i+1) #{@publication.score_tr}"
+		puts "Publication score at time t(i+1) #{@publication.score_trm}"
 
 		users.each do |user|
 			puts "User bonus at time t(i) #{user.bonus}"

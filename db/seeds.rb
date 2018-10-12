@@ -92,11 +92,11 @@ puts "########## PUBLICATIONS SEEDING COMPLETED ##########"
 # 	fake_rating.user_id = random_user_id
 # 	fake_rating.save
 #
-# 	sm_strategy = SMStrategy.new(fake_rating)
+# 	sm_strategy = RsmStrategy.new(fake_rating)
 # 	readersourcing = Readersourcing.new(sm_strategy)
 # 	readersourcing.compute_scores
 #
-# 	tr_strategy = TrueReviewStrategy.new(Publication.find(random_publication_id))
+# 	tr_strategy = TrmStrategy.new(Publication.find(random_publication_id))
 # 	readersourcing = Readersourcing.new(tr_strategy)
 # 	readersourcing.compute_scores
 #
@@ -120,11 +120,11 @@ rating_1.user_id = user_id_1
 rating_1.publication_id = publication_id_1
 rating_1.save
 
-sm_strategy = SMStrategy.new(rating_1)
+sm_strategy = RsmStrategy.new(rating_1)
 readersourcing = Readersourcing.new(sm_strategy)
 readersourcing.compute_scores
 
-true_review_strategy = TrueReviewStrategy.new(rating_1)
+true_review_strategy = TrmStrategy.new(rating_1)
 readersourcing = Readersourcing.new(true_review_strategy)
 readersourcing.compute_scores
 
@@ -134,11 +134,11 @@ rating_2.user_id = user_id_2
 rating_2.publication_id = publication_id_1
 rating_2.save
 
-sm_strategy = SMStrategy.new(rating_2)
+sm_strategy = RsmStrategy.new(rating_2)
 readersourcing = Readersourcing.new(sm_strategy)
 readersourcing.compute_scores
 
-true_review_strategy = TrueReviewStrategy.new(rating_2)
+true_review_strategy = TrmStrategy.new(rating_2)
 readersourcing = Readersourcing.new(true_review_strategy)
 readersourcing.compute_scores
 
@@ -148,11 +148,11 @@ rating_3.user_id = user_id_3
 rating_3.publication_id = publication_id_1
 rating_3.save
 
-sm_strategy = SMStrategy.new(rating_3)
+sm_strategy = RsmStrategy.new(rating_3)
 readersourcing = Readersourcing.new(sm_strategy)
 readersourcing.compute_scores
 
-true_review_strategy = TrueReviewStrategy.new(rating_3)
+true_review_strategy = TrmStrategy.new(rating_3)
 readersourcing = Readersourcing.new(true_review_strategy)
 readersourcing.compute_scores
 
@@ -162,11 +162,11 @@ rating_4.user_id = user_id_3
 rating_4.publication_id = publication_id_2
 rating_4.save
 
-sm_strategy = SMStrategy.new(rating_4)
+sm_strategy = RsmStrategy.new(rating_4)
 readersourcing = Readersourcing.new(sm_strategy)
 readersourcing.compute_scores
 
-true_review_strategy = TrueReviewStrategy.new(rating_4)
+true_review_strategy = TrmStrategy.new(rating_4)
 readersourcing = Readersourcing.new(true_review_strategy)
 readersourcing.compute_scores
 
@@ -176,11 +176,11 @@ rating_5.user_id = user_id_4
 rating_5.publication_id = publication_id_2
 rating_5.save
 
-sm_strategy = SMStrategy.new(rating_5)
+sm_strategy = RsmStrategy.new(rating_5)
 readersourcing = Readersourcing.new(sm_strategy)
 readersourcing.compute_scores
 
-true_review_strategy = TrueReviewStrategy.new(rating_5)
+true_review_strategy = TrmStrategy.new(rating_5)
 readersourcing = Readersourcing.new(true_review_strategy)
 readersourcing.compute_scores
 
@@ -190,11 +190,11 @@ rating_6.user_id = user_id_4
 rating_6.publication_id = publication_id_1
 rating_6.save
 
-sm_strategy = SMStrategy.new(rating_6)
+sm_strategy = RsmStrategy.new(rating_6)
 readersourcing = Readersourcing.new(sm_strategy)
 readersourcing.compute_scores
 
-true_review_strategy = TrueReviewStrategy.new(rating_6)
+true_review_strategy = TrmStrategy.new(rating_6)
 readersourcing = Readersourcing.new(true_review_strategy)
 readersourcing.compute_scores
 

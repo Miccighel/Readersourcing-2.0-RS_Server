@@ -8,11 +8,11 @@ class Rating < ApplicationRecord
 	end
 
 	def compute_scores
-		logger.info "Computing scores with SM Model"
-		readersourcing = SMStrategy.new self
+		logger.info "Computing scores with RSM Model"
+		readersourcing = Readersourcing.new RsmStrategy.new self
 		readersourcing.compute_scores
-		logger.info "Computing scores with TrueReview Model"
-		readersourcing = TrueReviewStrategy.new self
+		logger.info "Computing scores with TRM Model"
+		readersourcing = Readersourcing.new TrmStrategy.new self
 		readersourcing.compute_scores
 	end
 

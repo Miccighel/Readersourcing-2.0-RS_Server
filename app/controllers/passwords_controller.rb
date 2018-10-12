@@ -1,5 +1,9 @@
 class PasswordsController < ApplicationController
 
+	include ::ActionView::Layouts
+
+	layout "application"
+
 	skip_before_action :authenticate_request, only: [:forgot, :reset]
 
 	before_action :set_error_manager, only: [:update, :forgot, :reset]
@@ -12,13 +16,16 @@ class PasswordsController < ApplicationController
 			current_user.password = inserted_password
 			if current_user.save
 				PasswordMailer.update(current_user).deliver
-				render partial: "shared/success", status: :ok, locals: {message: I18n.t("confirmations.messages.password_update_successful")}
+				render "shared/success", status: :ok, locals: {message: I18n.t("confirmations.messages.password_update_successful")}
 			else
-				render json: current_user.errors, status: :unprocessable_entity
+				current_user.errors.each do |error|
+					@error_manager.add_error(error)
+				end
+				render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
 			end
 		else
 			@error_manager.add_error(I18n.t("errors.messages.password_does_not_match"))
-			render partial: "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
+			render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
 		end
 	end
 
@@ -27,16 +34,16 @@ class PasswordsController < ApplicationController
 		email = params[:email]
 		if email.blank?
 			@error_manager.add_error(I18n.t("errors.messages.email_not_present"))
-			render partial: "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
+			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
 		end
 		user = User.find_by(email: email)
 		if user.present?
 			user.generate_password_token!
 			PasswordMailer.forgot(user, user.reset_password_token).deliver
-			render partial: "shared/success", status: :ok, locals: {message: I18n.t("confirmations.messages.reset_mail_sent")}
+			render "shared/success", status: :ok, locals: {message: I18n.t("confirmations.messages.reset_mail_sent")}
 		else
 			@error_manager.add_error(I18n.t("errors.messages.email_not_present"))
-			render partial: "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
+			render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
 		end
 	end
 
@@ -46,24 +53,28 @@ class PasswordsController < ApplicationController
 		reset_token = params[:reset_token]
 		if email.blank?
 			@error_manager.add_error('Email not present')
-			render partial: "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
-		end
-		if reset_token.blank?
-			@error_manager.add_error('Reset token not present')
-			render partial: "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
-		end
-		user = User.find_by(reset_password_token: reset_token)
-		if user.present? && user.password_token_valid?
-			new_password = SecureRandom.hex (rand(6..10))
-			puts new_password
-			if user.reset_password!(new_password)
-				PasswordMailer.reset(user, new_password).deliver
-				render partial: "shared/success", status: :ok, locals: {message: I18n.t("confirmations.messages.new_password_mail_sent")}
-			else
-				render json: user.errors, status: :unprocessable_entity
-			end
+			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
 		else
-			render json: {error: [I18n.t("errors.messages.invalid_link")]}, status: :not_found
+			if reset_token.blank?
+				@error_manager.add_error('Reset token not present')
+				render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
+			else
+				user = User.find_by(reset_password_token: reset_token)
+				if user.present? && user.password_token_valid?
+					new_password = SecureRandom.hex (rand(6..10))
+					if user.reset_password!(new_password)
+						PasswordMailer.reset(user, new_password).deliver
+						render "shared/success", status: :ok, locals: {message: I18n.t("confirmations.messages.new_password_mail_sent")}
+					else
+						@error_manager.add_error("dssdsdssd")
+						render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
+						render json: user.errors, status: :unprocessable_entity
+					end
+				else
+					@error_manager.add_error(I18n.t("errors.messages.invalid_link"))
+					render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
+				end
+			end
 		end
 	end
 

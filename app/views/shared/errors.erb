@@ -1,0 +1,18 @@
+<section class="bar bg-gray-dark no-mb color-white">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="heading text-center">
+					<% errors.each do |error| %>
+						<p class="lead mb-0"><%= error["message"] %></p>
+				<% end %>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 text-center mt-1">
+				<%= link_to I18n.t("labels.close_page"), "", :onclick => 'window.close();', class: "btn btn-primary" %>
+			</div>
+		</div>
+	</div>
+</section>

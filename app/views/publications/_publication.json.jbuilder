@@ -15,8 +15,8 @@ json.extract! publication,
 			  :pdf_download_path_link,
 			  :pdf_download_url_link,
 			  :steadiness,
-			  :score_sm,
-			  :score_tr,
+			  :score_rsm,
+			  :score_trm,
 			  :created_at,
 			  :updated_at
 json.url publication_url(publication, format: :json)
