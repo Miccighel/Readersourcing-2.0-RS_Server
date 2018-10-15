@@ -46,7 +46,8 @@ class RatingsController < ApplicationController
 				end
 			end
 		else
-			render :'shared/unauthorized', locals: {message: I18n.t("errors.messages.expired_token")}
+			@error_manager.add_error(I18n.t("errors.messages.password_does_not_match"))
+			render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
 		end
 	end
 
@@ -103,16 +104,6 @@ class RatingsController < ApplicationController
 			end
 		else
 			render :not_the_same_user, locals: {pubId: publication.id}
-		end
-	end
-
-	# PATCH/PUT /ratings/1.json
-	def update
-		if @rating.update(rating_params)
-			@rating.compute_scores
-			render :show, status: :ok, location: @rating
-		else
-			render json: @rating.errors, status: :unprocessable_entity
 		end
 	end
 

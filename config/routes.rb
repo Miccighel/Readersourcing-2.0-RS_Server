@@ -15,7 +15,7 @@ Rails.application.routes.draw do
 				get :is_rated
 			end
 		end
-		resources :ratings, except: [:destroy] do
+		resources :ratings, except: [:destroy, :update] do
 			collection do
 				get :rate
 			end

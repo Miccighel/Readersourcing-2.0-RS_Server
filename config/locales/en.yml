@@ -35,7 +35,7 @@ en:
       errors:
         messages:
           lookup_error: "Publication not available for the given URL."
-          is_rated_error: "There isn't any rating given to the publication by the logged in user."
+          is_rated_error: "There is not any rating given to the publication by the logged in user."
   labels:
     otherwise: "Otherwise"
     try_again: "Try again"
@@ -44,6 +44,7 @@ en:
     anonimyze: "Anonymize"
   confirmations:
     messages:
+      operation_completed: "Operation completed successfully."
       rating_successful: "Rating successfully given to the publication."
       password_update_successful: "Your password has been updated successfully."
       reset_mail_sent: "Reset email sent. Check your inbox."
@@ -54,19 +55,19 @@ en:
       try_again: "Do you want to try again?"
       rate_again: "Do you want to give a new rating?"
       mail_confirmation: "you will get an email confirmation."
-      not_the_same_user: "If you're that user, insert your login data again."
+      not_the_same_user: "If you are that user, insert your login data again."
       validate_user: "Validate yourself"
   errors:
     messages:
       invalid_credentials: "Invalid credentials. Please, try again."
       rating_already_given: "You have already rated the publication."
       rating_unsuccessful: "Something went wrong during rating assignment. Please, try again."
-      not_the_same_user: "The data doesn't match with the ones of the user that has created the link inside the file."
-      unauthorized: "Attention, you're not authorized to proceed."
-      expired_token: "The clicked link contains an expired token. <br />To proceed, you must regenerate the document and click the new link."
-      password_does_not_match: "The inserted passwords don't match. Please, try again."
-      email_not_present: "Email address not found. Please check it and try again."
-      invalid_link: "Link not valid or expired. Try generating a new link."
+      not_the_same_user: "The data do not match with the ones of the user that has created the link inside the file."
+      unauthorized: "You're not authorized to proceed."
+      expired_token: "The clicked link contains an expired token. <br />To proceed, you must annotate the publication again and click the new link."
+      password_does_not_match: "The inserted passwords do not match. Please, try again."
+      email_not_present: "Email address not found. Please, check it and try again."
+      invalid_link: "Link not valid or expired. Please, try to generate a new link."
   mails:
     labels:
       platform_name: "Readersourcing 2.0"
@@ -82,13 +83,13 @@ en:
       rating_confirm: "Rating Assignment Confirmation"
       registration_confirm: "Registration Completed"
     password:
-      to_get_a_new_one: "To get a new password just click on the link below. You will get an email containing the new password."
+      to_get_a_new_one: "To get a new password just click on the link below. You will get an email containing the new password itself."
       edit_first_access: "For your safety, change it during the first login to the platform."
       reset_successful: "Your password has been successfully reset. The new one is:"
       update_successful: "Your password has been updated successfully."
     rating:
       delete_rating: "We remind you that you can delete this rating at any time from the interface."
-      given_rating_1: "You gave a rating of:"
+      given_rating_1: "You gave a rating equal to:"
       given_rating_2: "to the publication available at the link below."
     user:
       registration_successful: "Your registration has been completed successfully. Welcome to our platform."

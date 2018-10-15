@@ -2,7 +2,7 @@ class PasswordsController < ApplicationController
 
 	include ::ActionView::Layouts
 
-	layout "application"
+	layout "application", only: [:forgot, :reset]
 
 	skip_before_action :authenticate_request, only: [:forgot, :reset]
 
@@ -18,9 +18,7 @@ class PasswordsController < ApplicationController
 				PasswordMailer.update(current_user).deliver
 				render "shared/success", status: :ok, locals: {message: I18n.t("confirmations.messages.password_update_successful")}
 			else
-				current_user.errors.each do |error|
-					@error_manager.add_error(error)
-				end
+				current_user.errors.each {|error| @error_manager.add_error(error)}
 				render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
 			end
 		else
@@ -51,10 +49,12 @@ class PasswordsController < ApplicationController
 	def reset
 		email = params[:email]
 		reset_token = params[:reset_token]
+		# Has the user inserted an email?
 		if email.blank?
 			@error_manager.add_error('Email not present')
 			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
 		else
+			# Is the reset token present?
 			if reset_token.blank?
 				@error_manager.add_error('Reset token not present')
 				render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
@@ -66,8 +66,6 @@ class PasswordsController < ApplicationController
 						PasswordMailer.reset(user, new_password).deliver
 						render "shared/success", status: :ok, locals: {message: I18n.t("confirmations.messages.new_password_mail_sent")}
 					else
-						@error_manager.add_error("dssdsdssd")
-						render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
 						render json: user.errors, status: :unprocessable_entity
 					end
 				else

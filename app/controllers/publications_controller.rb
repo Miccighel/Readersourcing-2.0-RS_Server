@@ -20,7 +20,7 @@ class PublicationsController < ApplicationController
 			render :show, status: :found, location: @publication
 		else
 			@error_manager.add_error(I18n.t("models.publications.errors.messages.lookup_error"))
-			render partial: "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
+			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
 		end
 	end
 
@@ -38,7 +38,7 @@ class PublicationsController < ApplicationController
 			render rating, status: :ok
 		else
 			@error_manager.add_error(I18n.t("models.publications.errors.messages.is_rated_error"))
-			render partial: "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
+			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
 		end
 	end
 
