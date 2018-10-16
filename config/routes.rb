@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 			member do
 				get :refresh
 				get :is_rated
+				get :is_saved_for_later
 			end
 		end
 		resources :ratings, except: [:destroy, :update] do

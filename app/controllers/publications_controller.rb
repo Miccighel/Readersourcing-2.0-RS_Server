@@ -1,7 +1,7 @@
 class PublicationsController < ApplicationController
 
-	before_action :set_publication, only: [:show, :update, :destroy, :refresh, :is_rated]
-	before_action :set_error_manager, only: [:lookup, :is_rated]
+	before_action :set_publication, only: [:show, :update, :destroy, :refresh, :is_rated, :is_saved_for_later]
+	before_action :set_error_manager, only: [:lookup, :is_rated, :is_saved_for_later]
 
 	# GET /publications.json
 	def index
@@ -38,6 +38,16 @@ class PublicationsController < ApplicationController
 			render rating, status: :ok
 		else
 			@error_manager.add_error(I18n.t("models.publications.errors.messages.is_rated_error"))
+			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
+		end
+	end
+
+	# GET /publications/1/is_saved_for_later.json
+	def is_saved_for_later
+		if @publication.is_saved_for_later
+			render @publication, status: :ok
+		else
+			@error_manager.add_error("not saved for later")
 			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
 		end
 	end

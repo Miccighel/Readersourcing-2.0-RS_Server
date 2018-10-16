@@ -20,6 +20,10 @@ class Publication < ApplicationRecord
 		nil
 	end
 
+	def is_saved_for_later
+		File.file?(absolute_pdf_download_path_link)
+	end
+
 	def fetch(request_data)
 
 		data = build_data(request_data)
