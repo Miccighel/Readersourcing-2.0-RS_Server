@@ -8,8 +8,8 @@ RUN apt-get update && apt-get install -y build-essential nodejs
 # Configure the main working directory. This is the base
 # directory used in any further RUN, COPY, and ENTRYPOINT
 # commands.
-RUN mkdir -p /rs_server_webapp
-WORKDIR ./rs_server_webapp
+RUN mkdir -p /rs_server
+WORKDIR ./rs_server
 
 # Copy the Gemfile as well as the Gemfile.lock and install
 # the RubyGems. This is a separate step so the dependencies
@@ -32,4 +32,4 @@ EXPOSE 3000
 # The main command to run when the container starts. Also
 # tell the Rails dev server to bind to all interfaces by
 # default.
-# CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
