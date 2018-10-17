@@ -31,7 +31,7 @@ puts "########## FAKE USERS SEEDING STARTED ##########"
 6.times do |index|
 	puts "---------- CREATING FAKE USER #{index} ----------"
 
-	fake_user = User.new(first_name: "FirstName#{index}", last_name: "LastName#{index}", email: "Email#{index}@mail.com", password: '123456', password_confirmation: '123456')
+	fake_user = User.new(first_name: "FirstName#{index}", last_name: "LastName#{index}", email: "email#{index}@mail.com", password: '123456', password_confirmation: '123456')
 	fake_user.save
 
 	puts "---------- CREATION COMPLETED ----------"
@@ -50,7 +50,7 @@ p5 = Publication.new({pdf_url: "https://geochemicaltransactions.springeropen.com
 auth_token = "bf9c15d6a6ad390c36915fe31649d1c66dfc836fc5a8739ea7c0823f0879a730$$RpkBx+0OSzzQWvis2/cLJ9eqDpkXibVcERKSG1ZLHOYvmuHJTcO4JJEQBC2h5bauj85OUU3CSTb7iZvrGx2KxMKm/b9c5KAo+KwfSfmQOj4uIclTAk12o3Wp2k/UVgSMU9NMyxFmb6S/5+YKkH+7gD+5k9fKeQ==--4vM+DLuTaxGyv5ce--pkUJwp+xPVgORbtUMGugxA=="
 data = Hash.new
 data[:authToken] = auth_token
-data[:host] = "http://localhost:3000/"
+data[:host] = "http://localhost:3000"
 
 puts "---------- FETCHING FILE FOR PUBLICATION 1 ----------"
 p1.save
@@ -105,7 +105,7 @@ puts "########## PUBLICATIONS SEEDING COMPLETED ##########"
 #
 #puts "########## FAKE RATING SEEDING COMPLETED #########"
 
-puts "########## SM RATING SIMULATION COMPLETED #########"
+puts "########## RATING SIMULATION STARTED #########"
 
 publication_id_1 = 1
 publication_id_2 = 2
@@ -198,7 +198,7 @@ true_review_strategy = TrmStrategy.new(rating_6)
 readersourcing = Readersourcing.new(true_review_strategy)
 readersourcing.compute_scores
 
-puts "########## SM RATING SIMULATION COMPLETED #########"
+puts "########## RATING SIMULATION COMPLETED #########"
 
 puts "@@@@@@@@@@ SEEDING COMPLETED @@@@@@@@@@"
 

@@ -6,7 +6,6 @@ class PublicationsController < ApplicationController
 	# GET /publications.json
 	def index
 		@publications = Publication.all
-		puts @host
 	end
 
 	# GET /publications/1.json
@@ -108,7 +107,7 @@ class PublicationsController < ApplicationController
 	def request_data
 		request_data = Hash.new
 		request_data["authToken"] =  encrypt request.headers["Authorization"]
-		request_data["host"] =  "#{request.protocol}#{request.host_with_port}/"
+		request_data["host"] =  "#{request.protocol}#{request.host_with_port}"
 		request_data
 	end
 

@@ -15,6 +15,7 @@ gem 'simple_command'
 gem 'nokogiri'
 gem 'mailcatcher'
 gem 'uglifier'
+gem 'config'
 gem 'coffee-rails'
 gem 'pg'
 

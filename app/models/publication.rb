@@ -123,25 +123,25 @@ class Publication < ApplicationRecord
 			logger.info e.message
 		end
 
-		# EDITING OF PDF FILE WITH PDFxREADERSOURCING STARTS HERE
-		#
+		# EDITING OF PDF FILE WITH RS_PDF STARTS HERE
+
 		logger.info "Checking again existence of: #{absolute_pdf_download_path}"
 		if File.exist?(absolute_pdf_download_path)
 			logger.info "File exists"
-			logger.info "RS_Rate execution started"
-			logger.info "Path: #{APP_CONFIG['rs_pdf']}"
+			logger.info "RS_PDF execution started"
+			logger.info "Path: #{absolute_rs_pdf_path}"
 			logger.info "with options:"
 			logger.info "-pIn: #{absolute_pdf_download_path}"
 			logger.info "-pOut: #{absolute_pdf_storage_path}"
-			logger.info "-u: #{data[:url]}"
+			logger.info "-u: #{data[:rate_path]}"
 			logger.info "-c: Click here"
 			logger.info "-pId: #{data[:pubId]}"
 			logger.info "-a: #{data[:authToken]}"
 			logger.info "Complete command:"
-			logger.info "java -jar #{APP_CONFIG['rs_pdf']} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:url]} -c \"Click here\""
-			output = %x( java -jar #{APP_CONFIG['rs_pdf']} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:url]} -c "Click here")
+			logger.info "java -jar #{absolute_rs_pdf_path} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:rate_path]} -c \"Click here\""
+			output = %x( java -jar #{absolute_rs_pdf_path} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:rate_path]} -c "Click here")
 			logger.info output
-			logger.info "RS_Rate execution completed"
+			logger.info "RS_PDF execution completed"
 			File.delete(absolute_pdf_download_path)
 			logger.info "Modified file"
 			logger.info "Name: #{pdf_name_link}"
@@ -173,6 +173,10 @@ class Publication < ApplicationRecord
 
 	private
 
+	def absolute_rs_pdf_path
+		Rails.root.join("lib").join(Settings.rs_pdf_name)
+	end
+
 	def load_pdf_paths(pdf_name, host)
 		pdf_name_without_ext = pdf_name.chomp(".pdf").to_s.gsub('%2', '-')
 		pdf_name = "#{pdf_name_without_ext}.pdf"
@@ -180,9 +184,9 @@ class Publication < ApplicationRecord
 		update_attribute(:pdf_download_path, "#{pdf_storage_path}#{pdf_name}")
 		update_attribute(:pdf_download_url, "#{host}#{pdf_storage_path}#{pdf_name}")
 		update_attribute(:pdf_name, pdf_name)
-		update_attribute(:pdf_download_path_link, "#{pdf_storage_path}#{pdf_name_without_ext}#{APP_CONFIG['rs_pdf_link_suffix']}.pdf")
-		update_attribute(:pdf_download_url_link, "#{host}#{pdf_storage_path}#{pdf_name_without_ext}#{APP_CONFIG['rs_pdf_link_suffix']}.pdf")
-		update_attribute(:pdf_name_link, "#{pdf_name_without_ext}#{APP_CONFIG['rs_pdf_link_suffix']}.pdf")
+		update_attribute(:pdf_download_path_link, "#{pdf_storage_path}#{pdf_name_without_ext}#{Settings.rs_pdf_link_suffix}.pdf")
+		update_attribute(:pdf_download_url_link, "#{host}#{pdf_storage_path}#{pdf_name_without_ext}#{Settings.rs_pdf_link_suffix}.pdf")
+		update_attribute(:pdf_name_link, "#{pdf_name_without_ext}#{Settings.rs_pdf_link_suffix}.pdf")
 	end
 
 	def absolute_pdf_storage_path
@@ -202,7 +206,7 @@ class Publication < ApplicationRecord
 		data[:authToken] = request_data.values[0]
 		data[:host] = request_data.values[1]
 		data[:pubId] = self.id
-		data[:url] = Rails.application.routes.url_helpers.rate_path(data[:pubId], data[:authToken])
+		data[:rate_path] = "#{request_data.values[1]}#{Rails.application.routes.url_helpers.rate_path(data[:pubId], data[:authToken])}"
 		data
 	end
 
