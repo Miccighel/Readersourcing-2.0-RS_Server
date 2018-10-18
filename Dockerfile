@@ -32,4 +32,8 @@ EXPOSE 3000
 # The main command to run when the container starts. Also
 # tell the Rails dev server to bind to all interfaces by
 # default.
+
+# DEVELOPMENT MODE
 CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
+# PRODUCTION MODE
+# CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000", "-e" "production"]

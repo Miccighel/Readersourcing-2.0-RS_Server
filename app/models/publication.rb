@@ -182,10 +182,10 @@ class Publication < ApplicationRecord
 		pdf_name = "#{pdf_name_without_ext}.pdf"
 		update_attribute(:pdf_storage_path, "publication/#{id}/")
 		update_attribute(:pdf_download_path, "#{pdf_storage_path}#{pdf_name}")
-		update_attribute(:pdf_download_url, "#{host}#{pdf_storage_path}#{pdf_name}")
+		update_attribute(:pdf_download_url, "#{host}/#{pdf_storage_path}#{pdf_name}")
 		update_attribute(:pdf_name, pdf_name)
 		update_attribute(:pdf_download_path_link, "#{pdf_storage_path}#{pdf_name_without_ext}#{Settings.rs_pdf_link_suffix}.pdf")
-		update_attribute(:pdf_download_url_link, "#{host}#{pdf_storage_path}#{pdf_name_without_ext}#{Settings.rs_pdf_link_suffix}.pdf")
+		update_attribute(:pdf_download_url_link, "#{host}/#{pdf_storage_path}#{pdf_name_without_ext}#{Settings.rs_pdf_link_suffix}.pdf")
 		update_attribute(:pdf_name_link, "#{pdf_name_without_ext}#{Settings.rs_pdf_link_suffix}.pdf")
 	end
 
