@@ -15,14 +15,13 @@
 #    - "5432"
 #    container_name: postgres
 
-# DEPLOY WITH LOCAL BUILD (Dev Mode)
-#
+# DEPLOY WITH LOCAL BUILD
+
 version: '3'
 services:
   rs_server_webapp:
     build: .
     image: miccighel/rs_server:v1.0.5-alpha
-    command: rails server -p 3000 -b '0.0.0.0'
     volumes:
     - .:/app
     ports:
@@ -36,28 +35,9 @@ services:
     - "5432"
     container_name: postgres
 
-# DEPLOY WITH LOCAL BUILD (Prod Mode)
-#
-#version: '3'
-#services:
-#  rs_server_webapp:
-#    build: .
-#    image: miccighel/rs_server:v1.0.5-alpha
-#    command: rails server -p 3000 -b '0.0.0.0' -e production
-#    volumes:
-#    - .:/app
-#    ports:
-#    - "3000:3000"
-#    links:
-#    - rs_server_database
-#    container_name: webapp
-#  rs_server_database:
-#    image: postgres:10.5
-#    ports:
-#    - "5432"
-#    container_name: postgres
-
 # POST DEPLOY COMMANDS
 #
 # docker-compose run rs_server_webapp rake db:create
 # docker-compose run rs_server_webapp rake db:migrate
+# docker compose run rails server -p 3000 -b '0.0.0.0' (Dev Mode)
+# docker compose run rails server -p 3000 -b '0.0.0.0' -e production (Prod Mode)

@@ -20,6 +20,7 @@ gem 'coffee-rails'
 gem 'pg'
 
 group :development, :test do
+	gem 'dotenv-rails'
 	gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
 
