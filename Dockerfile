@@ -4,6 +4,8 @@ FROM ruby:2.4
 # well as RubyGems. As the Ruby image itself is based on a
 # Debian image, we use apt-get to install those.
 RUN apt-get update && apt-get install -y build-essential nodejs
+# Install java since it is required to run rs-server
+RUN apt-get install default-jre -y
 
 # Configure the main working directory. This is the base
 # directory used in any further RUN, COPY, and ENTRYPOINT
@@ -34,6 +36,15 @@ EXPOSE 3000
 # default.
 
 # DEVELOPMENT MODE
-#CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
+#CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
 # PRODUCTION MODE
-# CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000", "-e" "production"]
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-e", "production"]
+
+# HEROKU DOCKER DEPLOY COMNMANDS
+#
+# heroku login
+# heroku container:login
+# heroku container:push web
+# heroku release:web
+# heroku open
+# heroku run rake db:migrate

@@ -7,5 +7,14 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/development</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="d4nc50pcpinj7" uuid="ed9172a9-7fb7-4e4c-a162-c545c2b872ac">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql:d4nc50pcpinj7</jdbc-url>
+      <driver-properties>
+        <property name="ssl" value="false" />
+      </driver-properties>
+    </data-source>
   </component>
 </project>

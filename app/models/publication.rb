@@ -26,6 +26,10 @@ class Publication < ApplicationRecord
 
 	def fetch(request_data)
 
+		# TODO
+
+		remove_files
+
 		data = build_data(request_data)
 
 		# FETCHING OF PDF FILE STARTS HERE

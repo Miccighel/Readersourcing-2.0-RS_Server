@@ -53,6 +53,6 @@ Rails.application.configure do
 	# routes, locales, etc. This feature depends on the listen gem.
 	# config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 	#
-	config.secret_key_base = ENV["SECRET_KEY_BASE"]
+	config.secret_key_base = ENV["SECRET_DEV_KEY"]
 
 end
