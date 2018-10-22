@@ -3,7 +3,6 @@ class PasswordMailer < ApplicationMailer
 	def update(user)
 		@user = user
 		mail(
-			from: "#{I18n.t("mails.labels.platform_name")} <from@example.com>",
 			to: "#{@user.first_name} #{@user.last_name} <#{@user.email}>",
 			subject: "#{I18n.t("mails.labels.platform_name")} - #{I18n.t("mails.subject.password_update")}",
 			:template_path => 'passwords',
@@ -11,11 +10,10 @@ class PasswordMailer < ApplicationMailer
 		)
 	end
 
-	def forgot(user, reset_token)
+	def forgot(user, reset_url)
 		@user = user
-		@reset_token = reset_token
+		@reset_url = reset_url
 		mail(
-			from: "#{I18n.t("mails.labels.platform_name")} <from@example.com>",
 			to: "#{@user.first_name} #{@user.last_name} <#{@user.email}>",
 			subject: "#{I18n.t("mails.labels.platform_name")} - #{I18n.t("mails.subject.password_recovery")}",
 			:template_path => 'passwords',
@@ -27,7 +25,6 @@ class PasswordMailer < ApplicationMailer
 		@user = user
 		@new_password = new_password
 		mail(
-			from: "#{I18n.t("mails.labels.platform_name")} <from@example.com>",
 			to: "#{@user.first_name} #{@user.last_name} <#{@user.email}>",
 			subject: "#{I18n.t("mails.labels.platform_name")} - #{I18n.t("mails.subject.password_reset")}",
 			:template_path => 'passwords',

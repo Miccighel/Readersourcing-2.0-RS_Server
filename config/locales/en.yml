@@ -1,34 +1,3 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
 en:
   models:
     publications:
@@ -72,10 +41,10 @@ en:
     labels:
       platform_name: "Readersourcing 2.0"
       dear: "Dear"
-      cheers: "Cheers"
+      cheers: "Cheers,"
       team: "The Readersourcing 2.0 Team"
       new_password: "Get a new password"
-      view_publication: "Go to the publication"
+      view_publication: "Go to the original publication"
     subject:
       password_update: "Password Update"
       password_reset: "Password Reset"
@@ -83,13 +52,12 @@ en:
       rating_confirm: "Rating Assignment Confirmation"
       registration_confirm: "Registration Completed"
     password:
-      to_get_a_new_one: "To get a new password just click on the link below. You will get an email containing the new password itself."
+      to_get_a_new_one: "To get a new password just click on the link below. You will get an email containing the new password."
       edit_first_access: "For your safety, change it during the first login to the platform."
-      reset_successful: "Your password has been successfully reset. The new one is:"
+      reset_successful: "Your password has been successfully reset. The new password is:"
       update_successful: "Your password has been updated successfully."
     rating:
-      delete_rating: "We remind you that you can delete this rating at any time from the interface."
-      given_rating_1: "You gave a rating equal to:"
+      given_rating_1: "You gave a rating equal to"
       given_rating_2: "to the publication available at the link below."
     user:
       registration_successful: "Your registration has been completed successfully. Welcome to our platform."

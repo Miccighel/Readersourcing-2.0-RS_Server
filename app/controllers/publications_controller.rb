@@ -5,6 +5,7 @@ class PublicationsController < ApplicationController
 
 	# GET /publications.json
 	def index
+		puts reset_url(email: "s", reset_token: "d")
 		@publications = Publication.all
 	end
 

@@ -10,11 +10,5 @@
       <user-name>postgres</user-name>
       <introspection-schemas>@:@</introspection-schemas>
     </data-source>
-    <data-source name="d4nc50pcpinj7" uuid="ed9172a9-7fb7-4e4c-a162-c545c2b872ac">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" family="POSTGRES" exact-version="0.0" />
-      <secret-storage>master_key</secret-storage>
-      <first-sync>true</first-sync>
-      <user-name>eacthpqudfengy</user-name>
-    </data-source>
   </component>
 </project>

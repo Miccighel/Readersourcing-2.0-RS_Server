@@ -3,6 +3,6 @@
 	<%= I18n.t "mails.password.to_get_a_new_one" %>
 	<%= I18n.t "mails.password.edit_first_access" %>
 </p>
-<p><a href="<%= reset_url(email: @user.email, reset_token: @reset_token) %>"><%= I18n.t "mails.labels.new_password" %></a></p>
+<p><a href="<%= @reset_url %>"><%= I18n.t "mails.labels.new_password" %></a></p>
 <p><%= I18n.t "mails.labels.cheers" %></p>
 <p><%= I18n.t "mails.labels.team" %></p>

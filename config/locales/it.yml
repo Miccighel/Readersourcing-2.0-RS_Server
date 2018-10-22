@@ -108,7 +108,7 @@ it:
     labels:
       platform_name: "Readersourcing 2.0"
       dear: "Gentile"
-      cheers: "Saluti"
+      cheers: "Saluti,"
       team: "Il Team di Readersourcing 2.0"
       new_password: "Ottieni una nuova password"
       view_publication: "Vai alla pubblicazione"
@@ -124,7 +124,6 @@ it:
       reset_successful: "La tua password è stata resettata con successo. Quella nuova è:"
       update_successful: "La tua password è stata aggiornata con successo."
     rating:
-      delete_rating: "Ti ricordiamo che puoi eliminare tale giudizio in qualsiasi momento dall'interfaccia."
       given_rating_1: "Hai assegnato con successo un giudizio pari a"
       given_rating_2: "alla pubblicazione disponibile al collegamento sottostante."
     user:

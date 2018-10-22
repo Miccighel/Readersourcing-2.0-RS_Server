@@ -1,8 +1,7 @@
 <h1><%= I18n.t "mails.labels.dear" %> <%= @user.first_name %>,</h1>
 <p>
-	<%= I18n.t "mails.rating.given_rating_1" %><i> <%= @score %> </i><%= I18n.t "mails.rating.given_rating_2" %>
+	<%= I18n.t "mails.rating.given_rating_1" %> <%= @score %> <%= I18n.t "mails.rating.given_rating_2" %>
 </p>
-<p><a href="<%= @link %>"></a><%= I18n.t "mails.labels.view_publication" %></p>
-<p><%= I18n.t "mails.rating.delete_rating" %></p>
+<p><a href="<%= @link %>"><%= I18n.t "mails.labels.view_publication" %></a></p>
 <p><%= I18n.t "mails.labels.cheers" %></p>
 <p><%= I18n.t "mails.labels.team" %></p>

@@ -18,6 +18,7 @@ gem 'uglifier'
 gem 'config'
 gem 'coffee-rails'
 gem 'pg'
+gem 'sendgrid-ruby'
 
 group :development, :test do
 	gem 'dotenv-rails'

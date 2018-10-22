@@ -21,6 +21,7 @@ class ApplicationController < ActionController::API
 		salt, data = text.split "!!!!!!!!!!"
 		len   = ActiveSupport::MessageEncryptor.key_len
 		key   = ActiveSupport::KeyGenerator.new(Rails.application.secrets.secret_key_base).generate_key salt, len
+		crypt = ActiveSupport::MessageEncryptor.new key
 		crypt.decrypt_and_verify data
 	end
 

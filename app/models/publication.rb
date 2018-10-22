@@ -26,13 +26,9 @@ class Publication < ApplicationRecord
 
 	def fetch(request_data)
 
-		# TODO
-
-		remove_files
-
 		data = build_data(request_data)
 
-		# FETCHING OF PDF FILE STARTS HERE
+		# FILE FETCHING STARTS HERE
 
 		logger.info "Fetching file from: #{pdf_url}"
 		publication = open(pdf_url)
@@ -48,8 +44,14 @@ class Publication < ApplicationRecord
 		end
 		load_pdf_paths(filename, data[:host])
 		logger.info "File name: #{filename}"
+
+		logger.info "Checking if there is an old annotated version to remove."
+		remove_annotated_file
+
+		logger.info "Creating folder at #{absolute_pdf_storage_path}."
 		FileUtils::mkdir_p absolute_pdf_storage_path
 		bytes_expected = publication.meta['content-length'].to_i
+		logger.info "Copying file at #{absolute_pdf_download_path}"
 		bytes_copied = IO.copy_stream(publication, absolute_pdf_download_path)
 		if bytes_expected != bytes_copied
 			raise "Expected #{bytes_expected} bytes but got #{bytes_copied}"
@@ -156,8 +158,21 @@ class Publication < ApplicationRecord
 	end
 
 	def remove_files
-		logger.info "Deleting folder at: #{absolute_pdf_storage_path}"
-		FileUtils.rm_rf(absolute_pdf_storage_path)
+		if File.exists? absolute_pdf_storage_path
+			logger.info "Deleting storage folder at: #{absolute_pdf_storage_path}"
+			File.remove_dir(absolute_pdf_storage_path)
+		else
+			logger.info "Storage folder not detected."
+		end
+	end
+
+	def remove_annotated_file
+		if File.exists? absolute_pdf_download_path_link
+			logger.info "Deleting old annotated version at: #{absolute_pdf_download_path_link}"
+			File.delete(absolute_pdf_download_path_link)
+		else
+			logger.info "Old annotated version not detected."
+		end
 	end
 
 	def other_users(current_user)

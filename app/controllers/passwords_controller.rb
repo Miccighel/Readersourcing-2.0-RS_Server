@@ -2,7 +2,7 @@ class PasswordsController < ApplicationController
 
 	include ::ActionView::Layouts
 
-	layout "application", only: [:forgot, :reset]
+	layout "application", only: [:reset]
 
 	skip_before_action :authenticate_request, only: [:forgot, :reset]
 
@@ -37,7 +37,8 @@ class PasswordsController < ApplicationController
 		user = User.find_by(email: email)
 		if user.present?
 			user.generate_password_token!
-			PasswordMailer.forgot(user, user.reset_password_token).deliver
+			reset_url = "#{request.protocol}#{request.host_with_port}#{reset_path(email: user.email, reset_token: user.reset_password_token)}"
+			PasswordMailer.forgot(user, reset_url).deliver
 			render "shared/success", status: :ok, locals: {message: I18n.t("confirmations.messages.reset_mail_sent")}
 		else
 			@error_manager.add_error(I18n.t("errors.messages.email_not_present"))
