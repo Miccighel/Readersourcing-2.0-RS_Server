@@ -10,19 +10,28 @@ class PasswordsController < ApplicationController
 
 	# POST /password/update.json
 	def update
-		inserted_password = params[:password]
-		inserted_password_confirmation = params[:password_confirmation]
-		if inserted_password == inserted_password_confirmation
-			current_user.password = inserted_password
-			if current_user.save
-				PasswordMailer.update(current_user).deliver
-				render "shared/success", status: :ok, locals: {message: I18n.t("confirmations.messages.password_update_successful")}
+		current_password = params[:current_password]
+		new_password = params[:new_password]
+		new_password_confirmation = params[:new_password_confirmation]
+		if BCrypt::Password.new(current_user.password) == current_password
+			if new_password == new_password_confirmation
+				current_user.password = new_password
+				if current_user.save
+					PasswordMailer.update(current_user).deliver
+					render "shared/success", status: :ok, locals: {message: I18n.t("confirmations.messages.password_update_successful")}
+				else
+					current_user.errors.each {|error| @error_manager.add_error(error)}
+					render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
+				end
 			else
-				current_user.errors.each {|error| @error_manager.add_error(error)}
+				@error_manager.add_error(I18n.t("errors.messages.password_do_not_match"))
 				render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
 			end
 		else
-			@error_manager.add_error(I18n.t("errors.messages.password_does_not_match"))
+			@error_manager.add_error(I18n.t("errors.messages.current_password_does_not_match"))
+			unless new_password == new_password_confirmation
+				@error_manager.add_error(I18n.t("errors.messages.password_do_not_match"))
+			end
 			render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
 		end
 	end

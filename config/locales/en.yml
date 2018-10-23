@@ -34,7 +34,8 @@ en:
       not_the_same_user: "The data do not match with the ones of the user that has created the link inside the file."
       unauthorized: "You're not authorized to proceed."
       expired_token: "The clicked link contains an expired token. <br />To proceed, you must annotate the publication again and click the new link."
-      password_does_not_match: "The inserted passwords do not match. Please, try again."
+      password_do_not_match: "The new password and its confirmation do not match. Please, try again."
+      current_password_does_not_match: "The current password is wrong. Please, try again."
       email_not_present: "Email address not found. Please, check it and try again."
       invalid_link: "Link not valid or expired. Please, try to generate a new link."
   mails:

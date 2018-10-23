@@ -101,7 +101,8 @@ it:
       rating_unsuccessful: "Qualcosa è andato storto durante l'assegnamento del giudizio. Per favore, riprova."
       unauthorized: "Non sei autorizzato a procedere."
       expired_token: "Il collegamento cliccato contiene un token scaduto. <br/ >Per procedere, devi rigenerare il documento e cliccare sul nuovo collegamento."
-      password_does_not_match: "Le due password inserite non corrispondono. Riprova."
+      password_do_not_match: "La nuova password e la relativa conferma non corrispondo. Per favore, riprova."
+      current_password_does_not_match: "La password corrente è errata. Per favore, riprova."
       email_not_present: "Indirizzo mail non individuato. Per favore, controllalo e riprova."
       invalid_link: "Collegamento non valido o scaduto. Prova a generarne un altro."
   mails:

@@ -8,9 +8,5 @@ development:
   database: development
   user: postgres
 
-test:
-  <<: *default
-  database: myapp_test
-
 production:
   url: <%= ENV['DATABASE_URL'] %>
