@@ -4,6 +4,8 @@ class UsersController < ApplicationController
 
 	before_action :set_user, only: [:show, :update, :destroy]
 
+	require "http"
+
 	# GET /users.json
 	def index
 		@users = User.all
@@ -20,12 +22,20 @@ class UsersController < ApplicationController
 
 	# POST /users.json
 	def create
-		@user = User.new(user_params)
-		if @user.save
-			UserMailer.confirm(@user).deliver_now
-			render :show, status: :created, location: @user
+		result = verify_recaptcha params[:recaptcha_response]
+		if result
+			@user = User.new(user_params)
+			if @user.save
+				UserMailer.confirm(@user).deliver_now
+				render :show, status: :created, location: @user
+			else
+				render json: @user.errors, status: :unprocessable_entity
+			end
 		else
-			render json: @user.errors, status: :unprocessable_entity
+			result.each do |error|
+				@error_manager.add_error(I18n.t("errors.codes.#{error}"))
+			end
+			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
 		end
 	end
 
@@ -45,6 +55,18 @@ class UsersController < ApplicationController
 
 	private
 
+	def verify_recaptcha(recaptcha_response)
+		response = HTTP.post("https://www.google.com/recaptcha/api/siteverify?secret=#{ENV["RECAPTCHA_SECRET_KEY"]}&response=#{recaptcha_response}")
+		json = JSON.parse response.body
+		if json["success"]
+			logger.info "Current user verified with reCAPTCHA"
+			true
+		else
+			logger.info "Current user unverified with reCAPTCHA"
+			json["error-codes"]
+		end
+	end
+
 	def set_error_manager
 		@error_manager = ErrorManager.new
 	end
@@ -54,6 +76,6 @@ class UsersController < ApplicationController
 	end
 
 	def user_params
-		params.require(:user).permit(:first_name, :last_name, :email, :orcid, :password, :password_confirmation)
+		params.require(:user).permit(:first_name, :last_name, :email, :orcid, :password, :password_confirmation, :recaptcha_response)
 	end
 end

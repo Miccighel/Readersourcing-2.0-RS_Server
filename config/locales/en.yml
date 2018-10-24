@@ -38,6 +38,12 @@ en:
       current_password_does_not_match: "The current password is wrong. Please, try again."
       email_not_present: "Email address not found. Please, check it and try again."
       invalid_link: "Link not valid or expired. Please, try to generate a new link."
+    codes:
+      missing-input-secret: "The secret parameter is missing."
+      invalid-input-secret: "The secret parameter is invalid or malformed."
+      missing-input-response: "The response parameter is missing."
+      invalid-input-response: "The response parameter is invalid or malformed."
+      bad-request: "The request is invalid or malformed."
   mails:
     labels:
       platform_name: "Readersourcing 2.0"

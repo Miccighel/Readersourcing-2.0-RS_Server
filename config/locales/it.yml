@@ -105,6 +105,12 @@ it:
       current_password_does_not_match: "La password corrente è errata. Per favore, riprova."
       email_not_present: "Indirizzo mail non individuato. Per favore, controllalo e riprova."
       invalid_link: "Collegamento non valido o scaduto. Prova a generarne un altro."
+    codes:
+      missing-input-secret: "Parametro segreto mancante."
+      invalid-input-secret: "Parametro segreto non valido o malformato."
+      missing-input-response: "Parametro di risposta mancante."
+      invalid-input-response: "Parametro di risposta mancante o malformato."
+      bad-request: "Richiesta non valida o malformata."
   mails:
     labels:
       platform_name: "Readersourcing 2.0"

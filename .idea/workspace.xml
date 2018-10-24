@@ -2,9 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9a6b8f29-73b1-4a52-8365-fef6e2fbe1bf" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/RS_Server.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/RS_Server.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/micci.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/micci.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/passwords_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/passwords_controller.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/database.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/database.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gemfile" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gemfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/application_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/application_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/users_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/users_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/ratings/confirm.erb" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/ratings/confirm.erb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/locales/en.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/locales/en.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/locales/it.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/locales/it.yml" afterDir="false" />
     </list>
@@ -15,7 +20,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/RS_Server@DB_Drop__Dev_.rcov" NAME="DB:Drop (Dev) Coverage Results" MODIFIED="1540287518875" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="RS_Server" />
+    <SUITE FILE_PATH="coverage/RS_Server@DB_Drop__Dev_.rcov" NAME="DB:Drop (Dev) Coverage Results" MODIFIED="1540296352390" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="RS_Server" />
     <SUITE FILE_PATH="coverage/RS_Server@Routes.rcov" NAME="Routes Coverage Results" MODIFIED="1539595725430" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="RS_Server" />
     <SUITE FILE_PATH="coverage/RS_Server@Create.rcov" NAME="Create Coverage Results" MODIFIED="1539786411270" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="RS_Server" />
     <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@Spec.rcov" NAME="Spec Coverage Results" MODIFIED="1536762570398" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
@@ -27,7 +32,7 @@
     <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@db_reset__R_SM_ReadersourcingServerSide.rcov" NAME="db:reset: R@SM-ReadersourcingServerSide Coverage Results" MODIFIED="1531830873898" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
     <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@Routes.rcov" NAME="Routes Coverage Results" MODIFIED="1536833580442" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
     <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@Migrate.rcov" NAME="Migrate Coverage Results" MODIFIED="1536920771419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
-    <SUITE FILE_PATH="coverage/RS_Server@DB_Setup__Dev_.rcov" NAME="DB:Setup (Dev) Coverage Results" MODIFIED="1540287548348" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="RS_Server" />
+    <SUITE FILE_PATH="coverage/RS_Server@DB_Setup__Dev_.rcov" NAME="DB:Setup (Dev) Coverage Results" MODIFIED="1540296384937" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="RS_Server" />
     <SUITE FILE_PATH="coverage/RS_Server@Migrate.rcov" NAME="Migrate Coverage Results" MODIFIED="1539786432536" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="RS_Server" />
     <SUITE FILE_PATH="coverage/RS_Server@DB_Seed__Dev_.rcov" NAME="DB:Seed (Dev) Coverage Results" MODIFIED="1540212578360" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="RS_Server" />
     <SUITE FILE_PATH="coverage/RS_Server@Create__Prod_.rcov" NAME="DB:Create (Prod) Coverage Results" MODIFIED="1539855882580" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="RS_Server" />
@@ -40,7 +45,7 @@
     <SUITE FILE_PATH="coverage/RS_Server@DB_Seed__Prod_.rcov" NAME="DB:Seed (Prod) Coverage Results" MODIFIED="1539854147186" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="RS_Server" />
     <SUITE FILE_PATH="coverage/R_SM_ReadersourcingServerSide@Seed.rcov" NAME="Seed Coverage Results" MODIFIED="1536920780065" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="R@SM-ReadersourcingServerSide" />
     <SUITE FILE_PATH="coverage/RS_Server@Seed.rcov" NAME="Seed Coverage Results" MODIFIED="1539786451430" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="RS_Server" />
-    <SUITE FILE_PATH="coverage/RS_Server@Puma__Dev_.rcov" NAME="Puma (Dev) Coverage Results" MODIFIED="1540287667827" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="RS_Server" />
+    <SUITE FILE_PATH="coverage/RS_Server@Puma__Dev_.rcov" NAME="Puma (Dev) Coverage Results" MODIFIED="1540375241155" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="RS_Server" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -285,10 +290,10 @@
     <session id="-1750578713">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="32" />
-          <entry key="project.open.time.10" value="5" />
+          <entry key="project.closed" value="34" />
+          <entry key="project.open.time.10" value="6" />
           <entry key="project.open.time.11" value="5" />
-          <entry key="project.open.time.12" value="4" />
+          <entry key="project.open.time.12" value="5" />
           <entry key="project.open.time.13" value="2" />
           <entry key="project.open.time.14" value="2" />
           <entry key="project.open.time.15" value="1" />
@@ -299,59 +304,59 @@
           <entry key="project.open.time.7" value="2" />
           <entry key="project.open.time.8" value="4" />
           <entry key="project.open.time.9" value="4" />
-          <entry key="project.opened" value="36" />
+          <entry key="project.opened" value="38" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Dockerfile" value="813" />
-          <entry key="Gemfile" value="52" />
-          <entry key="env" value="195" />
-          <entry key="erb" value="83" />
-          <entry key="rb" value="2906" />
+          <entry key="Gemfile" value="54" />
+          <entry key="env" value="300" />
+          <entry key="erb" value="119" />
+          <entry key="rb" value="3811" />
           <entry key="txt" value="21" />
-          <entry key="yml" value="1678" />
+          <entry key="yml" value="1987" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key=".env file" value="195" />
+          <entry key=".env file" value="300" />
           <entry key="Dockerfile" value="813" />
           <entry key="PLAIN_TEXT" value="21" />
-          <entry key="RHTML" value="83" />
-          <entry key="Ruby" value="2958" />
-          <entry key="YAML" value="1678" />
+          <entry key="RHTML" value="119" />
+          <entry key="Ruby" value="3865" />
+          <entry key="YAML" value="1987" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="Dockerfile" value="6" />
-          <entry key="Gemfile" value="3" />
+          <entry key="Gemfile" value="4" />
           <entry key="css" value="1" />
           <entry key="dab" value="1" />
-          <entry key="env" value="6" />
-          <entry key="erb" value="19" />
+          <entry key="env" value="7" />
+          <entry key="erb" value="22" />
           <entry key="heroku" value="1" />
           <entry key="jbuilder" value="6" />
           <entry key="publications" value="2" />
-          <entry key="rb" value="67" />
+          <entry key="rb" value="75" />
           <entry key="scss" value="2" />
           <entry key="sql" value="1" />
-          <entry key="yml" value="34" />
+          <entry key="yml" value="37" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key=".env file" value="5" />
+          <entry key=".env file" value="6" />
           <entry key="CSS" value="1" />
           <entry key="Database Element" value="2" />
           <entry key="Dockerfile" value="6" />
           <entry key="PLAIN_TEXT" value="3" />
-          <entry key="RHTML" value="19" />
-          <entry key="Ruby" value="76" />
+          <entry key="RHTML" value="22" />
+          <entry key="Ruby" value="85" />
           <entry key="SCSS" value="2" />
           <entry key="Scratch" value="1" />
-          <entry key="YAML" value="34" />
+          <entry key="YAML" value="37" />
         </counts>
       </usages-collector>
     </session>
@@ -422,20 +427,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/controllers/passwords_controller.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="309">
-              <caret line="27" column="57" selection-start-line="27" selection-start-column="57" selection-end-line="27" selection-end-column="57" />
+            <state relative-caret-position="1428">
+              <caret line="68" column="16" selection-start-line="68" selection-start-column="16" selection-end-line="69" selection-end-column="103" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/db/seeds.rb">
+        <entry file="file://$PROJECT_DIR$/app/controllers/ratings_controller.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3296">
-              <caret line="15" selection-start-line="15" selection-end-line="15" />
+            <state relative-caret-position="1050">
+              <caret line="50" column="7" selection-start-line="50" selection-start-column="7" selection-end-line="50" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -443,8 +448,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/locales/en.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="393">
-              <caret line="36" column="5" selection-start-line="36" selection-start-column="5" selection-end-line="37" selection-end-column="90" />
+            <state relative-caret-position="840">
+              <caret line="40" column="4" selection-start-line="40" selection-start-column="4" selection-end-line="45" selection-end-column="57" />
             </state>
           </provider>
         </entry>
@@ -452,35 +457,67 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/locales/it.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="246">
-              <caret line="122" column="72" selection-start-line="122" selection-start-column="72" selection-end-line="122" selection-end-column="72" />
+            <state relative-caret-position="1764">
+              <caret line="84" column="30" selection-start-line="84" selection-start-column="30" selection-end-line="84" selection-end-column="30" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config/database.yml">
+        <entry file="file://$PROJECT_DIR$/app/controllers/publications_controller.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2247">
+              <caret line="107" column="4" selection-start-line="107" selection-start-column="4" selection-end-line="112" selection-end-column="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/controllers/authentication_controller.rb">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/controllers/users_controller.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="246">
+              <caret line="56" selection-start-line="56" selection-end-line="56" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/controllers/application_controller.rb">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="168">
-              <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
+              <caret line="8" selection-start-line="8" selection-end-line="8" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/models/user.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="399">
-              <caret line="40" selection-start-line="40" selection-end-line="43" selection-end-column="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config/secrets.yml">
+        <entry file="file://$PROJECT_DIR$/app/mailers/application_mailer.rb">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="84">
-              <caret line="4" column="48" selection-start-line="4" selection-start-column="48" selection-end-line="4" selection-end-column="48" />
+              <caret line="4" selection-start-line="4" selection-end-line="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/mailers/rating_mailer.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="15" selection-start-line="15" selection-end-line="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/views/ratings/confirm.erb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="168">
+              <caret line="8" column="37" selection-start-line="8" selection-start-column="37" selection-end-line="8" selection-end-column="37" />
             </state>
           </provider>
         </entry>
@@ -488,8 +525,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.env">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="84">
-              <caret line="4" column="76" selection-start-line="4" selection-start-column="76" selection-end-line="4" selection-end-column="76" />
+            <state relative-caret-position="126">
+              <caret line="6" column="59" selection-start-line="6" selection-start-column="59" selection-end-line="6" selection-end-column="59" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Gemfile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="609">
+              <caret line="29" selection-start-line="29" selection-end-line="29" />
             </state>
           </provider>
         </entry>
@@ -572,15 +618,10 @@
         <option value="$PROJECT_DIR$/docker-compose.yml" />
         <option value="$PROJECT_DIR$/Dockerfile" />
         <option value="$PROJECT_DIR$/app/models/publication.rb" />
-        <option value="$PROJECT_DIR$/app/controllers/users_controller.rb" />
-        <option value="$PROJECT_DIR$/Gemfile" />
         <option value="$PROJECT_DIR$/app/mailers/application_mailer.rb" />
         <option value="$PROJECT_DIR$/app/mailers/user_mailer.rb" />
         <option value="$PROJECT_DIR$/config/environments/development.rb" />
         <option value="$PROJECT_DIR$/config/environments/production.rb" />
-        <option value="$PROJECT_DIR$/app/controllers/application_controller.rb" />
-        <option value="$PROJECT_DIR$/app/views/ratings/confirm.erb" />
-        <option value="$PROJECT_DIR$/.env" />
         <option value="$PROJECT_DIR$/app/mailers/rating_mailer.rb" />
         <option value="$PROJECT_DIR$/app/controllers/ratings_controller.rb" />
         <option value="$PROJECT_DIR$/app/controllers/publications_controller.rb" />
@@ -588,9 +629,14 @@
         <option value="$PROJECT_DIR$/app/views/passwords/forgot.erb" />
         <option value="$PROJECT_DIR$/lib/json_web_token.rb" />
         <option value="$PROJECT_DIR$/config/database.yml" />
+        <option value="$PROJECT_DIR$/app/controllers/passwords_controller.rb" />
+        <option value="$PROJECT_DIR$/app/views/ratings/confirm.erb" />
+        <option value="$PROJECT_DIR$/Gemfile" />
+        <option value="$PROJECT_DIR$/.env" />
+        <option value="$PROJECT_DIR$/app/controllers/application_controller.rb" />
         <option value="$PROJECT_DIR$/config/locales/en.yml" />
         <option value="$PROJECT_DIR$/config/locales/it.yml" />
-        <option value="$PROJECT_DIR$/app/controllers/passwords_controller.rb" />
+        <option value="$PROJECT_DIR$/app/controllers/users_controller.rb" />
       </list>
     </option>
   </component>
@@ -671,8 +717,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="RailsProjectView" />
       <pane id="Scope" />
+      <pane id="RailsProjectView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -695,7 +741,20 @@
               <item name="RS_Server" type="b2602c69:ProjectViewProjectNode" />
               <item name="RS_Server" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
+              <item name="mailers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RS_Server" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RS_Server" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RS_Server" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RS_Server" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="ratings" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="RS_Server" type="b2602c69:ProjectViewProjectNode" />
@@ -1235,7 +1294,9 @@
       <workItem from="1540193104919" duration="15000" />
       <workItem from="1540193155915" duration="17136000" />
       <workItem from="1540282121109" duration="10000" />
-      <workItem from="1540282154331" duration="5522000" />
+      <workItem from="1540282154331" duration="7039000" />
+      <workItem from="1540366279762" duration="12966000" />
+      <workItem from="1540385311353" duration="640000" />
     </task>
     <servers />
   </component>
@@ -1257,7 +1318,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="500769000" />
+    <option name="totallyTimeSpent" value="515892000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1270,12 +1331,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49924585" visible="true" weight="0.20127796" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49924585" visible="true" weight="0.20553781" />
       <window_info id="Structure" order="1" sideWeight="0.5007542" side_tool="true" weight="0.1818792" />
       <window_info id="Favorites" order="2" sideWeight="0.5007542" side_tool="true" weight="0.1818792" />
-      <window_info anchor="bottom" id="Messages" order="0" sideWeight="0.49946696" weight="0.32997763" />
+      <window_info anchor="bottom" id="Messages" order="0" sideWeight="0.49946696" weight="0.32962137" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" weight="0.32849163" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
@@ -1286,8 +1346,8 @@
       <window_info anchor="bottom" id="TODO" order="8" sideWeight="0.50159913" side_tool="true" weight="0.32850778" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5489883" side_tool="true" weight="0.36525613" />
       <window_info anchor="bottom" id="Version Control" order="10" sideWeight="0.50067115" side_tool="true" weight="0.3284091" />
-      <window_info anchor="bottom" x="0" y="0" width="1552" height="880" id="Terminal" order="11" sideWeight="0.45101172" weight="0.36525613" />
-      <window_info active="true" anchor="bottom" x="0" y="23" width="1920" height="1017" id="Run" order="12" sideWeight="0.50053304" visible="true" weight="0.32739422" />
+      <window_info active="true" anchor="bottom" x="0" y="0" width="1552" height="880" id="Terminal" order="11" sideWeight="0.45101172" visible="true" weight="0.36525613" />
+      <window_info anchor="bottom" x="0" y="23" width="1920" height="1017" id="Run" order="12" sideWeight="0.50053304" type="WINDOWED" weight="0.32739422" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -1303,13 +1363,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/db/migrate/20180717084919_create_publications.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="15" column="44" selection-start-line="15" selection-start-column="44" selection-end-line="15" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/publications/_publication.json.jbuilder">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="294">
@@ -1408,13 +1461,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Gemfile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="17" column="12" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/mailers/user_mailer.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -1433,13 +1479,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
           <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/ratings/successful.erb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="16" column="10" lean-forward="true" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
         </state>
       </provider>
     </entry>
@@ -1467,41 +1506,6 @@
     <entry file="file://$PROJECT_DIR$/app/views/users/_user.json.jbuilder">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/ratings/rate.erb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1218">
-          <caret line="58" column="12" selection-start-line="58" selection-start-column="12" selection-end-line="58" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/users_controller.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="609">
-          <caret line="32" column="14" selection-start-line="32" selection-start-column="14" selection-end-line="32" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/mailers/application_mailer.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/mailers/rating_mailer.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/ratings/confirm.erb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="6" column="40" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/mailers/password_mailer.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="231">
@@ -1516,24 +1520,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/publications_controller.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2247">
-          <caret line="107" column="4" selection-start-line="107" selection-start-column="4" selection-end-line="112" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/routes.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="735">
           <caret line="35" column="4" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/ratings_controller.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1050">
-          <caret line="50" column="7" selection-start-line="50" selection-start-column="7" selection-end-line="50" selection-end-column="7" />
         </state>
       </provider>
     </entry>
@@ -1551,6 +1541,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/db/seeds.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/config/database.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
@@ -1558,17 +1555,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/application_controller.rb">
+    <entry file="file://$PROJECT_DIR$/app/models/user.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="14" column="55" selection-start-line="14" selection-start-column="55" selection-end-line="14" selection-end-column="55" />
+        <state relative-caret-position="840">
+          <caret line="40" selection-start-line="40" selection-end-line="43" selection-end-column="22" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/user.rb">
+    <entry file="file://$PROJECT_DIR$/app/views/ratings/rate.erb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="40" selection-start-line="40" selection-end-line="43" selection-end-column="22" />
+        <state relative-caret-position="435">
+          <caret line="58" column="12" selection-start-line="58" selection-start-column="12" selection-end-line="58" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/ratings/successful.erb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="16" column="10" lean-forward="true" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
         </state>
       </provider>
     </entry>
@@ -1579,38 +1583,90 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.env">
+    <entry file="file://$PROJECT_DIR$/app/controllers/passwords_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="4" column="76" selection-start-line="4" selection-start-column="76" selection-end-line="4" selection-end-column="76" />
+        <state relative-caret-position="1428">
+          <caret line="68" column="16" selection-start-line="68" selection-start-column="16" selection-end-line="69" selection-end-column="103" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/db/seeds.rb">
+    <entry file="file://$PROJECT_DIR$/app/controllers/ratings_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3296">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
+        <state relative-caret-position="1050">
+          <caret line="50" column="7" selection-start-line="50" selection-start-column="7" selection-end-line="50" selection-end-column="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/config/locales/en.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="393">
-          <caret line="36" column="5" selection-start-line="36" selection-start-column="5" selection-end-line="37" selection-end-column="90" />
+        <state relative-caret-position="840">
+          <caret line="40" column="4" selection-start-line="40" selection-start-column="4" selection-end-line="45" selection-end-column="57" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/config/locales/it.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="122" column="72" selection-start-line="122" selection-start-column="72" selection-end-line="122" selection-end-column="72" />
+        <state relative-caret-position="1764">
+          <caret line="84" column="30" selection-start-line="84" selection-start-column="30" selection-end-line="84" selection-end-column="30" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/passwords_controller.rb">
+    <entry file="file://$PROJECT_DIR$/app/controllers/publications_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="309">
-          <caret line="27" column="57" selection-start-line="27" selection-start-column="57" selection-end-line="27" selection-end-column="57" />
+        <state relative-caret-position="2247">
+          <caret line="107" column="4" selection-start-line="107" selection-start-column="4" selection-end-line="112" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/authentication_controller.rb">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/application_controller.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/mailers/application_mailer.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/mailers/rating_mailer.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/ratings/confirm.erb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="8" column="37" selection-start-line="8" selection-start-column="37" selection-end-line="8" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="6" column="59" selection-start-line="6" selection-start-column="59" selection-end-line="6" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Gemfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="609">
+          <caret line="29" selection-start-line="29" selection-end-line="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/users_controller.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="56" selection-start-line="56" selection-end-line="56" />
         </state>
       </provider>
     </entry>

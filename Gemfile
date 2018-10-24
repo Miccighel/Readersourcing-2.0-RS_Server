@@ -19,6 +19,7 @@ gem 'config'
 gem 'coffee-rails'
 gem 'pg'
 gem 'sendgrid-ruby'
+gem "http"
 
 group :development, :test do
 	gem 'dotenv-rails'
