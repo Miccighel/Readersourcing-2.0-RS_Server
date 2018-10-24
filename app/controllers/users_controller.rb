@@ -22,20 +22,12 @@ class UsersController < ApplicationController
 
 	# POST /users.json
 	def create
-		result = verify_recaptcha params[:recaptcha_response]
-		if result
-			@user = User.new(user_params)
-			if @user.save
-				UserMailer.confirm(@user).deliver_now
-				render :show, status: :created, location: @user
-			else
-				render json: @user.errors, status: :unprocessable_entity
-			end
+		@user = User.new(user_params)
+		if @user.save
+			UserMailer.confirm(@user).deliver_now
+			render :show, status: :created, location: @user
 		else
-			result.each do |error|
-				@error_manager.add_error(I18n.t("errors.codes.#{error}"))
-			end
-			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
+			render json: @user.errors, status: :unprocessable_entity
 		end
 	end
 
@@ -55,6 +47,7 @@ class UsersController < ApplicationController
 
 	private
 
+	# METHOD TO VERIFY GOOGLE reCAPTCHA v2
 	def verify_recaptcha(recaptcha_response)
 		response = HTTP.post("https://www.google.com/recaptcha/api/siteverify?secret=#{ENV["RECAPTCHA_SECRET_KEY"]}&response=#{recaptcha_response}")
 		json = JSON.parse response.body
