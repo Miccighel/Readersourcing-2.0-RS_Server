@@ -144,8 +144,8 @@ class Publication < ApplicationRecord
 			logger.info "-pId: #{data[:pubId]}"
 			logger.info "-a: #{data[:authToken]}"
 			logger.info "Complete command:"
-			logger.info "java -jar #{absolute_rs_pdf_path} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:rate_path]} -c \"Click here\""
-			output = %x( java -jar #{absolute_rs_pdf_path} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:rate_path]} -c "Click here")
+			logger.info "java -jar #{absolute_rs_pdf_path} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:rate_path]} -c \"Express your rating\""
+			output = %x( java -jar #{absolute_rs_pdf_path} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:rate_path]} -c "Express your rating")
 			logger.info output
 			logger.info "RS_PDF execution completed"
 			File.delete(absolute_pdf_download_path)

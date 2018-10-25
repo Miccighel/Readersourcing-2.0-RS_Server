@@ -24,8 +24,8 @@ class UsersController < ApplicationController
 	def create
 		@user = User.new(user_params)
 		if @user.save
-			UserMailer.confirm(@user).deliver_now
-			render :show, status: :created, location: @user
+			UserMailer.successful(@user).deliver_now
+			render "shared/success", status: :created, locals: {message: I18n.t("mails.user.registration_successful")}
 		else
 			render json: @user.errors, status: :unprocessable_entity
 		end
