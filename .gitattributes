@@ -1,1 +1,5 @@
 node_modules/* linguist-vendored
+app/assets/javascripts/system/* linguist-vendored
+app/assets/stylesheets/system/* linguist-vendored
+*.scss linguist-detectable=false
+*.coffee linguist-detectable=false
