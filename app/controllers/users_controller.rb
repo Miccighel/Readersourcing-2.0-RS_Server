@@ -34,7 +34,7 @@ class UsersController < ApplicationController
 	# PATCH/PUT /users/1.json
 	def update
 		if @user.update(user_params)
-			render :show, status: :ok, location: @user
+			render "shared/success", status: :created, locals: {message: I18n.t("mails.user.update_successful")}
 		else
 			render json: @user.errors, status: :unprocessable_entity
 		end
@@ -69,6 +69,6 @@ class UsersController < ApplicationController
 	end
 
 	def user_params
-		params.require(:user).permit(:first_name, :last_name, :email, :orcid, :password, :password_confirmation, :recaptcha_response)
+		params.require(:user).permit(:first_name, :last_name, :email, :orcid, :subscribe, :password, :password_confirmation, :recaptcha_response)
 	end
 end

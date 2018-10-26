@@ -57,17 +57,17 @@ class RatingsController < ApplicationController
 		@rating.anonymous = rating_params[:anonymous]
 		@rating.user = current_user
 		publication = Publication.find_by_pdf_url(rating_params[:pdf_url])
-		if publication
-			@rating.publication = publication
-		else
+		unless publication
 			publication = Publication.new
 			publication.pdf_url = rating_params[:pdf_url]
 			publication.save
-			@rating.publication = publication
 		end
+		@rating.publication = publication
 		if @rating.save
 			@rating.compute_scores
-			RatingMailer.confirm(current_user, @rating.score, publication.pdf_url).deliver
+			if @rating.user.is_subscribed
+				RatingMailer.confirm(current_user, @rating.score, @rating.publication.pdf_url).deliver
+			end
 			render :show, status: :created, location: @rating
 		else
 			render json: @rating.errors, status: :unprocessable_entity
@@ -92,10 +92,12 @@ class RatingsController < ApplicationController
 					@rating.user = requesting_user
 					if @rating.save
 						@rating.compute_scores
-						RatingMailer.confirm(requesting_user, @rating.score, publication.pdf_url).deliver
-						render :successful, locals: {pubId: publication.id}
+						if @rating.user.is_subscribed
+							RatingMailer.confirm(@rating.user, @rating.score, @rating.publication.pdf_url).deliver
+						end
+						render :successful, locals: {pubId: @rating.publication.id}
 					else
-						render :unsuccessful, locals: {pubId: publication.id}
+						render :unsuccessful, locals: {pubId: @rating.publication.id}
 					end
 				end
 			else

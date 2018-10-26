@@ -4,6 +4,14 @@ body, html {
     background-color: rgb(85, 85, 85);
 }
 
+h4 {
+	font-size: 1.2rem !important;
+}
+
+.lead {
+	font-size: 1.2rem !important;
+}
+
 /* ////////// VOTE SLIDER SECTION ////////// */
 
 #rating-slider .slider-selection {

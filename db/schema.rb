@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 2018_07_18_090558) do
     t.string "last_name"
     t.string "email"
     t.string "orcid"
+    t.boolean "subscribe", default: false
     t.string "password_digest"
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"

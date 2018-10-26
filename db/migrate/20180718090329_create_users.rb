@@ -5,6 +5,7 @@ class CreateUsers < ActiveRecord::Migration[5.2]
 			t.string :last_name
 			t.string :email
 			t.string :orcid
+			t.boolean :subscribe, default: false
 			t.string :password_digest
 			t.string :reset_password_token
 			t.datetime :reset_password_sent_at

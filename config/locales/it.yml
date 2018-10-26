@@ -135,3 +135,4 @@ it:
       given_rating_2: "alla pubblicazione disponibile al collegamento sottostante."
     user:
       registration_successful: "La tua registrazione è stata completata con successo. Benvenuto sulla nostra piattaforma."
+      update_successful: "Il tuo profilo è stato aggiornato con successo."

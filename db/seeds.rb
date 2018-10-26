@@ -14,14 +14,14 @@ unless Rails.env.production?
 
 	puts "---------- CREATING USER 1 ----------"
 
-	mario_rossi = User.new(first_name: "Mario", last_name: "Rossi", email: 'mail@mail.com', orcid: '0000-0002-1825-0097', password: '123456', password_confirmation: '123456')
+	mario_rossi = User.new(first_name: "Mario", last_name: "Rossi", email: 'mail@mail.com', orcid: '0000-0002-1825-0097', subscribe:true, password: '123456', password_confirmation: '123456')
 	mario_rossi.save
 
 	puts "---------- CREATION COMPLETED ----------"
 
 	puts "---------- CREATING USER 2 ----------"
 
-	luca_bianchi = User.new(first_name: "Luca", last_name: "Bianchi", email: 'bianchi@mail.com', orcid: '0000-0002-1825-009X', password: '123456', password_confirmation: '123456')
+	luca_bianchi = User.new(first_name: "Luca", last_name: "Bianchi", email: 'bianchi@mail.com', orcid: '0000-0002-1825-009X', subscribe:true, password: '123456', password_confirmation: '123456')
 	luca_bianchi.save
 
 	puts "---------- CREATION COMPLETED ----------"
@@ -33,7 +33,7 @@ unless Rails.env.production?
 	6.times do |index|
 		puts "---------- CREATING FAKE USER #{index} ----------"
 
-		fake_user = User.new(first_name: "FirstName#{index}", last_name: "LastName#{index}", email: "email#{index}@mail.com", password: '123456', password_confirmation: '123456')
+		fake_user = User.new(first_name: "FirstName#{index}", last_name: "LastName#{index}", email: "email#{index}@mail.com", subscribe:false, password: '123456', password_confirmation: '123456')
 		fake_user.save
 
 		puts "---------- CREATION COMPLETED ----------"

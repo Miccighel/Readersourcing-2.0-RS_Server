@@ -68,3 +68,4 @@ en:
       given_rating_2: "to the publication available at the link below."
     user:
       registration_successful: "Your registration has been completed successfully. You can sign in now. Please, check your inbox."
+      update_successful: "Your profile has been updated successfully."
