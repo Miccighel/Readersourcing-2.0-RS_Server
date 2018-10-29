@@ -13,11 +13,14 @@ en:
     anonimyze: "Anonymize"
   confirmations:
     messages:
+      registration_successful: "Welcome to Readersourcing 2.0! Your email address has been confirmed successfully. Now you can log in from RS_Rate."
+      please_confirm: "Please, check your inbox and confirm your email address to proceed."
       operation_completed: "Operation completed successfully."
       rating_successful: "Rating successfully given to the publication."
       password_update_successful: "Your password has been updated successfully."
       reset_mail_sent: "Reset email sent. Check your inbox."
       new_password_mail_sent: "Email containing new password sent. Check your inbox."
+      update_successful: "Your profile has been updated successfully."
   information:
     messages:
       rate: "Rate this publication."
@@ -38,6 +41,8 @@ en:
       current_password_does_not_match: "The current password is wrong. Please, try again."
       email_not_present: "Email address not found. Please, check it and try again."
       invalid_link: "Link not valid or expired. Please, try to generate a new link."
+      user_not_exists: "This user does not exists or has already confirmed his email address. Use confirmation link that you have received by mail and try again."
+      unconfirmed_mail: "This email address has not been confirmed. Please, check your inbox and click the confirmation link."
     codes:
       missing-input-secret: "The secret parameter is missing."
       invalid-input-secret: "The secret parameter is invalid or malformed."
@@ -52,12 +57,13 @@ en:
       team: "The Readersourcing 2.0 Team"
       new_password: "Get a new password"
       view_publication: "Go to the original publication"
+      registration_confirm: "Registration Confirm"
     subject:
       password_update: "Password Update"
       password_reset: "Password Reset"
       password_recovery: "Password Recovery"
       rating_confirm: "Rating Assignment Confirmation"
-      registration_confirm: "Registration Completed"
+      registration_confirm: "Registration Confirmation"
     password:
       to_get_a_new_one: "To get a new password just click on the link below. You will get an email containing the new password."
       edit_first_access: "For your safety, change it during the first login to the platform."
@@ -67,7 +73,6 @@ en:
       given_rating_1: "You gave a rating equal to"
       given_rating_2: "to the publication available at the link below."
     user:
-      registration_successful: "Your registration has been completed successfully. You can sign in now. Please, check your inbox."
-      update_successful: "Your profile has been updated successfully."
+      registration_confirm: "Thanks for registering! To confirm your registration click the URL below."
       unsubscribe: "If you do not want to get more mails like this one, unsubscribe here."
       unsubscribe_successful: "You are not subscribed anymore to emails (except for system ones) from Readersourcing 2.0. You can subscribe again at any time from profile editing section."

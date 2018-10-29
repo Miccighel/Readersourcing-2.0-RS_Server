@@ -10,10 +10,7 @@ class AuthenticationController < ApplicationController
 		if command.success?
 			render json: { auth_token: command.result }
 		else
-			command.errors[:user_authentication].each do |error|
-				@error_manager.add_error(error)
-			end
-			render json: { errors: @error_manager.get_errors}, status: :unauthorized
+			render json: { errors: command.errors[:user_authentication]}, status: :unauthorized
 		end
 	end
 

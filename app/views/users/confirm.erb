@@ -1,0 +1,13 @@
+<h1><%= I18n.t "mails.labels.dear" %> <%= @user.first_name %>,</h1>
+<p>
+	<%= I18n.t "mails.user.registration_confirm" %>
+	<br/>
+	<br/>
+	<a href="<%= @link %>"><%= I18n.t "mails.labels.registration_confirm" %></a>
+	<br/>
+	<br/>
+	<%= I18n.t "mails.labels.cheers" %>
+	<br/>
+	<br/>
+	<%= I18n.t "mails.labels.team" %>
+</p>
