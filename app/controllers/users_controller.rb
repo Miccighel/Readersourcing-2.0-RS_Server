@@ -1,8 +1,12 @@
 class UsersController < ApplicationController
 
-	skip_before_action :authenticate_request, only: :create
+	include ::ActionView::Layouts
 
-	before_action :set_user, only: [:show, :update, :destroy]
+	layout "application", only: [:unsubscribe]
+
+	skip_before_action :authenticate_request, only: [:create, :unsubscribe]
+
+	before_action :set_user, only: [:show, :update, :unsubscribe, :destroy]
 
 	require "http"
 
@@ -35,6 +39,15 @@ class UsersController < ApplicationController
 	def update
 		if @user.update(user_params)
 			render "shared/success", status: :created, locals: {message: I18n.t("mails.user.update_successful")}
+		else
+			render json: @user.errors, status: :unprocessable_entity
+		end
+	end
+
+	# POST /unsubscribe/1
+	def unsubscribe
+		if @user.update(subscribe: false)
+			render "shared/success", status: :created, locals: {message: I18n.t("mails.user.unsubscribe_successful")}
 		else
 			render json: @user.errors, status: :unprocessable_entity
 		end
