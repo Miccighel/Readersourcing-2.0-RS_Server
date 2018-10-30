@@ -68,4 +68,10 @@ en:
       given_rating_2: "to the publication available at the link below."
     user:
       registration_successful: "Your registration has been completed successfully. You can sign in now. Please, check your inbox."
+<<<<<<< HEAD
       update_successful: "Your profile has been updated successfully."
+=======
+      update_successful: "Your profile has been updated successfully."
+      unsubscribe: "If you do not want to get more mails like this one, unsubscribe here."
+      unsubscribe_successful: "You are not subscribed anymore to emails (except for system ones) from Readersourcing 2.0. You can subscribe again at any time from profile editing section."
+>>>>>>> parent of 9a85bc8... Added registration mail with link to confirm email address.

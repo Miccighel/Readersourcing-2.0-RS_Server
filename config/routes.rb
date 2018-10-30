@@ -28,6 +28,11 @@ Rails.application.routes.draw do
 		end
 	end
 
+<<<<<<< HEAD
+=======
+	get 'unsubscribe/:id', to: 'users#unsubscribe', as: :unsubscribe, constraints: {:format => 'html'}
+
+>>>>>>> parent of 9a85bc8... Added registration mail with link to confirm email address.
 	post 'load', to: 'ratings#load', as: :load, constraints: {:format => 'html'}
 	get 'rate/:pubId/:authToken/', to: 'ratings#rate', as: :rate, constraints: {:format => 'html'}
 
