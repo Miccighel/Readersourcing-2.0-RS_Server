@@ -7,9 +7,7 @@ class ErrorManager
 	end
 
 	def add_error(message)
-		error = Hash.new
-		error["message"] = message
-		@errors << error
+		@errors << message
 	end
 
 	def get_errors

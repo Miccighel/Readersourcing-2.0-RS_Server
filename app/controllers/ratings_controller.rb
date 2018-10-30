@@ -90,7 +90,7 @@ class RatingsController < ApplicationController
 					@rating.user = requesting_user
 					if @rating.save
 						@rating.compute_scores
-						RatingMailer.confirm(@rating.user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(current_user.id)).deliver
+						RatingMailer.confirm(@rating.user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(@rating.user.id)).deliver
 						render :successful, locals: {pubId: @rating.publication.id}
 					else
 						render :unsuccessful, locals: {pubId: @rating.publication.id}

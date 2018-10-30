@@ -26,7 +26,7 @@ en:
       rate: "Rate this publication."
       try_again: "Do you want to try again?"
       rate_again: "Do you want to give a new rating?"
-      mail_confirmation: "you will get an email confirmation."
+      mail_confirmation: "You will get an email confirmation."
       not_the_same_user: "If you are that user, insert your login data again."
       validate_user: "Validate yourself"
   errors:
