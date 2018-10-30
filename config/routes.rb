@@ -28,6 +28,9 @@ Rails.application.routes.draw do
 		end
 	end
 
+	get 'confirm/:id/:confirmToken', to: 'users#confirm_email', as: :confirm, constraints: {:format => 'html'}
+	get 'unsubscribe/:id', to: 'users#unsubscribe', as: :unsubscribe, constraints: {:format => 'html'}
+
 	post 'load', to: 'ratings#load', as: :load, constraints: {:format => 'html'}
 	get 'rate/:pubId/:authToken/', to: 'ratings#rate', as: :rate, constraints: {:format => 'html'}
 

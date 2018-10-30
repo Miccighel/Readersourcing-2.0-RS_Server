@@ -67,11 +67,14 @@ it:
       validate_user: "Valida la tua utenza"
   confirmations:
     messages:
+      registration_successful: "Benvenuto su Readersourcing 2.0! Il tuo indirizzo email è stato confermato con successo. Ora puoi effettuare il login da RS_Rate."
+      please_confirm: "Per favore, controlla la tua casella di posta e conferma il tuo indirizzo email per proseguire."
       operation_completed: "Operazione completata con successo."
       rating_successful: "Giudizio assegnato correttamente alla pubblicazione."
       password_update_successful: "La tua password è stata aggiornata con successo."
       reset_mail_sent: "Mail per il reset della password inviata correttamente. Controlla la tua casella di posta."
       new_password_mail_sent: "Mail contenente nuova password inviata correttamente. Controlla la tua casella di posta."
+      update_successful: "Il tuo profilo è stato aggiornato con successo."
   errors:
     messages:
       invalid_credentials: "Credenziali non valide. Per favore, riprova."
@@ -105,6 +108,8 @@ it:
       current_password_does_not_match: "La password corrente è errata. Per favore, riprova."
       email_not_present: "Indirizzo mail non individuato. Per favore, controllalo e riprova."
       invalid_link: "Collegamento non valido o scaduto. Prova a generarne un altro."
+      user_not_exists: "Questo utente non esiste oppure ha già confermato il suo indirizzo email. Utilizza il collegamento presente nella mail e riprova."
+      unconfirmed_mail: "Questo indirizzo email non risulta confermato. Per favore, controlla la tua casella di posta e clicca sul collegamento di conferma"
     codes:
       missing-input-secret: "Parametro segreto mancante."
       invalid-input-secret: "Parametro segreto non valido o malformato."
@@ -119,6 +124,7 @@ it:
       team: "Il Team di Readersourcing 2.0"
       new_password: "Ottieni una nuova password"
       view_publication: "Vai alla pubblicazione"
+      registration_confirm: "Conferma registrazione"
     subject:
       password_update: "Aggiornamento Password"
       password_reset: "Reset Password"
@@ -134,5 +140,6 @@ it:
       given_rating_1: "Hai assegnato con successo un giudizio pari a"
       given_rating_2: "alla pubblicazione disponibile al collegamento sottostante."
     user:
-      registration_successful: "La tua registrazione è stata completata con successo. Benvenuto sulla nostra piattaforma."
-      update_successful: "Il tuo profilo è stato aggiornato con successo."
+      registration_confirm: "Grazie per esserti registrato! Per favore, clicca il collegamento sottostante per confermare la tua registrazione."
+      unsubscribe: "Se non desideri più ricevere mail come questa, disiscriviti"
+      unsubscribe_successful: "Non sei più iscritto alle mail (eccetto quelle di sistema) provenienti da Readersourcing 2.0. Riceverai ancora quelle di sistema. Puoi iscriverti nuovamente in qualsiasi momento dalla sezione di modifica del profilo."

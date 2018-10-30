@@ -4,6 +4,7 @@ class User < ApplicationRecord
 
 	validates :email, presence: true, length: {maximum: 255}, format: {with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i}, uniqueness: {case_sensitive: false}
 	validates :orcid, length: {maximum: 19}, format: {with: /[0-9]{4}-[0-9]{4}-[0-9]{4}-([0-9]{3}X|[0-9]{4})/}, uniqueness: true, allow_nil: true
+
 	has_secure_password
 
 	def password
@@ -31,6 +32,18 @@ class User < ApplicationRecord
 		save!
 	end
 
+	def generate_confirm_token
+		if self.confirm_token.blank?
+			self.confirm_token = generate_token
+		end
+	end
+
+	def activate_email
+		self.email_confirmed = true
+		self.confirm_token = nil
+		save!(:validate => false)
+	end
+
 	def is_subscribed
 		self.subscribe
 	end
@@ -46,7 +59,7 @@ class User < ApplicationRecord
 	private
 
 	def generate_token
-		SecureRandom.hex(10)
+		SecureRandom.urlsafe_base64.to_s
 	end
 
 end
