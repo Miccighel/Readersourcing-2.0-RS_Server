@@ -4,8 +4,6 @@ class CreateUsers < ActiveRecord::Migration[5.2]
 			t.string :first_name
 			t.string :last_name
 			t.string :email
-			t.boolean :email_confirmed, default: false
-			t.string :confirm_token
 			t.string :orcid
 			t.boolean :subscribe, default: false
 			t.string :password_digest

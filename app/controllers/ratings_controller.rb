@@ -4,7 +4,7 @@ class RatingsController < ApplicationController
 
 	layout "application", only: [:rate, :load]
 
-	before_action :set_rating, only: [:show]
+	before_action :set_rating, only: [:show, :update]
 
 	skip_before_action :authenticate_request, only: [:rate, :load]
 
@@ -45,7 +45,7 @@ class RatingsController < ApplicationController
 				end
 			end
 		else
-			@error_manager.add_error(I18n.t("errors.messages.password_do_not_match"))
+			@error_manager.add_error(I18n.t("errors.messages.password_does_not_match"))
 			render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
 		end
 	end
@@ -65,7 +65,9 @@ class RatingsController < ApplicationController
 		@rating.publication = publication
 		if @rating.save
 			@rating.compute_scores
-			RatingMailer.confirm(current_user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(current_user.id)).deliver
+			if @rating.user.is_subscribed
+				RatingMailer.confirm(current_user, @rating.score, @rating.publication.pdf_url).deliver
+			end
 			render :show, status: :created, location: @rating
 		else
 			render json: @rating.errors, status: :unprocessable_entity
@@ -90,7 +92,9 @@ class RatingsController < ApplicationController
 					@rating.user = requesting_user
 					if @rating.save
 						@rating.compute_scores
-						RatingMailer.confirm(@rating.user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(current_user.id)).deliver
+						if @rating.user.is_subscribed
+							RatingMailer.confirm(@rating.user, @rating.score, @rating.publication.pdf_url).deliver
+						end
 						render :successful, locals: {pubId: @rating.publication.id}
 					else
 						render :unsuccessful, locals: {pubId: @rating.publication.id}

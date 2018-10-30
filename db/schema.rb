@@ -56,8 +56,6 @@ ActiveRecord::Schema.define(version: 2018_07_18_090558) do
     t.string "first_name"
     t.string "last_name"
     t.string "email"
-    t.boolean "email_confirmed", default: false
-    t.string "confirm_token"
     t.string "orcid"
     t.boolean "subscribe", default: false
     t.string "password_digest"

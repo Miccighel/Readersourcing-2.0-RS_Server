@@ -44,7 +44,7 @@ CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-e", "production"]
 #
 # heroku login
 # heroku container:login
-# heroku container:push web
-# heroku release:web
-# heroku open
-# heroku run rake db:migrate
+# heroku container:push web [--app rs-server]
+# heroku release:web [--app rs-server]
+# heroku open [--app rs-server]
+# heroku run rake db:migrate [--app rs-server]
