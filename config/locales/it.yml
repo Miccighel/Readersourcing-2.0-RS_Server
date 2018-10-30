@@ -135,10 +135,4 @@ it:
       given_rating_2: "alla pubblicazione disponibile al collegamento sottostante."
     user:
       registration_successful: "La tua registrazione è stata completata con successo. Benvenuto sulla nostra piattaforma."
-<<<<<<< HEAD
       update_successful: "Il tuo profilo è stato aggiornato con successo."
-=======
-      update_successful: "Il tuo profilo è stato aggiornato con successo."
-      unsubscribe: "Se non desideri più ricevere mail come questa, disiscriviti"
-      unsubscribe_successful: "Non sei più iscritto alle mail (eccetto quelle di sistema) provenienti da Readersourcing 2.0. Riceverai ancora quelle di sistema. Puoi iscriverti nuovamente in qualsiasi momento dalla sezione di modifica del profilo."
->>>>>>> parent of 9a85bc8... Added registration mail with link to confirm email address.
