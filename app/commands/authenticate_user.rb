@@ -2,19 +2,21 @@ class AuthenticateUser
 
 	prepend SimpleCommand
 
-	def initialize(email, password)
+	def initialize(email, password, ip_address)
 		@email = email
 		@password = password
+		@ip_address = ip_address
 	end
 
 	def call
-		JsonWebToken.encode(user_id: user.id) if user
+		JsonWebToken.encode(user_id: user.id, ip_address: ip_address) if user
 	end
 
 	private
 
-	attr_accessor :email, :password
+	attr_accessor :email, :password, :ip_address
 
+	# Fetches the user if the inserted login data are valid
 	def user
 		user = User.find_by_email(email)
 		if user && user.authenticate(password) && user.email_confirmed

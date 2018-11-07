@@ -6,7 +6,7 @@ class RatingsController < ApplicationController
 
 	before_action :set_rating, only: [:show]
 
-	skip_before_action :authenticate_request, only: [:rate, :load]
+	skip_before_action :authorize_api_request, only: [:rate, :load]
 
 	# GET /ratings.json
 	def index

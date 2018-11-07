@@ -4,7 +4,7 @@ class PasswordsController < ApplicationController
 
 	layout "application", only: [:reset]
 
-	skip_before_action :authenticate_request, only: [:forgot, :reset]
+	skip_before_action :authorize_api_request, only: [:forgot, :reset]
 
 	before_action :set_error_manager, only: [:update, :forgot, :reset]
 

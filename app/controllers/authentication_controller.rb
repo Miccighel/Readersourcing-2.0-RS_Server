@@ -1,12 +1,12 @@
 class AuthenticationController < ApplicationController
 
-	skip_before_action :authenticate_request
+	skip_before_action :authorize_api_request
 
 	before_action :set_error_manager
 
 	# POST /authenticate
 	def authenticate
-		command = AuthenticateUser.call(params[:email], params[:password])
+		command = AuthenticateUser.call(params[:email], params[:password], request.remote_ip)
 		if command.success?
 			render json: { auth_token: command.result }
 		else
