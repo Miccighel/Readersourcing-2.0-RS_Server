@@ -1,7 +1,7 @@
 class PublicationsController < ApplicationController
 
 	before_action :set_publication, only: [:show, :update, :destroy, :refresh, :is_rated, :is_saved_for_later]
-	before_action :set_error_manager, only: [:lookup, :is_rated, :is_saved_for_later]
+	before_action :set_error_manager, only: [:lookup, :is_rated, :is_saved_for_later, :is_fetchable]
 
 	# GET /publications.json
 	def index
@@ -62,6 +62,23 @@ class PublicationsController < ApplicationController
 		end
 	end
 
+	# POST /publications/is_fetchable.json
+	def is_fetchable
+		if Publication.exists?(pdf_url: publication_params[:pdf_url])
+			@publication = Publication.find_by_pdf_url(publication_params[:pdf_url])
+			render :show, status: :found, location: @publication
+		else
+			@publication = Publication.new(pdf_url: publication_params[:pdf_url])
+			if @publication.is_fetchable
+				render "shared/success", status: :ok, locals: {message: I18n.t("confirmations.messages.fetchable_publication")}
+			else
+				@error_manager.add_error(I18n.t("errors.messages.unfetchable_publication"))
+				render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
+			end
+		end
+
+	end
+
 	# POST /publications/fetch.json
 	def fetch
 		if Publication.exists?(pdf_url: publication_params[:pdf_url])
@@ -106,8 +123,8 @@ class PublicationsController < ApplicationController
 
 	def request_data
 		request_data = Hash.new
-		request_data["authToken"] =  encrypt request.headers["Authorization"]
-		request_data["host"] =  "#{request.protocol}#{request.host_with_port}"
+		request_data["authToken"] = encrypt request.headers["Authorization"]
+		request_data["host"] = "#{request.protocol}#{request.host_with_port}"
 		request_data
 	end
 

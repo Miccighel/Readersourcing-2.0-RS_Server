@@ -2,6 +2,7 @@
   <dictionary name="Michael">
     <words>
       <w>bcrypt</w>
+      <w>fetchable</w>
     </words>
   </dictionary>
 </component>

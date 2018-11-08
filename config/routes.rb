@@ -7,8 +7,8 @@ Rails.application.routes.draw do
 			collection do
 				get :random
 				post :lookup
+				post :is_fetchable
 				post :fetch
-				get :aggregate
 			end
 			member do
 				get :refresh

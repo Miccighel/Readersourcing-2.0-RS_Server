@@ -24,7 +24,7 @@ class RatingsController < ApplicationController
 		@crypted_auth_token = params[:authToken]
 		auth_token = decrypt(params[:authToken])
 		payload = JsonWebToken.decode(auth_token)
-		expiration_time = Time.at payload[:exp]
+		expiration_time = Time.at payload[:expiration_time]
 		@user = User.find(payload[:user_id])
 		@rating = Rating.new
 		logger.info "Publication: #{@publication}"

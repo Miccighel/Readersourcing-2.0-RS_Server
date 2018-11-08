@@ -24,13 +24,20 @@ class Publication < ApplicationRecord
 		File.file?(absolute_pdf_download_path_link)
 	end
 
+	def is_fetchable
+		logger.info "Fetching file at url: #{pdf_url}"
+		publication = open(pdf_url)
+		bytes_expected = publication.meta['content-length'].to_i
+		bytes_expected > 0
+	end
+
 	def fetch(request_data)
 
 		data = build_data(request_data)
 
 		# FILE FETCHING STARTS HERE
 
-		logger.info "Fetching file from: #{pdf_url}"
+		logger.info "Fetching file at url: #{pdf_url}"
 		publication = open(pdf_url)
 		if publication.meta['content-disposition'] != nil
 			logger.info "Content disposition meta tag detected. Reading file name from there"
