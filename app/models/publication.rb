@@ -27,8 +27,11 @@ class Publication < ApplicationRecord
 	def is_fetchable
 		logger.info "Fetching file at url: #{pdf_url}"
 		publication = open(pdf_url)
+		content_type = publication.meta['content-type']
+		logger.info "Content type found: #{content_type}"
 		bytes_expected = publication.meta['content-length'].to_i
-		bytes_expected > 0
+		logger.info "Bytes expected: #{bytes_expected}"
+		bytes_expected > 0 and content_type == "application/pdf"
 	end
 
 	def fetch(request_data)

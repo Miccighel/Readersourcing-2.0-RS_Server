@@ -21,7 +21,7 @@ en:
       reset_mail_sent: "Reset email sent. Check your inbox."
       new_password_mail_sent: "Email containing new password sent. Check your inbox."
       update_successful: "Your profile has been updated successfully."
-      fetchable_publication: "PDF file detected, publication is fetchable."
+      fetchable_publication: "File exists, is downloadable and it is encoded in PDF format."
   information:
     messages:
       rate: "Rate this publication."
@@ -49,7 +49,7 @@ en:
       not_authorized: "You're not authorized to see this page."
       ip_address_changed: "IP address changed."
       expired_login_token: "Expired authentication token."
-      unfetchable_publication: "No file detected, publication is unfetchable."
+      unfetchable_publication: "File does not exists, it is not downloadable or it is not encoded in PDF format."
     codes:
       missing-input-secret: "The secret parameter is missing."
       invalid-input-secret: "The secret parameter is invalid or malformed."

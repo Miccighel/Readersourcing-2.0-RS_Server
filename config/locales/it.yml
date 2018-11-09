@@ -75,7 +75,7 @@ it:
       reset_mail_sent: "Mail per il reset della password inviata correttamente. Controlla la tua casella di posta."
       new_password_mail_sent: "Mail contenente nuova password inviata correttamente. Controlla la tua casella di posta."
       update_successful: "Il tuo profilo è stato aggiornato con successo."
-      fetchable_publication: "File PDF individuato, pubblicazione scaricabile."
+      fetchable_publication: "Il file esiste, è scaricabile ed è codificato in formato PDF."
   errors:
     messages:
       invalid_credentials: "Credenziali non valide. Per favore, riprova."
@@ -116,7 +116,7 @@ it:
       not_authorized: "Non sei autorizzato a vedere questa pagina."
       ip_address_changed: "Indirizzo IP modificato."
       expired_login_token: "Token d'autenticazione scaduto."
-      unfetchable_publication: "Nessun file individuato, pubblicazione non scaricabile."
+      unfetchable_publication: "Il file non esiste, non è scaricabile oppure non è codificato in formato PDF."
     codes:
       missing-input-secret: "Parametro segreto mancante."
       invalid-input-secret: "Parametro segreto non valido o malformato."

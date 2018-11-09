@@ -42,24 +42,24 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-4 offset-4 text-center">
+				<div class="col-4 offset-4">
 					<div class="form-group mt-2">
-						<label for="email">Email</label>
-						<%= email_field_tag "email", "mail@mail.com", class: "form-control form-control-light", id: "email", placeholder: "Email", required: true, build_data: {"parsley-type":"email"} %>
+						<label for="email">Email <span class="small">(e.g. address@example.com)</span></label>
+						<%= email_field_tag "email", class: "form-control form-control-light", id: "email", placeholder: "Email", required: true, build_data: {"parsley-type":"email"} %>
 					</div>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-4 offset-4 text-center">
+				<div class="col-4 offset-4">
 					<div class="form-group mt-2">
 						<label for="email">Password</label>
-						<%= password_field_tag "password", "123456", class: "form-control form-control-light", id: "password", placeholder: "Password", required: true, build_data: {"parsley-minlength":"6"} %>
+						<%= password_field_tag "password", class: "form-control form-control-light", id: "password", placeholder: "Password", required: true, build_data: {"parsley-minlength":"6"} %>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-12 text-center">
-					<%= button_tag(type: 'submit', id: "vote-btn", class: "btn btn-primary mt-3") do %>
+					<%= button_tag(type: 'submit', id: "vote-btn", class: "btn btn-success mt-3") do %>
 						<i class="fa fa-refresh fa-spin reload-icon"></i>Rate
 					<% end %>
 				</div>
