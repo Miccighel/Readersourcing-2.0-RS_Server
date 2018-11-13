@@ -31,35 +31,35 @@
 			<div class="row">
 				<div class="col-12 text-center">
 					<%= f.check_box :anonymous, id: "anonymize-check", class:'form-check-input' %>
-					<label class="form-check-label" for="anonymize-check">
+					<label class="form-check-label lead" for="anonymize-check">
 						<%= I18n.t "labels.anonimyze" %>
 					</label>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-12 text-center mt-3">
-					<h4><%= I18n.t("information.messages.validate_user") %></h4>
+				<div class="col-12 text-center mt-3 mb-1 ">
+					<p class="lead mb-2"><%= I18n.t("information.messages.validate_user") %></p>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-4 offset-4">
-					<div class="form-group mt-2">
-						<label for="email">Email <span class="small">(e.g. address@example.com)</span></label>
-						<%= email_field_tag "email", class: "form-control form-control-light", id: "email", placeholder: "Email", required: true, build_data: {"parsley-type":"email"} %>
+					<div class="form-group text-center">
+						<label class="text-white" for="email">Email <span class="small text-white">(e.g. address@example.com)</span></label>
+						<%= email_field_tag "email", "", class: "form-control form-control-light", id: "email", required: true, build_data: {"parsley-type":"email"} %>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-4 offset-4">
-					<div class="form-group mt-2">
-						<label for="email">Password</label>
-						<%= password_field_tag "password", class: "form-control form-control-light", id: "password", placeholder: "Password", required: true, build_data: {"parsley-minlength":"6"} %>
+					<div class="form-group text-center">
+						<label class="text-white" for="email">Password</label><br/>
+						<%= password_field_tag "password", "", class: "form-control form-control-light", id: "password", required: true, build_data: {"parsley-minlength":"6"} %>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-12 text-center">
-					<%= button_tag(type: 'submit', id: "vote-btn", class: "btn btn-success mt-3") do %>
+					<%= button_tag(type: 'submit', id: "vote-btn", class: "btn btn-success mt-1") do %>
 						<i class="fa fa-refresh fa-spin reload-icon"></i>Rate
 					<% end %>
 				</div>

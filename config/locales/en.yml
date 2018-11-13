@@ -24,7 +24,7 @@ en:
       fetchable_publication: "File exists, is downloadable and it is encoded in PDF format."
   information:
     messages:
-      rate: "Rate this publication."
+      rate: "Rate this publication"
       try_again: "Do you want to try again?"
       rate_again: "Do you want to give a new rating?"
       mail_confirmation: "You will get an email confirmation."

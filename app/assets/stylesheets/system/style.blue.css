@@ -172,11 +172,7 @@ p.lead {
 }
 
 .color-white {
-  color: #fff !important;
-}
-
-.color-white * {
-  color: #fff !important;
+  color: #fff;
 }
 
 .bg-white {
@@ -504,7 +500,7 @@ ul.social a.email {
   box-shadow: 0 0 0 0.2rem rgba(70, 127, 191, 0.25);
 }
 
-.form-group label {
+.form-group labellabel {
   color: #555;
 }
 

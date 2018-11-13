@@ -29,7 +29,9 @@ class ApplicationController < ActionController::API
 
 	def authorize_api_request
 		@current_user = AuthorizeApiRequest.call(request.headers, request.remote_ip).result
-		render json: {add_error: I18n.t("errors.messages.not_authorized")}, status: 401 unless @current_user
+		@error_manager = ErrorManager.new
+		@error_manager.add_error(I18n.t("errors.messages.not_authorized"))
+		render "shared/errors", status: 401, locals: {errors: @error_manager.get_errors} unless @current_user
 	end
 
 end

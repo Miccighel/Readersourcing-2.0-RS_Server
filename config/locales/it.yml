@@ -59,7 +59,7 @@ it:
     anonimyze: "Anonimizza"
   information:
     messages:
-      rate: "Assegna un voto a questa pubblicazione."
+      rate: "Assegna un voto a questa pubblicazione"
       try_again: "Desideri tentare nuovamente?"
       rate_again: "Desideri riassegnare il giudizio?"
       mail_confirmation: "Riceverai una conferma via mail."
