@@ -26,7 +26,12 @@ class Publication < ApplicationRecord
 
 	def is_fetchable
 		logger.info "Fetching file at url: #{pdf_url}"
-		publication = open(pdf_url)
+		begin
+			publication = open(pdf_url)
+		rescue SystemCallError => exception
+			logger.info "Could not fetch file: #{exception.message}"
+			return false
+		end
 		content_type = publication.meta['content-type']
 		logger.info "Content type found: #{content_type}"
 		bytes_expected = publication.meta['content-length'].to_i
