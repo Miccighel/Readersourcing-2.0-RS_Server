@@ -15,4 +15,6 @@ RS_Server is the server-side component of Readersourcing 2.0 which has the task 
 
 There are three main modalities that can be exploited to deploy a working instance of RS_Server in **development** or **production** mode. The former must be used if there is the need to add custom Readersourcing model or to extend/modify the current implementation of RS_Server. The latter must be used if RS_Server is about to be used as it is. In the following these three modalities are described, along with their requirements. 
 
+<h2>Manual Way</h2>
+
 ....
