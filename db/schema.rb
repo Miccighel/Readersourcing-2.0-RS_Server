@@ -26,7 +26,6 @@ ActiveRecord::Schema.define(version: 2018_07_18_090558) do
     t.string "pdf_storage_path"
     t.string "pdf_name"
     t.string "pdf_download_path"
-    t.string "pdf_download_url"
     t.string "pdf_name_link"
     t.string "pdf_download_path_link"
     t.string "pdf_download_url_link"

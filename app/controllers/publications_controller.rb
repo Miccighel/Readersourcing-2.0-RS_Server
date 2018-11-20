@@ -1,5 +1,6 @@
 class PublicationsController < ApplicationController
 
+	before_action :set_user, :set_request_data
 	before_action :set_publication, only: [:show, :update, :destroy, :refresh, :is_rated, :is_saved_for_later]
 	before_action :set_error_manager, only: [:lookup, :is_rated, :is_saved_for_later, :is_fetchable]
 
@@ -16,7 +17,7 @@ class PublicationsController < ApplicationController
 	def lookup
 		@publication = Publication.find_by_pdf_url(publication_params[:pdf_url])
 		if @publication
-			render :show, status: :found, location: @publication
+			render :show_without_paths, status: :found, location: @publication
 		else
 			@error_manager.add_error(I18n.t("models.publications.errors.messages.lookup_error"))
 			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
@@ -27,7 +28,7 @@ class PublicationsController < ApplicationController
 	def random
 		publication_id = Publication.pluck(:id).shuffle[0]
 		@publication = Publication.find(publication_id)
-		render :show, status: :ok, location: @publication
+		render :show_without_paths, status: :ok, location: @publication
 	end
 
 	# GET /publications/1/is_rated.json
@@ -43,8 +44,8 @@ class PublicationsController < ApplicationController
 
 	# GET /publications/1/is_saved_for_later.json
 	def is_saved_for_later
-		if @publication.is_saved_for_later
-			render @publication, status: :ok
+		if @publication.is_saved_for_later(current_user)
+			render :show, status: :ok, location: @publication
 		else
 			@error_manager.add_error("not saved for later")
 			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
@@ -55,7 +56,7 @@ class PublicationsController < ApplicationController
 	def create
 		@publication = Publication.new(publication_params)
 		if @publication.save
-			@publication.fetch request_data
+			@publication.fetch @request_data
 			render :show, status: :created, location: @publication
 		else
 			render json: @publication.errors, status: :unprocessable_entity
@@ -66,7 +67,7 @@ class PublicationsController < ApplicationController
 	def is_fetchable
 		if Publication.exists?(pdf_url: publication_params[:pdf_url])
 			@publication = Publication.find_by_pdf_url(publication_params[:pdf_url])
-			render :show, status: :found, location: @publication
+			render "publications/show_without_paths", status: :found, location: @publication
 		else
 			@publication = Publication.new(pdf_url: publication_params[:pdf_url])
 			if @publication.is_fetchable
@@ -83,12 +84,12 @@ class PublicationsController < ApplicationController
 	def fetch
 		if Publication.exists?(pdf_url: publication_params[:pdf_url])
 			@publication = Publication.find_by_pdf_url(publication_params[:pdf_url])
-			@publication.fetch request_data
+			@publication.fetch @request_data
 			render :show, status: :ok, location: @publication
 		else
 			@publication = Publication.new(pdf_url: publication_params[:pdf_url])
 			if @publication.save
-				@publication.fetch request_data
+				@publication.fetch @request_data
 				render :show, status: :created, location: @publication
 			else
 				render json: @publication.errors, status: :unprocessable_entity
@@ -99,14 +100,14 @@ class PublicationsController < ApplicationController
 
 	# GET /publications/1/refresh.json
 	def refresh
-		@publication.fetch request_data
+		@publication.fetch @request_data
 		render :show, status: :ok, location: @publication
 	end
 
 	# PATCH/PUT /publications/1.json
 	def update
 		if @publication.update(publication_params)
-			@publication.fetch request_data
+			@publication.fetch @request_data
 			render :show, status: :ok, location: @publication
 		else
 			render json: @publication.errors, status: :unprocessable_entity
@@ -115,17 +116,21 @@ class PublicationsController < ApplicationController
 
 	# DELETE /publications/1.json
 	def destroy
-		@publication.remove_files
+		@publication.remove_files(current_user)
 		@publication.destroy
 	end
 
 	private
 
-	def request_data
-		request_data = Hash.new
-		request_data["authToken"] = encrypt request.headers["Authorization"]
-		request_data["host"] = "#{request.protocol}#{request.host_with_port}"
-		request_data
+	def set_request_data
+		@request_data = Hash.new
+		@request_data[:authToken] = encrypt request.headers["Authorization"]
+		@request_data[:host] = "#{request.protocol}#{request.host_with_port}"
+		@request_data[:user] = current_user
+	end
+
+	def set_user
+		@user = current_user
 	end
 
 	def set_publication

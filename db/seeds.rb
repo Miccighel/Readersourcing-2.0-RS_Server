@@ -54,6 +54,7 @@ unless Rails.env.production?
 	data = Hash.new
 	data[:authToken] = auth_token
 	data[:host] = "http://localhost:3000"
+	data[:user] = mario_rossi
 
 	puts "---------- FETCHING FILE FOR PUBLICATION 1 ----------"
 	p1.save
@@ -70,10 +71,14 @@ unless Rails.env.production?
 	p3.fetch data
 	puts "---------- FETCHING COMPLETED ----------"
 
+	data[:user] = luca_bianchi
+
 	puts "---------- FETCHING FILE FOR PUBLICATION 4 ----------"
 	p4.save
 	p4.fetch data
 	puts "---------- FETCHING COMPLETED ----------"
+
+	data[:user] = mario_rossi
 
 	puts "---------- FETCHING FILE FOR PUBLICATION 5 ----------"
 	p5.save

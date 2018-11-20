@@ -11,10 +11,8 @@ class CreatePublications < ActiveRecord::Migration[5.2]
 			t.string :pdf_storage_path
 			t.string :pdf_name
 			t.string :pdf_download_path
-			t.string :pdf_download_url
 			t.string :pdf_name_link
 			t.string :pdf_download_path_link
-			t.string :pdf_download_url_link
 			t.decimal :steadiness, default: 0.0
 			t.decimal :score_rsm, default: 0.0
 			t.decimal :score_trm, default: 0.0

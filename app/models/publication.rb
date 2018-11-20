@@ -20,8 +20,8 @@ class Publication < ApplicationRecord
 		nil
 	end
 
-	def is_saved_for_later
-		File.file?(absolute_pdf_download_path_link)
+	def is_saved_for_later(user)
+		File.file?(absolute_pdf_download_path_link(user))
 	end
 
 	def is_fetchable
@@ -41,7 +41,12 @@ class Publication < ApplicationRecord
 
 	def fetch(request_data)
 
-		data = build_data(request_data)
+		data = Hash.new
+		data[:authToken] = request_data.values[0]
+		data[:host] = request_data.values[1]
+		data[:pubId] = self.id
+		data[:user] = request_data.values[2]
+		data[:rate_path] = "#{request_data.values[1]}#{Rails.application.routes.url_helpers.rate_path(data[:pubId], data[:authToken])}"
 
 		# FILE FETCHING STARTS HERE
 
@@ -61,13 +66,13 @@ class Publication < ApplicationRecord
 		logger.info "File name: #{filename}"
 
 		logger.info "Checking if there is an old annotated version to remove."
-		remove_annotated_file
+		remove_annotated_file data[:user]
 
-		logger.info "Creating folder at #{absolute_pdf_storage_path}."
-		FileUtils::mkdir_p absolute_pdf_storage_path
+		logger.info "Creating folder at #{absolute_pdf_storage_path(data[:user])}."
+		FileUtils::mkdir_p absolute_pdf_storage_path(data[:user])
 		bytes_expected = publication.meta['content-length'].to_i
-		logger.info "Copying file at #{absolute_pdf_download_path}"
-		bytes_copied = IO.copy_stream(publication, absolute_pdf_download_path)
+		logger.info "Copying file at #{absolute_pdf_download_path(data[:user])}"
+		bytes_copied = IO.copy_stream(publication, absolute_pdf_download_path(data[:user]))
 		if bytes_expected != bytes_copied
 			raise "Expected #{bytes_expected} bytes but got #{bytes_copied}"
 		end
@@ -75,8 +80,8 @@ class Publication < ApplicationRecord
 
 		# METADATA READING STARTS HERE
 
-		logger.info "Reading metadata from: #{absolute_pdf_download_path}"
-		reader = PDF::Reader.new(absolute_pdf_download_path)
+		logger.info "Reading metadata from: #{absolute_pdf_download_path(data[:user])}"
+		reader = PDF::Reader.new(absolute_pdf_download_path(data[:user]))
 		begin
 			if !reader.info[:doi].blank?
 				logger.info "DOI found"
@@ -146,45 +151,45 @@ class Publication < ApplicationRecord
 
 		# EDITING OF PDF FILE WITH RS_PDF STARTS HERE
 
-		logger.info "Checking again existence of: #{absolute_pdf_download_path}"
-		if File.exist?(absolute_pdf_download_path)
+		logger.info "Checking again existence of: #{absolute_pdf_download_path(data[:user])}"
+		if File.exist?(absolute_pdf_download_path(data[:user]))
 			logger.info "File exists"
 			logger.info "RS_PDF execution started"
 			logger.info "Path: #{absolute_rs_pdf_path}"
 			logger.info "with options:"
-			logger.info "-pIn: #{absolute_pdf_download_path}"
-			logger.info "-pOut: #{absolute_pdf_storage_path}"
+			logger.info "-pIn: #{absolute_pdf_download_path(data[:user])}"
+			logger.info "-pOut: #{absolute_pdf_storage_path(data[:user])}"
 			logger.info "-u: #{data[:rate_path]}"
 			logger.info "-c: Click here"
 			logger.info "-pId: #{data[:pubId]}"
 			logger.info "-a: #{data[:authToken]}"
 			logger.info "Complete command:"
-			logger.info "java -jar #{absolute_rs_pdf_path} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:rate_path]} -c \"Express your rating\""
-			output = %x( java -jar #{absolute_rs_pdf_path} -pIn #{absolute_pdf_download_path} -pOut #{absolute_pdf_storage_path} -u #{data[:rate_path]} -c "Express your rating")
+			logger.info "java -jar #{absolute_rs_pdf_path} -pIn #{absolute_pdf_download_path(data[:user])} -pOut #{absolute_pdf_storage_path(data[:user])} -u #{data[:rate_path]} -c \"Express your rating\""
+			output = %x( java -jar #{absolute_rs_pdf_path} -pIn #{absolute_pdf_download_path(data[:user])} -pOut #{absolute_pdf_storage_path(data[:user])} -u #{data[:rate_path]} -c "Express your rating")
 			logger.info output
 			logger.info "RS_PDF execution completed"
-			File.delete(absolute_pdf_download_path)
+			File.delete(absolute_pdf_download_path(data[:user]))
 			logger.info "Modified file"
 			logger.info "Name: #{pdf_name_link}"
 			logger.info "Download path: #{pdf_download_path_link}"
 		else
-			raise "File does not exists at #{absolute_pdf_download_path}"
+			raise "File does not exists at #{absolute_pdf_download_path(data[:user])}"
 		end
 	end
 
-	def remove_files
-		if File.exists? absolute_pdf_storage_path
-			logger.info "Deleting storage folder at: #{absolute_pdf_storage_path}"
-			File.remove_dir(absolute_pdf_storage_path)
+	def remove_files(user)
+		if File.exists? absolute_pdf_storage_path(user)
+			logger.info "Deleting storage folder at: #{absolute_pdf_storage_path(user)}"
+			File.remove_dir(absolute_pdf_storage_path(user))
 		else
 			logger.info "Storage folder not detected."
 		end
 	end
 
-	def remove_annotated_file
-		if File.exists? absolute_pdf_download_path_link
-			logger.info "Deleting old annotated version at: #{absolute_pdf_download_path_link}"
-			File.delete(absolute_pdf_download_path_link)
+	def remove_annotated_file(user)
+		if File.exists? absolute_pdf_download_path_link(user)
+			logger.info "Deleting old annotated version at: #{absolute_pdf_download_path_link(user)}"
+			File.delete(absolute_pdf_download_path_link(user))
 		else
 			logger.info "Old annotated version not detected."
 		end
@@ -205,43 +210,43 @@ class Publication < ApplicationRecord
 		Rating.where(publication_id: self.id).order(created_at: :asc).all
 	end
 
+	def pdf_download_url(host, user)
+		pdf_name_without_ext = pdf_name.chomp(".pdf").to_s.gsub('%2', '-')
+		pdf_name = "#{pdf_name_without_ext}.pdf"
+		"#{host}/user/#{user.id}/#{pdf_storage_path}#{pdf_name}"
+	end
+
+	def pdf_download_url_link(host, user)
+		pdf_name_without_ext = pdf_name.chomp(".pdf").to_s.gsub('%2', '-')
+		"#{host}/user/#{user.id}/#{pdf_storage_path}#{pdf_name_without_ext}#{Settings.rs_pdf_link_suffix}.pdf"
+	end
+
 	private
+
+	def load_pdf_paths(pdf_name, host)
+		pdf_name_without_ext = pdf_name.chomp(".pdf").to_s.gsub('%2', '-')
+		pdf_name = "#{pdf_name_without_ext}.pdf"
+		update_attribute(:pdf_storage_path, "publication/pdf/#{id}/")
+		update_attribute(:pdf_download_path, "#{pdf_storage_path}#{pdf_name}")
+		update_attribute(:pdf_name, pdf_name)
+		update_attribute(:pdf_download_path_link, "#{pdf_storage_path}#{pdf_name_without_ext}#{Settings.rs_pdf_link_suffix}.pdf")
+		update_attribute(:pdf_name_link, "#{pdf_name_without_ext}#{Settings.rs_pdf_link_suffix}.pdf")
+	end
 
 	def absolute_rs_pdf_path
 		Rails.root.join("lib").join(Settings.rs_pdf_name)
 	end
 
-	def load_pdf_paths(pdf_name, host)
-		pdf_name_without_ext = pdf_name.chomp(".pdf").to_s.gsub('%2', '-')
-		pdf_name = "#{pdf_name_without_ext}.pdf"
-		update_attribute(:pdf_storage_path, "publication/#{id}/")
-		update_attribute(:pdf_download_path, "#{pdf_storage_path}#{pdf_name}")
-		update_attribute(:pdf_download_url, "#{host}/#{pdf_storage_path}#{pdf_name}")
-		update_attribute(:pdf_name, pdf_name)
-		update_attribute(:pdf_download_path_link, "#{pdf_storage_path}#{pdf_name_without_ext}#{Settings.rs_pdf_link_suffix}.pdf")
-		update_attribute(:pdf_download_url_link, "#{host}/#{pdf_storage_path}#{pdf_name_without_ext}#{Settings.rs_pdf_link_suffix}.pdf")
-		update_attribute(:pdf_name_link, "#{pdf_name_without_ext}#{Settings.rs_pdf_link_suffix}.pdf")
+	def absolute_pdf_storage_path(user)
+		Rails.public_path.join("user").join(user.id.to_s).join(pdf_storage_path)
 	end
 
-	def absolute_pdf_storage_path
-		Rails.public_path.join(pdf_storage_path)
+	def absolute_pdf_download_path(user)
+		Rails.public_path.join("user").join(user.id.to_s).join(pdf_download_path)
 	end
 
-	def absolute_pdf_download_path
-		Rails.public_path.join(pdf_download_path)
-	end
-
-	def absolute_pdf_download_path_link
-		Rails.public_path.join(pdf_download_path_link)
-	end
-
-	def build_data(request_data)
-		data = Hash.new
-		data[:authToken] = request_data.values[0]
-		data[:host] = request_data.values[1]
-		data[:pubId] = self.id
-		data[:rate_path] = "#{request_data.values[1]}#{Rails.application.routes.url_helpers.rate_path(data[:pubId], data[:authToken])}"
-		data
+	def absolute_pdf_download_path_link(user)
+		Rails.public_path.join("user").join(user.id.to_s).join(pdf_download_path_link)
 	end
 
 end
