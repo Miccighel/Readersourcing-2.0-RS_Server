@@ -4,7 +4,7 @@
 #services:
 #  rs_server_webapp:
 #    image: miccighel/rs_server:v1.0.8-alpha
-#    command: rails server -p 3000 -b '0.0.0.0'
+#    command: rails server -p 3000 -b '0.0.0.0' -e production
 #    ports:
 #    - "3000:3000"
 #    links:
@@ -23,7 +23,7 @@ services:
   rs_server_webapp:
     build: .
     image: miccighel/rs_server:v1.0.8-alpha
-    command: rails server -p 3000 -b '0.0.0.0'
+    command: rails server -p 3000 -b '0.0.0.0' -e development
     volumes:
     - .:/app
     ports:
