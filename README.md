@@ -27,16 +27,16 @@ This deploy modality allows to manually downwload and start RS_Server locally to
  
  <h3>How To</h3>
 
-Clone this repository and move inside the main directory using a command line prompt (with an ```ls``` or ```dir``` command you should see ```app```, ```bin```, ```config```, etc. folders) and type ```gem install bundler```. This gem (a.k.a., dependency) will provides a consistent environment for Ruby projects by tracking and installing the exact gems (a.k.a., dependencies) and versions that are needed. Then, to fetch all those required by RS_Server type ```bundle install``` and wait for the process to complete. The next two commands _are required only before the first startup of RS_Server_  because they will create and set up the database, so please be sure that the  PostgreSQL service is started up and ready to accept connections on port 5432. To proceed, type ```rake db:create``` to create the database and ```rake db:migrate``` to create the required tables in its inside. Once done that, everything is ready to launch RS_Server in development or production mode. To do that, just type ```cd bin``` or ```dir bin``` to move inside ```bin``` directory and then ```rails server -b 127.0.0.1 -p 3000 -e development``` with the proper values for ```-b```, ```-p``` and ```-e``` options. If the previous values are used, RS_Server will be started and bound on ```127.0.0.1``` ip address with port ```3000``` and ```development``` environment. Therefore, every request to RS_Sever must be sent to ```https://127.0.0.1:3000``` address.  
+Clone this repository and move inside the main directory using a command line prompt (with an ```ls``` or ```dir``` command you should see ```app```, ```bin```, ```config```, etc. folders) and type ```gem install bundler```. This gem (a.k.a., dependency) will provides a consistent environment for Ruby projects by tracking and installing the exact gems (a.k.a., dependencies) and versions that are needed. Then, to fetch all those required by RS_Server type ```bundle install``` and wait for the process to complete. The next two commands _are required only before the first startup of RS_Server_  because they will create and set up the database, so please be sure that the  PostgreSQL service is started up and ready to accept connections on port 5432. To proceed, type ```rake db:create``` to create the database and ```rake db:migrate``` to create the required tables in its inside. Once done that, everything is ready to launch RS_Server in development or production mode. To do that, just type ```cd bin``` to move inside ```bin``` directory and then ```rails server -b 127.0.0.1 -p 3000 -e development``` with the proper values for ```-b```, ```-p``` and ```-e``` options. If the previous values are used, RS_Server will be started and bound on ```127.0.0.1``` ip address with port ```3000``` and ```development``` environment. Therefore, every request must be sent to ```https://127.0.0.1:3000``` address.  
 
 <h3>Quick Cheatsheet</h3>
 
-- ```ls``` or ```dir``` (to main directory)
+- ```cd``` to main directory
 - ```gem install bundler```
 - ```bundle install```
 - ```rake db:create``` (only before first startup)
 - ```rake db:migrate``` (only before first startup)
-- ```cd bin``` or ```dir bin```
+- ```cd bin```
 - ```rails server -b x.x.x.x -p x -e development``` or ```rails server -b x.x.x.x -p x -e production```
 
 <h2>2: Manual Way (But Faster)</h2>
@@ -49,11 +49,23 @@ This deploy modality allows to downwload and start RS_Server locally to a machin
 
 <h3>How To</h3>
 
-Clone this repository and move inside the main directory using a command line prompt (with an ```ls``` or ```dir``` command you should see ```app```, ```bin```, ```config```, etc. folders). Now, type ```ls``` or ```dir``` again; you should see a ```docker-compose.yml``` file. If you do not see it, please be sure to be in the main directory of the cloned repository. Before proceeding, _be sure that your Docker Engine has been started up, otherwise the following commands will not work_. At this point two different scenarions could happen, which are outlined in the following. 
+Clone this repository and move inside the main directory using a command line prompt (with an ```ls``` or ```dir``` command you should see ```app```, ```bin```, ```config```, etc. folders). Now, type ```ls``` or ```dir``` again; you should see a ```docker-compose.yml``` file and a ```Dockerfile```. If you do not see them, please be sure to be in the main directory of the cloned repository. Before proceeding, _be sure that your Docker Engine has been started up, otherwise the following commands will not work_. At this point two different scenarions could happen, which are outlined in the following. 
 
-<h4>Scenario 1: The source code of RS_Server has been edited</h4>
+<h4>Scenario 1: RS_Server is about to be used as it is (deploy with remote images)</h4>
 
-<h4>Scenario 2: RS_Server is about to be used as it is</h4>
+If there is not the need to edit the source code of RS_Server the Docker Engine can simply fetch the required dependencies outlined in the ```docker-compose.yml``` file and set-up the application. To do this, open the ```docker-compose.yml``` file and uncomment the section between the ```----------- SCENARIO 1: DEPLOY WITH REMOTE IMAGES ----------``` and ```----------- END OF SCENARIO 1: DEPLOY WITH REMOTE IMAGES ----------``` comments and comment back the remaining lines of code. Now, from the command line prompt type ```docker-compose up``` and wait for the processing to finish. Note that it may take different minutes. Once the Docker Engine completes the process, the container with a working instance of RS_Server will be ready. _If the first startup of the application is being done_ type also ```docker-compose run rake db:create``` and ```docker-compose run rake db:migrate``` to set-up the required database. RS_Server will be started and bound on ```127.0.0.1``` ip address with port ```3000``` and ```production``` environment. Therefore, every request must be sent to ```https://127.0.0.1:3000``` address. If you want to set a custom ip address, port or the ```development``` environent, edit the ```command``` key inside ```docker-compose.yml``` file. To shutdown and undeploy the container, simply type ```docker-compose down```
+
+<h4>Quick Cheatsheet</h3>
+
+- ```cd``` to main directory
+- ```docker-compose up```
+- ```docker-compose run rake db:create``` (only at first startup)
+- ```docker-compose run rake db:migrate``` (only at first startup)
+- ```docker-compose down``` (to shutdown and undeploy)
+
+<h4>Scenario 2: The source code of RS_Server has been edited (deploy with local build)</h4>
+
+If the source code of RS_Server has been edited the application must be built by fetching the 
 
 <h2>3: Heroku Deploy</h2>
 
