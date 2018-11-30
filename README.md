@@ -4,8 +4,9 @@ Please, note that this is an early alpha release and it is not ready for the use
 
 <h1>Useful Links</h1>
 
-- Original article: https://zenodo.org/record/1446468;
-- Technical documentation: https://zenodo.org/record/1452397.
+- <a href="https://zenodo.org/record/1446468">Original Article</a>
+- <a href="https://zenodo.org/record/1452397">Technical Documentation</a>
+- <a href="https://web.postman.co/collections/4632696-c26fc049-7021-4691-beb3-97cebfb60adb?workspace=8a3ef37e-60b1-4b49-8782-e73d2a6e3a8c">RESTful API Interface</a>
 
 <h1>Description</h1>
 
@@ -13,7 +14,7 @@ RS_Server is the server-side component of Readersourcing 2.0 which has the task 
 
 <h1>Deploy</h1>
 
-There are three main modalities that can be exploited to deploy a working instance of RS_Server in **development** or **production** environment. The former must be used if there is the need to add custom Readersourcing model, to extend/modify the current implementation of RS_Server or simply to test it in a safe way and it is allowed only by the first and the second deploy modality. The latter must be used if RS_Server is about to be used in production as it is and it is allowed by every deploy modality. In the following these three modalities are described, along with their requirements. 
+There are three main modalities that can be exploited to deploy a working instance of RS_Server in **development** or **production** environment. The former must be used if there is the need to add custom Readersourcing model, to extend/modify the current implementation of RS_Server or simply to test it in a safe way and it is allowed only by the first and the second deploy modality. The latter must be used if RS_Server is about to be used in production as it is and it is allowed by every deploy modality. In the following these three modalities are described, along with their requirements. Please, be sure to read also the section dedicated to the **environment variabiles**, since if they are not set RS_Server will not work.
 
 <h2>1: Manual Way</h2>
 
@@ -21,9 +22,9 @@ This deploy modality allows to manually downwload and start RS_Server locally to
 
 <h3>Requirements</h3>
 
- - Ruby >= 2.4.4;
- - JRE (Java Runtime Environment) >= 1.8.0;
- - PostgreSQL >= 10.5.
+ - <a href="https://www.ruby-lang.org/en/downloads/">Ruby</a> >= 2.4.4;
+ - <a href="https://www.java.com/it/download/">JRE (Java Runtime Environment)</a> >= 1.8.0;
+ - <a href="https://www.postgresql.org/download/">PostgreSQL</a> >= 10.5.
  
  <h3>How To</h3>
 
@@ -118,7 +119,7 @@ Regardless of the chosen deploy modality, there is the need to set some environm
  
 | RAILS_LOG_TO_STD  | If set to ```true```, Rails write its logs to the standard output.  | 3 | production | ```.env``` file, Heroku App |
 
-<h3>```.env``` File</h3>
+<h3>.env File</h3>
  
  To set an environment variable in a local ```.env``` file, create it inside the main directory of RS_Server. Then, populate it in a ```key=value``` fashion. To provide an example, the following is the content of a valid ```.env``` file:
 
@@ -128,9 +129,8 @@ SENDGRID_USERNAME=your_sendgrid_username
 SENDGRID_PASSWORD=your_sendgrid_password
 SENDGRID_DOMAIN=your_sendgrid_domain
 SENDGRID_API_KEY=your_sendgrig_secret_api_key
-
 ```
 
-<h3>On Heroku</h3>
+<h3>Heroku App</h3>
 
 To set an environment variabile in an Heroku app, simply follow <a href="https://devcenter.heroku.com/articles/config-vars">this guide</a>.
