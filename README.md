@@ -13,7 +13,7 @@ RS_Server is the server-side component of Readersourcing 2.0 which has the task 
 
 <h1>Deploy</h1>
 
-There are three main modalities that can be exploited to deploy a working instance of RS_Server in **development** or **production** environment. The former must be used if there is the need to add custom Readersourcing model, to extend/modify the current implementation of RS_Server or simply to test it in a safe way. The latter must be used if RS_Server is about to be used in production as it is. In the following these three modalities are described, along with their requirements. 
+There are three main modalities that can be exploited to deploy a working instance of RS_Server in **development** or **production** environment. The former must be used if there is the need to add custom Readersourcing model, to extend/modify the current implementation of RS_Server or simply to test it in a safe way and it is allowed only by the first and the second deploy modality. The latter must be used if RS_Server is about to be used in production as it is and it is allowed by every deploy modality. In the following these three modalities are described, along with their requirements. 
 
 <h2>1: Manual Way</h2>
 
@@ -77,20 +77,60 @@ If the source code of RS_Server has been edited the application must be built lo
 
 <h2>3: Heroku Deploy</h2>
 
-This modality allows to exploit the container registry of **Heroku** to perform a docker-based production-ready deploy of RS_Server. Note that this modality can be used only if you choose to use RS_Server in _production_ environment. Heroku is Platform-as-a-Service (PaaS) that enables developers to build, run, and operate applications entirely in the cloud. Regarding the requirements of this modality, an _app_ on Heroku must be created and it must be and _provisioned_ with two addons, namely _PostgreSQL_ for the database and _SendGrid_ for the mailing functionalities. Follow Heroku tutorials if you do not know it and its concepts. Also, a working installation of **Docker Desktop CE (Community Edition)** on the machine used to perform the deploy is required.
+This modality allows to exploit the container registry of **Heroku** to perform a docker-based production-ready deploy of RS_Server through a working installation of the **Heroku Command Line Interface (CLI)**. Note that this modality can be used only if you choose to use RS_Server in _production_ environment. Heroku is Platform-as-a-Service (PaaS) that enables developers to build, run, and operate applications entirely in the cloud. Regarding the requirements of this modality, an _app_ on Heroku must be created and it must be and _provisioned_ with two addons, namely _PostgreSQL_ for the database and _SendGrid_ for the mailing functionalities. Follow Heroku tutorials if you do not know it and its concepts. Also, a working installation of **Docker Desktop CE (Community Edition)** on the machine used to perform the deploy is required.
 
 <h3>Requirements</h3>
 
-- Heroku account;
-- Heroku application provisioned with PostgreSQL and SendGrid addons;
+- Heroku Account;
+- Heroku Application (PostgreSQL + SendGrid Addons);
+- Heroku CLI;
 - Docker Desktop CE (Community Edition).
 
 <h3>How To</h3>
 
-Clone this repository and move inside the main directory using a command line prompt. Now, type ```ls``` or ```dir```; you should see a ```Dockerfile```. If you do not see it, please be sure to be in the main directory of the cloned repository. Before proceeding, _be sure that your Docker Engine has been started up, otherwise the following commands will not work_.
+Clone this repository and move inside the main directory using a command line prompt. Now, type ```ls``` or ```dir```; you should see a ```Dockerfile```. If you do not see it, please be sure to be in the main directory of the cloned repository. Before proceeding, _be sure that your Docker Engine has been started up, otherwise the following commands will not work_. To proceed, log in to your Heroku account by typing ```heroku login``` and inserting your credentials. Next, log in to Heroku container registry by typing ```heroku container:login```. To build and upload your instance of RS_Server type ```heroku container:push web --app your-app-name``` and when the process is finished type ```heroku container:release web``` to make it publicy accessible. Optionally, you can type ```heroku open``` to open the browser and be redirected on the homepage of  ```your_app_name``` application. To create and set-up the database type ```heroku run rake db:create``` and ```heroku run rake db:migrate```. As you can see, there is no need to manually start the server by specifing its ip address, port and environment, since Heroku will take care of that for you.
+
+<h4>Quick Cheatsheet</h3>
+
+- ```cd``` to main directory;
+- ```heroku login```;
+- ```heroku container:login```;
+- ```heroku container:push web --app your-app-name```;
+- ```heroku container:release web --app your-app-name```;
+- ```heroku open --app your-app-name``` (optional);
+- ```heroku run rake db:create --app your-app-name```;
+- ```heroku run rake db:migrate --app your-app-name```.
 
 <h2>Environment Variables</h2>
 
-TO DO 
+Regardless of the chosen deploy modality, there is the need to set some environment variables which cannot be checked into a repository as a safety measure; on the contrary, what depends on the chosen modality is which variables are required. In the following each of these environment variables is described along with an explanation of where to set them on the basis of the chosen deploy modality/environment is provided. 
+
+| Environment Variable  | Description | Deploy Modality | Environment | Where To Set |
+| ------------- | ------------- | ------------- | ------------- | ------------- |
+| SECRET_DEV_KEY  | Private key used to encrypt some strings  | 1 - 2 (Scenario 1, Scenario 2) | development | ```.env``` file |
+| SECRET_PROD_KEY  | Private key used to encrypt some strings  | 1 - 2 (Scenario 1, Scenario 2) - 3 | production | ```.env``` file, Heroku App |
+| SENDGRID_USERNAME  | Username of your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
+| SENDGRID_PASSWORD  | Password of your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
+| SENDGRID_API_KEY  | API key of your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
+| SENDGRID_DOMAIN  | A domain registered within your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
+| RECAPTCHA_SECRET_KEY  | Private key used by Google ReCAPTCHA v2 within a registered domain | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
+| RECAPTCHA_SITE_KEY  | API key of your Google ReCAPTCHA v2 account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
  
+| RAILS_LOG_TO_STD  | If set to ```true```, Rails write its logs to the standard output.  | 3 | production | ```.env``` file, Heroku App |
+
+<h3>```.env``` File</h3>
  
+ To set an environment variable in a local ```.env``` file, create it inside the main directory of RS_Server. Then, populate it in a ```key=value``` fashion. To provide an example, the following is the content of a valid ```.env``` file:
+
+```
+SECRET_DEV_KEY=your_secret_dev_key
+SENDGRID_USERNAME=your_sendgrid_username
+SENDGRID_PASSWORD=your_sendgrid_password
+SENDGRID_DOMAIN=your_sendgrid_domain
+SENDGRID_API_KEY=your_sendgrig_secret_api_key
+
+```
+
+<h3>On Heroku</h3>
+
+To set an environment variabile in an Heroku app, simply follow <a href="https://devcenter.heroku.com/articles/config-vars">this guide</a>.
