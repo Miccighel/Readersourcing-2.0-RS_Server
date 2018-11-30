@@ -4,8 +4,8 @@ Please, note that this is an early alpha release and it is not ready for the use
 
 <h1>Useful Links</h1>
 
-- Original article: https://zenodo.org/record/1446468
-- Technical documentation: https://zenodo.org/record/1452397
+- Original article: https://zenodo.org/record/1446468;
+- Technical documentation: https://zenodo.org/record/1452397.
 
 <h1>Description</h1>
 
@@ -21,9 +21,9 @@ This deploy modality allows to manually downwload and start RS_Server locally to
 
 <h3>Requirements</h3>
 
- - Ruby >= 2.4.4
- - JRE (Java Runtime Environment) >= 1.8.0
- - PostgreSQL >= 10.5
+ - Ruby >= 2.4.4;
+ - JRE (Java Runtime Environment) >= 1.8.0;
+ - PostgreSQL >= 10.5.
  
  <h3>How To</h3>
 
@@ -31,21 +31,21 @@ Clone this repository and move inside the main directory using a command line pr
 
 <h3>Quick Cheatsheet</h3>
 
-- ```cd``` to main directory
-- ```gem install bundler```
-- ```bundle install```
-- ```rake db:create``` (only before first startup)
-- ```rake db:migrate``` (only before first startup)
-- ```cd bin```
-- ```rails server -b x.x.x.x -p x -e development``` or ```rails server -b x.x.x.x -p x -e production```
+- ```cd``` to main directory;
+- ```gem install bundler```;
+- ```bundle install```;
+- ```rake db:create``` (only before first startup);
+- ```rake db:migrate``` (only before first startup);
+- ```cd bin```;
+- ```rails server -b x.x.x.x -p x -e development``` or ```rails server -b x.x.x.x -p x -e production```.
 
 <h2>2: Manual Way (But Faster)</h2>
 
-This deploy modality allows to downwload and start RS_Server locally to a machine chosen as a server like the first one, but in a way which is faster and less frustrating, despite being less flexible. Also, it have less demanding requirements, since only a working installation of Docker Desktop CE (Community Edition) is required. Docker is a Platform-as-a-Service project which allows to automate the deployment phase by distributing an _image_ of an application inside a _container_. A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another. A Docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries and settings. This means that there is not the need to manually install the runtimes/libraries/dependencies needed to run an application since the Docker Engine will automatically fetch, install and setup them.
+This deploy modality allows to downwload and start RS_Server locally to a machine chosen as a server like the first one, but in a way which is faster and less frustrating, despite being less flexible. Also, it have less demanding requirements, since only a working installation of **Docker Desktop CE (Community Edition)** is required. Docker is a project which allows to automate the deployment phase by distributing an _image_ of an application inside a _container_. A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another. A Docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries and settings. This means that there is not the need to manually install the runtimes/libraries/dependencies needed to run an application since the Docker Engine will automatically fetch, install and setup them.
 
 <h3>Requirements</h3>
 
-- Docker Desktop CE (Community Edition) 
+- Docker Desktop CE (Community Edition). 
 
 <h3>How To</h3>
 
@@ -57,11 +57,11 @@ If there is not the need to edit the source code of RS_Server the Docker Engine 
 
 <h4>Quick Cheatsheet</h3>
 
-- ```cd``` to main directory
-- ```docker-compose up```
-- ```docker-compose run rake db:create``` (only at first startup)
-- ```docker-compose run rake db:migrate``` (only at first startup)
-- ```docker-compose down``` (to shutdown and undeploy)
+- ```cd``` to main directory;
+- ```docker-compose up```;
+- ```docker-compose run rake db:create``` (only at first startup);
+- ```docker-compose run rake db:migrate``` (only at first startup);
+- ```docker-compose down``` (to shutdown and undeploy).
 
 <h4>Scenario 2: The source code of RS_Server has been edited (deploy with local build)</h4>
 
@@ -69,13 +69,25 @@ If the source code of RS_Server has been edited the application must be built lo
 
 <h4>Quick Cheatsheet</h3>
 
-- ```cd``` to main directory
-- ```docker-compose up```
-- ```docker-compose run rake db:create``` (only at first startup)
-- ```docker-compose run rake db:migrate``` (only at first startup)
-- ```docker-compose down``` (to shutdown and undeploy)
+- ```cd``` to main directory;
+- ```docker-compose up```;
+- ```docker-compose run rake db:create``` (only at first startup);
+- ```docker-compose run rake db:migrate``` (only at first startup);
+- ```docker-compose down``` (to shutdown and undeploy).
 
 <h2>3: Heroku Deploy</h2>
+
+This modality allows to exploit the container registry of **Heroku** to perform a docker-based production-ready deploy of RS_Server. Note that this modality can be used only if you choose to use RS_Server in _production_ environment. Heroku is Platform-as-a-Service (PaaS) that enables developers to build, run, and operate applications entirely in the cloud. Regarding the requirements of this modality, an _app_ on Heroku must be created and it must be and _provisioned_ with two addons, namely _PostgreSQL_ for the database and _SendGrid_ for the mailing functionalities. Follow Heroku tutorials if you do not know it and its concepts. Also, a working installation of **Docker Desktop CE (Community Edition)** on the machine used to perform the deploy is required.
+
+<h3>Requirements</h3>
+
+- Heroku account;
+- Heroku application provisioned with PostgreSQL and SendGrid addons;
+- Docker Desktop CE (Community Edition).
+
+<h3>How To</h3>
+
+Clone this repository and move inside the main directory using a command line prompt. Now, type ```ls``` or ```dir```; you should see a ```Dockerfile```. If you do not see it, please be sure to be in the main directory of the cloned repository. Before proceeding, _be sure that your Docker Engine has been started up, otherwise the following commands will not work_.
 
 <h2>Environment Variables</h2>
 
