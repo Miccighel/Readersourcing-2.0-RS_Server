@@ -1,3 +1,5 @@
+# ---------- SCENARIO 2: DEPLOY WITH LOCAL BUILD ----------
+
 FROM ruby:2.4.4
 
 # Install apt based dependencies required to run Rails as
@@ -36,15 +38,20 @@ EXPOSE 3000
 # default.
 
 # DEVELOPMENT MODE
-#CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+# CMD ["bundle", "exec", "rails", "server", "-b", "-p", "3000", "-e", "development"]
 # PRODUCTION MODE
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-e", "production"]
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000", "-e", "production"]
 
-# HEROKU DOCKER DEPLOY COMNMANDS
-#
+# ---------- SCENARIO 2: DEPLOY WITH LOCAL BUILD ----------
+
+# ---------- COMMANDS FOR A DOCKER DEPLOY ON HEROKU ----------
+
 # heroku login
 # heroku container:login
-# heroku container:push web
-# heroku release:web
-# heroku open
-# heroku run rake db:migrate
+# heroku container:push web --app rs-server
+# heroku container:release web --app rs-server
+# heroku open --app rs-server
+# heroku run rake db:create --app rs-server
+# heroku run rake db:migrate --app rs-server
+
+# ---------- END ----------

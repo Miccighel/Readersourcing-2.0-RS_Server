@@ -1,4 +1,4 @@
-# DEPLOY WITH REMOTE IMAGES
+# ---------- SCENARIO 1: DEPLOY WITH REMOTE IMAGES ----------
 
 #version: '3'
 #services:
@@ -16,14 +16,16 @@
 #    - "5432"
 #    container_name: postgres
 
-# DEPLOY WITH LOCAL BUILD
+# ---------- END OF SCENARIO 1: DEPLOY WITH REMOTE IMAGES ----------
+
+# ---------- SCENARIO 2: DEPLOY WITH LOCAL BUILD ----------
 
 version: '3'
 services:
   rs_server_webapp:
     build: .
     image: miccighel/rs_server:v1.0.8-alpha
-    command: rails server -p 3000 -b '0.0.0.0' -e development
+    command: rails server -p 3000 -b '0.0.0.0' -e production
     volumes:
     - .:/app
     ports:
@@ -37,10 +39,14 @@ services:
     - "5432"
     container_name: postgres
 
-# DEPLOY COMMANDS
-#
+# ---------- END OF SCENARIO 2: DEPLOY WITH LOCAL BUILD ----------
+
+# ---------- ADDITIONAL USEFUL COMMANDS ----------
+
 # docker-compose run rs_server_webapp rake db:create
 # docker-compose run rs_server_webapp rake db:migrate
 # docker-compose run rs_server_webapp rake db:seed (Eventually)
-# docker compose run rails server -p 3000 -b '0.0.0.0' (Dev Mode)
-# docker compose run rails server -p 3000 -b '0.0.0.0' -e production (Prod Mode)
+# docker-compose run rails server -p 3000 -b '0.0.0.0' (Dev Mode)
+# docker-compose run rails server -p 3000 -b '0.0.0.0' -e production (Prod Mode)
+
+# ---------- END ----------
