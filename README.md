@@ -116,7 +116,6 @@ Regardless of the chosen deploy modality, there is the need to set some environm
 | SENDGRID_DOMAIN  | A domain registered within your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
 | RECAPTCHA_SECRET_KEY  | Private key used by Google ReCAPTCHA v2 within a registered domain | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
 | RECAPTCHA_SITE_KEY  | API key of your Google ReCAPTCHA v2 account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
- 
 | RAILS_LOG_TO_STD  | If set to ```true```, Rails write its logs to the standard output.  | 3 | production | ```.env``` file, Heroku App |
 
 <h3>.env File</h3>
