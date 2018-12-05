@@ -70,18 +70,18 @@ If the source code of RS_Server has been edited the application must be built lo
 
 <h2>3: Heroku Deploy</h2>
 
-This modality allows to exploit the container registry of **Heroku** to perform a docker-based production-ready deploy of RS_Server through a working installation of the **Heroku Command Line Interface (CLI)**. Note that this modality can be used only if you choose to use RS_Server in _production_ environment. Heroku is Platform-as-a-Service (PaaS) that enables developers to build, run, and operate applications entirely in the cloud. Regarding the requirements of this modality, an _app_ on Heroku must be created and it must be and _provisioned_ with two addons, namely _PostgreSQL_ for the database and _SendGrid_ for the mailing functionalities. Follow Heroku tutorials if you do not know it and its concepts. Also, a working installation of **Docker Desktop CE (Community Edition)** on the machine used to perform the deploy is required.
+This deploy modality allows to exploit the container registry of **Heroku** to perform a docker-based production-ready deploy of RS_Server through a working installation of the **Heroku Command Line Interface (CLI)**. Note that this modality can be used only if you choose to use RS_Server in _production_ environment. Heroku is Platform-as-a-Service (PaaS) that enables developers to build, run, and operate applications entirely in the cloud. Regarding the requirements of this modality, an _app_ on Heroku must be created and _provisioned_ with two addons, namely _PostgreSQL_ for the database and _SendGrid_ for the mailing functionalities. Follow Heroku tutorials if you do not know it and its concepts. Also, a working installation of **Docker Desktop CE (Community Edition)** on the machine used to perform the deploy is required.
 
 <h3>Requirements</h3>
 
-- Heroku Account;
-- Heroku Application (PostgreSQL + SendGrid Addons);
+- Heroku account;
+- Heroku application (PostgreSQL + SendGrid Addons);
 - <a href="https://devcenter.heroku.com/articles/heroku-cli">Heroku CLI</a>;
 - <a href="https://www.docker.com/products/docker-desktop">Docker Desktop CE (Community Edition)</a>. 
 
 <h3>How To</h3>
 
-Clone this repository and move inside the main directory using a command line prompt. Now, type ```ls``` or ```dir```; you should see a ```Dockerfile```. If you do not see it, please be sure to be in the main directory of the cloned repository. Before proceeding, _be sure that your Docker Engine has been started up, otherwise the following commands will not work_. To proceed, log in to your Heroku account by typing ```heroku login``` and inserting your credentials. Next, log in to Heroku container registry by typing ```heroku container:login```. To build and upload your instance of RS_Server type ```heroku container:push web --app your-app-name``` and when the process is finished type ```heroku container:release web``` to make it publicy accessible. Optionally, you can type ```heroku open``` to open the browser and be redirected on the homepage of  ```your_app_name``` application. To create and set up the database type ```heroku run rake db:create``` and ```heroku run rake db:migrate```. As you can see, there is no need to start the server by specifing its ip address, port and environment, since Heroku (through the Docker Engine) will take care of that for you.
+Clone this repository and move inside the main directory using a command line prompt. Now, type ```ls``` or ```dir```; you should see a ```Dockerfile```. If you do not see it, please be sure to be in the main directory of the cloned repository. Before proceeding, _be sure that your Docker Engine has been started up, otherwise the following commands will not work_. Log in to your Heroku account by typing ```heroku login``` and insert your credentials. Next, log in to Heroku container registry by typing ```heroku container:login```. To build and upload your instance of RS_Server type ```heroku container:push web --app your-app-name``` and when the process terminates type ```heroku container:release web``` to make it publicy accessible. Optionally, you can type ```heroku open``` to open the browser and be redirected on the homepage of  ```your_app_name``` application. To create and set up the database type ```heroku run rake db:create``` and ```heroku run rake db:migrate```. As you can see, there is no need to start the server by specifing its ip address, port and environment, since Heroku (through the Docker Engine) will take care of that for you.
 
 <h4>Quick Cheatsheet</h3>
 
@@ -108,7 +108,7 @@ Regardless of the chosen deploy modality, there is the need to set some environm
 | SENDGRID_DOMAIN  | A domain registered within your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
 | RECAPTCHA_SECRET_KEY  | Private key used by Google ReCAPTCHA v2 within a registered domain | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
 | RECAPTCHA_SITE_KEY  | API key of your Google ReCAPTCHA v2 account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
-| RAILS_LOG_TO_STD  | If set to ```true```, Rails write its logs to the standard output.  | 3 | production | ```.env``` file, Heroku App |
+| RAILS_LOG_TO_STD  | If set to ```true```, Rails writes its logs to the standard output. Useful for debugging purposes. | 3 | production | ```.env``` file, Heroku App |
 
 <h3>.env File</h3>
  
@@ -119,9 +119,9 @@ SECRET_DEV_KEY=your_secret_dev_key
 SENDGRID_USERNAME=your_sendgrid_username
 SENDGRID_PASSWORD=your_sendgrid_password
 SENDGRID_DOMAIN=your_sendgrid_domain
-SENDGRID_API_KEY=your_sendgrig_secret_api_key
+SENDGRID_API_KEY=your_sendgrid_secret_api_key
 ```
 
 <h3>Heroku App</h3>
 
-To set an environment variabile in an Heroku app, simply follow <a href="https://devcenter.heroku.com/articles/config-vars">this guide</a>.
+To set an environment variabile in an Heroku app, simply follow <a href="https://devcenter.heroku.com/articles/config-vars">this guide</a>. In Heroku terminology environment variables are called ```config vars```.
