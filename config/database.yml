@@ -5,7 +5,7 @@ Default: &default
 
 development:
   <<: *default
-  database: development
+  database: rs_server
   user: postgres
 
 production:
