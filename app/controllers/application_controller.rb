@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
 
 	include ::ActionController::RequestForgeryProtection
+	include ActionController::MimeResponds
 	include ::ActionView::Layouts
 
 	layout "application", only: [:home]

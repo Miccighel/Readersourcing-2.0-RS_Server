@@ -15,17 +15,13 @@ class AuthorizeApiRequest
 
 	attr_reader :headers, :ip_address
 
-	def http_auth_header
+	def authorize_user
+		decoded_auth_token = nil
 		if headers['Authorization'].present?
-			return headers['Authorization'].split(' ').last
+			decoded_auth_token = JsonWebToken.decode headers['Authorization'].split(' ').last
 		else
 			errors.add(:token, I18n.t("errors.messages.missing_token"))
 		end
-		nil
-	end
-
-	def authorize_user
-		decoded_auth_token = JsonWebToken.decode(http_auth_header)
 		if decoded_auth_token
 			# If the user represented by the token exists and his IP address is equal to the one of the current request
 			if @user.nil?
