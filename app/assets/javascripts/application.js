@@ -16,28 +16,3 @@
 //= require general
 //= require shared
 
-////////// INIT  //////////
-
-//######## CONTENT SECTIONS ########//
-
-let loadingSection = $("#loading-sect");
-let loginSection = $("#login-sect");
-
-//######## UI COMPONENTS ########//
-
-let logoutButton = $("#logout-btn");
-let profileButton = $("#profile-btn");
-
-//######## UI INITIAL SETUP ########//
-
-loginSection.hide();
-
-let authToken = null;
-if (authToken != null) {
-	loginSection.hide();
-} else {
-	loginSection.show();
-	logoutButton.parent().hide();
-	profileButton.parent().hide();
-	loadingSection.hide()
-}

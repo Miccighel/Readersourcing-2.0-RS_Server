@@ -39,9 +39,9 @@ class RatingsController < ApplicationController
 				Rating.where(user_id: @user.id, publication_id: @publication.id).destroy_all
 			else
 				if Rating.exists?(user_id: @user.id, publication_id: @publication.id)
-					render :already_given, locals: {pubId: @publication.id}
+					render 'ratings/messages/already_given', locals: {pubId: @publication.id}
 				else
-					render :rate
+					render 'ratings/rate_paper'
 				end
 			end
 		else
@@ -83,7 +83,7 @@ class RatingsController < ApplicationController
 			logged_user = User.find_by_email inserted_email
 			if requesting_user.id == logged_user.id and requesting_user.email == logged_user.email and BCrypt::Password.new(logged_user.password_digest) == inserted_password
 				if Rating.exists?(user_id: requesting_user.id, publication_id: publication.id)
-					render :already_given, locals: {pubId: publication.id}
+					render 'ratings/messages/already_given', locals: {pubId: publication.id}
 				else
 					@rating = Rating.new rating_params
 					@rating.publication = publication
@@ -91,16 +91,16 @@ class RatingsController < ApplicationController
 					if @rating.save
 						@rating.compute_scores
 						RatingMailer.confirm(@rating.user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(@rating.user.id)).deliver
-						render :successful, locals: {pubId: @rating.publication.id}
+						render 'ratings/messages/successful', locals: {pubId: @rating.publication.id}
 					else
-						render :unsuccessful, locals: {pubId: @rating.publication.id}
+						render 'ratings/messages/unsuccessful', locals: {pubId: @rating.publication.id}
 					end
 				end
 			else
-				render :not_the_same_user, locals: {pubId: publication.id}
+				render 'ratings/messages/not_the_same_user', locals: {pubId: publication.id}
 			end
 		else
-			render :not_the_same_user, locals: {pubId: publication.id}
+			render 'ratings/messages/not_the_same_user', locals: {pubId: publication.id}
 		end
 	end
 

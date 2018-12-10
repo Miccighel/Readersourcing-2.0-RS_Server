@@ -1,0 +1,72 @@
+<section id="rating-sect" class="bar bg-gray-dark no-mb color-white">
+	<div class="container">
+		<div class="row">
+			<div class="col-12 heading text-center">
+				<h4>Readersourcing 2.0</h4>
+				<p class="lead mb-0"><%= I18n.t("information.messages.rate") %></p>
+			</div>
+		</div>
+		<%= form_for @rating, url: load_path, html: {"data-parsley-validate" => ''} do |f| %>
+			<div class="row">
+				<div class="col-12 text-center">
+					<%=
+						f.text_field :score,
+						             id: 'rating-slider',
+						             "data-slider-id": "ratingSlider",
+						             "data-slider-max": "100",
+						             "data-slider-min": "0",
+						             "data-slider-step": "1",
+						             "data-slider-value": "50",
+						             "data-tooltip": "hide",
+						             "title": "Rating Slider"
+					%>
+					<br/>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12 text-center mt-3">
+					<h1 id="rating-text"><span id="rating-text-value">50</span></h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12 text-center">
+					<%= f.check_box :anonymous, id: "anonymize-check", class:'form-check-input' %>
+					<label class="form-check-label lead" for="anonymize-check">
+						<%= I18n.t "labels.anonimyze" %>
+					</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12 text-center mt-3 mb-1 ">
+					<p class="lead mb-2"><%= I18n.t("information.messages.validate_user") %></p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-4 offset-4">
+					<div class="form-group text-center">
+						<label class="text-white" for="email">Email <span class="small text-white">(e.g. address@example.com)</span></label>
+						<%= email_field_tag "email", "", class: "form-control form-control-light", id: "email", required: true, build_data: {"parsley-type":"email"} %>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-4 offset-4">
+					<div class="form-group text-center">
+						<label class="text-white" for="email">Password</label><br/>
+						<%= password_field_tag "password", "", class: "form-control form-control-light", id: "password", required: true, build_data: {"parsley-minlength":"6"} %>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12 text-center">
+					<%= button_tag(type: 'submit', id: "vote-btn", class: "btn btn-success mt-1") do %>
+						<i class="fa fa-refresh fa-spin reload-icon"></i>Rate
+					<% end %>
+				</div>
+			</div>
+			<%= hidden_field_tag "pubId", @publication.id %>
+			<%= hidden_field_tag "userId", @user.id %>
+			<%= hidden_field_tag "cryptedAuthToken", @crypted_auth_token %>
+		<% end %>
+	</div>
+</section>

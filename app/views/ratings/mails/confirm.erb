@@ -1,0 +1,17 @@
+<h1><%= I18n.t "mails.labels.dear" %> <%= @user.first_name %>,</h1>
+<%= I18n.t "mails.rating.given_rating_1" %> <%= @score %> <%= I18n.t "mails.rating.given_rating_2" %>
+<br/>
+<br/>
+<a href="<%= @link %>"><%= I18n.t "mails.labels.view_publication" %></a>
+<br/>
+<br/>
+<%= I18n.t "mails.labels.cheers" %>
+<br/>
+<br/>
+<%= I18n.t "mails.labels.team" %>
+<br/>
+<br/>
+<%= "--------------------" %>
+<br/>
+<br/>
+<small><a href="<%= @unsubscribe %>"><%= I18n.t "mails.user.unsubscribe" %></a></small>

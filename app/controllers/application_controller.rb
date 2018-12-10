@@ -4,8 +4,6 @@ class ApplicationController < ActionController::API
 	include ActionController::MimeResponds
 	include ::ActionView::Layouts
 
-	layout "application", only: [:home]
-
 	before_action :authorize_api_request, except: [:home]
 	attr_reader :current_user
 

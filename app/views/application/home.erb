@@ -1,3 +1,17 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<%= csrf_meta_tags %>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
+	<%= stylesheet_link_tag 'application' %>
+	<%= stylesheet_link_tag 'home' %>
+	<title>RS_Server</title>
+</head>
+<body>
 <section id="login-sect" class="bar bg-gray-dark color-white">
 	<div class="container">
 		<div class="row">
@@ -7,28 +21,32 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-2 m-auto">
-				<a href="" id="login-btn" class="btn btn-primary btn-block">
+			<div class="col-lg-4 col-sm-8 col-xs-12 m-auto">
+				<a href="<%= login_path %>" id="login-btn" class="btn btn-primary btn-block">
 					Login
 					<i id="sign-in-icon" class="fa fa-sign-in"></i>
-					<i class="fa fa-refresh fa-spin reload-icon"></i>
+					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 				</a>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col text-center mt-3">
+			<div class="col-lg-4 col-sm-8 col-xs-12 text-center mt-3 ml-auto mr-auto">
 				<p class="lead mb-3">Otherwise</p>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-2 m-auto">
+			<div class="col-lg-4 col-sm-8 col-xs-12 m-auto">
 				<a href="registration.html" id="sign-up-btn" class="btn btn-primary btn-block">
 					Sign Up
 					<i id="sign-up-icon" class="fa fa-user-plus"></i>
-					<i class="fa fa-refresh fa-spin reload-icon"></i>
+					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 				</a>
 			</div>
 		</div>
 	</div>
 </section>
+<%= render partial: "layouts/footer" %>
+</body>
+</html>
 <%= javascript_include_tag "application" %>
+<%= javascript_include_tag "home" %>

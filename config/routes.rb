@@ -28,6 +28,7 @@ Rails.application.routes.draw do
 		end
 	end
 
+	get 'login', to: 'authentication#login', as: :login, constraints: {:format =>  'html'}
 	post 'authenticate', to: 'authentication#authenticate', as: :authenticate, constraints: {:format =>  /(html|json)/}
 
 	get 'confirm/:id/:confirmToken', to: 'users#confirm_email', as: :confirm, constraints: {:format => 'html'}

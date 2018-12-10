@@ -58,4 +58,4 @@ Parsley.addValidator('password', {
     }
 });
 
-Parsley.setLocale('it');
+Parsley.setLocale('en');

@@ -18,6 +18,5 @@
  *= require owl.carousel/dist/assets/owl.theme.default
  *= require system/style.blue
  *= require general
- *= require_tree
  *= require_self
 */
