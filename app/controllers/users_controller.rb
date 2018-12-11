@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 
 	layout "application", only: [:confirm_email, :unsubscribe]
 
-	skip_before_action :authorize_api_request, only: [:create, :confirm_email, :unsubscribe]
+	skip_before_action :authorize_api_request, only: [:signup, :create, :confirm_email, :unsubscribe]
 
 	before_action :set_user, only: [:show, :update, :unsubscribe, :destroy]
 	before_action :set_error_manager, only: [:confirm_email]
@@ -23,6 +23,10 @@ class UsersController < ApplicationController
 	# POST /users/info.json
 	def info
 		render current_user
+	end
+
+	# GET /users/signup
+	def signup
 	end
 
 	# POST /users.json

@@ -8,15 +8,9 @@ class AuthenticationController < ApplicationController
 	def authenticate
 		command = AuthenticateUser.call(params[:email], params[:password], request.remote_ip)
 		if command.success?
-			respond_to do |format|
-				format.html do
-					session[:auth_token] = command.result
-					render "ratings/rate_web"
-				end
-				format.json {render json: {auth_token: command.result}}
-			end
+			render json: {auth_token: command.result}
 		else
-			render json: { errors: command.errors[:user_authentication]}, status: :unauthorized
+			render json: {errors: command.errors[:user_authentication]}, status: :unauthorized
 		end
 	end
 

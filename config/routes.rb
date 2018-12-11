@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
 	root to: 'application#home'
 
-	scope format: true, constraints: {format: /(html|json)/} do
+	scope format: true, constraints: {format: :json} do
 		resources :publications do
 			collection do
 				get :random
@@ -28,16 +28,17 @@ Rails.application.routes.draw do
 		end
 	end
 
-	get 'login', to: 'authentication#login', as: :login, constraints: {:format =>  'html'}
-	post 'authenticate', to: 'authentication#authenticate', as: :authenticate, constraints: {:format =>  /(html|json)/}
+	get 'login', to: 'authentication#login', as: :login, constraints: {:format => 'html'}
+	post 'authenticate', to: 'authentication#authenticate', as: :authenticate, constraints: {:format => :json}
 
 	get 'confirm/:id/:confirmToken', to: 'users#confirm_email', as: :confirm, constraints: {:format => 'html'}
 	get 'unsubscribe/:id', to: 'users#unsubscribe', as: :unsubscribe, constraints: {:format => 'html'}
+	get 'signup', to: 'users#signup', as: :signup, constraints: {:format => 'html'}
 
 	post 'load', to: 'ratings#load', as: :load, constraints: {:format => 'html'}
 	get 'rate/:pubId/:authToken/', to: 'ratings#rate', as: :rate, constraints: {:format => 'html'}
 
-	post 'password/update', to: 'passwords#update', as: :password, constraints: {:format =>  /(html|json)/}
+	post 'password/update', to: 'passwords#update', as: :password, constraints: {:format => /(html|json)/}
 	post 'password/forgot', to: 'passwords#forgot', as: :forgot, constraints: {:format => /(html|json)/}
 	get 'password/reset', to: 'passwords#reset', as: :reset, constraints: {:format => /(html|json)/}
 

@@ -1,9 +1,5 @@
 ////////// INIT  //////////
 
-//######## CONTENT SECTIONS ########//
-
-let loginSection = $("#login-sect");
-
 //######## UI COMPONENTS ########//
 
 let loginButton = $("#login-btn");

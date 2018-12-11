@@ -1,7 +1,6 @@
 class ApplicationController < ActionController::API
 
 	include ::ActionController::RequestForgeryProtection
-	include ActionController::MimeResponds
 	include ::ActionView::Layouts
 
 	before_action :authorize_api_request, except: [:home]

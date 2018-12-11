@@ -12,40 +12,36 @@
 	<title>RS_Server</title>
 </head>
 <body>
-<section id="login-sect" class="bar bg-gray-dark color-white">
-	<div class="container">
-		<div class="row">
-			<div class="col heading text-center">
-				<h4>Readersourcing 2.0</h4>
-				<p class="lead mb-0">Welcome, choose your action</p>
-			</div>
+<div class="container d-flex flex-column align-items-center justify-content-center color-white">
+	<div class="row m-auto">
+		<div class="col-12 heading text-center">
+			<h4>Readersourcing 2.0</h4>
+			<p class="lead mb-0">Welcome, choose your action</p>
 		</div>
-		<div class="row">
-			<div class="col-lg-4 col-sm-8 col-xs-12 m-auto">
-				<a href="<%= login_path %>" id="login-btn" class="btn btn-primary btn-block">
-					Login
-					<i id="sign-in-icon" class="fa fa-sign-in"></i>
-					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
-				</a>
-			</div>
+		<div class="col-8 m-auto">
+			<a href="<%= login_path %>" id="login-btn" class="btn btn-primary btn-block">
+				Login
+				<i id="sign-in-icon" class="fa fa-sign-in"></i>
+				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+			</a>
 		</div>
-		<div class="row">
-			<div class="col-lg-4 col-sm-8 col-xs-12 text-center mt-3 ml-auto mr-auto">
-				<p class="lead mb-3">Otherwise</p>
-			</div>
+		<div class="col-12 text-center mt-3">
+			<p class="lead mb-3">Otherwise</p>
 		</div>
-		<div class="row">
-			<div class="col-lg-4 col-sm-8 col-xs-12 m-auto">
-				<a href="registration.html" id="sign-up-btn" class="btn btn-primary btn-block">
-					Sign Up
-					<i id="sign-up-icon" class="fa fa-user-plus"></i>
-					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
-				</a>
-			</div>
+		<div class="col-8 m-auto">
+			<a href="<%= signup_path %>" id="sign-up-btn" class="btn btn-primary btn-block">
+				Sign Up
+				<i id="sign-up-icon" class="fa fa-user-plus"></i>
+				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+			</a>
 		</div>
 	</div>
-</section>
-<%= render partial: "layouts/footer" %>
+	<div class="row align-self-stretch mt-3">
+		<div class="col-12">
+			<%= render partial: "layouts/footer" %>
+		</div>
+	</div>
+</div>
 </body>
 </html>
 <%= javascript_include_tag "application" %>

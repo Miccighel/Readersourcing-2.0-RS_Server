@@ -9,11 +9,11 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 	<%= stylesheet_link_tag 'application' %>
-	<%= stylesheet_link_tag 'login' %>
+	<%= stylesheet_link_tag 'signup' %>
 	<title>RS_Server</title>
 </head>
 <body>
-<div class="container h-100 d-lg-flex flex-column align-items-center justify-content-center">
+<div class="container d-flex flex-column align-items-center justify-content-center">
 	<div class="row align-self-stretch mb-3">
 		<div class="col-12">
 			<section id="buttons-sect bg-primary">
@@ -37,8 +37,20 @@
 			</div>
 		</div>
 		<div class="col-lg-4 col-sm-8 col-xs-12 m-auto p-0">
-			<form id="login-form" data-parsley-validate>
+			<form id="sign-up-form" data-parsley-validate>
 				<div class="row">
+					<div class="col-12">
+						<div class="form-group">
+							<label for="first-name">First Name</label>
+							<input id="first-name" type="text" class="form-control" placeholder="">
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="form-group">
+							<label for="last-name">Last Name</label>
+							<input id="last-name" type="text" class="form-control" placeholder="">
+						</div>
+					</div>
 					<div class="col-12">
 						<div class="form-group">
 							<label for="email">Email <span class="small">(e.g. address@example.com)</span></label>
@@ -47,8 +59,26 @@
 					</div>
 					<div class="col-12">
 						<div class="form-group">
-							<label for="password">Password</label>
-							<input id="password" type="password" class="form-control" placeholder="" data-parsley-minlength="6" required>
+							<label for="orcid">ORCID <span class="small">(e.g. 1234-1234-1234-1234)</span></label>
+							<input id="orcid" type="text" class="form-control" placeholder="" data-parsley-orcid>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="form-group">
+							<label for="password">Password </label>
+							<input id="password" type="password" class="form-control" placeholder="" data-parsley-minlength="6" data-parsley-password required>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="form-group">
+							<label for="password-confirmation">Password (Confirmation)</label>
+							<input id="password-confirmation" type="password" class="form-control" placeholder="" data-parsley-minlength="6" data-parsley-password required>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="form-group no-mb">
+							<input id="subscribe" type="checkbox">
+							<label for="subscribe">Subscribe (To Emails)</label>
 						</div>
 					</div>
 					<div class="col-12">
@@ -56,19 +86,17 @@
 					</div>
 					<div class="col-12">
 						<p class="text-sm text-center">
-							<small><a href="password_forgot.html">Did you forget your password?</a></small>
-							<br/>
-							<small><a href="<%= signup_path %>">Do you want to create a new account?</a></small>
+							<small><a href="login.html">You already have an account?</a></small>
 						</p>
 					</div>
 					<div class="col-12 text-center">
 						<section id="errors-sect" class="text-left">
 							<div role="alert" class="alert alert-danger"></div>
 						</section>
-						<button type="submit" id="login-btn" class="btn btn-success btn-block">
-							Login
-							<i id="sign-in-icon" class="fa fa-sign-in"></i>
-							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+						<button type="submit" id="sign-up-btn" class="btn btn-success btn-block">
+							Sign Up
+							<i id="sign-up-icon" class="fa fa-user-plus"></i>
+							<i class="fa fa-refresh fa-spin reload-icon"></i>
 						</button>
 						<button type="button" class="btn btn-danger error-btn btn-block">
 							<i class="fa fa-exclamation-triangle danger-icon"></i>
@@ -88,4 +116,4 @@
 </body>
 </html>
 <%= javascript_include_tag "application" %>
-<%= javascript_include_tag "login" %>
+<%= javascript_include_tag "signup" %>
