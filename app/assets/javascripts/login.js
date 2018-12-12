@@ -70,7 +70,6 @@ loginButton.on("click", () => {
 				button.show();
 				button.prop("disabled", true)
 			} else {
-				console.log(jqXHR.responseText);
 				let errorPromise = buildErrors(jqXHR.responseText).then(result => {
 					errorsSection.find(alert).empty();
 					errorsSection.find(alert).append(result);
