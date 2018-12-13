@@ -7,12 +7,12 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 	<%= stylesheet_link_tag 'application' %>
-	<%= stylesheet_link_tag 'home' %>
 	<title>RS_Server</title>
 </head>
-<body>
-<div class="container color-white min-h-100 d-lg-flex flex-column align-items-center justify-content-center">
+<body class="bg-gray-dark">
+<div class="container color-white min-h-100 d-flex flex-column align-items-center justify-content-center">
 	<div class="mb-3"></div>
 	<div class="row mt-auto mb-3">
 		<div class="col-12">
@@ -32,7 +32,7 @@
 			<p class="lead mb-3">Otherwise</p>
 		</div>
 		<div class="col-8 m-auto">
-			<a href="<%= signup_path %>" id="sign-up-btn" class="btn btn-primary btn-block">
+			<a href="<%= sign_up_path %>" id="sign-up-btn" class="btn btn-primary btn-block">
 				Sign Up
 				<i id="sign-up-icon" class="fa fa-user-plus"></i>
 				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
@@ -43,7 +43,7 @@
 		<%= render partial: "layouts/footer" %>
 	</div>
 </div>
-</body>
-</html>
 <%= javascript_include_tag "application" %>
 <%= javascript_include_tag "home" %>
+</body>
+</html>

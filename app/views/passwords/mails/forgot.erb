@@ -1,0 +1,14 @@
+<h1><%= I18n.t "mails.labels.dear" %> <%= @user.first_name %>,</h1>
+<%= I18n.t "mails.password.to_get_a_new_one" %>
+<br/>
+<br/>
+<%= I18n.t "mails.password.edit_first_access" %>
+<br/>
+<br/>
+<a href="<%= @reset_url %>"><%= I18n.t "mails.labels.new_password" %></a>
+<br/>
+<br/>
+<%= I18n.t "mails.labels.cheers" %>
+<br/>
+<br/>
+<%= I18n.t "mails.labels.team" %>

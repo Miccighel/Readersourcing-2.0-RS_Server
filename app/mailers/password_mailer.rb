@@ -6,7 +6,7 @@ class PasswordMailer < ApplicationMailer
 			to: "#{@user.first_name} #{@user.last_name} <#{@user.email}>",
 			subject: "#{I18n.t("mails.labels.platform_name")} - #{I18n.t("mails.subject.password_update")}",
 			:template_path => 'passwords',
-			:template_name => 'update'
+			:template_name => 'mails/update'
 		)
 	end
 
@@ -17,7 +17,7 @@ class PasswordMailer < ApplicationMailer
 			to: "#{@user.first_name} #{@user.last_name} <#{@user.email}>",
 			subject: "#{I18n.t("mails.labels.platform_name")} - #{I18n.t("mails.subject.password_recovery")}",
 			:template_path => 'passwords',
-			:template_name => 'forgot'
+			:template_name => 'mails/forgot'
 		)
 	end
 
@@ -28,7 +28,7 @@ class PasswordMailer < ApplicationMailer
 			to: "#{@user.first_name} #{@user.last_name} <#{@user.email}>",
 			subject: "#{I18n.t("mails.labels.platform_name")} - #{I18n.t("mails.subject.password_reset")}",
 			:template_path => 'passwords',
-			:template_name => 'reset'
+			:template_name => 'mails/reset'
 		)
 	end
 

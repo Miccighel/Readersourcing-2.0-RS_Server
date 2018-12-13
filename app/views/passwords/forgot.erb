@@ -1,14 +1,69 @@
-<h1><%= I18n.t "mails.labels.dear" %> <%= @user.first_name %>,</h1>
-<%= I18n.t "mails.password.to_get_a_new_one" %>
-<br/>
-<br/>
-<%= I18n.t "mails.password.edit_first_access" %>
-<br/>
-<br/>
-<a href="<%= @reset_url %>"><%= I18n.t "mails.labels.new_password" %></a>
-<br/>
-<br/>
-<%= I18n.t "mails.labels.cheers" %>
-<br/>
-<br/>
-<%= I18n.t "mails.labels.team" %>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<%= csrf_meta_tags %>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+	<%= stylesheet_link_tag 'application' %>
+	<title>RS_Server</title>
+</head>
+<body>
+<div class="container min-h-100 d-flex flex-column align-items-center justify-content-center">
+	<div class="container mb-3">
+		<div class="row">
+			<div class="col-12 p-0">
+				<section id="buttons-sect bg-primary">
+					<button type="button" id="back-btn" class="btn btn-primary w-100">
+						<i id="back-icon" class="fa fa-arrow-left"></i> Back
+						<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+					</button>
+				</section>
+			</div>
+		</div>
+	</div>
+	<div class="row mt-auto mb-3">
+		<div class="col-12">
+			<div class="heading text-center">
+				<h4>Readersourcing 2.0</h4>
+				<p class="lead mb-0">You will get a confirmation email.</p>
+			</div>
+		</div>
+		<div class="col-lg-8 col-sm-10 col-xs-12 m-auto">
+			<form id="password-forgot-form" data-parsley-validate>
+				<div class="row">
+					<div class="col-12">
+						<div class="form-group">
+							<label for="email">Email <span class="small">(e.g. address@example.com)</span></label>
+							<input id="email" type="text" class="form-control" placeholder="" data-parsley-type="email" required>
+						</div>
+					</div>
+					<div class="col-12 text-center">
+						<section id="errors-sect" class="text-left">
+							<div role="alert" class="alert alert-danger"></div>
+						</section>
+						<button type="submit" id="password-forgot-btn" class="btn btn-success btn-block">
+							Recover
+							<i id="check-icon" class="fa fa-check"></i>
+							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+						</button>
+						<button type="button" class="btn btn-danger error-btn btn-block">
+							<i class="fa fa-exclamation-triangle danger-icon"></i>
+							Error
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="row mt-auto ml-auto mr-auto mb-0 w-100">
+		<%= render partial: "layouts/footer" %>
+	</div>
+</div>
+<%= javascript_include_tag "application" %>
+<%= javascript_include_tag "password_forgot" %>
+</body>
+</html>

@@ -20,7 +20,7 @@ class PublicationsController < ApplicationController
 			render :show_without_paths, status: :found, location: @publication
 		else
 			@error_manager.add_error(I18n.t("models.publications.errors.messages.lookup_error"))
-			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
+			render json: {errors: @error_manager.get_errors}, status: :not_found
 		end
 	end
 
@@ -38,7 +38,7 @@ class PublicationsController < ApplicationController
 			render rating, status: :ok
 		else
 			@error_manager.add_error(I18n.t("models.publications.errors.messages.is_rated_error"))
-			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
+			render json: {errors: @error_manager.get_errors}, status: :not_found
 		end
 	end
 
@@ -48,7 +48,7 @@ class PublicationsController < ApplicationController
 			render :show, status: :ok, location: @publication
 		else
 			@error_manager.add_error("not saved for later")
-			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
+			render json: {errors: @error_manager.get_errors}, status: :not_found
 		end
 	end
 
@@ -71,10 +71,10 @@ class PublicationsController < ApplicationController
 		else
 			@publication = Publication.new(pdf_url: publication_params[:pdf_url])
 			if @publication.is_fetchable
-				render "shared/success", status: :ok, locals: {message: I18n.t("confirmations.messages.fetchable_publication")}
+				render json: {message: I18n.t("confirmations.messages.fetchable_publication")}, status: :ok
 			else
 				@error_manager.add_error(I18n.t("errors.messages.unfetchable_publication"))
-				render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
+				render json: {errors: @error_manager.get_errors}, status: :not_found
 			end
 		end
 

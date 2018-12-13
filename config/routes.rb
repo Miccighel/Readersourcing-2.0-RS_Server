@@ -33,13 +33,14 @@ Rails.application.routes.draw do
 
 	get 'confirm/:id/:confirmToken', to: 'users#confirm_email', as: :confirm, constraints: {:format => 'html'}
 	get 'unsubscribe/:id', to: 'users#unsubscribe', as: :unsubscribe, constraints: {:format => 'html'}
-	get 'signup', to: 'users#signup', as: :signup, constraints: {:format => 'html'}
+	get 'sign_up', to: 'users#sign_up', as: :sign_up, constraints: {:format => 'html'}
 
 	post 'load', to: 'ratings#load', as: :load, constraints: {:format => 'html'}
 	get 'rate/:pubId/:authToken/', to: 'ratings#rate', as: :rate, constraints: {:format => 'html'}
 
 	post 'password/update', to: 'passwords#update', as: :password, constraints: {:format => /(html|json)/}
-	post 'password/forgot', to: 'passwords#forgot', as: :forgot, constraints: {:format => /(html|json)/}
+	get 'password/forgot', to: 'passwords#forgot', as: :forgot, constraints: {:format => /(html|json)/}
+	post 'password/forgot', to: 'passwords#forgot', constraints: {:format => /(html|json)/}
 	get 'password/reset', to: 'passwords#reset', as: :reset, constraints: {:format => /(html|json)/}
 
 end

@@ -9,11 +9,10 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 	<%= stylesheet_link_tag 'application' %>
-	<%= stylesheet_link_tag 'login' %>
 	<title>RS_Server</title>
 </head>
 <body>
-<div class="container min-h-100 d-lg-flex flex-column align-items-center justify-content-center">
+<div class="container min-h-100 d-flex flex-column align-items-center justify-content-center">
 	<div class="container mb-3">
 		<div class="row">
 			<div class="col-12 p-0">
@@ -56,9 +55,9 @@
 					</div>
 					<div class="col-12 pt-1">
 						<p class="text-sm text-center">
-							<small><a href="password_forgot.html">Did you forget your password?</a></small>
+							<small><a href="<%= forgot_path %>">Did you forget your password?</a></small>
 							<br/>
-							<small><a href="<%= signup_path %>">Do you want to create a new account?</a></small>
+							<small><a href="<%= sign_up_path %>">Do you want to create a new account?</a></small>
 						</p>
 					</div>
 					<div class="col-12 text-center">
@@ -83,7 +82,7 @@
 		<%= render partial: "layouts/footer" %>
 	</div>
 </div>
-</body>
-</html>
 <%= javascript_include_tag "application" %>
 <%= javascript_include_tag "login" %>
+</body>
+</html>

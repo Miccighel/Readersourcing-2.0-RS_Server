@@ -9,11 +9,11 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 	<%= stylesheet_link_tag 'application' %>
-	<%= stylesheet_link_tag 'signup' %>
+	<%= stylesheet_link_tag 'sign_up' %>
 	<title>RS_Server</title>
 </head>
 <body>
-<div class="container min-h-100 d-lg-flex flex-column align-items-center justify-content-center">
+<div class="container min-h-100 d-flex flex-column align-items-center justify-content-center">
 	<div class="container mb-3">
 		<div class="row">
 			<div class="col-12 p-0">
@@ -33,7 +33,7 @@
 				<p class="lead mb-0">Insert your login data</p>
 			</div>
 		</div>
-		<div class="col-lg-4 col-sm-8 col-xs-12 m-auto">
+		<div class="col-lg-8 col-sm-10 col-xs-12 m-auto">
 			<form id="sign-up-form" data-parsley-validate>
 				<div class="row">
 					<div class="col-12">
@@ -111,4 +111,4 @@
 </body>
 </html>
 <%= javascript_include_tag "application" %>
-<%= javascript_include_tag "signup" %>
+<%= javascript_include_tag "sign_up" %>

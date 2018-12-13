@@ -58,7 +58,10 @@ registrationButton.on("click", () => {
 		};
 		let successCallback = (data, status, jqXHR) => {
 			registrationButton.find(reloadIcons).toggle();
-			deleteToken().then(() => localStorage.setItem("message", data["message"]), () => window.location.href = "/login");
+			deleteToken().then(() => {
+				localStorage.setItem("message", data["message"]);
+				window.location.href = "/login";
+			});
 		};
 		let errorCallback = (jqXHR, status) => {
 			registrationButton.find(reloadIcons).toggle();
@@ -77,7 +80,7 @@ registrationButton.on("click", () => {
 			}
 		};
 		// noinspection JSIgnoredPromiseFromCall
-		ajax("POST", "users.json", "application/json", "json", true, data, successCallback, errorCallback);
+		ajax("POST", "users.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 	}
 });
 

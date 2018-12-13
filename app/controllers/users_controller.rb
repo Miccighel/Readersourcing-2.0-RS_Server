@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 
 	layout "application", only: [:confirm_email, :unsubscribe]
 
-	skip_before_action :authorize_api_request, only: [:signup, :create, :confirm_email, :unsubscribe]
+	skip_before_action :authorize_api_request, only: [:sign_up, :create, :confirm_email, :unsubscribe]
 
 	before_action :set_user, only: [:show, :update, :unsubscribe, :destroy]
 	before_action :set_error_manager, only: [:confirm_email]
@@ -25,8 +25,8 @@ class UsersController < ApplicationController
 		render current_user
 	end
 
-	# GET /users/signup
-	def signup
+	# GET /users/sign_up
+	def sign_up
 	end
 
 	# POST /users.json
@@ -35,7 +35,7 @@ class UsersController < ApplicationController
 		@user.generate_confirm_token
 		if @user.save
 			UserMailer.registration_confirmation(@user, confirm_url(@user.id, @user.confirm_token)).deliver_now
-			render "shared/success", status: :created, locals: {message: I18n.t("confirmations.messages.please_confirm")}
+			render json: {message: I18n.t("confirmations.messages.please_confirm")}, status: :created
 		else
 			render json: @user.errors, status: :unprocessable_entity
 		end
@@ -46,7 +46,7 @@ class UsersController < ApplicationController
 		@user = User.find_by_confirm_token(params[:confirmToken])
 		if @user
 			@user.activate_email
-			render "shared/success", status: :created, locals: {message: I18n.t("confirmations.messages.registration_successful")}
+			render json: {message: I18n.t("confirmations.messages.registration_successful")}, status: :created
 		else
 			@error_manager.add_error(I18n.t("errors.messages.user_not_exists"))
 			render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
@@ -56,7 +56,7 @@ class UsersController < ApplicationController
 	# PATCH/PUT /users/1.json
 	def update
 		if @user.update(user_params)
-			render "shared/success", status: :created, locals: {message: I18n.t("confirmations.messages.update_successful")}
+			render json: {message: I18n.t("confirmations.messages.update_successful")}, status: :ok
 		else
 			render json: @user.errors, status: :unprocessable_entity
 		end
@@ -65,7 +65,7 @@ class UsersController < ApplicationController
 	# POST /unsubscribe/:id
 	def unsubscribe
 		if @user.update(subscribe: false)
-			render "shared/success", status: :created, locals: {message: I18n.t("mails.user.unsubscribe_successful")}
+			render json: {message: I18n.t("mails.user.unsubscribe_successful")}, status: :ok
 		else
 			render json: @user.errors, status: :unprocessable_entity
 		end
