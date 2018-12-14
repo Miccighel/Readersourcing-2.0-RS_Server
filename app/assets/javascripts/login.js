@@ -59,7 +59,7 @@ loginButton.on("click", () => {
 			loginButton.find(signInIcon).toggle();
 			loginButton.find(reloadIcons).toggle();
 			localStorage.setItem("authToken", data["auth_token"]);
-			window.location.href = "/rating/new"
+			window.location.href = "/rate"
 		};
 		let errorCallback = (jqXHR, status) => {
 			loginButton.find(signInIcon).toggle();

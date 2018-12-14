@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<%= csrf_meta_tags %>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+	<%= stylesheet_link_tag 'application' %>
+	<%= stylesheet_link_tag 'rating' %>
+	<title>RS_Server</title>
+</head>
+<body class="bg-gray-dark color-white">
+<div class="container min-h-100 d-flex flex-column align-items-center justify-content-center">
+	<div class="container mb-3">
+		<div id="buttons-sect" class="row">
+			<div class="col-6 p-0">
+				<button type="button" id="profile-btn" class="btn btn-primary btn-block">
+					Profile
+					<i id="profile-icon" class="fa fa-user"></i>
+					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+				</button>
+			</div>
+			<div class="col-6 p-0">
+				<button type="button" id="logout-btn" class="btn btn-primary btn-block">
+					Logout
+					<i id="sign-out-icon" class="fas fa-sign-out-alt"></i>
+					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="row mt-auto mb-3">
+		<div class="col-12">
+			<div class="heading text-center">
+				<h4>Readersourcing 2.0</h4>
+				<p id="rating-caption" class="lead mb-0">Rate a publication</p>
+				<p id="rating-subcaption" class="lead mb-0">Publication rated with score</p>
+			</div>
+		</div>
+		<div class="col-lg-6 col-sm-10 col-xs-12 m-auto">
+			<div class="form-group">
+				<label for="publication-url">Publication URL <span class="small">(e.g. https://arxiv.org/pdf/1812.05594.pdf)</span></label>
+				<input id="publication-url" type="text" class="form-control" placeholder="" data-parsley-type="url" required>
+			</div>
+		</div>
+		<div class="col-lg-8 col-sm-10 col-xs-12 m-auto">
+			<h1 id="rating-text" class="text-center"><i class="fa fa-refresh fa-spin"></i>0</h1>
+		</div>
+		<div class="col-lg-8 col-sm-10 col-xs-12 m-auto">
+			<div class="col-4 p-0 m-auto">
+				<button type="button" id="load-rate-btn" class="btn btn-primary btn-block">
+					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+				</button>
+				<button type="button" id="vote-btn" class="btn btn-success btn-block">
+					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+					Rate
+				</button>
+				<a href="#" data-toggle="modal" data-target="#modal-configuration" id="configure-btn"
+				   class="btn btn-primary btn-block">
+					<i class="fas fa-cog"></i>
+				</a>
+				<button type="button" id="vote-success-btn" class="btn btn-success btn-block">
+					<i class="fa fa-refresh fa-spin reload-icon"></i>
+					Rating saved
+				</button>
+				<button type="button" class="btn btn-danger error-btn btn-block">
+					<i class="fa fa-exclamation-triangle danger-icon"></i>
+					Error
+				</button>
+			</div>
+		</div>
+		<div id="buttons-caption" class="col-lg-8 col-sm-10 col-xs-12 m-auto">
+			<div class="col-12 text-center mt-3">
+				<p class="lead mb-3">Otherwise</p>
+			</div>
+		</div>
+		<div class="col-lg-8 col-sm-10 col-xs-12 m-auto">
+			<div class="col-4 p-0 m-auto">
+				<button type="button" id="load-save-btn" class="btn btn-primary btn-block">
+					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+				</button>
+				<a href="#" id="download-btn" class="btn btn-primary btn-block" target="_blank">
+					Download
+				</a>
+				<button type="button" id="save-btn" class="btn btn-primary btn-block">
+					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+					Save For Later
+				</button>
+				<a href="#" data-toggle="modal" data-target="#modal-refresh" id="refresh-btn"
+				   class="btn btn-primary btn-block">
+					<i class="fas fa-sync-alt"></i>
+				</a>
+				<button type="button" id="error-btn" class="btn btn-danger btn-block error-btn">
+					<i class="fa fa-exclamation-triangle danger-icon"></i>
+					Error
+				</button>
+			</div>
+		</div>
+		<div class="col-lg-8 col-sm-10 col-xs-12 m-auto">
+			<div class="col-12 text-center btn btn-primary btn-block">
+				Pub. score (RSM): <span id="publication-score-rsm-val"></span>/100
+			</div>
+		</div>
+	</div>
+	<div class="row mt-auto ml-auto mr-auto mb-0 w-100">
+		<%= render partial: "layouts/footer" %>
+	</div>
+</div>
+<%= javascript_include_tag "application" %>
+<%= javascript_include_tag "rating" %>
+</body>
+</html>

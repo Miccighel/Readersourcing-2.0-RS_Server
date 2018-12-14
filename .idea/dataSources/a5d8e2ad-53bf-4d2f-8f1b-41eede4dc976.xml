@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="RS_Server (Dev)">
-  <database-model serializer="dbm" rdbms="POSTGRES" format-version="4.11">
+  <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.14">
     <root id="1">
       <ServerVersion>10.5</ServerVersion>
     </root>
@@ -130,7 +130,6 @@
       <Owner>postgres</Owner>
       <StateNumber>3124</StateNumber>
       <SequenceIdentity>1</SequenceIdentity>
-      <BelongsToColumn>1</BelongsToColumn>
       <CacheSize>1</CacheSize>
       <DataType>bigint</DataType>
     </sequence>
@@ -139,7 +138,6 @@
       <Owner>postgres</Owner>
       <StateNumber>3125</StateNumber>
       <SequenceIdentity>1</SequenceIdentity>
-      <BelongsToColumn>1</BelongsToColumn>
       <CacheSize>1</CacheSize>
       <DataType>bigint</DataType>
     </sequence>
@@ -148,7 +146,6 @@
       <Owner>postgres</Owner>
       <StateNumber>3128</StateNumber>
       <SequenceIdentity>1</SequenceIdentity>
-      <BelongsToColumn>1</BelongsToColumn>
       <CacheSize>1</CacheSize>
       <DataType>bigint</DataType>
     </sequence>
@@ -222,7 +219,6 @@
       <StateNumber>3124</StateNumber>
       <DefaultExpression>nextval(&apos;publications_id_seq&apos;::regclass)</DefaultExpression>
       <TypeId>20</TypeId>
-      <SequenceName>publications_id_seq</SequenceName>
     </column>
     <column id="37" parent="26" name="doi">
       <Position>2</Position>
@@ -361,7 +357,6 @@
       <StateNumber>3125</StateNumber>
       <DefaultExpression>nextval(&apos;ratings_id_seq&apos;::regclass)</DefaultExpression>
       <TypeId>20</TypeId>
-      <SequenceName>ratings_id_seq</SequenceName>
     </column>
     <column id="59" parent="27" name="score">
       <Position>2</Position>
@@ -492,7 +487,6 @@
       <StateNumber>3128</StateNumber>
       <DefaultExpression>nextval(&apos;users_id_seq&apos;::regclass)</DefaultExpression>
       <TypeId>20</TypeId>
-      <SequenceName>users_id_seq</SequenceName>
     </column>
     <column id="79" parent="29" name="first_name">
       <Position>2</Position>

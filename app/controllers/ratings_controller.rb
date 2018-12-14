@@ -17,36 +17,40 @@ class RatingsController < ApplicationController
 	def show
 	end
 
-	# GET /rate/:pubId/:authToken
+	# GET /rate/:pubId/:authToken or /rate
 	def rate
-		delete_old_rating = params[:delete]
-		@publication = Publication.find(params[:pubId])
-		@crypted_auth_token = params[:authToken]
-		auth_token = decrypt(params[:authToken])
-		payload = JsonWebToken.decode(auth_token)
-		expiration_time = Time.at payload[:expiration_time]
-		@user = User.find(payload[:user_id])
-		@rating = Rating.new
-		logger.info "Publication: #{@publication}"
-		logger.info "Crypted Auth Token: #{@crypted_auth_token}"
-		logger.info "Auth Token: #{auth_token}"
-		logger.info "Payload: #{payload}"
-		logger.info "Expiration Time: #{expiration_time}"
-		logger.info "Current Time: #{Time.now}"
-		logger.info "User: #{@user}"
-		if Time.now < expiration_time
-			if delete_old_rating
-				Rating.where(user_id: @user.id, publication_id: @publication.id).destroy_all
-			else
-				if Rating.exists?(user_id: @user.id, publication_id: @publication.id)
-					render 'ratings/messages/already_given', locals: {pubId: @publication.id}
+		if params.key? :authToken
+			delete_old_rating = params[:delete]
+			@publication = Publication.find(params[:pubId])
+			@crypted_auth_token = params[:authToken]
+			auth_token = decrypt(params[:authToken])
+			payload = JsonWebToken.decode(auth_token)
+			expiration_time = Time.at payload[:expiration_time]
+			@user = User.find(payload[:user_id])
+			@rating = Rating.new
+			logger.info "Publication: #{@publication}"
+			logger.info "Crypted Auth Token: #{@crypted_auth_token}"
+			logger.info "Auth Token: #{auth_token}"
+			logger.info "Payload: #{payload}"
+			logger.info "Expiration Time: #{expiration_time}"
+			logger.info "Current Time: #{Time.now}"
+			logger.info "User: #{@user}"
+			if Time.now < expiration_time
+				if delete_old_rating
+					Rating.where(user_id: @user.id, publication_id: @publication.id).destroy_all
 				else
-					render 'ratings/rate_paper'
+					if Rating.exists?(user_id: @user.id, publication_id: @publication.id)
+						render 'ratings/messages/already_given', locals: {pubId: @publication.id}
+					else
+						render 'ratings/rate_paper'
+					end
 				end
+			else
+				@error_manager.add_error(I18n.t("errors.messages.password_do_not_match"))
+				render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
 			end
 		else
-			@error_manager.add_error(I18n.t("errors.messages.password_do_not_match"))
-			render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
+			render 'ratings/rate_web'
 		end
 	end
 
