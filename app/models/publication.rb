@@ -46,7 +46,7 @@ class Publication < ApplicationRecord
 		data[:host] = request_data.values[1]
 		data[:pubId] = self.id
 		data[:user] = request_data.values[2]
-		data[:rate_path] = "#{request_data.values[1]}#{Rails.application.routes.url_helpers.rate_path(data[:pubId], data[:authToken])}"
+		data[:rate_path] = "#{request_data.values[1]}#{Rails.application.routes.url_helpers.rate_paper_path(data[:pubId], data[:authToken])}"
 
 		# FILE FETCHING STARTS HERE
 

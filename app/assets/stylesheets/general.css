@@ -12,6 +12,14 @@ body, html {
 	width: 49% !important;
 }
 
+.w-74 {
+	width: 74% !important;
+}
+
+.w-24 {
+	width: 24% !important;
+}
+
 footer {
 	padding-top: 0 !important;
 }
@@ -50,6 +58,14 @@ p {
 .bar-tb {
 	padding-top: 60px;
 	padding-bottom: 1rem;
+}
+
+.color-dark {
+	color: #212529 !important;
+}
+
+.box-simple {
+	border: 0 !important;
 }
 
 /* ////////// ERRORS  ////////// */

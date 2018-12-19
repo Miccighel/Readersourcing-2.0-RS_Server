@@ -1,7 +1,6 @@
 class ApplicationController < ActionController::API
 
 	include ::ActionController::RequestForgeryProtection
-	include ::ActionView::Layouts
 
 	before_action :authorize_api_request, except: [:home]
 	attr_reader :current_user

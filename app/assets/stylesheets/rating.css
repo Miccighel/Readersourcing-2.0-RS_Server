@@ -1,0 +1,11 @@
+/* ////////// GENERAL ////////// */
+
+.form-check-label {
+	position: relative;
+	left: 4%;
+	bottom: 15%;
+}
+
+.parsley-errors-list li {
+	color: indianred !important;
+}
