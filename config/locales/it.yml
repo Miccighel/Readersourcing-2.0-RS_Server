@@ -76,6 +76,7 @@ it:
       new_password_mail_sent: "Mail contenente nuova password inviata correttamente. Controlla la tua casella di posta."
       update_successful: "Il tuo profilo è stato aggiornato con successo."
       fetchable_publication: "Il file esiste, è scaricabile ed è codificato in formato PDF."
+      authorization_completed: "Sei autorizzato a procedere."
   errors:
     messages:
       invalid_credentials: "Credenziali non valide. Per favore, riprova."

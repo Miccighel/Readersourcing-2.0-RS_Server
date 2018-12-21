@@ -2,11 +2,30 @@ class ApplicationController < ActionController::API
 
 	include ::ActionController::RequestForgeryProtection
 
-	before_action :authorize_api_request, except: [:home]
+	before_action :authorize_api_request, except: [:home, :request_authorization, :unauthorized]
 	attr_reader :current_user
 
 	# GET /
 	def home
+	end
+
+	# POST /request_authorization.json
+	def request_authorization
+		@current_user = AuthorizeApiRequest.call(request.headers, request.remote_ip).result
+		if @current_user
+			render json: {message: I18n.t("confirmations.messages.authorization_completed")}, status: :ok
+		else
+			@error_manager = ErrorManager.new
+			@error_manager.add_error(I18n.t("errors.messages.not_authorized"))
+			render json: {errors: @error_manager.get_errors}, status: 401
+		end
+	end
+
+	# GET /unauthorized
+	def unauthorized
+		@error_manager = ErrorManager.new
+		@error_manager.add_error(I18n.t("errors.messages.not_authorized"))
+		render "shared/errors", status: 401, locals: {errors: @error_manager.get_errors}
 	end
 
 	protected

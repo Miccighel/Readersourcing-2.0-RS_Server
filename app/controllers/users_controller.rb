@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 
 	layout "application", only: [:confirm_email, :unsubscribe]
 
-	skip_before_action :authorize_api_request, only: [:sign_up, :create, :confirm_email, :unsubscribe]
+	skip_before_action :authorize_api_request, only: [:sign_up, :create, :confirm_email, :unsubscribe, :edit]
 
 	before_action :set_user, only: [:show, :update, :unsubscribe, :destroy]
 	before_action :set_error_manager, only: [:confirm_email]
@@ -51,6 +51,11 @@ class UsersController < ApplicationController
 			@error_manager.add_error(I18n.t("errors.messages.user_not_exists"))
 			render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
 		end
+	end
+
+	# POST /users/edit
+	def edit
+		render :update
 	end
 
 	# PATCH/PUT /users/1.json

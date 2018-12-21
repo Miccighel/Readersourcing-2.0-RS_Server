@@ -22,6 +22,7 @@ en:
       new_password_mail_sent: "Email containing new password sent. Check your inbox."
       update_successful: "Your profile has been updated successfully."
       fetchable_publication: "File exists, is downloadable and it is encoded in PDF format."
+      authorization_completed: "You're authorized to proceed."
   information:
     messages:
       rate: "Rate this publication"

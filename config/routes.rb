@@ -28,9 +28,13 @@ Rails.application.routes.draw do
 		end
 	end
 
+	post 'request_authorization', to: 'application#request_authorization', as: :request_authorization, constraints: {:format => 'json'}
+	get 'unauthorized', to: 'application#unauthorized', as: :unauthorized, constraints: {:format => 'json'}
+
 	get 'login', to: 'authentication#login', as: :login, constraints: {:format => 'html'}
 	post 'authenticate', to: 'authentication#authenticate', as: :authenticate, constraints: {:format => :json}
 
+	get 'profile/edit', to: 'users#edit', as: :profile, constraints: {:format => 'html'}
 	get 'confirm/:id/:confirmToken', to: 'users#confirm_email', as: :confirm, constraints: {:format => 'html'}
 	get 'unsubscribe/:id', to: 'users#unsubscribe', as: :unsubscribe, constraints: {:format => 'html'}
 	get 'sign_up', to: 'users#sign_up', as: :sign_up, constraints: {:format => 'html'}
@@ -39,7 +43,8 @@ Rails.application.routes.draw do
 	get 'rate/:pubId/:authToken/', to: 'ratings#rate', as: :rate_paper, constraints: {:format => 'html'}
 	get 'rate/', to: 'ratings#rate', as: :rate_web, constraints: {:format => 'html'}
 
-	post 'password/update', to: 'passwords#update', as: :password, constraints: {:format => /(html|json)/}
+	get 'password/edit', to: 'passwords#edit', as: :edit, constraints: {:format => 'html'}
+	post 'password/update', to: 'passwords#update', constraints: {:format => /(html|json)/}
 	get 'password/forgot', to: 'passwords#forgot', as: :forgot, constraints: {:format => /(html|json)/}
 	post 'password/forgot', to: 'passwords#forgot', constraints: {:format => /(html|json)/}
 	get 'password/reset', to: 'passwords#reset', as: :reset, constraints: {:format => /(html|json)/}

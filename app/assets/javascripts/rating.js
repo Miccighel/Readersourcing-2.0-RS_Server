@@ -1,11 +1,15 @@
 ////////// INIT  //////////
 
+let body = $("body");
+
 //######## CONTENT SECTIONS ########//
 
 let buttonsSections = $("#buttons-sect");
 let ratingSection = $("#rating-sect");
+let ratingSectionSubControls = $(".rating-sect-sub");
 let publicationScoreSection = $("#publication-score-sect");
 let userScoreSection = $("#user-score-sect");
+let undetectedPublicationSection = $("#undetected-publication-sect");
 let loadingSection = $("#loading-sect");
 
 //######## MODALS ########//
@@ -32,6 +36,7 @@ let loadSaveButton = $("#load-save-btn");
 let saveButton = $("#save-btn");
 let downloadButton = $("#download-btn");
 let refreshButton = $("#refresh-btn");
+let reloadButton = $("#reload-btn");
 let errorButtons = $(".error-btn");
 let passwordEditButton = $("#password-edit-btn");
 let modalRefreshButton = $("#modal-refresh-btn");
@@ -41,7 +46,10 @@ let publicationUrlField = $("#publication-url");
 let ratingCaption = $("#rating-caption");
 let ratingSubCaption = $("#rating-subcaption");
 let ratingSlider = $("#rating-slider");
+
+let urlText = $("#url-text");
 let ratingText = $("#rating-text");
+
 let buttonsCaption = $("#buttons-caption");
 
 let firstNameValue = $("#first-name-val");
@@ -51,7 +59,6 @@ let orcidValue = $("#orcid-val");
 let subscribeValue = $("#subscribe-val");
 let userScoreRSMValue = $("#user-score-rsm-val");
 let userScoreTRMValue = $("#user-score-trm-val");
-
 let publicationScoreRSMValue = $("#publication-score-rsm-val");
 let publicationScoreTRMValue = $("#publication-score-trm-val");
 
@@ -63,6 +70,7 @@ let reloadIcons = $(".reload-icon");
 
 //######## UI INITIAL SETUP ########//
 
+body.hide();
 downloadButton.hide();
 refreshButton.hide();
 saveButton.hide();
@@ -75,14 +83,22 @@ errorButtons.hide();
 reloadIcons.hide();
 ratingCaption.hide();
 ratingSubCaption.hide();
-ratingText.show();
+undetectedPublicationSection.hide();
 loadingSection.hide();
+ratingText.show();
+ratingSection.show();
+ratingSectionSubControls.hide();
+publicationScoreSection.hide();
 
-ratingSlider.slider({});
-ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
-
-let validationInstance = rateForm.parsley();
-rateForm.submit(event => event.preventDefault());
+let successCallback = (data, status, jqXHR) => {
+	body.show();
+	ratingSlider.slider({});
+	ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
+};
+let errorCallback = (jqXHR, status) => {
+	window.location.href = "/unauthorized"
+};
+let promise = emptyAjax("POST", '/request_authorization.json', "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
 
 ////////// PUBLICATION //////////
 
@@ -90,107 +106,128 @@ rateForm.submit(event => event.preventDefault());
 
 let authToken = localStorage.getItem('authToken');
 if (authToken != null) {
-	let currentUrl = publicationUrlField.val();
-	if (currentUrl !== "") {
-		let data = {
-			publication: {
-				pdf_url: currentUrl
+	publicationUrlField.change(() => {
+		validationInstance.validate();
+		if (validationInstance.isValid()) {
+			ratingSection.hide();
+			loadingSection.show();
+			let currentUrl = publicationUrlField.val();
+			if (currentUrl !== "") {
+				let data = {
+					publication: {
+						pdf_url: currentUrl
+					}
+				};
+				let successCallback = (data, status, jqXHR) => {
+					// 1.2 Publication exists, so it may be rated by the user
+					let successCallback = (data, status, jqXHR) => {
+						publicationScoreRSMValue.text((data["score_rsm"] * 100).toFixed(2));
+						publicationScoreTRMValue.text((data["score_trm"] * 100).toFixed(2));
+						// 2.2 Publication has been rated by the user, so it is not necessary to check if it has been annotated
+						let secondSuccessCallback = (data, status, jqXHR) => {
+							validationInstance.reset();
+							loadRateButton.hide();
+							loadSaveButton.hide();
+							voteButton.hide();
+							configureButton.hide();
+							downloadButton.hide();
+							refreshButton.hide();
+							saveButton.hide();
+							ratingSection.show();
+							ratingSectionSubControls.show();
+							publicationScoreSection.show();
+							buttonsCaption.hide();
+							loadingSection.hide();
+							voteSuccessButton.show();
+							voteSuccessButton.prop("disabled", true);
+							ratingText.parent().removeClass("mt-3");
+							ratingCaption.hide();
+							ratingSubCaption.show();
+							ratingSlider.slider('destroy');
+							ratingSlider.hide();
+							ratingText.text(data["score"]);
+						};
+						// 2.3 Publication has not been rated by the user
+						let secondErrorCallback = (jqXHR, status) => {
+							loadingSection.hide();
+							loadRateButton.hide();
+							voteSuccessButton.hide();
+							ratingSubCaption.hide();
+							ratingSection.show();
+							ratingSectionSubControls.show();
+							publicationScoreSection.show();
+							loadingSection.hide();
+							buttonsCaption.show();
+							ratingCaption.show();
+							ratingText.text("50");
+							ratingSlider.slider({});
+							voteButton.show();
+							configureButton.show();
+							// 3.1 The rated publication was also annotated
+							let thirdSuccessCallback = (data, status, jqXHR) => {
+								loadSaveButton.hide();
+								saveButton.hide();
+								downloadButton.show();
+								downloadButton.attr("href", data["pdf_download_url_link"]);
+								refreshButton.show();
+							};
+							// 3.2 The rated publication was not annotated
+							let thirdErrorCallback = (jqXHR, status) => {
+								loadSaveButton.hide();
+								downloadButton.hide();
+								refreshButton.hide();
+								saveButton.show();
+							};
+							// 3.1 Does the rated publication has been already annotated?
+							let thirdPromise = emptyAjax("GET", `publications/${data["id"]}/is_saved_for_later.json`, "application/json; charset=utf-8", "json", true, thirdSuccessCallback, thirdErrorCallback);
+						};
+						// 2.1 Does the publication has been rated by the logged user?
+						let secondPromise = emptyAjax("GET", `publications/${data["id"]}/is_rated.json`, "application/json; charset=utf-8", "json", true, secondSuccessCallback, secondErrorCallback);
+					};
+					// 1.3 Publication was never rated, so it does not exists on the database
+					let errorCallback = (jqXHR, status) => {
+						loadingSection.hide();
+						loadRateButton.hide();
+						loadSaveButton.hide();
+						voteSuccessButton.hide();
+						ratingSection.show();
+						ratingSectionSubControls.show();
+						publicationScoreSection.show();
+						saveButton.show();
+						configureButton.show();
+						voteButton.show();
+						ratingCaption.show();
+						ratingSubCaption.hide();
+						ratingText.text("50");
+						ratingSlider.slider({});
+						publicationScoreRSMValue.text("...");
+						publicationScoreTRMValue.text("...");
+					};
+					// 1.1 Does the publication exists on the database?
+					let promise = ajax("POST", "publications/lookup.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
+				};
+				let errorCallback = (jqXHR, status) => {
+					ratingSection.hide();
+					ratingSectionSubControls.hide();
+					publicationScoreSection.hide();
+					undetectedPublicationSection.show();
+					loadingSection.hide()
+				};
+				let promise = ajax("POST", "publications/is_fetchable.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 			}
-		};
-		// 1.2 Publication exists, so it may be rated by the user
-		let successCallback = (data, status, jqXHR) => {
-			publicationScoreRSMValue.text((data["score_rsm"] * 100).toFixed(2));
-			publicationScoreTRMValue.text((data["score_trm"] * 100).toFixed(2));
-			// 2.2 Publication has been rated by the user, so it is not necessary to check if it has been annotated
-			let secondSuccessCallback = (data, status, jqXHR) => {
-				buttonsCaption.hide();
-				loadRateButton.hide();
-				loadSaveButton.hide();
-				voteButton.hide();
-				configureButton.hide();
-				downloadButton.hide();
-				refreshButton.hide();
-				saveButton.hide();
-				voteSuccessButton.show();
-				voteSuccessButton.prop("disabled", true);
-				ratingText.parent().removeClass("mt-3");
-				ratingCaption.hide();
-				ratingSubCaption.show();
-				ratingSlider.slider('destroy');
-				ratingSlider.hide();
-				ratingText.text(data["score"]);
-			};
-			// 2.3 Publication has not been rated by the user
-			let secondErrorCallback = (jqXHR, status) => {
-				loadRateButton.hide();
-				voteSuccessButton.hide();
-				ratingSubCaption.hide();
-				buttonsCaption.show();
-				ratingCaption.show();
-				ratingText.text("50");
-				ratingSlider.slider({});
-				voteButton.show();
-				configureButton.show();
-				// 3.1 The rated publication was also annotated
-				let thirdSuccessCallback = (data, status, jqXHR) => {
-					loadSaveButton.hide();
-					saveButton.hide();
-					downloadButton.show();
-					downloadButton.attr("href", data["pdf_download_url_link"]);
-					refreshButton.show();
-				};
-				// 3.2 The rated publication was not annotated
-				let thirdErrorCallback = (jqXHR, status) => {
-					loadSaveButton.hide();
-					downloadButton.hide();
-					refreshButton.hide();
-					saveButton.show();
-				};
-				// 3.1 Does the rated publication has been already annotated?
-				let thirdPromise = emptyAjax("GET", `publications/${data["id"]}/is_saved_for_later.json`, "application/json; charset=utf-8", "json", true, thirdSuccessCallback, thirdErrorCallback);
-			};
-			// 2.1 Does the publication has been rated by the logged user?
-			let secondPromise = emptyAjax("GET", `publications/${data["id"]}/is_rated.json`, "application/json; charset=utf-8", "json", true, secondSuccessCallback, secondErrorCallback);
-		};
-		// 1.3 Publication was never rated, so it does not exists on the database
-		let errorCallback = (jqXHR, status) => {
-			loadRateButton.hide();
-			loadSaveButton.hide();
-			voteSuccessButton.hide();
-			saveButton.show();
-			configureButton.show();
-			voteButton.show();
-			ratingCaption.show();
-			ratingSubCaption.hide();
-			ratingText.text("50");
-			ratingSlider.slider({});
-			publicationScoreRSMValue.text("...");
-			publicationScoreTRMValue.text("...");
-		};
-		// 1.1 Does the publication exists on the database?
-		let promise = ajax("POST", "publications/lookup.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
-	} else {
-		loadRateButton.hide();
-		loadSaveButton.hide();
-		voteSuccessButton.hide();
-		saveButton.show();
-		configureButton.show();
-		voteButton.show();
-		ratingCaption.show();
-		ratingSubCaption.hide();
-		ratingText.text("50");
-		ratingSlider.slider({});
-		publicationScoreRSMValue.text("...");
-		publicationScoreTRMValue.text("...");
-	}
+		}
+	});
 }
 
-//######### URL CHANGE HANDLING ########//
+//########## RELOAD HANDLING #########//
 
-publicationUrlField.change(() => {
-	ratingSection.hide();
-	loadingSection.show();
-});
+authToken = localStorage.getItem('authToken');
+if (authToken != null) {
+	reloadButton.on("click", () => {
+		undetectedPublicationSection.hide();
+		ratingSection.show();
+	});
+}
 
 //######### SAVE FOR LATER HANDLING #########//
 
@@ -292,6 +329,10 @@ modalRefreshButton.on("click", () => {
 
 //#######  ACTION HANDLING #########//
 
+let validationInstance = rateForm.parsley();
+
+rateForm.submit(event => event.preventDefault());
+
 authToken = localStorage.getItem('authToken');
 if (authToken != null) {
 	voteButton.on("click", () => {
@@ -366,7 +407,6 @@ if (authToken != null) {
 	});
 }
 
-
 //######### CONFIGURATION HANDLING #########//
 
 configureSaveButton.on("click", () => modalConfigure.modal("hide"));
@@ -405,3 +445,7 @@ logoutButton.on("click", () => {
 	logoutButton.find(signOutIcon).toggle();
 	deleteToken().then(() => window.location.href = "/login");
 });
+
+//####### GO TO PASSWORD EDIT HANDLING #########//
+
+passwordEditButton.on("click", () => {passwordEditButton.find(reloadIcons).toggle();});

@@ -36,14 +36,28 @@
 		<div class="col-12">
 			<div class="heading text-center">
 				<h4>Readersourcing 2.0</h4>
-				<p class="lead mb-0">Checking if there is a fetchable publication in PDF format...</p>
+				<p id="check-par" class="lead mb-0">Checking if there is a fetchable publication in PDF format...</p>
 			</div>
 			<div class="text-center mt-3">
 				<h1><i class="fas fa-sync-alt fa-spin"></i></h1>
 			</div>
 		</div>
 	</div>
-	<div id="rating-sect" class="row mt-auto mb-3">
+	<div id="undetected-publication-sect" class="row mt-auto mb-3">
+		<div class="col-12">
+			<div class="heading text-center">
+				<h4>Readersourcing 2.0</h4>
+				<p class="lead mb-0">The inserted URL does not contain a rateable publication, please check it again.</p>
+			</div>
+			<div class="mt-3">
+				<button type="button" id="reload-btn" class="btn btn-danger btn-block">
+					<i class="fas fa-redo-alt"></i>
+					Reload
+				</button>
+			</div>
+		</div>
+	</div>
+	<div id="rating-sect" class="row mt-auto mb-3 w-100">
 		<div class="col-12">
 			<div class="heading text-center">
 				<h4>Readersourcing 2.0</h4>
@@ -54,13 +68,14 @@
 		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto">
 			<div class="form-group">
 				<label for="publication-url">Publication URL
-					<span class="small">(e.g. https://arxiv.org/pdf/1812.05594.pdf)</span></label>
+					<span class="small">(e.g. https://arxiv.org/pdf/1812.05594.pdf)</span>
+				</label>
 				<form id="rate-form" data-parsley-validate>
 					<input id="publication-url" type="text" class="form-control" data-parsley-type="url" required>
 				</form>
 			</div>
 		</div>
-		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto pt-1 text-center">
+		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto text-center rating-sect-sub">
 			<input
 				id="rating-slider"
 				data-slider-id='ratingSlider'
@@ -70,12 +85,13 @@
 				data-slider-value="50"
 				data-tooltip="hide"
 				title="Rating Slider"
+				class="mb-3"
 				/>
 		</div>
-		<div class="col-lg-7 col-sm-10 col-xs-12 ml-auto mr-auto mb-auto mt-3 pt-1 text-center">
+		<div class="col-lg-7 col-sm-10 col-xs-12 ml-auto mr-auto mb-auto mt-3 text-center rating-sect-sub">
 			<h1 id="rating-text"><i class="fas fa-sync-alt fa-spin"></i></h1>
 		</div>
-		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto">
+		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto rating-sect-sub">
 			<button type="button" id="load-rate-btn" class="btn btn-primary btn-block">
 				<i class="fas fa-sync-alt fa-spin"></i>
 			</button>
@@ -96,12 +112,12 @@
 				Error
 			</button>
 		</div>
-		<div id="buttons-caption" class="col-lg-8 col-sm-10 col-xs-12 m-auto">
+		<div id="buttons-caption" class="col-lg-8 col-sm-10 col-xs-12 m-auto rating-sect-sub">
 			<div class="col-12 text-center mt-3">
 				<p class="lead mb-3">Otherwise</p>
 			</div>
 		</div>
-		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto">
+		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto rating-sect-sub">
 			<button type="button" id="load-save-btn" class="btn btn-primary btn-block m-0">
 				<i class="fas fa-sync-alt fa-spin"></i>
 			</button>
@@ -122,10 +138,10 @@
 		</div>
 		<div id="publication-score-sect" class="col-lg-7 col-sm-10 col-xs-12 m-auto pt-3">
 			<div class="col-12 text-center btn btn-primary btn-block">
-				Pub. score (RSM): <span id="publication-score-rsm-val"></span>/100
+				Publication Score (RSM): <span id="publication-score-rsm-val"></span>/100
 			</div>
 			<div class="col-12 text-center btn btn-primary btn-block">
-				Pub. score (TRM): <span id="publication-score-trm-val"></span>/100
+				Publication Score (TRM): <span id="publication-score-trm-val"></span>/100
 			</div>
 		</div>
 	</div>
@@ -192,13 +208,14 @@
 			<div class="modal-footer">
 				<div class="row m-auto w-100">
 					<div class="col-12 mb-1 p-0">
-						<a href="profile_update.html" id="profile-update-btn" class="btn btn-primary btn-block">
+						<a href="<%= profile_path %>" id="profile-update-btn" class="btn btn-primary btn-block">
 							Update Profile
 						</a>
 					</div>
 					<div class="col-12 p-0">
-						<a href="password_update.html" id="password-edit-btn" class="btn btn-primary btn-block">
+						<a href="<%= edit_path %>" id="password-edit-btn" class="btn btn-primary btn-block">
 							Edit Password
+							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</div>
 				</div>
