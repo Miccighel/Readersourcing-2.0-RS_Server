@@ -12,6 +12,11 @@
 	<title>RS_Server</title>
 </head>
 <body>
+<div class="preloader-wrapper">
+	<div class="preloader">
+		<img src="<%= image_path("preloader.svg") %>" alt="Loading...">
+	</div>
+</div>
 <%= yield %>
 <%= javascript_include_tag "application" %>
 </body>

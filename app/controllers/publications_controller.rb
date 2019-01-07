@@ -17,7 +17,7 @@ class PublicationsController < ApplicationController
 	def lookup
 		@publication = Publication.find_by_pdf_url(publication_params[:pdf_url])
 		if @publication
-			render :show_without_paths, status: :found, location: @publication
+			render :show_without_paths, status: :ok, location: @publication
 		else
 			@error_manager.add_error(I18n.t("models.publications.errors.messages.lookup_error"))
 			render json: {errors: @error_manager.get_errors}, status: :not_found
@@ -67,7 +67,7 @@ class PublicationsController < ApplicationController
 	def is_fetchable
 		if Publication.exists?(pdf_url: publication_params[:pdf_url])
 			@publication = Publication.find_by_pdf_url(publication_params[:pdf_url])
-			render "publications/show_without_paths", status: :found, location: @publication
+			render "publications/show_without_paths", status: :ok, location: @publication
 		else
 			@publication = Publication.new(pdf_url: publication_params[:pdf_url])
 			if @publication.is_fetchable

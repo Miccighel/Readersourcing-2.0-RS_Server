@@ -9,10 +9,15 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 	<%= stylesheet_link_tag 'application' %>
-	<%= stylesheet_link_tag 'rating' %>
+	<%= stylesheet_link_tag 'rating_web' %>
 	<title>RS_Server</title>
 </head>
 <body class="bg-gray-dark color-white">
+<div class="preloader-wrapper">
+	<div class="preloader">
+		<img src="<%= image_path("preloader.svg") %>" alt="Loading...">
+	</div>
+</div>
 <div class="container min-h-100 d-flex flex-column align-items-center justify-content-center">
 	<div class="container mb-3">
 		<div id="buttons-sect" class="row">
@@ -281,6 +286,6 @@
 	</div>
 </div>
 <%= javascript_include_tag "application" %>
-<%= javascript_include_tag "rating" %>
+<%= javascript_include_tag "rating_web" %>
 </body>
 </html>

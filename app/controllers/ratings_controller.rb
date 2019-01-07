@@ -42,7 +42,7 @@ class RatingsController < ApplicationController
 					if Rating.exists?(user_id: @user.id, publication_id: @publication.id)
 						render 'ratings/messages/already_given', locals: {pubId: @publication.id}
 					else
-						render 'ratings/rate_paper'
+						render 'ratings/rating_paper'
 					end
 				end
 			else
@@ -50,7 +50,7 @@ class RatingsController < ApplicationController
 				render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
 			end
 		else
-			render 'ratings/rate_web'
+			render 'ratings/rating_web'
 		end
 	end
 

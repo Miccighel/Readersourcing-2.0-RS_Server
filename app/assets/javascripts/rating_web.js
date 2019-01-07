@@ -107,6 +107,7 @@ let promise = emptyAjax("POST", '/request_authorization.json', "application/json
 let authToken = localStorage.getItem('authToken');
 if (authToken != null) {
 	publicationUrlField.change(() => {
+		console.log("here");
 		validationInstance.validate();
 		if (validationInstance.isValid()) {
 			ratingSection.hide();
@@ -118,7 +119,8 @@ if (authToken != null) {
 						pdf_url: currentUrl
 					}
 				};
-				let successCallback = (data, status, jqXHR) => {
+				// data ---> secondData because of visibility clash with "lookup" call.
+				let successCallback = (secondData, status, jqXHR) => {
 					// 1.2 Publication exists, so it may be rated by the user
 					let successCallback = (data, status, jqXHR) => {
 						publicationScoreRSMValue.text((data["score_rsm"] * 100).toFixed(2));
@@ -326,6 +328,10 @@ modalRefreshButton.on("click", () => {
 });
 
 ////////// RATING //////////
+
+//#######  SLIDER HANDLING #########//
+
+ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
 
 //#######  ACTION HANDLING #########//
 

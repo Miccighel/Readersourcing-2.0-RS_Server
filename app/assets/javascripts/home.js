@@ -12,6 +12,13 @@ let reloadIcons = $(".reload-icon");
 
 reloadIcons.hide();
 
+//######### USER ALREADY LOGGED? HANDLING #########//
+
+let authToken = localStorage.getItem('authToken');
+if (authToken != null) {
+	window.location.href = "/rate";
+}
+
 //######### GO TO LOGIN HANDLING #########//
 
 loginButton.on("click", () => {

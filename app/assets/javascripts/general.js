@@ -1,3 +1,12 @@
+$(document).ready($ => {
+	$('.preloader-wrapper').fadeOut(1000);
+	$('body').removeClass('preloader');
+});
+$(window).on("load", () => {
+	let body = $('body');
+	body.addClass('preloader');
+});
+
 Parsley.addMessages('it', {
     defaultMessage: "Questo valore sembra essere non valido.",
     type: {
