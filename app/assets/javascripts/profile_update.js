@@ -16,7 +16,6 @@ let orcidField = $("#orcid");
 
 let subscribeCheckbox = $("#subscribe");
 
-let optionsButton = $("#options-btn");
 let backButton = $("#back-btn");
 let updateButton = $("#update-btn");
 let errorButton = $(".error-btn");
@@ -24,12 +23,10 @@ let errorButton = $(".error-btn");
 let alert = $(".alert");
 
 let backIcon = $("#back-icon");
-let signUpIcon = $("#sign-up-icon");
 let reloadIcons = $(".reload-icon");
 
 //######## UI INITIAL SETUP ########//
 
-body.hide();
 errorsSection.hide();
 errorButton.hide();
 reloadIcons.hide();
@@ -39,8 +36,6 @@ let validationInstance = signUpForm.parsley();
 signUpForm.submit(event => event.preventDefault());
 
 let successCallback = (data, status, jqXHR) => {
-	body.show();
-
 	////////// USER ///////////
 
 	//####### STATUS HANDLING (SCORES, ...) #########//
@@ -75,7 +70,7 @@ if (authToken != null) {
 	updateButton.on("click", () => {
 		validationInstance.validate();
 		if (validationInstance.isValid()) {
-			updateButton.find(signUpIcon).toggle();
+			updateButton.find(checkIcon).toggle();
 			updateButton.find(reloadIcons).toggle();
 			let successCallback = (data, status, jqXHR) => {
 				let secondData = {
@@ -89,7 +84,7 @@ if (authToken != null) {
 				if (orcidField.val() === "")
 					delete secondData.user.orcid;
 				let secondSuccessCallback = (data, status, jqXHR) => {
-					updateButton.find(reloadIcons).toggle();
+					//updateButton.find(reloadIcons).toggle();
 					deleteToken().then(() => {
 						localStorage.setItem("message", data["message"]);
 						window.location.href = "/login";
@@ -97,7 +92,7 @@ if (authToken != null) {
 				};
 				let secondErrorCallback = (jqXHR, status) => {
 					updateButton.find(reloadIcons).toggle();
-					updateButton.find(signUpIcon).toggle();
+					updateButton.find(checkIcon).toggle();
 					if (jqXHR.responseText == null) {
 						updateButton.hide();
 						let button = updateButton.parent().find(errorButton);
@@ -115,7 +110,7 @@ if (authToken != null) {
 			};
 			let errorCallback = (jqXHR, status) => {
 				updateButton.find(reloadIcons).toggle();
-				updateButton.find(signUpIcon).toggle();
+				updateButton.find(checkIcon).toggle();
 				if (jqXHR.responseText == null) {
 					updateButton.hide();
 					let button = updateButton.parent().find(errorButton);
@@ -133,3 +128,13 @@ if (authToken != null) {
 		}
 	});
 }
+
+////////// GENERAL //////////
+
+//########## GO BACK HANDLING #########//
+
+backButton.on("click", () => {
+	backButton.find(reloadIcons).toggle();
+	backButton.find(backIcon).toggle();
+	window.history.back()
+});

@@ -39,6 +39,7 @@ let refreshButton = $("#refresh-btn");
 let reloadButton = $("#reload-btn");
 let errorButtons = $(".error-btn");
 let passwordEditButton = $("#password-edit-btn");
+let profileUpdateButton = $("#profile-update-btn");
 let modalRefreshButton = $("#modal-refresh-btn");
 
 let publicationUrlField = $("#publication-url");
@@ -70,7 +71,6 @@ let reloadIcons = $(".reload-icon");
 
 //######## UI INITIAL SETUP ########//
 
-body.hide();
 downloadButton.hide();
 refreshButton.hide();
 saveButton.hide();
@@ -91,7 +91,6 @@ ratingSectionSubControls.hide();
 publicationScoreSection.hide();
 
 let successCallback = (data, status, jqXHR) => {
-	body.show();
 	ratingSlider.slider({});
 	ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
 };
@@ -107,7 +106,6 @@ let promise = emptyAjax("POST", '/request_authorization.json', "application/json
 let authToken = localStorage.getItem('authToken');
 if (authToken != null) {
 	publicationUrlField.change(() => {
-		console.log("here");
 		validationInstance.validate();
 		if (validationInstance.isValid()) {
 			ratingSection.hide();
@@ -202,6 +200,7 @@ if (authToken != null) {
 						ratingSubCaption.hide();
 						ratingText.text("50");
 						ratingSlider.slider({});
+						ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
 						publicationScoreRSMValue.text("...");
 						publicationScoreTRMValue.text("...");
 					};
@@ -455,3 +454,7 @@ logoutButton.on("click", () => {
 //####### GO TO PASSWORD EDIT HANDLING #########//
 
 passwordEditButton.on("click", () => {passwordEditButton.find(reloadIcons).toggle();});
+
+//####### GO TO PROFILE UPDATE HANDLING #########//
+
+profileUpdateButton.on("click", () => {profileUpdateButton.find(reloadIcons).toggle();});

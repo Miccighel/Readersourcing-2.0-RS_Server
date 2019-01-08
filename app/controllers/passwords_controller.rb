@@ -83,7 +83,7 @@ class PasswordsController < ApplicationController
 					new_password = SecureRandom.hex (rand(6..10))
 					if user.reset_password!(new_password)
 						PasswordMailer.reset(user, new_password).deliver
-						render json: {message: I18n.t("confirmations.messages.reset_mail_sent")}, status: :ok
+						render "shared/success", locals: {message: I18n.t("confirmations.messages.reset_mail_sent")}, status: :ok
 					else
 						render "shared/errors", status: :unprocessable_entity, locals: {errors: user.errors}
 					end

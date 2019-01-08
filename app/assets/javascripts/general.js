@@ -1,5 +1,5 @@
 $(document).ready($ => {
-	$('.preloader-wrapper').fadeOut(1000);
+	$('.preloader-wrapper').fadeOut(1500);
 	$('body').removeClass('preloader');
 });
 $(window).on("load", () => {

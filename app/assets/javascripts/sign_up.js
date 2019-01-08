@@ -57,7 +57,7 @@ registrationButton.on("click", () => {
 			},
 		};
 		let successCallback = (data, status, jqXHR) => {
-			registrationButton.find(reloadIcons).toggle();
+			//registrationButton.find(reloadIcons).toggle();
 			deleteToken().then(() => {
 				localStorage.setItem("message", data["message"]);
 				window.location.href = "/login";

@@ -22,7 +22,7 @@
 	<div class="container mb-3">
 		<div id="buttons-sect" class="row">
 			<div class="col-6 p-0">
-				<a href="#" data-toggle="modal" data-target="#modal-profile" id="profile-btn" class="btn btn-primary btn-block">
+				<a href="#" data-toggle="modal" data-target="#modal-profile" id="profile-btn" class="btn btn-primary btn-block link-white">
 					Profile
 					<i id="profile-icon" class="fa fa-user"></i>
 					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
@@ -105,7 +105,7 @@
 				Rate
 			</button>
 			<a href="#" data-toggle="modal" data-target="#modal-configuration" id="configure-btn"
-			   class="btn btn-primary w-24 pull-right">
+			   class="btn btn-primary link-white w-24 pull-right">
 				<i class="fas fa-cog"></i>
 			</a>
 			<button type="button" id="vote-success-btn" class="btn btn-success btn-block">
@@ -124,17 +124,17 @@
 		</div>
 		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto rating-sect-sub">
 			<button type="button" id="load-save-btn" class="btn btn-primary btn-block m-0">
-				<i class="fas fa-sync-alt fa-spin"></i>
+				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 			</button>
 			<button type="button" id="save-btn" class="btn btn-primary btn-block m-0">
 				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 				Save For Later
 			</button>
-			<a href="#" id="download-btn" class="btn btn-primary w-75" target="_blank">
+			<a href="#" id="download-btn" class="btn btn-primary link-white w-75" target="_blank">
 				Download
 			</a>
-			<a href="#" id="refresh-btn" class="btn btn-primary w-24 pull-right">
-				<i class="fas fa-sync-alt"></i>
+			<a href="#" id="refresh-btn" class="btn btn-primary link-white w-24 pull-right">
+				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 			</a>
 			<button type="button" id="error-btn" class="btn btn-danger btn-block error-btn m-0">
 				<i class="fa fa-exclamation-triangle danger-icon"></i>
@@ -168,43 +168,43 @@
 						<div class="col-12">
 							<div class="box-simple box-dark same-height">
 								<p class="lead no-mt">First Name</p>
-								<span id="first-name-val"><i class="fas fa-sync-alt fa-spin reload-icon"></i></span>
+								<span id="first-name-val"><i class="fas fa-sync-alt fa-spin"></i></span>
 							</div>
 						</div>
 						<div class="col-12">
 							<div class="box-simple box-dark same-height">
 								<p class="lead no-mt">Last Name</p>
-								<span id="last-name-val"><i class="fas fa-sync-alt fa-spin reload-icon"></i></span>
+								<span id="last-name-val"><i class="fas fa-sync-alt fa-spin"></i></span>
 							</div>
 						</div>
 						<div class="col-12">
 							<div class="box-simple box-dark same-height">
 								<p class="lead no-mt">Email</p>
-								<span id="email-val"><i class="fas fa-sync-alt fa-spin reload-icon"></i></span>
+								<span id="email-val"><i class="fas fa-sync-alt fa-spin"></i></span>
 							</div>
 						</div>
 						<div class="col-12">
 							<div class="box-simple box-dark same-height">
 								<p class="lead no-mt">Score (RSM)</p>
-								<span id="user-score-rsm-val"><i class="fas fa-sync-alt fa-spin reload-icon"></i></span>/100
+								<span id="user-score-rsm-val"><i class="fas fa-sync-alt fa-spin"></i></span>/100
 							</div>
 						</div>
 						<div class="col-12">
 							<div class="box-simple box-dark same-height">
 								<p class="lead no-mt">Score (TRM)</p>
-								<span id="user-score-trm-val"><i class="fas fa-sync-alt fa-spin reload-icon"></i></span>/100
+								<span id="user-score-trm-val"><i class="fas fa-sync-alt fa-spin"></i></span>/100
 							</div>
 						</div>
 						<div class="col-12">
 							<div class="box-simple box-dark same-height">
 								<p class="lead no-mt">ORCID</p>
-								<span id="orcid-val"><i class="fas fa-sync-alt fa-spin reload-icon"></i></span>
+								<span id="orcid-val"><i class="fas fa-sync-alt fa-spin"></i></span>
 							</div>
 						</div>
 						<div class="col-12">
 							<div class="box-simple box-dark same-height">
 								<p class="lead no-mt">Subscribed (Emails)</p>
-								<span id="subscribe-val"><i class="fas fa-sync-alt fa-spin reload-icon"></i></span>
+								<span id="subscribe-val"><i class="fas fa-sync-alt fa-spin"></i></span>
 							</div>
 						</div>
 					</div>
@@ -213,12 +213,13 @@
 			<div class="modal-footer">
 				<div class="row m-auto w-100">
 					<div class="col-12 mb-1 p-0">
-						<a href="<%= profile_path %>" id="profile-update-btn" class="btn btn-primary btn-block">
+						<a href="<%= profile_path %>" id="profile-update-btn" class="btn btn-primary btn-block link-white">
 							Update Profile
+							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</div>
 					<div class="col-12 p-0">
-						<a href="<%= edit_path %>" id="password-edit-btn" class="btn btn-primary btn-block">
+						<a href="<%= edit_path %>" id="password-edit-btn" class="btn btn-primary btn-block link-white">
 							Edit Password
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>

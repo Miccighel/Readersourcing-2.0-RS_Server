@@ -14,7 +14,6 @@ let currentPasswordField = $("#current-password");
 let newPasswordField = $("#new-password");
 let newPasswordConfirmationField = $("#new-password-confirmation");
 
-let optionsButton = $("#options-btn");
 let backButton = $("#back-btn");
 let passwordEditButton = $("#password-edit-btn");
 let errorButton = $(".error-btn");
@@ -27,13 +26,11 @@ let reloadIcons = $(".reload-icon");
 
 //######## UI INITIAL SETUP ########//
 
-body.hide();
 errorsSection.hide();
 errorButton.hide();
 reloadIcons.hide();
 
 let successCallback = (data, status, jqXHR) => {
-	body.show();
 };
 let errorCallback = (jqXHR, status) => {
 	window.location.href = "/unauthorized"
@@ -52,13 +49,14 @@ passwordEditButton.on("click", () => {
 	validationInstance.validate();
 	if (validationInstance.isValid()) {
 		passwordEditButton.find(checkIcon).toggle();
+		passwordEditButton.find(reloadIcons).toggle();
 		let data = {
 			current_password: currentPasswordField.val(),
 			new_password: newPasswordField.val(),
 			new_password_confirmation: newPasswordConfirmationField.val()
 		};
 		let successCallback = (data, status, jqXHR) => {
-			passwordEditButton.find(reloadIcons).toggle();
+			//passwordEditButton.find(reloadIcons).toggle();
 			deleteToken().then(() => {
 				localStorage.setItem("message", data["message"]);
 				window.location.href = "/login";

@@ -10,7 +10,6 @@ let errorsSection = $("#errors-sect");
 
 let emailField = $("#email");
 
-let optionsButton = $("#options-btn");
 let backButton = $("#back-btn");
 let passwordForgotButton = $("#password-forgot-btn");
 let errorButton = $(".error-btn");
@@ -43,7 +42,7 @@ passwordForgotButton.on("click", () => {
 			email: emailField.val(),
 		};
 		let successCallback = (data, status, jqXHR) => {
-			passwordForgotButton.find(reloadIcons).toggle();
+			//passwordForgotButton.find(reloadIcons).toggle();
 			deleteToken().then(() => {
 				localStorage.setItem("message", data["message"]);
 				window.location.href = "/login";

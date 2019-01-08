@@ -11,7 +11,6 @@ let errorsSection = $("#errors-sect");
 let emailField = $("#email");
 let passwordField = $("#password");
 
-let optionsButton = $("#options-btn");
 let backButton = $("#back-btn");
 let loginButton = $("#login-btn");
 let errorButton = $(".error-btn");
@@ -56,8 +55,8 @@ loginButton.on("click", () => {
 		loginButton.find(reloadIcons).toggle();
 		let data = {email: emailField.val(), password: passwordField.val()};
 		let successCallback = (data, status, jqXHR) => {
-			loginButton.find(signInIcon).toggle();
-			loginButton.find(reloadIcons).toggle();
+			//loginButton.find(signInIcon).toggle();
+			//loginButton.find(reloadIcons).toggle();
 			localStorage.setItem("authToken", data["auth_token"]);
 			window.location.href = "/rate"
 		};

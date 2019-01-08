@@ -71,7 +71,8 @@
 					</div>
 					<div class="col-12 text-center">
 						<%= button_tag(type: 'submit', id: "vote-btn", class: "btn btn-success btn-block") do %>
-							<i class="fa fa-refresh fa-spin reload-icon"></i>Rate
+							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+							Rate
 						<% end %>
 					</div>
 					<%= hidden_field_tag "pubId", @publication.id %>

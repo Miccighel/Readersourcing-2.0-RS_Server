@@ -65,7 +65,11 @@ p {
 }
 
 .box-simple {
-	border: 0 !important;
+	border: 1px solid white !important;
+}
+
+.btn:active, .link-white {
+	color:white !important;
 }
 
 /* ////////// ERRORS  ////////// */
@@ -123,4 +127,30 @@ input.parsley-error, select.parsley-error, textarea.parsley-error {
 
 .parsley-errors-list.filled {
 	opacity: 1;
+}
+
+
+/*----------------------- Preloader -----------------------*/
+
+body.preloader {
+	overflow: hidden;
+}
+
+.preloader-wrapper {
+	height: 100%;
+	width: 100%;
+	background: #565656;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 9999999;
+}
+
+.preloader-wrapper .preloader {
+	position: absolute;
+	top: 50%;
+	left: 47.5%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	width: 120px;
 }

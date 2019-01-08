@@ -46,7 +46,7 @@ class UsersController < ApplicationController
 		@user = User.find_by_confirm_token(params[:confirmToken])
 		if @user
 			@user.activate_email
-			render json: {message: I18n.t("confirmations.messages.registration_successful")}, status: :created
+			render "shared/success", locals: {message: I18n.t("confirmations.messages.registration_successful")}, status: :created
 		else
 			@error_manager.add_error(I18n.t("errors.messages.user_not_exists"))
 			render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
@@ -70,7 +70,7 @@ class UsersController < ApplicationController
 	# POST /unsubscribe/:id
 	def unsubscribe
 		if @user.update(subscribe: false)
-			render json: {message: I18n.t("mails.user.unsubscribe_successful")}, status: :ok
+			render "shared/success", locals: {message: I18n.t("mails.user.unsubscribe_successful")}, status: :ok
 		else
 			render json: @user.errors, status: :unprocessable_entity
 		end

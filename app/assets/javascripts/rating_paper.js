@@ -14,6 +14,8 @@ let reloadIcons = $(".reload-icon");
 
 //######## UI INITIAL SETUP ########//
 
+reloadIcons.hide();
+
 ratingText.text("50");
 ratingSlider.slider({});
 
