@@ -1,6 +1,6 @@
 # ---------- SCENARIO 2: DEPLOY WITH LOCAL BUILD ----------
 
-FROM ruby:2.4.4
+FROM ruby:2.4.5
 
 # Install apt based dependencies required to run Rails as
 # well as RubyGems. As the Ruby image itself is based on a
@@ -40,7 +40,7 @@ EXPOSE 3000
 # DEVELOPMENT MODE
 # CMD ["bundle", "exec", "rails", "server", "-b", "-p", "3000", "-e", "development"]
 # PRODUCTION MODE
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000", "-e", "production"]
+CMD ["bundle", "exec", "rails", "server", "-e", "production"]
 
 # ---------- SCENARIO 2: DEPLOY WITH LOCAL BUILD ----------
 

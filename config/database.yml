@@ -9,4 +9,5 @@ development:
   user: postgres
 
 production:
+  adapter: postgresql
   url: <%= ENV['DATABASE_URL'] %>
