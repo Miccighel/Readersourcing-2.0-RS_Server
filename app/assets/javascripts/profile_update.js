@@ -22,6 +22,7 @@ let errorButton = $(".error-btn");
 
 let alert = $(".alert");
 
+let checkIcon = $("#check-icon");
 let backIcon = $("#back-icon");
 let reloadIcons = $(".reload-icon");
 
@@ -35,13 +36,12 @@ let validationInstance = signUpForm.parsley();
 
 signUpForm.submit(event => event.preventDefault());
 
+////////// USER ///////////
+
+//####### STATUS HANDLING (SCORES, ...) #########//
+
 let successCallback = (data, status, jqXHR) => {
-	////////// USER ///////////
-
-	//####### STATUS HANDLING (SCORES, ...) #########//
-
 	let authToken = localStorage.getItem('authToken');
-
 	if (authToken != null) {
 		let successCallback = (data, status, jqXHR) => {
 			firstNameField.val(data["first_name"]);
@@ -84,7 +84,7 @@ if (authToken != null) {
 				if (orcidField.val() === "")
 					delete secondData.user.orcid;
 				let secondSuccessCallback = (data, status, jqXHR) => {
-					//updateButton.find(reloadIcons).toggle();
+					updateButton.find(reloadIcons).toggle();
 					deleteToken().then(() => {
 						localStorage.setItem("message", data["message"]);
 						window.location.href = "/login";
