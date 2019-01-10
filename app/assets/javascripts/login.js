@@ -55,7 +55,7 @@ loginButton.on("click", () => {
 		loginButton.find(reloadIcons).toggle();
 		let data = {email: emailField.val(), password: passwordField.val()};
 		let successCallback = (data, status, jqXHR) => {
-			loginButton.find(signInIcon).toggle();
+			//loginButton.find(signInIcon).toggle();
 			//loginButton.find(reloadIcons).toggle();
 			localStorage.setItem("authToken", data["auth_token"]);
 			window.location.href = "/rate"
