@@ -23,10 +23,7 @@ let modalRefresh = $("#modal-refresh");
 let rateForm = $("#rate-form");
 
 let optionsButton = $("#options-btn");
-let loginButton = $("#login-btn");
 let logoutButton = $("#logout-btn");
-let profileButton = $("#profile-btn");
-let signUpButton = $("#sign-up-btn");
 let loadRateButton = $("#load-rate-btn");
 let voteButton = $("#vote-btn");
 let voteSuccessButton = $("#vote-success-btn");
@@ -48,7 +45,6 @@ let ratingCaption = $("#rating-caption");
 let ratingSubCaption = $("#rating-subcaption");
 let ratingSlider = $("#rating-slider");
 
-let urlText = $("#url-text");
 let ratingText = $("#rating-text");
 
 let buttonsCaption = $("#buttons-caption");

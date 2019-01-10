@@ -84,7 +84,7 @@ if (authToken != null) {
 				if (orcidField.val() === "")
 					delete secondData.user.orcid;
 				let secondSuccessCallback = (data, status, jqXHR) => {
-					updateButton.find(reloadIcons).toggle();
+					//updateButton.find(reloadIcons).toggle();
 					deleteToken().then(() => {
 						localStorage.setItem("message", data["message"]);
 						window.location.href = "/login";
