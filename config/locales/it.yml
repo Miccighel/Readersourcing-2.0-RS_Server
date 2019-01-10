@@ -67,7 +67,7 @@ it:
       validate_user: "Valida la tua utenza"
   confirmations:
     messages:
-      registration_successful: "Benvenuto su Readersourcing 2.0! Il tuo indirizzo email è stato confermato con successo. Ora puoi effettuare il login da RS_Rate."
+      registration_successful: "Benvenuto su Readersourcing 2.0! Il tuo indirizzo email è stato confermato con successo."
       please_confirm: "Per favore, controlla la tua casella di posta e conferma il tuo indirizzo email per proseguire."
       operation_completed: "Operazione completata con successo."
       rating_successful: "Giudizio assegnato correttamente alla pubblicazione."

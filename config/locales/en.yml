@@ -13,7 +13,7 @@ en:
     anonimyze: "Anonymize"
   confirmations:
     messages:
-      registration_successful: "Welcome to Readersourcing 2.0! Your email address has been confirmed successfully. Now you can log in from."
+      registration_successful: "Welcome to Readersourcing 2.0! Your email address has been confirmed successfully."
       please_confirm: "Please, check your inbox and confirm your email address to proceed."
       operation_completed: "Operation completed successfully."
       rating_successful: "Rating successfully given to the publication."
