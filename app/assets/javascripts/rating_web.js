@@ -41,6 +41,8 @@ let modalRefreshButton = $("#modal-refresh-btn");
 
 let publicationUrlField = $("#publication-url");
 
+let annotatedPublicationDropzone;
+
 let ratingCaption = $("#rating-caption");
 let ratingSubCaption = $("#rating-subcaption");
 let ratingSlider = $("#rating-slider");
@@ -260,6 +262,27 @@ if (authToken != null) {
 			let promise = ajax("POST", "publications/fetch.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 		}
 	});
+}
+
+//######### EXTRACT HANDLING #########//
+
+authToken = localStorage.getItem('authToken');
+if (authToken != null) {
+
+	Dropzone.options.annotatedPublicationDropzone = {
+		paramName: "file", // The name that will be used to transfer the file
+		acceptedFiles: "application/pdf",
+		maxFiles: 1,
+		headers: {
+			"Authorization": authToken
+		}
+	};
+	annotatedPublicationDropzone = new Dropzone("#annotated-publication-dropzone");
+
+	annotatedPublicationDropzone.on("success", (file, data) => {
+
+	});
+
 }
 
 ///######### REFRESH HANDLING #########//

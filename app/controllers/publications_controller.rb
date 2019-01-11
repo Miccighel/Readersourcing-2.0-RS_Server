@@ -77,7 +77,15 @@ class PublicationsController < ApplicationController
 				render json: {errors: @error_manager.get_errors}, status: :not_found
 			end
 		end
+	end
 
+	# POST /publications/extract.json
+	def extract
+		file = params[:file]
+		logger.info "Reading metadata from: #{file.original_filename}"
+		logger.info absolute_pdf_storage_temp_path
+		# TODO: Salva il file nella posizione temporanea e leggine i metadati.
+		render json: {message: "Test"}, status: :ok
 	end
 
 	# POST /publications/fetch.json
@@ -144,4 +152,9 @@ class PublicationsController < ApplicationController
 	def publication_params
 		params.require(:publication).permit(:doi, :title, :subject, :creator, :author, :pdf_url)
 	end
+
+	def absolute_pdf_storage_temp_path
+		Rails.public_path.join("user").join(current_user.id.to_s).join("temp")
+	end
+
 end

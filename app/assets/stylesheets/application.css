@@ -16,6 +16,7 @@
  *= require bootstrap-slider/dist/css/bootstrap-slider
  *= require owl.carousel/dist/assets/owl.carousel
  *= require owl.carousel/dist/assets/owl.theme.default
+ *= require dropzone/dist/dropzone
  *= require system/style.blue
  *= require general
  *= require_self

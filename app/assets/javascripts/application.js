@@ -12,6 +12,7 @@
 //= require jquery.scrollto/jquery.scrollTo.min
 //= require parsleyjs/dist/parsley.min
 //= require parsleyjs/dist/i18n/it
+//= require dropzone/dist/dropzone
 //= require system/front
 //= require general
 //= require shared

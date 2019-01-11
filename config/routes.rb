@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 				post :lookup
 				post :is_fetchable
 				post :fetch
+				post :extract
 			end
 			member do
 				get :refresh
