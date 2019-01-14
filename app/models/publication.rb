@@ -177,6 +177,39 @@ class Publication < ApplicationRecord
 		end
 	end
 
+	# The following method extract the BaseUrl metadata from an uploaded PDF file.
+	def self.extract_base_url(file, user)
+		logger.info "Copying temporary file with original name: #{file.original_filename}"
+		FileUtils::mkdir_p absolute_pdf_storage_temp_path(user)
+		temp_file_name_without_ext = remove_extension_from_filename(file.original_filename)
+		temp_path = absolute_pdf_storage_temp_path(user).join("#{temp_file_name_without_ext}-Tmp.pdf")
+		logger.info "Temporary path generated: #{temp_path}"
+		temp_file_content_type = file.content_type
+		logger.info "Temporary file content type: #{temp_file_content_type}"
+
+		if temp_file_content_type == "application/pdf"
+			FileUtils.cp(file.tempfile, temp_path)
+			logger.info "Temporary file successfully copied"
+			logger.info "Reading metadata from: #{temp_path}"
+			reader = PDF::Reader.new(temp_path)
+			begin
+				base_url = reader.info[:BaseUrl]
+				if !base_url.blank?
+					logger.info "Base Url found: #{base_url}"
+					return base_url
+				else
+					logger.info "Base Url not found"
+					return false
+				end
+			rescue ArgumentError => e
+				logger.info "Error reading Base Url metadata"
+				logger.info e.message
+			end
+		else
+			return false
+		end
+	end
+
 	def remove_files(user)
 		if File.exists? absolute_pdf_storage_path(user)
 			logger.info "Deleting storage folder at: #{absolute_pdf_storage_path(user)}"
@@ -211,20 +244,28 @@ class Publication < ApplicationRecord
 	end
 
 	def pdf_download_url(host, user)
-		pdf_name_without_ext = pdf_name.chomp(".pdf").to_s.gsub('%2', '-')
+		pdf_name_without_ext = remove_extension_from_filename(pdf_name)
 		pdf_name = "#{pdf_name_without_ext}.pdf"
 		"#{host}/user/#{user.id}/#{pdf_storage_path}#{pdf_name}"
 	end
 
 	def pdf_download_url_link(host, user)
-		pdf_name_without_ext = pdf_name.chomp(".pdf").to_s.gsub('%2', '-')
+		pdf_name_without_ext = remove_extension_from_filename(pdf_name)
 		"#{host}/user/#{user.id}/#{pdf_storage_path}#{pdf_name_without_ext}#{Settings.rs_pdf_link_suffix}.pdf"
 	end
 
 	private
 
+	def remove_extension_from_filename(filename)
+		filename.chomp(".pdf").gsub(/\s+/, '-')
+	end
+
+	def self.remove_extension_from_filename(filename)
+		filename.chomp(".pdf").gsub(/\s+/, '-')
+	end
+
 	def load_pdf_paths(pdf_name, host)
-		pdf_name_without_ext = pdf_name.chomp(".pdf").to_s.gsub('%2', '-')
+		pdf_name_without_ext = remove_extension_from_filename(pdf_name)
 		pdf_name = "#{pdf_name_without_ext}.pdf"
 		update_attribute(:pdf_storage_path, "publication/pdf/#{id}/")
 		update_attribute(:pdf_download_path, "#{pdf_storage_path}#{pdf_name}")
@@ -247,6 +288,10 @@ class Publication < ApplicationRecord
 
 	def absolute_pdf_download_path_link(user)
 		Rails.public_path.join("user").join(user.id.to_s).join(pdf_download_path_link)
+	end
+
+	def self.absolute_pdf_storage_temp_path(user)
+		Rails.public_path.join("user").join(user.id.to_s).join("tmp")
 	end
 
 end

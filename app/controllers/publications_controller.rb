@@ -2,7 +2,7 @@ class PublicationsController < ApplicationController
 
 	before_action :set_user, :set_request_data
 	before_action :set_publication, only: [:show, :update, :destroy, :refresh, :is_rated, :is_saved_for_later]
-	before_action :set_error_manager, only: [:lookup, :is_rated, :is_saved_for_later, :is_fetchable]
+	before_action :set_error_manager, only: [:lookup, :is_rated, :is_saved_for_later, :is_fetchable, :extract]
 
 	# GET /publications.json
 	def index
@@ -81,11 +81,13 @@ class PublicationsController < ApplicationController
 
 	# POST /publications/extract.json
 	def extract
-		file = params[:file]
-		logger.info "Reading metadata from: #{file.original_filename}"
-		logger.info absolute_pdf_storage_temp_path
-		# TODO: Salva il file nella posizione temporanea e leggine i metadati.
-		render json: {message: "Test"}, status: :ok
+		base_url = Publication.extract_base_url(params[:file], current_user)
+		if !base_url
+			@error_manager.add_error(I18n.t("errors.messages.base_url_not_found"))
+			render json: {errors: @error_manager.get_errors}, status: :not_found
+		else
+			render json: {message: I18n.t("confirmations.messages.base_url_found"), baseUrl: base_url}, status: :ok
+		end
 	end
 
 	# POST /publications/fetch.json
@@ -151,10 +153,6 @@ class PublicationsController < ApplicationController
 
 	def publication_params
 		params.require(:publication).permit(:doi, :title, :subject, :creator, :author, :pdf_url)
-	end
-
-	def absolute_pdf_storage_temp_path
-		Rails.public_path.join("user").join(current_user.id.to_s).join("temp")
 	end
 
 end

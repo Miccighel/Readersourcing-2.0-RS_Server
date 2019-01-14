@@ -34,6 +34,7 @@ let saveButton = $("#save-btn");
 let downloadButton = $("#download-btn");
 let refreshButton = $("#refresh-btn");
 let reloadButton = $("#reload-btn");
+let goToRatingButton = $("#go-to-rating-btn");
 let errorButtons = $(".error-btn");
 let passwordEditButton = $("#password-edit-btn");
 let profileUpdateButton = $("#profile-update-btn");
@@ -42,6 +43,7 @@ let modalRefreshButton = $("#modal-refresh-btn");
 let publicationUrlField = $("#publication-url");
 
 let annotatedPublicationDropzone;
+let annotatedPublicationDropzoneSuccess = $("#dropzone-success");
 
 let ratingCaption = $("#rating-caption");
 let ratingSubCaption = $("#rating-subcaption");
@@ -64,6 +66,7 @@ let publicationScoreTRMValue = $("#publication-score-trm-val");
 let anonymizeCheckbox = $("#anonymize-check");
 
 let signOutIcon = $("#sign-out-icon");
+let goToRatingIcon = $("#go-to-rating-icon");
 let profileIcon = $("#profile-icon");
 let reloadIcons = $(".reload-icon");
 
@@ -87,6 +90,8 @@ ratingText.show();
 ratingSection.show();
 ratingSectionSubControls.hide();
 publicationScoreSection.hide();
+annotatedPublicationDropzoneSuccess.hide();
+goToRatingButton.hide();
 
 let successCallback = (data, status, jqXHR) => {
 	ratingSlider.slider({});
@@ -266,9 +271,10 @@ if (authToken != null) {
 
 //######### EXTRACT HANDLING #########//
 
+annotatedPublicationDropzone = new Dropzone("#annotated-publication-dropzone");
+
 authToken = localStorage.getItem('authToken');
 if (authToken != null) {
-
 	Dropzone.options.annotatedPublicationDropzone = {
 		paramName: "file", // The name that will be used to transfer the file
 		acceptedFiles: "application/pdf",
@@ -277,13 +283,21 @@ if (authToken != null) {
 			"Authorization": authToken
 		}
 	};
-	annotatedPublicationDropzone = new Dropzone("#annotated-publication-dropzone");
-
+	annotatedPublicationDropzone.on("sending", (file, xhr, formData) => xhr.setRequestHeader("Authorization", authToken));
 	annotatedPublicationDropzone.on("success", (file, data) => {
-
+		annotatedPublicationDropzoneSuccess.show();
+		annotatedPublicationDropzoneSuccess.text(data["message"]);
+		goToRatingButton.show();
+		goToRatingButton.prop("href", data["baseUrl"])
 	});
-
 }
+
+//######### GO TO RATING URL HANDLING #########//
+
+goToRatingButton.on("click", () => {
+	goToRatingButton.find(goToRatingIcon).toggle();
+	goToRatingButton.find(reloadIcons).toggle();
+});
 
 ///######### REFRESH HANDLING #########//
 

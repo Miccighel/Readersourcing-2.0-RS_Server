@@ -23,6 +23,7 @@ en:
       update_successful: "Your profile has been updated successfully."
       fetchable_publication: "File exists, is downloadable and it is encoded in PDF format."
       authorization_completed: "You're authorized to proceed."
+      base_url_found: "The rating URL has been extracted from your PDF file."
   information:
     messages:
       rate: "Rate this publication"
@@ -51,6 +52,7 @@ en:
       ip_address_changed: "IP address changed."
       expired_login_token: "Expired authentication token."
       unfetchable_publication: "File does not exists, it is not downloadable or it is not encoded in PDF format."
+      base_url_not_found: "The PDF file does not contain a rating URL to extract."
     codes:
       missing-input-secret: "The secret parameter is missing."
       invalid-input-secret: "The secret parameter is invalid or malformed."

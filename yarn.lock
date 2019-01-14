@@ -8,19 +8,19 @@ animate.css@latest:
   integrity sha512-u3iMXDJr0cxMdQocIciDiou9Au4L5f9uT+/jCtprw3s1j3HcfCuI+khF+90Ps2KdsEhM2soF7SXB4WUvI3HlXg==
 
 bootstrap-select@^1.13.1:
-  version "1.13.3"
-  resolved "https://registry.yarnpkg.com/bootstrap-select/-/bootstrap-select-1.13.3.tgz#77f62b72c69339227753b3879cec036039dcb4d9"
-  integrity sha512-XzMwLFqRJQb142zR3ev57bZl66/h/RRguMODVfH0w2YTcJrqU+VCO6CserMxsVF4JE6hX9O99MQGZxgWZiitfg==
+  version "1.13.5"
+  resolved "https://registry.yarnpkg.com/bootstrap-select/-/bootstrap-select-1.13.5.tgz#12f000b25a95ed642fe371ae9e311d3afbb8c53f"
+  integrity sha512-1uYsYLB4FvGdwM6qzIfTxp6sP5gDqjPgWNHJztBfYUTIo1GUYG5zzmMVWiJvdxJlsvBXZ9AObmeZdzi0eg2jaA==
 
 bootstrap-slider@^10.0.2:
-  version "10.3.4"
-  resolved "https://registry.yarnpkg.com/bootstrap-slider/-/bootstrap-slider-10.3.4.tgz#92933e95fa045c1356283b217ca8d2e4c5f48c59"
-  integrity sha512-q5SHf5gh708S5NCU9uKISmbVocJ3IN+dw6reRKtxQzEYub/KuAkIH4sNcfj2ANtvmnbWE4jGYNpbrlU1JM+sag==
+  version "10.6.0"
+  resolved "https://registry.yarnpkg.com/bootstrap-slider/-/bootstrap-slider-10.6.0.tgz#54926997ed7d86dd7887bb3f25581e79b2c0f911"
+  integrity sha512-9GBrmXIyoHPiV1AurB/nsTS3FCd2d59QCdag1V4TijtG4rJvDv9RUf7I4SaoBXeSz0I+87vePoTuzVJDQZ2oGw==
 
 bootstrap@^4.1.1:
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.1.3.tgz#0eb371af2c8448e8c210411d0cb824a6409a12be"
-  integrity sha512-rDFIzgXcof0jDyjNosjv4Sno77X4KuPeFxG2XZZv1/Kc8DRVGVADdoQyyOVDwPqL36DDmtCQbrpMCqvpPLJQ0w==
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.2.1.tgz#8f8bdca024dbf0e8644da32e918c8a03a90a5757"
+  integrity sha512-tt/7vIv3Gm2mnd/WeDx36nfGGHleil0Wg8IeB7eMrVkY0fZ5iTaBisSh8oNANc2IBsCc6vCgCNTIM/IEN0+50Q==
 
 dropzone@^5.5.1:
   version "5.5.1"

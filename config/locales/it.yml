@@ -77,6 +77,7 @@ it:
       update_successful: "Il tuo profilo è stato aggiornato con successo."
       fetchable_publication: "Il file esiste, è scaricabile ed è codificato in formato PDF."
       authorization_completed: "Sei autorizzato a procedere."
+      base_url_found: "L'URL di voto è stata estratta dal tuo file PDF."
   errors:
     messages:
       invalid_credentials: "Credenziali non valide. Per favore, riprova."
@@ -118,6 +119,7 @@ it:
       ip_address_changed: "Indirizzo IP modificato."
       expired_login_token: "Token d'autenticazione scaduto."
       unfetchable_publication: "Il file non esiste, non è scaricabile oppure non è codificato in formato PDF."
+      base_url_not_found: "Il file PDF non contiene un'URL di voto da estrarre."
     codes:
       missing-input-secret: "Parametro segreto mancante."
       invalid-input-secret: "Parametro segreto non valido o malformato."
