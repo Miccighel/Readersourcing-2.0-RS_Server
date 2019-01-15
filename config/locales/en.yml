@@ -48,11 +48,12 @@ en:
       unconfirmed_mail: "This email address has not been confirmed. Please, check your inbox and click the confirmation link."
       invalid_token: "Invalid authentication token."
       missing_token: "Missing authentication token."
-      not_authorized: "You're not authorized to see this page."
+      not_authorized: "You are not authorized to see this page."
       ip_address_changed: "IP address changed."
       expired_login_token: "Expired authentication token."
       unfetchable_publication: "File does not exists, it is not downloadable or it is not encoded in PDF format."
       base_url_not_found: "The PDF file does not contain a rating URL to extract."
+      pdf_not_uploaded: "No PDF file has been uploaded. Please, try again."
     codes:
       missing-input-secret: "The secret parameter is missing."
       invalid-input-secret: "The secret parameter is invalid or malformed."

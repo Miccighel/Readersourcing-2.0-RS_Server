@@ -26,3 +26,31 @@
 	display: block;
 	margin-top: 1.4rem;
 }
+
+.dropzone .dz-image {
+	width: 100% !important;
+}
+
+.dropzone .dz-error-message {
+	width: 50% !important;
+	position: absolute !important;
+	left: 25% !important;
+}
+
+.dropzone .dz-error-mark svg path {
+	fill: #be2626
+}
+
+.dropzone .dz-success-mark svg path {
+	fill: #28a745
+}
+
+.dropzone .dz-image img {
+	margin: auto;
+	width: 75%;
+}
+
+.dropzone .dz-preview {
+	width: 95%;
+	margin: 16px;
+}

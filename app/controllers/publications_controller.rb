@@ -81,12 +81,17 @@ class PublicationsController < ApplicationController
 
 	# POST /publications/extract.json
 	def extract
-		base_url = Publication.extract_base_url(params[:file], current_user)
-		if !base_url
-			@error_manager.add_error(I18n.t("errors.messages.base_url_not_found"))
-			render json: {errors: @error_manager.get_errors}, status: :not_found
+		if params.has_key?(:file)
+			base_url = Publication.extract_base_url(params[:file], current_user)
+			if !base_url
+				@error_manager.add_error(I18n.t("errors.messages.base_url_not_found"))
+				render json: {errors: @error_manager.get_errors}, status: :not_acceptable
+			else
+				render json: {message: I18n.t("confirmations.messages.base_url_found"), baseUrl: base_url}, status: :ok
+			end
 		else
-			render json: {message: I18n.t("confirmations.messages.base_url_found"), baseUrl: base_url}, status: :ok
+			@error_manager.add_error(I18n.t("errors.messages.pdf_not_uploaded"))
+			render json: {errors: @error_manager.get_errors}, status: :not_found
 		end
 	end
 
@@ -105,7 +110,6 @@ class PublicationsController < ApplicationController
 				render json: @publication.errors, status: :unprocessable_entity
 			end
 		end
-
 	end
 
 	# GET /publications/1/refresh.json

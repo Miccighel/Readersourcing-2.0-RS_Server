@@ -120,6 +120,7 @@ it:
       expired_login_token: "Token d'autenticazione scaduto."
       unfetchable_publication: "Il file non esiste, non è scaricabile oppure non è codificato in formato PDF."
       base_url_not_found: "Il file PDF non contiene un'URL di voto da estrarre."
+      pdf_not_uploaded: "Nessun file PDF caricato. Per favore, riprova."
     codes:
       missing-input-secret: "Parametro segreto mancante."
       invalid-input-secret: "Parametro segreto non valido o malformato."
