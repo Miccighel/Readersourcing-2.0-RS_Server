@@ -1,12 +1,11 @@
-Default: &default
+development:
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-
-development:
-  <<: *default
+  user: admin
+  password: puyes46r
+  host: 127.0.0.1
   database: rs_server
-  user: postgres
 
 production:
   adapter: postgresql
