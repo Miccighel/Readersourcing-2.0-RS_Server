@@ -10,8 +10,12 @@
 	color: indianred !important;
 }
 
+#annotated-publication-dropzone {
+	background: url(texture-bw.png) center center repeat !important;
+}
+
 .dropzone {
-	border: 3px dashed #0087F7;
+	border: 1px solid #0087F7;
 	background: white;
 	color: #212529;
 }
@@ -29,21 +33,38 @@
 
 .dropzone .dz-image {
 	width: 100% !important;
+	background: transparent !important;
+}
+
+.dropzone .dz-details {
+	padding: 1em 0.5em !important;
+	background: transparent !important;
+}
+
+.dropzone .dz-size {
+	margin-bottom: 3.55em !important;
 }
 
 .dropzone .dz-error-message {
+	width: 75% !important;
+	position: absolute !important;
+	left: 15% !important;
+}
+
+.dropzone .dz-error-mark svg path {
+	fill: #FF0000
+}
+
+.dropzone .dz-success-mark svg path {
+	fill: #00ff00;
+}
+
+.dropzone .dz-filename {
 	width: 50% !important;
 	position: absolute !important;
 	left: 25% !important;
 }
 
-.dropzone .dz-error-mark svg path {
-	fill: #be2626
-}
-
-.dropzone .dz-success-mark svg path {
-	fill: #28a745
-}
 
 .dropzone .dz-image img {
 	margin: auto;

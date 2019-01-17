@@ -23,6 +23,12 @@ Rails.application.configure do
 	# Apache or NGINX already handles this.
 	config.public_file_server.enabled = true
 
+	# Generate digests for assets URLs
+	config.assets.digest = true
+
+	# Compress JavaScripts and CSS
+	config.assets.compress = true
+
 	# Enable serving of images, stylesheets, and JavaScripts from an asset server.
 	# config.action_controller.asset_host = 'http://assets.example.com'
 

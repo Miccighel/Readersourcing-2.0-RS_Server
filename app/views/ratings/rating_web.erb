@@ -127,7 +127,7 @@
 				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 			</button>
 			<button type="button" id="save-btn" class="btn btn-primary btn-block m-0">
-				<i class="fas fa-sync-alt fa-spin"></i>
+				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 				Save For Later
 			</button>
 			<a href="#" id="download-btn" class="btn btn-primary link-white w-75" target="_blank">
@@ -153,7 +153,7 @@
 	<div class="row mt-auto mb-3 w-100">
 		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto">
 			<form action="<%= extract_publications_path(format: :json) %>" id="annotated-publication-dropzone" class="dropzone border-primary">
-				<div class="dz-default dz-message"><span>Drop your link-annotated publication here</span><br /><i class="fas fa-file-pdf"></i></div>
+				<div class="dz-default dz-message"><h4>Drop Your Link-Annotated Publication Here</h4><br /><i class="fas fa-file-pdf fa-3x"></i></div>
 			</form>
 		</div>
 		<div class="col-lg-7 col-sm-10 col-xs-12 mt-3 ml-auto mr-auto">
@@ -161,7 +161,7 @@
 		</div>
 		<div class="col-lg-7 col-sm-10 col-xs-12 ml-auto mr-auto">
 			<a href="" id="go-to-rating-btn" class="btn btn-primary btn-block link-white">
-				Go To Rating Page
+				Rating Page
 				<i id="go-to-rating-icon" class="fas fa-arrow-right"></i>
 				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 			</a>

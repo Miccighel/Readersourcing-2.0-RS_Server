@@ -30,7 +30,15 @@ let reloadIcons = $(".reload-icon");
 
 errorsSection.hide();
 errorButton.hide();
-reloadIcons.hide();
+
+firstNameField.hide();
+lastNameField.hide();
+orcidField.hide();
+subscribeCheckbox.hide();
+backButton.find(reloadIcons).hide();
+updateButton.find(reloadIcons).hide();
+
+updateButton.prop("disabled", true);
 
 let validationInstance = signUpForm.parsley();
 
@@ -45,15 +53,25 @@ let successCallback = (data, status, jqXHR) => {
 	if (authToken != null) {
 		let successCallback = (data, status, jqXHR) => {
 			firstNameField.val(data["first_name"]);
+			firstNameField.show();
+			firstNameField.parent().parent().find(reloadIcons).hide();
 			lastNameField.val(data["last_name"]);
+			lastNameField.show();
+			lastNameField.parent().parent().find(reloadIcons).hide();
 			orcidField.val(data["orcid"]);
+			orcidField.show();
+			orcidField.parent().parent().find(reloadIcons).hide();
 			(data["subscribe"]) === true ? subscribeCheckbox.prop('checked', true) : subscribeCheckbox.prop('checked', false);
+			subscribeCheckbox.show();
+			subscribeCheckbox.parent().parent().find(reloadIcons).hide();
+			updateButton.prop("disabled", false);
 		};
 		let errorCallback = (jqXHR, status) => {
 			firstNameField.val();
 			lastNameField.val();
 			orcidField.val();
 			subscribeCheckbox.prop('checked', false);
+			updateButton.prop("disabled", false);
 		};
 		let promise = emptyAjax("POST", "/users/info.json", "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
 	}

@@ -20,7 +20,7 @@
 <div class="container bg-gray-dark color-white min-h-100 d-flex flex-column align-items-center justify-content-center">
 	<div class="mb-3"></div>
 	<div class="row mt-auto mb-3">
-		<div class="col-12">
+		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto text-center">
 			<div class="heading text-center">
 				<h1><%= I18n.t("errors.messages.unauthorized") %></h1>
 				<% errors.each do |error| %>
@@ -28,11 +28,19 @@
 				<% end %>
 			</div>
 		</div>
+		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto text-center">
+			<a href="<%= login_path %>" id="login-btn" class="btn btn-primary btn-block link-white">
+				Login
+				<i id="sign-in-icon" class="fas fa-sign-in-alt"></i>
+				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+			</a>
+		</div>
 	</div>
 	<div class="row mt-auto ml-auto mr-auto mb-0 w-100">
 		<%= render partial: "layouts/footer" %>
 	</div>
 </div>
 <%= javascript_include_tag "application" %>
+<%= javascript_include_tag "errors" %>
 </body>
 </html>

@@ -22,7 +22,7 @@ en:
       new_password_mail_sent: "Email containing new password sent. Check your inbox."
       update_successful: "Your profile has been updated successfully."
       fetchable_publication: "File exists, is downloadable and it is encoded in PDF format."
-      authorization_completed: "You're authorized to proceed."
+      authorization_completed: "You are authorized to proceed"
       base_url_found: "The rating URL has been extracted from your PDF file."
   information:
     messages:
@@ -38,7 +38,7 @@ en:
       rating_already_given: "You have already rated the publication."
       rating_unsuccessful: "Something went wrong during rating assignment. Please, try again."
       not_the_same_user: "The data do not match with the ones of the user that has created the link inside the file."
-      unauthorized: "You're not authorized to proceed."
+      unauthorized: "You are not authorized to proceed"
       expired_token: "The clicked link contains an expired token. <br />To proceed, you must annotate the publication again and click the new link."
       password_do_not_match: "The new password and its confirmation do not match. Please, try again."
       current_password_does_not_match: "The current password is wrong. Please, try again."

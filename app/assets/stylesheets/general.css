@@ -70,6 +70,7 @@ p {
 
 .btn:active, .link-white {
 	color:white !important;
+	text-decoration: none !important;
 }
 
 /* ////////// ERRORS  ////////// */
