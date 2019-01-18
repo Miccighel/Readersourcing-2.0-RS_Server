@@ -53,7 +53,9 @@ en:
       expired_login_token: "Expired authentication token."
       unfetchable_publication: "File does not exists, it is not downloadable or it is not encoded in PDF format."
       base_url_not_found: "The PDF file does not contain a rating URL to extract."
+      error_reading_base_url: "Error reading rating URL metadata. Please, try again"
       pdf_not_uploaded: "No PDF file has been uploaded. Please, try again."
+      content_type_not_application_pdf: "The content type of this file is not application/pdf. Please, try again."
     codes:
       missing-input-secret: "The secret parameter is missing."
       invalid-input-secret: "The secret parameter is invalid or malformed."

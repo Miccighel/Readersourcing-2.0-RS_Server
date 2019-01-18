@@ -44,6 +44,8 @@ let validationInstance = signUpForm.parsley();
 
 signUpForm.submit(event => event.preventDefault());
 
+removePreloader();
+
 ////////// USER ///////////
 
 //####### STATUS HANDLING (SCORES, ...) #########//

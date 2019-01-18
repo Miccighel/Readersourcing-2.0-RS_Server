@@ -26,6 +26,8 @@ errorsSection.hide();
 errorButton.hide();
 reloadIcons.hide();
 
+removePreloader();
+
 ////////// PASSWORD //////////
 
 //######## FORGOT HANDLING ########//

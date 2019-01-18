@@ -18,7 +18,7 @@ reloadIcons.hide();
 let authToken = localStorage.getItem('authToken');
 if (authToken != null) {
 	window.location.href = "/rate";
-}
+} else removePreloader();
 
 //######### GO TO LOGIN HANDLING #########//
 

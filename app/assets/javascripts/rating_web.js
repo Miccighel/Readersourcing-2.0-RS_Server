@@ -96,6 +96,7 @@ goToRatingButton.hide();
 let successCallback = (data, status, jqXHR) => {
 	ratingSlider.slider({});
 	ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
+	removePreloader();
 };
 let errorCallback = (jqXHR, status) => {
 	window.location.href = "/unauthorized"

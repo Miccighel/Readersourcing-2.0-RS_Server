@@ -11,6 +11,8 @@ let reloadIcons = $(".reload-icon");
 
 reloadIcons.hide();
 
+removePreloader();
+
 //######### GO TO LOGIN HANDLING #########//
 
 loginButton.on("click", () => {

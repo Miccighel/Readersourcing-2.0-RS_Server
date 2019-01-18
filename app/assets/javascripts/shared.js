@@ -52,3 +52,9 @@ async function buildErrors(errors) {
 	});
 	return element;
 }
+
+function removePreloader() {
+	$('.preloader-wrapper').fadeOut(1500);
+	$('body').removeClass('preloader');
+	$('.preloader').css('overflow','visible');
+}

@@ -37,6 +37,8 @@ errorsSection.hide();
 errorButton.hide();
 reloadIcons.hide();
 
+removePreloader();
+
 //########## GO BACK HANDLING #########//
 
 backButton.on("click", () => {

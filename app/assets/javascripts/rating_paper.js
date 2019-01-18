@@ -19,6 +19,8 @@ reloadIcons.hide();
 ratingText.text("50");
 ratingSlider.slider({});
 
+removePreloader();
+
 ////////// RATING //////////
 
 //#######  SLIDER HANDLING #########//

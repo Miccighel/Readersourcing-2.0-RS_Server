@@ -33,6 +33,8 @@ errorsSection.hide();
 errorButton.hide();
 reloadIcons.hide();
 
+removePreloader();
+
 ////////// USER ///////////
 
 //########## REGISTRATION HANDLING ##########//

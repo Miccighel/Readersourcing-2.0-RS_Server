@@ -186,27 +186,21 @@ class Publication < ApplicationRecord
 		logger.info "Temporary path generated: #{temp_path}"
 		temp_file_content_type = file.content_type
 		logger.info "Temporary file content type: #{temp_file_content_type}"
-
 		if temp_file_content_type == "application/pdf"
 			FileUtils.cp(file.tempfile, temp_path)
 			logger.info "Temporary file successfully copied"
 			logger.info "Reading metadata from: #{temp_path}"
 			reader = PDF::Reader.new(temp_path)
-			begin
-				base_url = reader.info[:BaseUrl]
-				if !base_url.blank?
-					logger.info "Base Url found: #{base_url}"
-					return base_url
-				else
-					logger.info "Base Url not found"
-					return false
-				end
-			rescue ArgumentError => e
-				logger.info "Error reading Base Url metadata"
-				logger.info e.message
+			base_url = reader.info[:BaseUrl]
+			if !base_url.blank?
+				logger.info "Base Url found: #{base_url}"
+				return base_url
+			else
+				logger.info "Base Url not found"
+				raise I18n.t("errors.messages.base_url_not_found")
 			end
 		else
-			return false
+			raise I18n.t("errors.messages.content_type_not_application_pdf")
 		end
 	end
 

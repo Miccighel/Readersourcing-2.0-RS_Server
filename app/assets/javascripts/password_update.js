@@ -31,6 +31,7 @@ errorButton.hide();
 reloadIcons.hide();
 
 let successCallback = (data, status, jqXHR) => {
+	removePreloader();
 };
 let errorCallback = (jqXHR, status) => {
 	window.location.href = "/unauthorized"
