@@ -20,6 +20,11 @@ body, html {
 	width: 24% !important;
 }
 
+hr.separator {
+	height: 2px;
+	background: #467fbf;
+}
+
 footer {
 	padding-top: 0 !important;
 }

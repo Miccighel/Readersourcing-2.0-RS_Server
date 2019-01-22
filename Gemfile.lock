@@ -111,7 +111,7 @@ GEM
       temple (>= 0.8.0)
       tilt
     hashery (2.1.2)
-    http (4.0.2)
+    http (4.0.3)
       addressable (~> 2.3)
       http-cookie (~> 1.0)
       http-form_data (~> 2.0)
@@ -120,7 +120,7 @@ GEM
       domain_name (~> 0.5)
     http-form_data (2.1.1)
     http_parser.rb (0.6.0)
-    i18n (1.5.2)
+    i18n (1.5.3)
       concurrent-ruby (~> 1.0)
     jbuilder (2.8.0)
       activesupport (>= 4.2.0)
