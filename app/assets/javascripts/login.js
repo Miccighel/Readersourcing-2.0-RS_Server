@@ -4,7 +4,7 @@
 
 let loginForm = $("#login-form");
 let successSection = $("#success-sect");
-let errorsSection = $("#errors-sect");
+let errorsSection = $(".errors-sect");
 
 //######## UI COMPONENTS ########//
 
@@ -72,9 +72,9 @@ loginButton.on("click", () => {
 				button.prop("disabled", true)
 			} else {
 				let errorPromise = buildErrors(jqXHR.responseText).then(result => {
-					errorsSection.find(alert).empty();
-					errorsSection.find(alert).append(result);
-					errorsSection.show();
+					loginButton.parent().find(errorsSection).find(alert).empty();
+					loginButton.parent().find(errorsSection).find(alert).append(result);
+					loginButton.parent().find(errorsSection).show();
 				});
 			}
 		};

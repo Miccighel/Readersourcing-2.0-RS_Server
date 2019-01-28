@@ -2,7 +2,7 @@ class PublicationsController < ApplicationController
 
 	before_action :set_user, :set_request_data
 	before_action :set_publication, only: [:show, :update, :destroy, :refresh, :is_rated, :is_saved_for_later]
-	before_action :set_error_manager, only: [:lookup, :is_rated, :is_saved_for_later, :is_fetchable, :extract]
+	before_action :set_error_manager, only: [:lookup, :is_rated, :is_saved_for_later, :fetch, :is_fetchable, :extract, :refresh, :create, :update]
 
 	# GET /publications.json
 	def index
@@ -55,11 +55,22 @@ class PublicationsController < ApplicationController
 	# POST /publications.json
 	def create
 		@publication = Publication.new(publication_params)
-		if @publication.save
-			@publication.fetch @request_data
-			render :show, status: :created, location: @publication
-		else
-			render json: @publication.errors, status: :unprocessable_entity
+		begin
+			@publication.transaction do
+				if @publication.save
+					begin
+						@publication.fetch @request_data
+						render :show, status: :created, location: @publication
+					rescue RuntimeError => error
+						raise ActiveRecord::Rollback error.message
+					end
+				else
+					render json: @publication.errors, status: :unprocessable_entity
+				end
+			rescue ActiveRecord::Rollback => error
+				@error_manager.add_error(error.message)
+				render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
+			end
 		end
 	end
 
@@ -83,14 +94,14 @@ class PublicationsController < ApplicationController
 	def extract
 		if params.has_key?(:file)
 			begin
-				base_url = Publication.extract_base_url(params[:file], current_user)
+				base_url = Publication.extract_base_url(params[:file], current_user, @request_data)
 				render json: {message: I18n.t("confirmations.messages.base_url_found"), baseUrl: base_url}, status: :ok
 			rescue RuntimeError => error
 				@error_manager.add_error(error.message)
-				render json: {errors: @error_manager.get_errors}, status: :not_acceptable
+				render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
 			rescue ArgumentError
 				@error_manager.add_error(I18n.t("errors.messages.error_reading_base_url"))
-				render json: {errors: @error_manager.get_errors}, status: :not_acceptable
+				render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
 			end
 		else
 			@error_manager.add_error(I18n.t("errors.messages.pdf_not_uploaded"))
@@ -102,32 +113,74 @@ class PublicationsController < ApplicationController
 	def fetch
 		if Publication.exists?(pdf_url: publication_params[:pdf_url])
 			@publication = Publication.find_by_pdf_url(publication_params[:pdf_url])
-			@publication.fetch @request_data
-			render :show, status: :ok, location: @publication
+			begin
+				@publication.transaction do
+					begin
+						@publication.fetch @request_data
+						render :show, status: :ok, location: @publication
+					rescue RuntimeError => error
+						raise ActiveRecord::Rollback error.message
+					end
+				rescue ActiveRecord::Rollback => error
+					@error_manager.add_error(error.message)
+					render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
+				end
+			end
 		else
 			@publication = Publication.new(pdf_url: publication_params[:pdf_url])
-			if @publication.save
-				@publication.fetch @request_data
-				render :show, status: :created, location: @publication
-			else
-				render json: @publication.errors, status: :unprocessable_entity
+			begin
+				@publication.transaction do
+					if @publication.save
+						begin
+							@publication.fetch @request_data
+							render :show, status: :created, location: @publication
+						rescue RuntimeError => error
+							raise ActiveRecord::Rollback error.message
+						end
+					else
+						render json: @publication.errors, status: :unprocessable_entity
+					end
+				rescue ActiveRecord::Rollback => error
+					@error_manager.add_error(error.message)
+					render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
+				end
 			end
 		end
 	end
 
 	# GET /publications/1/refresh.json
 	def refresh
-		@publication.fetch @request_data
-		render :show, status: :ok, location: @publication
+		begin
+			@publication.transaction do
+				@publication.fetch @request_data
+				render :show, status: :ok, location: @publication
+			rescue RuntimeError => error
+				raise ActiveRecord::Rollback error.message
+			end
+		rescue ActiveRecord::Rollback => error
+			@error_manager.add_error(error.message)
+			render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
+		end
 	end
 
 	# PATCH/PUT /publications/1.json
 	def update
-		if @publication.update(publication_params)
-			@publication.fetch @request_data
-			render :show, status: :ok, location: @publication
-		else
-			render json: @publication.errors, status: :unprocessable_entity
+		begin
+			@publication.transaction do
+				if @publication.update(publication_params)
+					begin
+						@publication.fetch @request_data
+						render :show, status: :ok, location: @publication
+					rescue RuntimeError => error
+						raise ActiveRecord::Rollback error.message
+					end
+				else
+					render json: @publication.errors, status: :unprocessable_entity
+				end
+			rescue ActiveRecord::Rollback => error
+				@error_manager.add_error(error.message)
+				render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
+			end
 		end
 	end
 

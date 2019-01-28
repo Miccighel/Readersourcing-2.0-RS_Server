@@ -6,7 +6,7 @@ let body = $("body");
 
 let signUpForm = $("#sign-up-form");
 
-let errorsSection = $("#errors-sect");
+let errorsSection = $(".errors-sect");
 
 //######## UI COMPONENTS ########//
 
@@ -120,9 +120,9 @@ if (authToken != null) {
 						button.prop("disabled", true)
 					} else {
 						let errorPromise = buildErrors(jqXHR.responseText).then(result => {
-							errorsSection.find(alert).empty();
-							errorsSection.find(alert).append(result);
-							errorsSection.show();
+							updateButton.parent().find(errorsSection).find(alert).empty();
+							updateButton.parent().find(errorsSection).find(alert).append(result);
+							updateButton.parent().find(errorsSection).show();
 						});
 					}
 				};
@@ -138,9 +138,9 @@ if (authToken != null) {
 					button.prop("disabled", true)
 				} else {
 					let errorPromise = buildErrors(jqXHR.responseText).then(result => {
-						errorsSection.find(alert).empty();
-						errorsSection.find(alert).append(result);
-						errorsSection.show();
+						updateButton.parent().find(errorsSection).find(alert).empty();
+						updateButton.parent().find(errorsSection).find(alert).append(result);
+						updateButton.parent().find(errorsSection).show();
 					});
 				}
 			};

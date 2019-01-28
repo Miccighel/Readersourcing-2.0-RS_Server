@@ -56,6 +56,8 @@ en:
       error_reading_base_url: "Error reading rating URL metadata. Please, try again"
       pdf_not_uploaded: "No PDF file has been uploaded. Please, try again."
       content_type_not_application_pdf: "The content type of this file is not application/pdf. Please, try again."
+      publication_already_fetched: "This is a publication which has already been fetched server side."
+      publication_fetched_somewhere_else: "This is a publication which has already been fetched by another installation of this application. The rating URL cannot be automatically extracted."
     codes:
       missing-input-secret: "The secret parameter is missing."
       invalid-input-secret: "The secret parameter is invalid or malformed."

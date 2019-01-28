@@ -10,6 +10,7 @@ let ratingSectionSubControls = $(".rating-sect-sub");
 let publicationScoreSection = $("#publication-score-sect");
 let userScoreSection = $("#user-score-sect");
 let undetectedPublicationSection = $("#undetected-publication-sect");
+let errorsSection = $(".errors-sect");
 let loadingSection = $("#loading-sect");
 
 //######## MODALS ########//
@@ -39,6 +40,8 @@ let errorButtons = $(".error-btn");
 let passwordEditButton = $("#password-edit-btn");
 let profileUpdateButton = $("#profile-update-btn");
 let modalRefreshButton = $("#modal-refresh-btn");
+
+let alert = $(".alert");
 
 let publicationUrlField = $("#publication-url");
 
@@ -92,6 +95,7 @@ ratingSectionSubControls.hide();
 publicationScoreSection.hide();
 annotatedPublicationDropzoneSuccess.hide();
 goToRatingButton.hide();
+errorsSection.hide();
 
 let successCallback = (data, status, jqXHR) => {
 	ratingSlider.slider({});
@@ -262,7 +266,12 @@ if (authToken != null) {
 				saveButton.hide();
 				let errorButton = saveButton.parent().find(errorButtons);
 				errorButton.show();
-				errorButton.prop("disabled", true)
+				errorButton.prop("disabled", true);
+				let errorPromise = buildErrors(jqXHR.responseText).then(result => {
+					saveButton.parent().find(errorsSection).find(alert).empty();
+					saveButton.parent().find(errorsSection).find(alert).append(result);
+					saveButton.parent().find(errorsSection).show();
+				});
 			};
 			// 1.1 Fetch and annotate the publication
 			let promise = ajax("POST", "publications/fetch.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
@@ -352,7 +361,12 @@ modalRefreshButton.on("click", () => {
 			loadSaveButton.hide();
 			let errorButton = downloadButton.parent().find(errorButtons);
 			errorButton.show();
-			errorButton.prop("disabled", true)
+			errorButton.prop("disabled", true);
+			let errorPromise = buildErrors(jqXHR.responseText).then(result => {
+				loadSaveButton.parent().find(errorsSection).find(alert).empty();
+				loadSaveButton.parent().find(errorsSection).find(alert).append(result);
+				loadSaveButton.parent().find(errorsSection).show();
+			});
 		};
 		// 2.1 Refresh the publication
 		let secondPromise = emptyAjax("GET", `publications/${data["id"]}/refresh.json`, "application/json; charset=utf-8", "json", true, secondSuccessCallback, secondErrorCallback);
@@ -362,7 +376,12 @@ modalRefreshButton.on("click", () => {
 		loadSaveButton.hide();
 		let errorButton = downloadButton.parent().find(errorButtons);
 		errorButton.show();
-		errorButton.prop("disabled", true)
+		errorButton.prop("disabled", true);
+		let errorPromise = buildErrors(jqXHR.responseText).then(result => {
+			loadSaveButton.parent().find(errorsSection).find(alert).empty();
+			loadSaveButton.parent().find(errorsSection).find(alert).append(result);
+			loadSaveButton.parent().find(errorsSection).show();
+		});
 	};
 	// 1.1 Does the publication exists on the database?
 	let promise = ajax("POST", "publications/lookup.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
@@ -446,7 +465,12 @@ if (authToken != null) {
 				configureButton.hide();
 				let errorButton = voteButton.parent().find(errorButtons);
 				errorButton.show();
-				errorButton.prop("disabled", true)
+				errorButton.prop("disabled", true);
+				let errorPromise = buildErrors(jqXHR.responseText).then(result => {
+					voteButton.parent().find(errorsSection).find(alert).empty();
+					voteButton.parent().find(errorsSection).find(alert).append(result);
+					voteButton.parent().find(errorsSection).show();
+				});
 			};
 			// 1.1 Create a new rating with the selected score
 			let promise = ajax("POST", "ratings.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
@@ -474,6 +498,7 @@ if (authToken != null) {
 		userScoreTRMValue.text((data["bonus"] * 100).toFixed(2));
 	};
 	let errorCallback = (jqXHR, status) => {
+		firstNameValue.text("...");
 		firstNameValue.text("...");
 		lastNameValue.text("...");
 		emailValue.text("...");

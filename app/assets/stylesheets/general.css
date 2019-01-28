@@ -69,6 +69,14 @@ p {
 	color: #212529 !important;
 }
 
+.color-red-dark {
+	color: #721c24 !important;
+}
+
+.errors-sect ul {
+	margin-bottom: 0 !important;
+}
+
 .box-simple {
 	border: 1px solid white !important;
 }
@@ -76,6 +84,10 @@ p {
 .btn:active, .link-white {
 	color:white !important;
 	text-decoration: none !important;
+}
+
+body.bg-gray-dark input {
+	border: 1px solid #0087F7;
 }
 
 /* ////////// ERRORS  ////////// */

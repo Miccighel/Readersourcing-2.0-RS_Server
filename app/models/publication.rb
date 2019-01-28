@@ -148,6 +148,29 @@ class Publication < ApplicationRecord
 			logger.info "Error reading Producer metadata"
 			logger.info e.message
 		end
+		begin
+			if !reader.info[:Producer].blank?
+				logger.info "Producer found"
+				update_attribute(:producer, reader.info[:Producer])
+			else
+				update_attribute(:producer, nil)
+			end
+		rescue ArgumentError => e
+			logger.info "Error reading Producer metadata"
+			logger.info e.message
+		end
+
+		# CHECK TO SEE IF CURRENT USER TRIES TO FETCH A PUBLICATION ALREADY PRESENT ON RS_SERVER
+
+		begin
+			if reader.info.key?(:BaseUrl)
+				logger.info "This is a publication which is already present on RS_Server"
+				raise I18n.t("errors.messages.publication_already_fetched")
+			end
+		rescue ArgumentError
+			logger.info "Error reading Base Url metadata"
+			logger.info "Probably this publication is not present on RS_Server"
+		end
 
 		# EDITING OF PDF FILE WITH RS_PDF STARTS HERE
 
@@ -178,7 +201,8 @@ class Publication < ApplicationRecord
 	end
 
 	# The following method extract the BaseUrl metadata from an uploaded PDF file.
-	def self.extract_base_url(file, user)
+	def self.extract_base_url(file, user, request_data)
+		current_host = request_data.values[1]
 		logger.info "Copying temporary file with original name: #{file.original_filename}"
 		FileUtils::mkdir_p absolute_pdf_storage_temp_path(user)
 		temp_file_name_without_ext = remove_extension_from_filename(file.original_filename)
@@ -194,7 +218,12 @@ class Publication < ApplicationRecord
 			base_url = reader.info[:BaseUrl]
 			if !base_url.blank?
 				logger.info "Base Url found: #{base_url}"
-				return base_url
+				logger.info "Comparing with Current Host: #{current_host}"
+				if base_url.include?(current_host)
+					return base_url
+				else
+					raise I18n.t("errors.messages.publication_fetched_somewhere_else")
+				end
 			else
 				logger.info "Base Url not found"
 				raise I18n.t("errors.messages.base_url_not_found")

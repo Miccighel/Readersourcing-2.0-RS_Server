@@ -4,7 +4,7 @@
 
 let signUpForm = $("#sign-up-form");
 
-let errorsSection = $("#errors-sect");
+let errorsSection = $(".errors-sect");
 
 //######## UI COMPONENTS ########//
 
@@ -75,9 +75,9 @@ registrationButton.on("click", () => {
 				button.prop("disabled", true)
 			} else {
 				let errorPromise = buildErrors(jqXHR.responseText).then(result => {
-					errorsSection.find(alert).empty();
-					errorsSection.find(alert).append(result);
-					errorsSection.show();
+					registrationButton.parent().find(errorsSection).find(alert).empty();
+					registrationButton.parent().find(errorsSection).find(alert).append(result);
+					registrationButton.parent().find(errorsSection).show();
 				});
 			}
 		};
