@@ -270,6 +270,7 @@ DEPENDENCIES
   rails (~> 5.2.0)
   sendgrid-ruby
   simple_command
+  sqlite3
   tzinfo-data
   uglifier
 

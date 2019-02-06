@@ -125,6 +125,7 @@ it:
       content_type_not_application_pdf: "Il content type di questo file non è application/pdf. Per favore, riprova."
       publication_already_fetched: "Questa è una pubblicazione già elaborata lato server."
       publication_fetched_somewhere_else: "Questa è una pubblicazione già elaborata da un'altra istanza dell'applicazione. L'URL di voto non può essere estratta automaticamente."
+      publication_not_saved_for_later: "Questa pubblicazione non è stata salvata per dopo."
     codes:
       missing-input-secret: "Parametro segreto mancante."
       invalid-input-secret: "Parametro segreto non valido o malformato."

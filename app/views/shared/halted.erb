@@ -11,7 +11,7 @@
 	<%= stylesheet_link_tag 'application' %>
 	<title>RS_Server</title>
 </head>
-<body clasS="bg-gray-dark color-white">
+<body clasS="bg-gray-dark">
 <div class="preloader-wrapper">
 	<div class="preloader">
 		<img src="<%= image_path("preloader.svg") %>" alt="Loading...">
@@ -22,9 +22,16 @@
 	<div class="row mt-auto mb-3">
 		<div class="col-12">
 			<div class="heading text-center">
-				<h1><%= I18n.t("errors.messages.not_the_same_user") %></h1>
-				<p class="lead mb-0"><%= I18n.t("information.messages.not_the_same_user") %></p>
+				<h1><%= title %></h1>
+				<p class="lead mb-0 text-center"><%= message %></p>
 			</div>
+		</div>
+		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto text-center">
+			<a href="<%= root_path %>" id="home-btn" class="btn btn-primary btn-block link-white">
+				Home
+				<i id="home-icon" class="fas fa-home"></i>
+				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+			</a>
 		</div>
 	</div>
 	<div class="row mt-auto ml-auto mr-auto mb-0 w-100">
@@ -32,5 +39,6 @@
 	</div>
 </div>
 <%= javascript_include_tag "application" %>
+<%= javascript_include_tag "halted" %>
 </body>
 </html>

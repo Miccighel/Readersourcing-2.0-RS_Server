@@ -2,10 +2,8 @@
 
 //######## UI COMPONENTS ########//
 
-let loginButton = $("#login-btn");
 let homeButton = $("#home-btn");
 
-let signInIcon = $("#sign-in-icon");
 let homeIcon = $("#home-icon");
 let reloadIcons = $(".reload-icon");
 
@@ -14,13 +12,6 @@ let reloadIcons = $(".reload-icon");
 reloadIcons.hide();
 
 removePreloader();
-
-//######### GO TO LOGIN HANDLING #########//
-
-loginButton.on("click", () => {
-	loginButton.find(signInIcon).toggle();
-	loginButton.find(reloadIcons).toggle();
-});
 
 //######### GO TO HOME HANDLING #########//
 

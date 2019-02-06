@@ -58,6 +58,7 @@ en:
       content_type_not_application_pdf: "The content type of this file is not application/pdf. Please, try again."
       publication_already_fetched: "This is a publication which has already been fetched server side."
       publication_fetched_somewhere_else: "This is a publication which has already been fetched by another installation of this application. The rating URL cannot be automatically extracted."
+      publication_not_saved_for_later: "This publication has not been saved for later."
     codes:
       missing-input-secret: "The secret parameter is missing."
       invalid-input-secret: "The secret parameter is invalid or malformed."

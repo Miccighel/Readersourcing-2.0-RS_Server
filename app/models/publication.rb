@@ -236,7 +236,7 @@ class Publication < ApplicationRecord
 	def remove_files(user)
 		if File.exists? absolute_pdf_storage_path(user)
 			logger.info "Deleting storage folder at: #{absolute_pdf_storage_path(user)}"
-			File.remove_dir(absolute_pdf_storage_path(user))
+			FileUtils.rm_rf(absolute_pdf_storage_path(user))
 		else
 			logger.info "Storage folder not detected."
 		end

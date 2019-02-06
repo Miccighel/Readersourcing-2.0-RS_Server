@@ -44,8 +44,6 @@ let validationInstance = signUpForm.parsley();
 
 signUpForm.submit(event => event.preventDefault());
 
-removePreloader();
-
 ////////// USER ///////////
 
 //####### STATUS HANDLING (SCORES, ...) #########//
@@ -67,6 +65,7 @@ let successCallback = (data, status, jqXHR) => {
 			subscribeCheckbox.show();
 			subscribeCheckbox.parent().parent().find(reloadIcons).hide();
 			updateButton.prop("disabled", false);
+			removePreloader();
 		};
 		let errorCallback = (jqXHR, status) => {
 			firstNameField.val();
@@ -74,6 +73,7 @@ let successCallback = (data, status, jqXHR) => {
 			orcidField.val();
 			subscribeCheckbox.prop('checked', false);
 			updateButton.prop("disabled", false);
+			removePreloader();
 		};
 		let promise = emptyAjax("POST", "/users/info.json", "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
 	}

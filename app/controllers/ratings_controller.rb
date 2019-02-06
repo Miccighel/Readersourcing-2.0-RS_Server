@@ -1,9 +1,5 @@
 class RatingsController < ApplicationController
 
-	include ::ActionView::Layouts
-
-	layout "application", only: [:rate, :load]
-
 	before_action :set_rating, only: [:show]
 
 	skip_before_action :authorize_api_request, only: [:rate, :load]
@@ -40,14 +36,18 @@ class RatingsController < ApplicationController
 					Rating.where(user_id: @user.id, publication_id: @publication.id).destroy_all
 				else
 					if Rating.exists?(user_id: @user.id, publication_id: @publication.id)
-						render 'ratings/messages/already_given', locals: {pubId: @publication.id}
+						render "shared/halted", locals: {
+							pubId: @publication.id,
+							message: "",
+							title: I18n.t("errors.messages.rating_already_given")
+						}, status: :ok
 					else
 						render 'ratings/rating_paper'
 					end
 				end
 			else
 				@error_manager.add_error(I18n.t("errors.messages.password_do_not_match"))
-				render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
+				render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}, layout: false
 			end
 		else
 			render 'ratings/rating_web'
@@ -87,7 +87,11 @@ class RatingsController < ApplicationController
 			logged_user = User.find_by_email inserted_email
 			if requesting_user.id == logged_user.id and requesting_user.email == logged_user.email and BCrypt::Password.new(logged_user.password_digest) == inserted_password
 				if Rating.exists?(user_id: requesting_user.id, publication_id: publication.id)
-					render 'ratings/messages/already_given', locals: {pubId: publication.id}
+					render "shared/halted", locals: {
+						pubId: publication.id,
+						message: "",
+						title: I18n.t("errors.messages.rating_already_given")
+					}, status: :ok
 				else
 					@rating = Rating.new rating_params
 					@rating.publication = publication
@@ -95,16 +99,32 @@ class RatingsController < ApplicationController
 					if @rating.save
 						@rating.compute_scores
 						RatingMailer.confirm(@rating.user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(@rating.user.id)).deliver
-						render 'ratings/messages/successful', locals: {pubId: @rating.publication.id}
+						render "shared/success", locals: {
+							pubId: @rating.publication.id,
+							message: I18n.t("information.messages.mail_confirmation"),
+							title: I18n.t("confirmations.messages.rating_successful")
+						}, status: :ok
 					else
-						render 'ratings/messages/unsuccessful', locals: {pubId: @rating.publication.id}
+						render "shared/halted", locals: {
+							pubId: @rating.publication.id,
+							message: I18n.t("information.messages.try_again"),
+							title: I18n.t("errors.messages.rating_unsuccessful")
+						}, status: :ok
 					end
 				end
 			else
-				render 'ratings/messages/not_the_same_user', locals: {pubId: publication.id}
+				render "shared/halted", locals: {
+					pubId: publication.id,
+					message: I18n.t("information.messages.not_the_same_user"),
+					title: I18n.t("errors.messages.not_the_same_user")
+				}, status: :ok
 			end
 		else
-			render 'ratings/messages/not_the_same_user', locals: {pubId: publication.id}
+			render "shared/halted", locals: {
+				pubId: publication.id,
+				message: I18n.t("information.messages.not_the_same_user"),
+				title: I18n.t("errors.messages.not_the_same_user")
+			}, status: :ok
 		end
 	end
 

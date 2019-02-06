@@ -26,11 +26,19 @@
 				<p class="lead mb-0 text-center"><%= message %></p>
 			</div>
 		</div>
+		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto text-center">
+			<a href="<%= root_path %>" id="home-btn" class="btn btn-primary btn-block link-white">
+				Home
+				<i id="home-icon" class="fas fa-home"></i>
+				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+			</a>
+		</div>
 	</div>
 	<div class="row mt-auto ml-auto mr-auto mb-0 w-100">
 		<%= render partial: "layouts/footer" %>
 	</div>
 </div>
 <%= javascript_include_tag "application" %>
+<%= javascript_include_tag "success" %>
 </body>
 </html>

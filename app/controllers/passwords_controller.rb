@@ -71,25 +71,25 @@ class PasswordsController < ApplicationController
 		# Has the user inserted an email?
 		if email.blank?
 			@error_manager.add_error('Email not present')
-			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
+			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}, layout: false
 		else
 			# Is the reset token present?
 			if reset_token.blank?
 				@error_manager.add_error('Reset token not present')
-				render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
+				render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}, layout: false
 			else
 				user = User.find_by(reset_password_token: reset_token)
 				if user.present? && user.password_token_valid?
 					new_password = SecureRandom.hex (rand(6..10))
 					if user.reset_password!(new_password)
 						PasswordMailer.reset(user, new_password).deliver
-						render "shared/success", locals: {message: I18n.t("confirmations.messages.reset_mail_sent")}, status: :ok
+						render "shared/success", locals: {message: I18n.t("confirmations.messages.reset_mail_sent")}, status: :ok, layout: false
 					else
-						render "shared/errors", status: :unprocessable_entity, locals: {errors: user.errors}
+						render "shared/errors", status: :unprocessable_entity, locals: {errors: user.errors}, layout: false
 					end
 				else
 					@error_manager.add_error(I18n.t("errors.messages.invalid_link"))
-					render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}
+					render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}, layout: false
 				end
 			end
 		end

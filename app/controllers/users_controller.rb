@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 
 	include ::ActionView::Layouts
 
-	layout "application", only: [:confirm_email, :unsubscribe]
+	layout "application", only: [:confirm_email]
 
 	skip_before_action :authorize_api_request, only: [:sign_up, :create, :confirm_email, :unsubscribe, :edit]
 
@@ -25,7 +25,7 @@ class UsersController < ApplicationController
 		render current_user
 	end
 
-	# GET /users/sign_up
+	# GET /sign_up
 	def sign_up
 	end
 
@@ -46,14 +46,14 @@ class UsersController < ApplicationController
 		@user = User.find_by_confirm_token(params[:confirmToken])
 		if @user
 			@user.activate_email
-			render "shared/success", locals: {message: I18n.t("confirmations.messages.registration_successful")}, status: :created
+			render "shared/success", locals: {message: I18n.t("confirmations.messages.registration_successful")}, status: :created, layout: false
 		else
 			@error_manager.add_error(I18n.t("errors.messages.user_not_exists"))
-			render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}
+			render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}, layout: false
 		end
 	end
 
-	# POST /users/edit
+	# POST /profile/edit
 	def edit
 		render :update
 	end
@@ -82,19 +82,6 @@ class UsersController < ApplicationController
 	end
 
 	private
-
-	# METHOD TO VERIFY GOOGLE reCAPTCHA v2
-	def verify_recaptcha(recaptcha_response)
-		response = HTTP.post("https://www.google.com/recaptcha/api/siteverify?secret=#{ENV["RECAPTCHA_SECRET_KEY"]}&response=#{recaptcha_response}")
-		json = JSON.parse response.body
-		if json["success"]
-			logger.info "Current user verified with reCAPTCHA"
-			true
-		else
-			logger.info "Current user unverified with reCAPTCHA"
-			json["error-codes"]
-		end
-	end
 
 	def set_error_manager
 		@error_manager = ErrorManager.new

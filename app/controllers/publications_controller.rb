@@ -47,7 +47,7 @@ class PublicationsController < ApplicationController
 		if @publication.is_saved_for_later(current_user)
 			render :show, status: :ok, location: @publication
 		else
-			@error_manager.add_error("not saved for later")
+			@error_manager.add_error(I18n.t("errors.messages.publication_not_saved_for_later"))
 			render json: {errors: @error_manager.get_errors}, status: :not_found
 		end
 	end
@@ -168,6 +168,7 @@ class PublicationsController < ApplicationController
 		begin
 			@publication.transaction do
 				if @publication.update(publication_params)
+					@publication.remove_files(current_user)
 					begin
 						@publication.fetch @request_data
 						render :show, status: :ok, location: @publication

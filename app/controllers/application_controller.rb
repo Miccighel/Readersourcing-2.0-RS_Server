@@ -25,7 +25,7 @@ class ApplicationController < ActionController::API
 	def unauthorized
 		@error_manager = ErrorManager.new
 		@error_manager.add_error(I18n.t("errors.messages.not_authorized"))
-		render "shared/errors", status: 401, locals: {errors: @error_manager.get_errors}
+		render "shared/errors", status: 401, locals: {errors: @error_manager.get_errors}, layout: false
 	end
 
 	protected
@@ -54,7 +54,7 @@ class ApplicationController < ActionController::API
 		@current_user = AuthorizeApiRequest.call(request.headers, request.remote_ip).result
 		@error_manager = ErrorManager.new
 		@error_manager.add_error(I18n.t("errors.messages.not_authorized"))
-		render "shared/errors", status: 401, locals: {errors: @error_manager.get_errors} unless @current_user
+		render "shared/errors", status: 401, locals: {errors: @error_manager.get_errors}, layout: false unless @current_user
 	end
 
 end
