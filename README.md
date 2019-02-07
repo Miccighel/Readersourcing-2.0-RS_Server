@@ -11,7 +11,7 @@ Please, note that this is an early alpha release and it is not ready for the use
 
 <h1>Description</h1>
 
-RS_Server is the server-side component of the Readersourcing 2.0 ecosystem which has the task to aggregate the ratings given by readers and to use the RSM and TRM models to compute quality scores for readers and publications. An instance of RS_PDF is deployed along one of RS_PDF. Then, there are up to n different browsers of as many users which communicate with the server and every one of them has an instance of RS_Rate, which is the true client. Both RS_PDF and RS_Rate will be described in the following. This setup means that every interaction between readers and server is carried out through clients installed on readers' browsers and these clients have to handle the registration and authentication of readers, the rating action and the download action of edited publications.
+RS_Server is the server-side application which has the task to collect and aggregate the ratings given by readers and to use the Readersourcing models to compute quality scores for readers and publications. An instance of RS_Server is deployed along one of RS_PDF. Then, there are up to n different browsers along with their end-users, which communicate with the server-side application itself; each of them is characterized by an instance of RS_Rate. This setup means that every interaction between readers and server can be carried out through clients installed on readers' browsers or by using the stand-alone web interface provided by RS_Server and these clients have to handle the registration and authentication of readers, the rating action and the download action of link-annotated publications.
 
 <h1>Deploy</h1>
 
