@@ -37,8 +37,6 @@ let refreshButton = $("#refresh-btn");
 let reloadButton = $("#reload-btn");
 let goToRatingButton = $("#go-to-rating-btn");
 let errorButtons = $(".error-btn");
-let passwordEditButton = $("#password-edit-btn");
-let profileUpdateButton = $("#profile-update-btn");
 let modalRefreshButton = $("#modal-refresh-btn");
 
 let alert = $(".alert");
@@ -516,16 +514,4 @@ logoutButton.on("click", () => {
 	logoutButton.find(reloadIcons).toggle();
 	logoutButton.find(signOutIcon).toggle();
 	deleteToken().then(() => window.location.href = "/login");
-});
-
-//####### GO TO PASSWORD EDIT HANDLING #########//
-
-passwordEditButton.on("click", () => {
-	passwordEditButton.find(reloadIcons).toggle();
-});
-
-//####### GO TO PROFILE UPDATE HANDLING #########//
-
-profileUpdateButton.on("click", () => {
-	profileUpdateButton.find(reloadIcons).toggle();
 });

@@ -1,0 +1,75 @@
+<div id="modal-profile" tabindex="-1" role="dialog" aria-labelledby="modal-profile-label" aria-hidden="true" class="modal fade">
+	<div role="document" class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 id="modal-profile-label" class="modal-title color-dark">User Profile</h4>
+				<button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+					aria-hidden="true">X</span></button>
+			</div>
+			<div class="modal-body">
+				<section id="user-score-sect">
+					<div class="row">
+						<div class="col-12">
+							<div class="box-simple box-dark same-height">
+								<p class="lead no-mt">First Name</p>
+								<span id="first-name-val"><i class="fas fa-sync-alt fa-spin"></i></span>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="box-simple box-dark same-height">
+								<p class="lead no-mt">Last Name</p>
+								<span id="last-name-val"><i class="fas fa-sync-alt fa-spin"></i></span>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="box-simple box-dark same-height">
+								<p class="lead no-mt">Email</p>
+								<span id="email-val"><i class="fas fa-sync-alt fa-spin"></i></span>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="box-simple box-dark same-height">
+								<p class="lead no-mt">Score (RSM)</p>
+								<span id="user-score-rsm-val"><i class="fas fa-sync-alt fa-spin"></i></span>/100
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="box-simple box-dark same-height">
+								<p class="lead no-mt">Score (TRM)</p>
+								<span id="user-score-trm-val"><i class="fas fa-sync-alt fa-spin"></i></span>/100
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="box-simple box-dark same-height">
+								<p class="lead no-mt">ORCID</p>
+								<span id="orcid-val"><i class="fas fa-sync-alt fa-spin"></i></span>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="box-simple box-dark same-height">
+								<p class="lead no-mt">Subscribed (Emails)</p>
+								<span id="subscribe-val"><i class="fas fa-sync-alt fa-spin"></i></span>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+			<div class="modal-footer">
+				<div class="row m-auto w-100">
+					<div class="col-12 mb-1 p-0">
+						<a href="<%= profile_path %>" id="go-to-profile-update-btn" class="btn btn-primary btn-block link-white">
+							Update Profile
+							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+						</a>
+					</div>
+					<div class="col-12 p-0">
+						<a href="<%= edit_path %>" id="go-to-password-edit-btn" class="btn btn-primary btn-block link-white">
+							Edit Password
+							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

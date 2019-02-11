@@ -2,9 +2,13 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 
 Rails.application.config.assets.paths  += %w( preloader.svg )
 Rails.application.config.assets.paths  += %w( texture-bw.png )
+Rails.application.config.assets.paths  += %w( logo.png )
+Rails.application.config.assets.paths  += %w( logo-small.png )
 
 Rails.application.config.assets.precompile += %w( application.css )
 Rails.application.config.assets.precompile += %w( application.js )
+
+Rails.application.config.assets.precompile += %w( menu.js )
 
 Rails.application.config.assets.precompile += %w( home.js )
 

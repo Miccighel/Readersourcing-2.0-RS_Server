@@ -14,29 +14,27 @@ let currentPasswordField = $("#current-password");
 let newPasswordField = $("#new-password");
 let newPasswordConfirmationField = $("#new-password-confirmation");
 
-let backButton = $("#back-btn");
 let passwordEditButton = $("#password-edit-btn");
+let backButton = $("#back-btn");
 let errorButton = $(".error-btn");
 
 let alert = $(".alert");
 
 let backIcon = $("#back-icon");
 let checkIcon = $("#check-icon");
-let reloadIcons = $(".reload-icon");
 
 //######## UI INITIAL SETUP ########//
 
 errorsSection.hide();
 errorButton.hide();
-reloadIcons.hide();
 
-let successCallback = (data, status, jqXHR) => {
+let secondSuccessCallback = (data, status, jqXHR) => {
 	removePreloader();
 };
-let errorCallback = (jqXHR, status) => {
+let secondErrorCallback = (jqXHR, status) => {
 	window.location.href = "/unauthorized"
 };
-let promise = emptyAjax("POST", '/request_authorization.json', "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
+let promise = emptyAjax("POST", '/request_authorization.json', "application/json; charset=utf-8", "json", true, secondSuccessCallback, secondErrorCallback);
 
 ////////// PASSWORD //////////
 
@@ -46,7 +44,7 @@ let validationInstance = passwordEditForm.parsley();
 
 passwordEditForm.submit(event => event.preventDefault());
 
-passwordEditButton.on("click", () => {
+goToPasswordEditButton.on("click", () => {
 	validationInstance.validate();
 	if (validationInstance.isValid()) {
 		passwordEditButton.find(checkIcon).toggle();
@@ -57,15 +55,15 @@ passwordEditButton.on("click", () => {
 			new_password_confirmation: newPasswordConfirmationField.val()
 		};
 		let successCallback = (data, status, jqXHR) => {
-			//passwordEditButton.find(reloadIcons).toggle();
+			//goToPasswordEditButton.find(reloadIcons).toggle();
 			deleteToken().then(() => {
 				localStorage.setItem("message", data["message"]);
 				window.location.href = "/login";
 			});
 		};
 		let errorCallback = (jqXHR, status) => {
-			passwordEditButton.find(checkIcon).toggle();
-			passwordEditButton.find(reloadIcons).toggle();
+			goToPasswordEditButton.find(checkIcon).toggle();
+			goToPasswordEditButton.find(reloadIcons).toggle();
 			if (jqXHR.responseText == null) {
 				passwordEditButton.hide();
 				let button = passwordEditButton.parent().find(errorButton);

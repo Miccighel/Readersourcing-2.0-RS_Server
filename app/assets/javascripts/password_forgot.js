@@ -18,13 +18,11 @@ let alert = $(".alert");
 
 let backIcon = $("#back-icon");
 let checkIcon = $("#check-icon");
-let reloadIcons = $(".reload-icon");
 
 //######## UI INITIAL SETUP ########//
 
 errorsSection.hide();
 errorButton.hide();
-reloadIcons.hide();
 
 removePreloader();
 

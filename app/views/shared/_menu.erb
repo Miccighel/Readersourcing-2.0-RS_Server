@@ -1,0 +1,52 @@
+<header class="nav-holder make-sticky">
+	<div id="navbar" role="navigation" class="navbar navbar-expand-lg <%= "bg-gray-dark" if appearance == "dark" %>">
+		<div class="container pl-4 pr-4">
+			<a href="<%= root_path %>" class="navbar-brand home">
+				<img src="<%= image_path("logo.png") %>" alt="Logo" class="d-none d-md-inline-block">
+				<img src="<%= image_path("logo-small.png") %>" alt="Logo" class="d-inline-block d-md-none">
+				<span class="sr-only">Homepage</span></a>
+			<button type="button" data-toggle="collapse" data-target="#navigation" class="navbar-toggler btn-template-outlined">
+				<span class="sr-only">Toggle Navigation</span><i class="fa fa-align-justify"></i>
+			</button>
+			<div id="navigation" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav ml-auto">
+					<li class="nav-item <%= "active" if active == "home" %>">
+						<a href="<%= root_path %>" class="<%= "color-white" if appearance == "dark" %>" id="home-btn">
+							Home
+							<i id="home-icon" class="fas fa-home"></i>
+							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+						</a>
+					</li>
+					<li id="profile-menu-item" class="nav-item <%= "active" if active == "profile-update" %>">
+						<a href="#" id="profile-btn" data-toggle="modal" data-target="#modal-profile" id="profile-btn" class="<%= "color-white" if appearance == "dark" %> nav-item">
+							Profile (<span id="user-menu-info"><i class="fas fa-sync-alt fa-spin"></i></span>)
+							<i id="profile-icon" class="fa fa-user"></i>
+							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+						</a>
+					</li>
+					<li id="logout-menu-item" class="nav-item <%= "active" if active == "logout" %>">
+						<a id="logout-btn" class="<%= "color-white" if appearance == "dark" %>" href="#">
+							Logout
+							<i id="sign-out-icon" class="fas fa-sign-out-alt"></i>
+							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+						</a>
+					</li>
+					<li id="sign-up-menu-item" class="nav-item <%= "active" if active == "sign-up" %>">
+						<a id="sign-up-btn" class="<%= "color-white" if appearance == "dark" %>" href="<%= sign_up_path %>">
+							Sign Up
+							<i id="sign-up-icon" class="fa fa-user-plus"></i>
+							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+						</a>
+					</li>
+					<li id="login-menu-item" class="nav-item <%= "active" if active == "login" %>">
+						<a id="login-btn" class="<%= "color-white" if appearance == "dark" %>" href="<%= login_path %>">
+							Login
+							<i id="sign-in-icon" class="fas fa-sign-in-alt"></i>
+							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</header>

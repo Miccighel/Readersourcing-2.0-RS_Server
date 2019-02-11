@@ -12,15 +12,14 @@ let emailField = $("#email");
 let passwordField = $("#password");
 
 let backButton = $("#back-btn");
-let loginButton = $("#login-btn");
+let doLoginButton = $("#do-login-btn");
 let errorButton = $(".error-btn");
 
 let alert = $(".alert");
 let alertSuccess = $(".alert-success");
 
+let signInIconBody = $("#sign-in-icon-body")
 let backIcon = $("#back-icon");
-let signInIcon = $("#sign-in-icon");
-let reloadIcons = $(".reload-icon");
 
 //######## UI INITIAL SETUP ########//
 
@@ -35,7 +34,6 @@ if (message == null) {
 
 errorsSection.hide();
 errorButton.hide();
-reloadIcons.hide();
 
 removePreloader();
 
@@ -51,30 +49,30 @@ backButton.on("click", () => {
 
 let validationInstance = loginForm.parsley();
 
-loginButton.on("click", () => {
+doLoginButton.on("click", () => {
 	if (validationInstance.isValid()) {
-		loginButton.find(signInIcon).toggle();
-		loginButton.find(reloadIcons).toggle();
+		doLoginButton.find(signInIconBody).toggle();
+		doLoginButton.find(reloadIcons).toggle();
 		let data = {email: emailField.val(), password: passwordField.val()};
 		let successCallback = (data, status, jqXHR) => {
-			//loginButton.find(signInIcon).toggle();
-			//loginButton.find(reloadIcons).toggle();
+			//doLoginButton.find(signInIcon).toggle();
+			//doLoginButton.find(reloadIcons).toggle();
 			localStorage.setItem("authToken", data["auth_token"]);
-			window.location.href = "/rate"
+			window.location.href = "/";
 		};
 		let errorCallback = (jqXHR, status) => {
-			loginButton.find(signInIcon).toggle();
-			loginButton.find(reloadIcons).toggle();
+			doLoginButton.find(signInIconBody).toggle();
+			doLoginButton.find(reloadIcons).toggle();
 			if (jqXHR.responseText == null) {
-				loginButton.hide();
-				let button = loginButton.parent().find(errorButton);
+				doLoginButton.hide();
+				let button = doLoginButton.parent().find(errorButton);
 				button.show();
 				button.prop("disabled", true)
 			} else {
 				let errorPromise = buildErrors(jqXHR.responseText).then(result => {
-					loginButton.parent().find(errorsSection).find(alert).empty();
-					loginButton.parent().find(errorsSection).find(alert).append(result);
-					loginButton.parent().find(errorsSection).show();
+					doLoginButton.parent().find(errorsSection).find(alert).empty();
+					doLoginButton.parent().find(errorsSection).find(alert).append(result);
+					doLoginButton.parent().find(errorsSection).show();
 				});
 			}
 		};

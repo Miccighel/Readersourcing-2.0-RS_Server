@@ -24,14 +24,11 @@ let errorButton = $(".error-btn");
 let alert = $(".alert");
 
 let backIcon = $("#back-icon");
-let signUpIcon = $("#sign-up-icon");
-let reloadIcons = $(".reload-icon");
 
 //######## UI INITIAL SETUP ########//
 
 errorsSection.hide();
 errorButton.hide();
-reloadIcons.hide();
 
 removePreloader();
 

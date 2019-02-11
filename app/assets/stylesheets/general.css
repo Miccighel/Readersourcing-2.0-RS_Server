@@ -73,6 +73,10 @@ p {
 	color: #721c24 !important;
 }
 
+.color-white {
+	color: #fff !important;
+}
+
 .errors-sect ul {
 	margin-bottom: 0 !important;
 }
@@ -148,10 +152,24 @@ input.parsley-error, select.parsley-error, textarea.parsley-error {
 }
 
 
-/*----------------------- Preloader -----------------------*/
+/*----------------------- Preloader and overflows -----------------------*/
 
-body.preloader {
-	overflow: hidden;
+html {
+	overflow: scroll;
+	overflow-x: hidden;
+}
+::-webkit-scrollbar {
+	width: 0px;  /* remove scrollbar space */
+	background: transparent;  /* optional: just make scrollbar invisible */
+}
+
+.container {
+	overflow-y: scroll;
+	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none;  /* IE 10+ */
+}
+.container::-webkit-scrollbar { /* WebKit */
+	width: 0px;
 }
 
 .preloader-wrapper {

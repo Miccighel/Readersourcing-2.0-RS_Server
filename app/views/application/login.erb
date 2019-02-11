@@ -17,20 +17,13 @@
 		<img src="<%= image_path("preloader.svg") %>" alt="Loading...">
 	</div>
 </div>
-<div class="container min-h-100 d-flex flex-column align-items-center justify-content-center">
-	<div class="container mb-3">
-		<div id="buttons-sect" class="row">
-		<div class="col-12 p-0">
-			<button type="button" id="back-btn" class="btn btn-primary btn-block">
-				<i id="back-icon" class="fa fa-arrow-left"></i> Back
-				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
-			</button>
-		</div>
+<div class="min-h-100 d-flex flex-column align-items-center justify-content-center">
+	<div class="w-100 mb-3">
+		<%= render partial:'shared/menu', locals: {active: "login", appearance: "dark"} %>
 	</div>
-	</div>
-	<div class="row mt-auto mb-3">
+	<div class="row m-auto">
 		<div class="col-12">
-			<section id="success-sect" class="col-lg-4 col-sm-12 col-xs-12 ml-auto mr-auto p-0">
+			<section id="success-sect" class="col-lg-8 col-sm-12 col-xs-12 ml-auto mr-auto p-0">
 				<div role="alert" class="alert alert-success"></div>
 			</section>
 			<div class="heading text-center">
@@ -38,7 +31,7 @@
 				<p class="lead mb-0">Insert your login data</p>
 			</div>
 		</div>
-		<div class="col-lg-4 col-sm-8 col-xs-12 m-auto">
+		<div class="col-lg-8 col-sm-8 col-xs-12 m-auto">
 			<form id="login-form" data-parsley-validate>
 				<div class="row">
 					<div class="col-12">
@@ -67,9 +60,9 @@
 						<section class="errors-sect text-left">
 							<div role="alert" class="alert alert-danger"></div>
 						</section>
-						<button type="submit" id="login-btn" class="btn btn-success btn-block">
+						<button type="submit" id="do-login-btn" class="btn btn-success btn-block">
 							Login
-							<i id="sign-in-icon" class="fas fa-sign-in-alt"></i>
+							<i id="sign-in-icon-body" class="fas fa-sign-in-alt"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</button>
 						<button type="button" class="btn btn-danger error-btn btn-block">
@@ -81,11 +74,13 @@
 			</form>
 		</div>
 	</div>
-	<div class="row mt-auto ml-auto mr-auto mb-0 w-100">
+	<div class="row w-100 mt-3">
 		<%= render partial: "layouts/footer" %>
 	</div>
 </div>
+<%= render partial:'shared/modal_profile' %>
 <%= javascript_include_tag "application" %>
+<%= javascript_include_tag "menu" %>
 <%= javascript_include_tag "login" %>
 </body>
 </html>
