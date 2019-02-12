@@ -15,7 +15,6 @@ let loadingSection = $("#loading-sect");
 
 //######## MODALS ########//
 
-let modalProfile = $("#modal-profile");
 let modalConfigure = $("#modal-configuration");
 let modalRefresh = $("#modal-refresh");
 
@@ -23,8 +22,6 @@ let modalRefresh = $("#modal-refresh");
 
 let rateForm = $("#rate-form");
 
-let optionsButton = $("#options-btn");
-let logoutButton = $("#logout-btn");
 let loadRateButton = $("#load-rate-btn");
 let voteButton = $("#vote-btn");
 let voteSuccessButton = $("#vote-success-btn");
@@ -46,6 +43,10 @@ let publicationUrlField = $("#publication-url");
 let annotatedPublicationDropzone;
 let annotatedPublicationDropzoneSuccess = $("#dropzone-success");
 
+let publicationScoreRSMValue = $("#publication-score-rsm-val");
+let publicationScoreTRMValue = $("#publication-score-trm-val");
+
+let ratingInfo = $("#rating-info");
 let ratingCaption = $("#rating-caption");
 let ratingSubCaption = $("#rating-subcaption");
 let ratingSlider = $("#rating-slider");
@@ -54,22 +55,9 @@ let ratingText = $("#rating-text");
 
 let buttonsCaption = $("#buttons-caption");
 
-let firstNameValue = $("#first-name-val");
-let lastNameValue = $("#last-name-val");
-let emailValue = $("#email-val");
-let orcidValue = $("#orcid-val");
-let subscribeValue = $("#subscribe-val");
-let userScoreRSMValue = $("#user-score-rsm-val");
-let userScoreTRMValue = $("#user-score-trm-val");
-let publicationScoreRSMValue = $("#publication-score-rsm-val");
-let publicationScoreTRMValue = $("#publication-score-trm-val");
-
 let anonymizeCheckbox = $("#anonymize-check");
 
-let signOutIcon = $("#sign-out-icon");
 let goToRatingIcon = $("#go-to-rating-icon");
-let profileIcon = $("#profile-icon");
-let reloadIcons = $(".reload-icon");
 
 //######## UI INITIAL SETUP ########//
 
@@ -82,7 +70,6 @@ voteButton.hide();
 configureButton.hide();
 voteSuccessButton.hide();
 errorButtons.hide();
-reloadIcons.hide();
 ratingCaption.hide();
 ratingSubCaption.hide();
 undetectedPublicationSection.hide();
@@ -100,16 +87,14 @@ let successCallback = (data, status, jqXHR) => {
 	ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
 	removePreloader();
 };
-let errorCallback = (jqXHR, status) => {
-	window.location.href = "/unauthorized"
-};
+let errorCallback = (jqXHR, status) => window.location.href = "/unauthorized";
 let promise = emptyAjax("POST", '/request_authorization.json', "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
 
 ////////// PUBLICATION //////////
 
 //######### STATUS HANDLING (EXISTS ON THE DB, RATED BY THE LOGGED IN USER, SAVED FOR LATER...) #########//
 
-let authToken = localStorage.getItem('authToken');
+authToken = localStorage.getItem('authToken');
 if (authToken != null) {
 	publicationUrlField.change(() => {
 		validationInstance.validate();
@@ -148,6 +133,7 @@ if (authToken != null) {
 							voteSuccessButton.prop("disabled", true);
 							ratingText.parent().removeClass("mt-3");
 							ratingCaption.hide();
+							ratingInfo.hide();
 							ratingSubCaption.show();
 							ratingSlider.slider('destroy');
 							ratingSlider.hide();
@@ -159,6 +145,7 @@ if (authToken != null) {
 							loadRateButton.hide();
 							voteSuccessButton.hide();
 							ratingSubCaption.hide();
+							ratingInfo.hide();
 							ratingSection.show();
 							ratingSectionSubControls.show();
 							publicationScoreSection.show();
@@ -203,6 +190,7 @@ if (authToken != null) {
 						configureButton.show();
 						voteButton.show();
 						ratingCaption.show();
+						ratingInfo.hide();
 						ratingSubCaption.hide();
 						ratingText.text("50");
 						ratingSlider.slider({});
@@ -292,9 +280,7 @@ annotatedPublicationDropzone = new Dropzone("#annotated-publication-dropzone");
 
 authToken = localStorage.getItem('authToken');
 if (authToken != null) {
-	annotatedPublicationDropzone.on("sending", (file, xhr, formData) => {
-		return xhr.setRequestHeader("Authorization", authToken);
-	});
+	annotatedPublicationDropzone.on("sending", (file, xhr, formData) => xhr.setRequestHeader("Authorization", authToken));
 	annotatedPublicationDropzone.on("success", (file, data) => {
 		annotatedPublicationDropzoneSuccess.show();
 		annotatedPublicationDropzoneSuccess.text(data["message"]);
@@ -507,11 +493,3 @@ if (authToken != null) {
 	};
 	let promise = emptyAjax("POST", "users/info.json", "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
 }
-
-//####### LOGOUT HANDLING #########//
-
-logoutButton.on("click", () => {
-	logoutButton.find(reloadIcons).toggle();
-	logoutButton.find(signOutIcon).toggle();
-	deleteToken().then(() => window.location.href = "/login");
-});

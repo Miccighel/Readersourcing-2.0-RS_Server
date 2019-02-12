@@ -18,29 +18,14 @@
 		<img src="<%= image_path("preloader.svg") %>" alt="Loading...">
 	</div>
 </div>
-<div class="container min-h-100 d-flex flex-column align-items-center justify-content-center">
-	<div class="container mb-3">
-		<div id="buttons-sect" class="row">
-			<div class="col-6 p-0">
-				<a href="#" data-toggle="modal" data-target="#modal-profile" id="profile-btn" class="btn btn-primary btn-block link-white">
-					Profile
-					<i id="profile-icon" class="fa fa-user"></i>
-					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
-				</a>
-			</div>
-			<div class="col-6 p-0">
-				<button type="button" id="logout-btn" class="btn btn-primary btn-block">
-					Logout
-					<i id="sign-out-icon" class="fas fa-sign-out-alt"></i>
-					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
-				</button>
-			</div>
-		</div>
+<div class="min-h-100 d-flex flex-column align-items-center justify-content-center">
+	<div class="w-100 mb-3">
+		<%= render partial: 'shared/menu', locals: {active: "rating-web", appearance: "light"} %>
 	</div>
-	<div id="loading-sect" class="row mt-auto mb-3">
+	<div id="loading-sect" class="row m-auto">
 		<div class="col-12">
 			<div class="heading text-center">
-				<h4>Readersourcing 2.0</h4>
+				<h4>Fetch a new publication</h4>
 				<p id="check-par" class="lead mb-0">Checking if there is a fetchable publication in PDF format...</p>
 			</div>
 			<div class="text-center mt-3">
@@ -48,10 +33,10 @@
 			</div>
 		</div>
 	</div>
-	<div id="undetected-publication-sect" class="row mt-auto mb-3">
+	<div id="undetected-publication-sect" class="row m-auto">
 		<div class="col-12">
 			<div class="heading text-center">
-				<h4>Readersourcing 2.0</h4>
+				<h4>Fetch a new publication</h4>
 				<p class="lead mb-0">The inserted URL does not contain a rateable publication, please check it
 					again.</p>
 			</div>
@@ -63,120 +48,136 @@
 			</div>
 		</div>
 	</div>
-	<div id="rating-sect" class="row mt-auto mb-3 w-100">
-		<div class="col-12">
-			<div class="heading text-center">
-				<h4>Readersourcing 2.0</h4>
-				<p id="rating-caption" class="lead mb-0">Rate a publication</p>
-				<p id="rating-subcaption" class="lead mb-0">Publication rated with score</p>
+	<div id="rating-sect" class="row m-auto w-100">
+		<div class="col-lg-6 col-sm-10 col-xs-12 m-auto">
+			<div class="col-12">
+				<div class="heading text-center mb-1">
+					<h4>Rating Section</h4>
+					<p id="rating-info" class="lead mb-0 text-justify">Insert an URL to a publication to rate it. If it
+						is fetchable, the rating interface will appear.</p>
+					<p id="rating-caption" class="lead mb-0">Rate this publication</p>
+					<p id="rating-subcaption" class="lead mb-0">Publication rated with score</p>
+				</div>
+			</div>
+			<div class="col-12">
+				<div class="form-group">
+					<label for="publication-url">Publication URL
+						<span class="small">(e.g. https://arxiv.org/pdf/1812.05594.pdf)</span>
+					</label>
+					<form id="rate-form" data-parsley-validate>
+						<input id="publication-url" type="text" class="form-control" data-parsley-type="url" required>
+					</form>
+				</div>
+			</div>
+			<div class="col-12 text-center rating-sect-sub mb-3">
+				<input
+					id="rating-slider"
+					data-slider-id='ratingSlider'
+					data-slider-min="0"
+					data-slider-max="100"
+					data-slider-step="1"
+					data-slider-value="50"
+					data-tooltip="hide"
+					title="Rating Slider"
+					/>
+			</div>
+			<div class="col-12 m-auto text-center rating-sect-sub">
+				<h1 id="rating-text"><i class="fas fa-sync-alt fa-spin"></i></h1>
+			</div>
+			<div class="col-12 m-auto rating-sect-sub">
+				<section class="errors-sect text-left">
+					<div role="alert" class="alert alert-danger"></div>
+				</section>
+				<button type="button" id="load-rate-btn" class="btn btn-primary btn-block">
+					<i class="fas fa-sync-alt fa-spin"></i>
+				</button>
+				<button type="button" id="vote-btn" class="btn btn-success w-75 m-auto">
+					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+					Rate
+				</button>
+				<a href="#" data-toggle="modal" data-target="#modal-configuration" id="configure-btn"
+				   class="btn btn-primary link-white w-24 pull-right">
+					<i class="fas fa-cog"></i>
+				</a>
+				<button type="button" id="vote-success-btn" class="btn btn-success btn-block">
+					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+					Rating saved
+				</button>
+				<button type="button" class="btn btn-danger error-btn btn-block">
+					<i class="fa fa-exclamation-triangle danger-icon"></i>
+					Error
+				</button>
+			</div>
+			<div id="buttons-caption" class="col-12 m-auto rating-sect-sub">
+				<div class="col-12 text-center mt-3">
+					<p class="lead mb-3">Otherwise</p>
+				</div>
+			</div>
+			<div class="col-12 m-auto rating-sect-sub">
+				<section class="errors-sect text-left">
+					<div role="alert" class="alert alert-danger"></div>
+				</section>
+				<button type="button" id="load-save-btn" class="btn btn-primary btn-block m-0">
+					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+				</button>
+				<button type="button" id="save-btn" class="btn btn-primary btn-block m-0">
+					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+					Save For Later
+				</button>
+				<a href="#" id="download-btn" class="btn btn-primary link-white w-75" target="_blank">
+					Download
+				</a>
+				<a href="#" id="refresh-btn" class="btn btn-primary link-white w-24 pull-right">
+					<i class="fas fa-sync-alt"></i>
+				</a>
+				<button type="button" id="error-btn" class="btn btn-danger btn-block error-btn m-0">
+					<i class="fa fa-exclamation-triangle danger-icon"></i>
+					Error
+				</button>
+			</div>
+			<div id="publication-score-sect" class="col-12 m-auto pt-3">
+				<div class="text-center">
+					<p class="lead mb-3">Scores</p>
+				</div>
+				<div class="text-center btn btn-primary btn-block mb-0">
+					Publication Score (RSM): <span id="publication-score-rsm-val"></span>/100
+				</div>
+				<div class="text-center btn btn-primary btn-block mt-0 mb-3">
+					Publication Score (TRM): <span id="publication-score-trm-val"></span>/100
+				</div>
 			</div>
 		</div>
-		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto">
-			<div class="form-group">
-				<label for="publication-url">Publication URL
-					<span class="small">(e.g. https://arxiv.org/pdf/1812.05594.pdf)</span>
-				</label>
-				<form id="rate-form" data-parsley-validate>
-					<input id="publication-url" type="text" class="form-control" data-parsley-type="url" required>
+	</div>
+	<div class="row m-auto w-100">
+		<div class="col-lg-6 col-sm-10 col-xs-12 m-auto">
+			<div class="col-12">
+				<div class="heading text-center mb-1">
+					<h4>Automatic extraction of a rating URL</h4>
+					<p class="lead mb-0 text-justify">If you already have a link-annotated publication, drop it below
+						and extract the rating url automatically.</p>
+				</div>
+			</div>
+			<div class="col-12">
+				<form action="<%= extract_publications_path(format: :json) %>" id="annotated-publication-dropzone" class="dropzone border-primary">
+					<div class="dz-default dz-message text-center">
+						<h4 class="color-dark mt-3 mb-0">Drop Your Link-Annotated Publication Here</h4>
+						<br/><i class="fas fa-file-pdf fa-3x color-dark"></i></div>
 				</form>
 			</div>
-		</div>
-		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto text-center rating-sect-sub">
-			<input
-				id="rating-slider"
-				data-slider-id='ratingSlider'
-				data-slider-min="0"
-				data-slider-max="100"
-				data-slider-step="1"
-				data-slider-value="50"
-				data-tooltip="hide"
-				title="Rating Slider"
-				class="mb-3"
-				/>
-		</div>
-		<div class="col-lg-7 col-sm-10 col-xs-12 ml-auto mr-auto mb-auto mt-3 text-center rating-sect-sub">
-			<h1 id="rating-text"><i class="fas fa-sync-alt fa-spin"></i></h1>
-		</div>
-		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto rating-sect-sub">
-			<section class="errors-sect text-left">
-				<div role="alert" class="alert alert-danger"></div>
-			</section>
-			<button type="button" id="load-rate-btn" class="btn btn-primary btn-block">
-				<i class="fas fa-sync-alt fa-spin"></i>
-			</button>
-			<button type="button" id="vote-btn" class="btn btn-success w-75 m-auto">
-				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
-				Rate
-			</button>
-			<a href="#" data-toggle="modal" data-target="#modal-configuration" id="configure-btn"
-			   class="btn btn-primary link-white w-24 pull-right">
-				<i class="fas fa-cog"></i>
-			</a>
-			<button type="button" id="vote-success-btn" class="btn btn-success btn-block">
-				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
-				Rating saved
-			</button>
-			<button type="button" class="btn btn-danger error-btn btn-block">
-				<i class="fa fa-exclamation-triangle danger-icon"></i>
-				Error
-			</button>
-		</div>
-		<div id="buttons-caption" class="col-lg-7 col-sm-10 col-xs-12 m-auto rating-sect-sub">
-			<div class="col-12 text-center mt-3">
-				<p class="lead mb-3">Otherwise</p>
+			<div class="col-12 mt-3 ml-auto mr-auto mb-auto">
+				<div role="alert" id="dropzone-success" class="alert alert-success"></div>
 			</div>
-		</div>
-		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto rating-sect-sub">
-			<section class="errors-sect text-left">
-				<div role="alert" class="alert alert-danger"></div>
-			</section>
-			<button type="button" id="load-save-btn" class="btn btn-primary btn-block m-0">
-				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
-			</button>
-			<button type="button" id="save-btn" class="btn btn-primary btn-block m-0">
-				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
-				Save For Later
-			</button>
-			<a href="#" id="download-btn" class="btn btn-primary link-white w-75" target="_blank">
-				Download
-			</a>
-			<a href="#" id="refresh-btn" class="btn btn-primary link-white w-24 pull-right">
-				<i class="fas fa-sync-alt"></i>
-			</a>
-			<button type="button" id="error-btn" class="btn btn-danger btn-block error-btn m-0">
-				<i class="fa fa-exclamation-triangle danger-icon"></i>
-				Error
-			</button>
-		</div>
-		<div id="publication-score-sect" class="col-lg-7 col-sm-10 col-xs-12 m-auto pt-3">
-			<div class="col-12 text-center btn btn-primary btn-block">
-				Publication Score (RSM): <span id="publication-score-rsm-val"></span>/100
-			</div>
-			<div class="col-12 text-center btn btn-primary btn-block">
-				Publication Score (TRM): <span id="publication-score-trm-val"></span>/100
+			<div class="col-12 m-auto">
+				<a href="" id="go-to-rating-btn" class="btn btn-primary btn-block link-white">
+					Rating Page
+					<i id="go-to-rating-icon" class="fas fa-arrow-right"></i>
+					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+				</a>
 			</div>
 		</div>
 	</div>
-	<div class="row mt-auto mb-3 w-100">
-		<div class="col-lg-7 col-sm-10 col-xs-12 m-auto">
-			<form action="<%= extract_publications_path(format: :json) %>" id="annotated-publication-dropzone" class="dropzone border-primary">
-				<div class="dz-default dz-message text-center"><h4 class="color-dark mt-3 mb-0">Drop Your Link-Annotated Publication Here</h4>
-					<br/><i class="fas fa-file-pdf fa-3x color-dark"></i></div>
-			</form>
-		</div>
-		<div class="col-lg-7 col-sm-10 col-xs-12 mt-3 ml-auto mr-auto">
-			<div role="alert" id="dropzone-success" class="alert alert-success"></div>
-		</div>
-		<div class="col-lg-7 col-sm-10 col-xs-12 ml-auto mr-auto">
-			<a href="" id="go-to-rating-btn" class="btn btn-primary btn-block link-white">
-				Rating Page
-				<i id="go-to-rating-icon" class="fas fa-arrow-right"></i>
-				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
-			</a>
-		</div>
-	</div>
-	<div class="row mt-auto ml-auto mr-auto mb-0 w-100">
-		<%= render partial: "layouts/footer" %>
+	<div class="row w-100 mt-3">
+		<%= render partial: "shared/footer" %>
 	</div>
 </div>
 <div id="modal-configuration" tabindex="-1" role="dialog" aria-labelledby="modal-profile-label" aria-hidden="true"
@@ -236,7 +237,9 @@
 		</div>
 	</div>
 </div>
+<%= render partial: 'shared/modal_profile' %>
 <%= javascript_include_tag "application" %>
+<%= javascript_include_tag "menu" %>
 <%= javascript_include_tag "rating_web" %>
 </body>
 </html>

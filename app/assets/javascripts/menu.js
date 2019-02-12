@@ -2,10 +2,13 @@
 
 //######## UI COMPONENTS ########//
 
+let menuLinks = $(".header a");
+
 let signUpMenuItem = $("#sign-up-menu-item");
 let loginMenuItem = $("#login-menu-item");
 let logoutMenuItem = $("#logout-menu-item");
 let profileMenuItem = $("#profile-menu-item");
+let controlPanelMenuItem = $("#control-panel-menu-item");
 let userMenuInfo = $("#user-menu-info");
 
 let homeButton = $("#home-btn");
@@ -22,14 +25,11 @@ let orcidValue = $("#orcid-val");
 let subscribeValue = $("#subscribe-val");
 let userScoreRSMValue = $("#user-score-rsm-val");
 let userScoreTRMValue = $("#user-score-trm-val");
-let publicationScoreRSMValue = $("#publication-score-rsm-val");
-let publicationScoreTRMValue = $("#publication-score-trm-val");
 
-let homeIcon = $("#home-icon");
-let signUpIcon = $("#sign-up-icon");
-let profileIcon = $("#profile-icon");
+let homeIcons = $(".home-icon");
+let signUpIcons = $(".sign-up-icon");
 let signOutIcon = $("#sign-out-icon");
-let signInIcon = $("#sign-in-icon");
+let signInIcons = $(".sign-in-icon");
 let reloadIcons = $(".reload-icon");
 
 //######## UI INITIAL SETUP ########//
@@ -40,29 +40,25 @@ signUpMenuItem.hide();
 loginMenuItem.hide();
 logoutMenuItem.hide();
 profileMenuItem.hide();
+controlPanelMenuItem.hide();
 
-$(".header a").on("click", (event) => {
-	event.preventDefault();
-});
+menuLinks.on("click", (event) => event.preventDefault());
 
-let successCallback = (data, status, jqXHR) => {
+let menuSuccessCallback = (data, status, jqXHR) => {
 	signUpMenuItem.hide();
 	loginMenuItem.hide();
 	profileMenuItem.show();
 	logoutMenuItem.show();
-	let secondSuccessCallback = (data, status, jqXHR) => {
-		userMenuInfo.text(`${data["first_name"]} ${data["last_name"]}`);
-	};
-	let secondErrorCallback = (jqXHR, status) => {
-		userMenuInfo.text("Unknown");
-	};
+	controlPanelMenuItem.show();
+	let secondSuccessCallback = (data, status, jqXHR) => userMenuInfo.text(`${data["first_name"]} ${data["last_name"]}`);
+	let secondErrorCallback = (jqXHR, status) => userMenuInfo.text("Unknown");
 	let promise = emptyAjax("POST", "/users/info.json", "application/json; charset=utf-8", "json", true, secondSuccessCallback, secondErrorCallback);
 };
-let errorCallback = (jqXHR, status) => {
+let menuErrorCallback = (jqXHR, status) => {
 	signUpMenuItem.show();
 	loginMenuItem.show();
 };
-menuPromise = emptyAjax("POST", '/request_authorization.json', "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
+menuPromise = emptyAjax("POST", '/request_authorization.json', "application/json; charset=utf-8", "json", true, menuSuccessCallback, menuErrorCallback);
 
 ////////// USER  //////////
 
@@ -110,25 +106,21 @@ logoutButton.on("click", () => {
 //######### GO TO LOGIN HANDLING #########//
 
 loginButton.on("click", () => {
-	loginButton.find(signInIcon).toggle();
+	loginButton.find(signInIcons).toggle();
 	loginButton.find(reloadIcons).toggle();
 });
 
 //######### GO TO SIGN UP HANDLING #########//
 
 signUpButton.on("click", () => {
-	signUpButton.find(signUpIcon.toggle());
+	signUpButton.find(signUpIcons).toggle();
 	signUpButton.find(reloadIcons).toggle();
 });
 
 //####### GO TO PASSWORD EDIT HANDLING #########//
 
-goToPasswordEditButton.on("click", () => {
-	goToPasswordEditButton.find(reloadIcons).toggle();
-});
+goToPasswordEditButton.on("click", () => goToPasswordEditButton.find(reloadIcons).toggle());
 
 //####### GO TO PROFILE UPDATE HANDLING #########//
 
-goToProfileUpdateButton.on("click", () => {
-	goToProfileUpdateButton.find(reloadIcons).toggle();
-});
+goToProfileUpdateButton.on("click", () => goToProfileUpdateButton.find(reloadIcons).toggle());

@@ -11,15 +11,11 @@ let errorsSection = $(".errors-sect");
 let emailField = $("#email");
 let passwordField = $("#password");
 
-let backButton = $("#back-btn");
 let doLoginButton = $("#do-login-btn");
 let errorButton = $(".error-btn");
 
 let alert = $(".alert");
 let alertSuccess = $(".alert-success");
-
-let signInIconBody = $("#sign-in-icon-body")
-let backIcon = $("#back-icon");
 
 //######## UI INITIAL SETUP ########//
 
@@ -37,21 +33,13 @@ errorButton.hide();
 
 removePreloader();
 
-//########## GO BACK HANDLING #########//
-
-backButton.on("click", () => {
-	backButton.find(reloadIcons).toggle();
-	backButton.find(backIcon).toggle();
-	window.location.href = "/";
-});
-
 //########## LOGIN HANDLING ##########//
 
 let validationInstance = loginForm.parsley();
 
 doLoginButton.on("click", () => {
 	if (validationInstance.isValid()) {
-		doLoginButton.find(signInIconBody).toggle();
+		doLoginButton.find(signInIcons).toggle();
 		doLoginButton.find(reloadIcons).toggle();
 		let data = {email: emailField.val(), password: passwordField.val()};
 		let successCallback = (data, status, jqXHR) => {
@@ -61,7 +49,7 @@ doLoginButton.on("click", () => {
 			window.location.href = "/";
 		};
 		let errorCallback = (jqXHR, status) => {
-			doLoginButton.find(signInIconBody).toggle();
+			doLoginButton.find(signInIcons).toggle();
 			doLoginButton.find(reloadIcons).toggle();
 			if (jqXHR.responseText == null) {
 				doLoginButton.hide();

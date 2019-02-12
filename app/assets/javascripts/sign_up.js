@@ -17,13 +17,10 @@ let passwordConfirmationField = $("#password-confirmation");
 
 let subscribeCheckbox = $("#subscribe");
 
-let backButton = $("#back-btn");
-let registrationButton = $("#sign-up-btn");
+let doSignUpButton = $("#do-sign-up-btn");
 let errorButton = $(".error-btn");
 
 let alert = $(".alert");
-
-let backIcon = $("#back-icon");
 
 //######## UI INITIAL SETUP ########//
 
@@ -40,10 +37,10 @@ let validationInstance = signUpForm.parsley();
 
 signUpForm.submit(event => event.preventDefault());
 
-registrationButton.on("click", () => {
+doSignUpButton.on("click", () => {
 	if (validationInstance.isValid()) {
-		registrationButton.find(signUpIcon).toggle();
-		registrationButton.find(reloadIcons).toggle();
+		doSignUpButton.find(signUpIcons).toggle();
+		doSignUpButton.find(reloadIcons).toggle();
 		let data = {
 			user: {
 				first_name: firstNameField.val(),
@@ -56,39 +53,29 @@ registrationButton.on("click", () => {
 			},
 		};
 		let successCallback = (data, status, jqXHR) => {
-			//registrationButton.find(reloadIcons).toggle();
+			//doSignUpButton.find(reloadIcons).toggle();
 			deleteToken().then(() => {
 				localStorage.setItem("message", data["message"]);
 				window.location.href = "/login";
 			});
 		};
 		let errorCallback = (jqXHR, status) => {
-			registrationButton.find(reloadIcons).toggle();
-			registrationButton.find(signUpIcon).toggle();
+			doSignUpButton.find(reloadIcons).toggle();
+			doSignUpButton.find(signUpIcons).toggle();
 			if (jqXHR.responseText == null) {
-				registrationButton.hide();
-				let button = registrationButton.parent().find(errorButton);
+				doSignUpButton.hide();
+				let button = doSignUpButton.parent().find(errorButton);
 				button.show();
 				button.prop("disabled", true)
 			} else {
 				let errorPromise = buildErrors(jqXHR.responseText).then(result => {
-					registrationButton.parent().find(errorsSection).find(alert).empty();
-					registrationButton.parent().find(errorsSection).find(alert).append(result);
-					registrationButton.parent().find(errorsSection).show();
+					doSignUpButton.parent().find(errorsSection).find(alert).empty();
+					doSignUpButton.parent().find(errorsSection).find(alert).append(result);
+					doSignUpButton.parent().find(errorsSection).show();
 				});
 			}
 		};
 		// noinspection JSIgnoredPromiseFromCall
 		ajax("POST", "users.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 	}
-});
-
-////////// GENERAL //////////
-
-//########## GO BACK HANDLING #########//
-
-backButton.on("click", () => {
-	backButton.find(reloadIcons).toggle();
-	backButton.find(backIcon).toggle();
-	window.history.back()
 });

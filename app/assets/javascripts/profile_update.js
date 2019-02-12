@@ -23,8 +23,6 @@ let errorButton = $(".error-btn");
 let alert = $(".alert");
 
 let checkIcon = $("#check-icon");
-let backIcon = $("#back-icon");
-let reloadIcons = $(".reload-icon");
 
 //######## UI INITIAL SETUP ########//
 
@@ -51,7 +49,7 @@ signUpForm.submit(event => event.preventDefault());
 let successCallback = (data, status, jqXHR) => {
 	let authToken = localStorage.getItem('authToken');
 	if (authToken != null) {
-		let successCallback = (data, status, jqXHR) => {
+		let thirdSuccessCallback = (data, status, jqXHR) => {
 			firstNameField.val(data["first_name"]);
 			firstNameField.show();
 			firstNameField.parent().parent().find(reloadIcons).hide();
@@ -67,7 +65,7 @@ let successCallback = (data, status, jqXHR) => {
 			updateButton.prop("disabled", false);
 			removePreloader();
 		};
-		let errorCallback = (jqXHR, status) => {
+		let thirdErrorCallback = (jqXHR, status) => {
 			firstNameField.val();
 			lastNameField.val();
 			orcidField.val();
@@ -75,17 +73,15 @@ let successCallback = (data, status, jqXHR) => {
 			updateButton.prop("disabled", false);
 			removePreloader();
 		};
-		let promise = emptyAjax("POST", "/users/info.json", "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
+		let thirdPromise = emptyAjax("POST", "/users/info.json", "application/json; charset=utf-8", "json", true, thirdSuccessCallback, thirdErrorCallback);
 	}
 };
-let errorCallback = (jqXHR, status) => {
-	window.location.href = "/unauthorized"
-};
+let errorCallback = (jqXHR, status) => window.location.href = "/unauthorized";
 let promise = emptyAjax("POST", '/request_authorization.json', "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
 
 //########## UPDATE HANDLING ##########//
 
-let authToken = localStorage.getItem('authToken');
+authToken = localStorage.getItem('authToken');
 if (authToken != null) {
 	updateButton.on("click", () => {
 		validationInstance.validate();
@@ -148,13 +144,3 @@ if (authToken != null) {
 		}
 	});
 }
-
-////////// GENERAL //////////
-
-//########## GO BACK HANDLING #########//
-
-backButton.on("click", () => {
-	backButton.find(reloadIcons).toggle();
-	backButton.find(backIcon).toggle();
-	window.history.back()
-});

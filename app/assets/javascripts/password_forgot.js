@@ -10,13 +10,11 @@ let errorsSection = $(".errors-sect");
 
 let emailField = $("#email");
 
-let backButton = $("#back-btn");
 let passwordForgotButton = $("#password-forgot-btn");
 let errorButton = $(".error-btn");
 
 let alert = $(".alert");
 
-let backIcon = $("#back-icon");
 let checkIcon = $("#check-icon");
 
 //######## UI INITIAL SETUP ########//
@@ -67,14 +65,4 @@ passwordForgotButton.on("click", () => {
 		// noinspection JSIgnoredPromiseFromCall
 		ajax("POST", "forgot.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 	}
-});
-
-////////// GENERAL //////////
-
-//########## GO BACK HANDLING #########//
-
-backButton.on("click", () => {
-	backButton.find(reloadIcons).toggle();
-	backButton.find(backIcon).toggle();
-	window.location.href = "/login.html";
 });

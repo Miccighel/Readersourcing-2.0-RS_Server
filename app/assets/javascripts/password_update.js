@@ -14,13 +14,11 @@ let currentPasswordField = $("#current-password");
 let newPasswordField = $("#new-password");
 let newPasswordConfirmationField = $("#new-password-confirmation");
 
-let passwordEditButton = $("#password-edit-btn");
-let backButton = $("#back-btn");
+let doPasswordEditButton = $("#do-password-edit-btn");
 let errorButton = $(".error-btn");
 
 let alert = $(".alert");
 
-let backIcon = $("#back-icon");
 let checkIcon = $("#check-icon");
 
 //######## UI INITIAL SETUP ########//
@@ -28,13 +26,9 @@ let checkIcon = $("#check-icon");
 errorsSection.hide();
 errorButton.hide();
 
-let secondSuccessCallback = (data, status, jqXHR) => {
-	removePreloader();
-};
-let secondErrorCallback = (jqXHR, status) => {
-	window.location.href = "/unauthorized"
-};
-let promise = emptyAjax("POST", '/request_authorization.json', "application/json; charset=utf-8", "json", true, secondSuccessCallback, secondErrorCallback);
+let successCallback = (data, status, jqXHR) => removePreloader();
+let errorCallback = (jqXHR, status) => window.location.href = "/unauthorized";
+let promise = emptyAjax("POST", '/request_authorization.json', "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
 
 ////////// PASSWORD //////////
 
@@ -44,18 +38,18 @@ let validationInstance = passwordEditForm.parsley();
 
 passwordEditForm.submit(event => event.preventDefault());
 
-goToPasswordEditButton.on("click", () => {
+doPasswordEditButton.on("click", () => {
 	validationInstance.validate();
 	if (validationInstance.isValid()) {
-		passwordEditButton.find(checkIcon).toggle();
-		passwordEditButton.find(reloadIcons).toggle();
+		doPasswordEditButton.find(checkIcon).toggle();
+		doPasswordEditButton.find(reloadIcons).toggle();
 		let data = {
 			current_password: currentPasswordField.val(),
 			new_password: newPasswordField.val(),
 			new_password_confirmation: newPasswordConfirmationField.val()
 		};
 		let successCallback = (data, status, jqXHR) => {
-			//goToPasswordEditButton.find(reloadIcons).toggle();
+			//doPasswordEditButton.find(reloadIcons).toggle();
 			deleteToken().then(() => {
 				localStorage.setItem("message", data["message"]);
 				window.location.href = "/login";
@@ -65,29 +59,19 @@ goToPasswordEditButton.on("click", () => {
 			goToPasswordEditButton.find(checkIcon).toggle();
 			goToPasswordEditButton.find(reloadIcons).toggle();
 			if (jqXHR.responseText == null) {
-				passwordEditButton.hide();
-				let button = passwordEditButton.parent().find(errorButton);
+				doPasswordEditButton.hide();
+				let button = doPasswordEditButton.parent().find(errorButton);
 				button.show();
 				button.prop("disabled", true)
 			} else {
 				let errorPromise = buildErrors(jqXHR.responseText).then(result => {
-					passwordEditButton.parent().find(errorsSection).find(alert).empty();
-					passwordEditButton.parent().find(errorsSection).find(alert).append(result);
-					passwordEditButton.parent().find(errorsSection).show();
+					doPasswordEditButton.parent().find(errorsSection).find(alert).empty();
+					doPasswordEditButton.parent().find(errorsSection).find(alert).append(result);
+					doPasswordEditButton.parent().find(errorsSection).show();
 				});
 			}
 		};
 		// noinspection JSIgnoredPromiseFromCall
 		ajax("POST", "update.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 	}
-});
-
-////////// GENERAL //////////
-
-//########## GO BACK HANDLING #########//
-
-backButton.on("click", () => {
-	backButton.find(reloadIcons).toggle();
-	backButton.find(backIcon).toggle();
-	window.history.back()
 });

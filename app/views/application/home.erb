@@ -19,16 +19,71 @@
 </div>
 <div class="color-white min-h-100 d-flex flex-column align-items-center justify-content-center">
 	<div class="w-100 mb-3">
-		<%= render partial:'shared/menu', locals: {active: "home", appearance: "light"} %>
+		<%= render partial: 'shared/menu', locals: {active: "home", appearance: "light"} %>
 	</div>
 	<div class="row m-auto">
-
+		<div class="col-12">
+			<div class="heading text-center">
+				<h1>Readersourcing 2.0</h1>
+			</div>
+		</div>
+		<div class="col-12 mb-3">
+			<div class="col-lg-6 col-sm-12 col-xs-12 m-auto">
+				<p class="lead text-justify mb-1">
+					This ecosystem has been presented for the first time during the IRCDL 2019 Conference and provides
+					and
+					implementation of the Readersourcing approach which is proposed as an alternative to the standard
+					peer review activity of scientific publications that aims to exploit the otherwise lost opinions
+					of readers.
+					<br/> The original paper and the documentation can be read on Zenodo, while the code is available on
+					GitHub.
+				</p>
+				<p class="text-center">
+					<a href="https://ircdl2019.isti.cnr.it/" target="_blank"><img src="https://img.shields.io/badge/IRCDL%202019-Conference-yellow.svg"></a>
+					<a href="https://doi.org/10.5281/zenodo.1446468" target="_blank"><img src="https://img.shields.io/badge/Zenodo-Paper-blue.svg"></a>
+					<a href="https://github.com/Miccighel/Readersourcing-2.0" target="_blank"><img src="https://img.shields.io/badge/GitHub-Code-lightgrey.svg"></a>
+				</p>
+			</div>
+		</div>
+		<div class="col-12">
+			<div class="heading text-center">
+				<h1>How To</h1>
+			</div>
+		</div>
+		<div class="col-12 mb-3">
+			<div class="col-lg-6 col-sm-12 col-xs-12 m-auto">
+				<p class="lead text-justify mb-2">
+					To take advantage of this ecosystem, sign up and login through this web interface. Once done that,
+					simply click on the control panel available in the top menu to explore the available
+					functionalities.
+				</p>
+			</div>
+		</div>
+		<div class="col-12">
+			<div class="heading text-center">
+				<h1>Browser Extension</h1>
+			</div>
+		</div>
+		<div class="col-12 mb-3">
+			<div class="col-lg-6 col-sm-12 col-xs-12 m-auto">
+				<p class="lead text-justify mb-2">
+					RS_Rate is an extension for Google Chrome available on its store. It is a client that readers of
+					scientific publications can use to rate them directly from the browser without the need of using
+					this web interface.
+				</p>
+				<p class="text-center">
+					<a href="https://chrome.google.com/webstore/detail/readersourcing-20-rsrate/hlkdlngpijhdkbdlhmgeemffaoacjagg?hl=it" target="_blank">
+						<img class="img-responsive" src="<%= image_path("chrome-webstore-badge.png") %>">
+					</a>
+				</p>
+			</div>
+		</div>
 	</div>
 	<div class="row mt-3 w-100">
-		<%= render partial: "layouts/footer" %>
+		<%= render partial: "shared/footer" %>
 	</div>
 </div>
-<%= render partial:'shared/modal_profile' %>
+<%= render partial: 'shared/modal_profile' %>
 <%= javascript_include_tag "application" %>
 <%= javascript_include_tag "menu" %>
 <%= javascript_include_tag "home" %>

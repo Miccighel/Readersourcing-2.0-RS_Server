@@ -1,6 +1,6 @@
 <header class="nav-holder make-sticky">
 	<div id="navbar" role="navigation" class="navbar navbar-expand-lg <%= "bg-gray-dark" if appearance == "dark" %>">
-		<div class="container pl-4 pr-4">
+		<div class="container pl-3 pr-3">
 			<a href="<%= root_path %>" class="navbar-brand home">
 				<img src="<%= image_path("logo.png") %>" alt="Logo" class="d-none d-md-inline-block">
 				<img src="<%= image_path("logo-small.png") %>" alt="Logo" class="d-inline-block d-md-none">
@@ -16,6 +16,34 @@
 							<i id="home-icon" class="fas fa-home"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
+					</li>
+					<li id="control-panel-menu-item" class="nav-item dropdown menu-large"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span class="<%= "color-white" if appearance == "dark" %>">Control Panel <i class="fas fa-file"></i><b class="caret"></b></span></a>
+						<ul class="dropdown-menu megamenu">
+							<li>
+								<div class="row">
+									<div class="col-4">
+										<h5>Publications</h5>
+										<ul class="list-unstyled mb-3">
+											<li class="nav-item"><a href="<%= rate_web_path %>" class="nav-link">Rate A New Publication</a></li>
+											<li class="nav-item"><a href="#" class="nav-link">View Indexed Publications (Available Soon)</a></li>
+										</ul>
+									</div>
+									<div class="col-4">
+										<h5>Authors</h5>
+										<ul class="list-unstyled mb-3">
+											<li class="nav-item"><a href="#" class="nav-link">View Indexed Authors (Available Soon)</a></li>
+										</ul>
+									</div>
+									<div class="col-4">
+										<h5>Personal</h5>
+										<ul class="list-unstyled mb-3">
+											<li class="nav-item"><a href="<%= profile_path %>" class="nav-link">Edit Profile</a></li>
+											<li class="nav-item"><a href="<%= edit_path %>" class="nav-link">Update Password</a></li>
+										</ul>
+									</div>
+								</div>
+							</li>
+						</ul>
 					</li>
 					<li id="profile-menu-item" class="nav-item <%= "active" if active == "profile-update" %>">
 						<a href="#" id="profile-btn" data-toggle="modal" data-target="#modal-profile" id="profile-btn" class="<%= "color-white" if appearance == "dark" %> nav-item">
@@ -34,14 +62,14 @@
 					<li id="sign-up-menu-item" class="nav-item <%= "active" if active == "sign-up" %>">
 						<a id="sign-up-btn" class="<%= "color-white" if appearance == "dark" %>" href="<%= sign_up_path %>">
 							Sign Up
-							<i id="sign-up-icon" class="fa fa-user-plus"></i>
+							<i class="fa fa-user-plus sign-up-icon"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>
 					<li id="login-menu-item" class="nav-item <%= "active" if active == "login" %>">
 						<a id="login-btn" class="<%= "color-white" if appearance == "dark" %>" href="<%= login_path %>">
 							Login
-							<i id="sign-in-icon" class="fas fa-sign-in-alt"></i>
+							<i class="fas fa-sign-in-alt sign-in-icon"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>

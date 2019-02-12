@@ -4,6 +4,4 @@
 
 //######## UI INITIAL SETUP ########//
 
-menuPromise.then(data => {
-	removePreloader();
-});
+menuPromise.then(data => removePreloader());

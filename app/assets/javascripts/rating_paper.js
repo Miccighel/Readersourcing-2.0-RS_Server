@@ -4,17 +4,15 @@ let body = $("body");
 
 //######## UI COMPONENTS ########//
 
+let rateForm = $("#new_rating");
+
 let voteButton = $("#vote-btn");
 
 let ratingSlider = $("#rating-slider");
 
 let ratingText = $("#rating-text");
 
-let reloadIcons = $(".reload-icon");
-
 //######## UI INITIAL SETUP ########//
-
-reloadIcons.hide();
 
 ratingText.text("50");
 ratingSlider.slider({});
@@ -29,5 +27,12 @@ ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
 
 //#######  ACTION HANDLING #########//
 
-voteButton.on("click", () => voteButton.find(reloadIcons).toggle());
+let validationInstance = rateForm.parsley();
+
+voteButton.on("click", () => {
+	validationInstance.validate();
+	if (validationInstance.isValid()) {
+		voteButton.find(reloadIcons).toggle();
+	}
+});
 
