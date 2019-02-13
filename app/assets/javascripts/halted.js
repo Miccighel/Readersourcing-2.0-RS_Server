@@ -2,20 +2,15 @@
 
 //######## UI COMPONENTS ########//
 
-let homeButton = $("#home-btn");
-
-let homeIcon = $("#home-icon");
-let reloadIcons = $(".reload-icon");
+let goToHomeButton = $("#go-to-home-btn");
 
 //######## UI INITIAL SETUP ########//
-
-reloadIcons.hide();
 
 removePreloader();
 
 //######### GO TO HOME HANDLING #########//
 
-homeButton.on("click", () => {
-	homeButton.find(homeIcon).toggle();
-	homeButton.find(reloadIcons).toggle();
+goToHomeButton.on("click", () => {
+	goToHomeButton.find(homeIcons).toggle();
+	goToHomeButton.find(reloadIcons).toggle();
 });
