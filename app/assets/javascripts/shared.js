@@ -2,6 +2,7 @@
 
 async function deleteToken() {
 	localStorage.removeItem('authToken');
+	localStorage.removeItem('redirected');
 }
 
 async function ajax(type, url, contentType, dataType, crossDomain, data, success, error) {

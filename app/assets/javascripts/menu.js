@@ -4,14 +4,19 @@
 
 let menuLinks = $(".header a");
 
+let homeMenuItem = $("#home-menu-item");
 let signUpMenuItem = $("#sign-up-menu-item");
 let loginMenuItem = $("#login-menu-item");
 let logoutMenuItem = $("#logout-menu-item");
 let profileMenuItem = $("#profile-menu-item");
-let controlPanelMenuItem = $("#control-panel-menu-item");
-let userMenuInfo = $("#user-menu-info");
+let publicationsMenuItem = $("#publications-menu-item");
+let readersMenuItem = $("#readers-menu-item");
+let literatureMenuItem = $("#literature-menu-item");
+let bugMenuItem = $("#bug-menu-item");
+let reloadFakeMenuItem = $("#reload-fake-menu-item");
 
 let homeButton = $("#home-btn");
+let literatureButton = $("#literature-btn");
 let logoutButton = $("#logout-btn");
 let loginButton = $("#login-btn");
 let signUpButton = $("#sign-up-btn");
@@ -27,6 +32,7 @@ let userScoreRSMValue = $("#user-score-rsm-val");
 let userScoreTRMValue = $("#user-score-trm-val");
 
 let homeIcons = $(".home-icon");
+let literatureIcon = $("#literature-icon");
 let signUpIcons = $(".sign-up-icon");
 let signOutIcon = $("#sign-out-icon");
 let signInIcons = $(".sign-in-icon");
@@ -36,27 +42,38 @@ let reloadIcons = $(".reload-icon");
 
 reloadIcons.hide();
 
+homeMenuItem.hide();
 signUpMenuItem.hide();
 loginMenuItem.hide();
 logoutMenuItem.hide();
 profileMenuItem.hide();
-controlPanelMenuItem.hide();
+readersMenuItem.hide();
+literatureMenuItem.hide();
+publicationsMenuItem.hide();
+bugMenuItem.hide();
 
 menuLinks.on("click", (event) => event.preventDefault());
 
 let menuSuccessCallback = (data, status, jqXHR) => {
 	signUpMenuItem.hide();
 	loginMenuItem.hide();
+	homeMenuItem.show();
 	profileMenuItem.show();
+	literatureMenuItem.show();
+	readersMenuItem.show();
+	publicationsMenuItem.show();
 	logoutMenuItem.show();
-	controlPanelMenuItem.show();
-	let secondSuccessCallback = (data, status, jqXHR) => userMenuInfo.text(`${data["first_name"]} ${data["last_name"]}`);
-	let secondErrorCallback = (jqXHR, status) => userMenuInfo.text("Unknown");
-	let promise = emptyAjax("POST", "/users/info.json", "application/json; charset=utf-8", "json", true, secondSuccessCallback, secondErrorCallback);
+	publicationsMenuItem.show();
+	bugMenuItem.show();
+	reloadFakeMenuItem.hide();
 };
 let menuErrorCallback = (jqXHR, status) => {
+	homeMenuItem.show();
+	literatureMenuItem.show();
 	signUpMenuItem.show();
 	loginMenuItem.show();
+	bugMenuItem.show();
+	reloadFakeMenuItem.hide();
 };
 menuPromise = emptyAjax("POST", '/request_authorization.json', "application/json; charset=utf-8", "json", true, menuSuccessCallback, menuErrorCallback);
 
@@ -91,8 +108,15 @@ if (authToken != null) {
 //######### GO TO HOME HANDLING #########//
 
 homeButton.on("click", () => {
-	homeButton.find(homeIcon).toggle();
+	homeButton.find(homeIcons).toggle();
 	homeButton.find(reloadIcons).toggle();
+});
+
+//######### GO TO LITERATURE HANDLING #########//
+
+literatureButton.on("click", () => {
+	literatureButton.find(literatureIcon).toggle();
+	literatureButton.find(reloadIcons).toggle();
 });
 
 //####### LOGOUT HANDLING #########//

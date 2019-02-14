@@ -8,46 +8,78 @@
 			<button type="button" data-toggle="collapse" data-target="#navigation" class="navbar-toggler btn-template-outlined">
 				<span class="sr-only">Toggle Navigation</span><i class="fa fa-align-justify"></i>
 			</button>
-			<div id="navigation" class="navbar-collapse collapse">
+			<div id="navigation" class="navbar-collapse collapse text-center">
+				<div id="reload-fake-menu-item" class="nav-item w-100 h-100">
+					<a href="#" class="<%= "color-white" if appearance == "dark" %>">
+						<i class="fas fa-sync-alt fa-spin fa-2x"></i>
+					</a>
+				</div>
 				<ul class="nav navbar-nav ml-auto">
-					<li class="nav-item <%= "active" if active == "home" %>">
+					<li id="home-menu-item" class="nav-item <%= "active" if active == "home" %>">
 						<a href="<%= root_path %>" class="<%= "color-white" if appearance == "dark" %>" id="home-btn">
 							Home
-							<i id="home-icon" class="fas fa-home"></i>
+							<i class="fas fa-home home-icon"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>
-					<li id="control-panel-menu-item" class="nav-item dropdown menu-large"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span class="<%= "color-white" if appearance == "dark" %>">Control Panel <i class="fas fa-file"></i><b class="caret"></b></span></a>
+					<li id="publications-menu-item" class="nav-item dropdown menu-large">
+						<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+							<span class="<%= "color-white" if appearance == "dark" %>">
+								Publications
+								<i class="fas fa-file-pdf"></i>
+								<b class="caret"></b>
+							</span>
+						</a>
 						<ul class="dropdown-menu megamenu">
 							<li>
 								<div class="row">
-									<div class="col-4">
-										<h5>Publications</h5>
+									<div class="col-12">
+										<h5>Actions</h5>
 										<ul class="list-unstyled mb-3">
-											<li class="nav-item"><a href="<%= rate_web_path %>" class="nav-link">Rate A New Publication</a></li>
-											<li class="nav-item"><a href="#" class="nav-link">View Indexed Publications (Available Soon)</a></li>
-										</ul>
-									</div>
-									<div class="col-4">
-										<h5>Authors</h5>
-										<ul class="list-unstyled mb-3">
-											<li class="nav-item"><a href="#" class="nav-link">View Indexed Authors (Available Soon)</a></li>
-										</ul>
-									</div>
-									<div class="col-4">
-										<h5>Personal</h5>
-										<ul class="list-unstyled mb-3">
-											<li class="nav-item"><a href="<%= profile_path %>" class="nav-link">Edit Profile</a></li>
-											<li class="nav-item"><a href="<%= edit_path %>" class="nav-link">Update Password</a></li>
+											<li class="nav-item">
+												<a href="<%= rate_web_path %>" class="nav-link">Dashboard</a></li>
+											<li class="nav-item">
+												<a href="#" class="nav-link">View List</a>
+											</li>
 										</ul>
 									</div>
 								</div>
 							</li>
 						</ul>
 					</li>
+					<li id="readers-menu-item" class="nav-item dropdown menu-large">
+						<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+							<span class="<%= "color-white" if appearance == "dark" %>">
+								Readers
+								<i class="fas fa-book-reader"></i>
+								<b class="caret"></b>
+							</span>
+						</a>
+						<ul class="dropdown-menu megamenu">
+							<li>
+								<div class="row">
+									<div class="col-12">
+										<h5>Actions</h5>
+										<ul class="list-unstyled mb-3">
+											<li class="nav-item">
+												<a href="" class="nav-link">View List</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</li>
+					<li id="literature-menu-item" class="nav-item <%= "active" if active == "profile-update" %>">
+						<a id="literature-btn" class="<%= "color-white" if appearance == "dark" %>" href="#">
+							Literature
+							<i id="literature-icon" class="fas fa-book-open"></i>
+							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+						</a>
+					</li>
 					<li id="profile-menu-item" class="nav-item <%= "active" if active == "profile-update" %>">
 						<a href="#" id="profile-btn" data-toggle="modal" data-target="#modal-profile" id="profile-btn" class="<%= "color-white" if appearance == "dark" %> nav-item">
-							Profile (<span id="user-menu-info"><i class="fas fa-sync-alt fa-spin"></i></span>)
+							Profile
 							<i id="profile-icon" class="fa fa-user"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
@@ -70,6 +102,13 @@
 						<a id="login-btn" class="<%= "color-white" if appearance == "dark" %>" href="<%= login_path %>">
 							Login
 							<i class="fas fa-sign-in-alt sign-in-icon"></i>
+							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+						</a>
+					</li>
+					<li id="bug-menu-item" class="nav-item">
+						<a id="bug-btn" class="color-red" href="<%= login_path %>">
+							Bug Report
+							<i class="fas fa-bug"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>

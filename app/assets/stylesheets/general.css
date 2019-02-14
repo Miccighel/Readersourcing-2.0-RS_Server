@@ -5,7 +5,7 @@ body, html {
 }
 
 .min-h-100 {
- min-height: 100%;
+	min-height: 100%;
 }
 
 .w-49 {
@@ -77,6 +77,10 @@ p {
 	color: #721c24 !important;
 }
 
+.color-red {
+	color: #CC0000 !important;
+}
+
 .color-white {
 	color: #fff !important;
 }
@@ -90,12 +94,44 @@ p {
 }
 
 .btn:active, .link-white {
-	color:white !important;
+	color: white !important;
 	text-decoration: none !important;
 }
 
 body.bg-gray-dark input {
 	border: 1px solid #0087F7;
+}
+
+/* ////////// MENU  ////////// */
+
+#bug-btn:hover, #bug-btn:active, #bug-btn {
+	background-color: rgba(255, 0, 0, 0.5) !important;
+	color: #fff !important;
+	border-color: rgba(255, 0, 0, 0.7) !important;
+}
+
+#bug-btn:hover, #bug-btn:active {
+	background-color: rgba(255, 0, 0, 0.7) !important;
+	color: #fff !important;
+	border-color: rgba(255, 0, 0, 0.98) !important;
+}
+
+#reload-fake-menu-item a {
+	position: relative;
+	right: 3%;
+	color: #555;
+}
+
+#navbar .menu-large .megamenu {
+	width: fit-content !important;
+}
+
+#publications-menu-item .megamenu {
+	left: 39.9% !important;
+}
+
+#readers-menu-item .megamenu {
+	left: 47.25% !important;
 }
 
 /* ////////// ERRORS  ////////// */
@@ -161,16 +197,18 @@ html {
 	overflow: scroll;
 	overflow-x: hidden;
 }
+
 ::-webkit-scrollbar {
-	width: 0px;  /* remove scrollbar space */
-	background: transparent;  /* optional: just make scrollbar invisible */
+	width: 0px; /* remove scrollbar space */
+	background: transparent; /* optional: just make scrollbar invisible */
 }
 
 .container {
 	overflow-y: scroll;
 	scrollbar-width: none; /* Firefox */
-	-ms-overflow-style: none;  /* IE 10+ */
+	-ms-overflow-style: none; /* IE 10+ */
 }
+
 .container::-webkit-scrollbar { /* WebKit */
 	width: 0px;
 }
