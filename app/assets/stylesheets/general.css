@@ -49,7 +49,7 @@ blockquote, .lead a {
 	font-size: 18px !important;
 }
 
-button, a, div, label {
+button, a, label {
 	font-size: 14px !important;
 }
 
@@ -226,8 +226,7 @@ html {
 .preloader-wrapper .preloader {
 	position: absolute;
 	top: 50%;
-	left: 47.5%;
+	left: 50%;
 	-webkit-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
-	width: 120px;
 }

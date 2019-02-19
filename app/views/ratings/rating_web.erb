@@ -13,11 +13,7 @@
 	<title>RS_Server</title>
 </head>
 <body class="bg-gray-dark color-white">
-<div class="preloader-wrapper">
-	<div class="preloader">
-		<img src="<%= image_path("preloader.svg") %>" alt="Loading...">
-	</div>
-</div>
+<%= render partial: 'shared/preloader' %>
 <div class="min-h-100 d-flex flex-column align-items-center justify-content-center">
 	<div class="w-100 mb-3">
 		<%= render partial: 'shared/menu', locals: {active: "rating-web", appearance: "light"} %>

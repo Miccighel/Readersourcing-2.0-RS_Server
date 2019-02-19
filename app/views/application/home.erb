@@ -12,11 +12,7 @@
 	<title>RS_Server</title>
 </head>
 <body class="bg-gray-dark">
-<div class="preloader-wrapper">
-	<div class="preloader">
-		<img src="<%= image_path("preloader.svg") %>" alt="Loading...">
-	</div>
-</div>
+<%= render partial: 'shared/preloader' %>
 <div class="color-white min-h-100 d-flex flex-column align-items-center justify-content-center">
 	<div class="w-100 mb-3">
 		<%= render partial: 'shared/menu', locals: {active: "home", appearance: "light"} %>
@@ -30,17 +26,8 @@
 		<div class="col-12 mb-3">
 			<div class="col-lg-6 col-sm-12 col-xs-12 m-auto">
 				<p class="lead text-justify mb-1">
-					This ecosystem has been presented for the first time during the IRCDL 2019 Conference and provides
-					an
-					implementation of the Readersourcing approach which is proposed as an alternative to the standard
-					peer review activity of scientific publications that aims to exploit the otherwise lost opinions
-					of readers. The original paper can be found on Zenodo, while the code and the related documentation is
-					available on GitHub. Click on the badges below to take advantage of these resources.
-				</p>
-				<p class="text-center">
-					<a href="https://ircdl2019.isti.cnr.it/" target="_blank"><img src="https://img.shields.io/badge/IRCDL%202019-Conference-yellow.svg"></a>
-					<a href="https://doi.org/10.5281/zenodo.1446468" target="_blank"><img src="https://img.shields.io/badge/Zenodo-Paper-blue.svg"></a>
-					<a href="https://github.com/Miccighel/Readersourcing-2.0" target="_blank"><img src="https://img.shields.io/badge/GitHub-Code-lightgrey.svg"></a>
+					<strong>Readersourcing.org</strong> is an independent, third-party, non-profit, academic/scientific endeavour, aimed at quality rating of both scholarly
+					literature and scholars.
 				</p>
 			</div>
 		</div>
@@ -52,8 +39,10 @@
 		<div class="col-12 mb-3">
 			<div class="col-lg-6 col-sm-12 col-xs-12 m-auto">
 				<p class="lead text-justify mb-2">
-					To start using Readersourcing 2.0, sign up and login through this web interface and look at the top
-					menu to explore the available functionalities. <i>If something goes wrong, please use the "bug report" button and write to us.</i>
+					To start using <strong>Readersourcing 2.0</strong>, you can freely sign up and perform the login through this web interface.
+					Once you become a registered user, you can actively participate within the system by rating publications from other authors.
+					Doing so will improve your authority. To find out more about the system, its internals and its virtuous dynamics
+					<a class="link-white" href="<%= resources_path %>">check out the <strong>Resources</strong> page</a>.
 				</p>
 			</div>
 		</div>
@@ -65,10 +54,8 @@
 		<div class="col-12 mb-3">
 			<div class="col-lg-6 col-sm-12 col-xs-12 m-auto">
 				<p class="lead text-justify mb-2">
-					RS_Rate is an extension for Google Chrome available on its store. It is a client that can be used by
-					readers of
-					scientific publications to rate them directly from the browser without the need of using this web
-					interface. Click on the banner below to install it.
+					<strong>RS_Rate</strong> is an extension for Google Chrome available on its store. It is a client for Readersourcing 2.0 that can be used by
+					readers of publications to rate them directly from the browser without the need of using this web interface. Click on the banner below to install it.
 				</p>
 				<p class="text-center">
 					<a href="https://chrome.google.com/webstore/detail/readersourcing-20-rsrate/hlkdlngpijhdkbdlhmgeemffaoacjagg?hl=it" target="_blank">

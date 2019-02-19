@@ -2,11 +2,24 @@ class ApplicationController < ActionController::API
 
 	include ::ActionController::RequestForgeryProtection
 
-	before_action :authorize_api_request, except: [:home, :request_authorization, :unauthorized]
+	before_action :authorize_api_request, except: [:home, :resources, :bug, :report, :request_authorization, :unauthorized]
 	attr_reader :current_user
 
 	# GET /
 	def home
+	end
+
+	# GET /resources
+	def resources
+	end
+
+	# GET /bug
+	def bug
+	end
+
+	# POST /report.json
+	def report
+		ApplicationMailer.report(params[:mail], params[:message]).deliver_now
 	end
 
 	# POST /request_authorization.json

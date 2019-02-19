@@ -80,6 +80,7 @@ en:
       password_recovery: "Password Recovery"
       rating_confirm: "Rating Assignment Confirmation"
       registration_confirm: "Registration Confirmation"
+      bug_report: "Bug Report"
     password:
       to_get_a_new_one: "To get a new password just click on the link below. You will get an email containing the new password."
       edit_first_access: "For your safety, change it during the first login to the platform."

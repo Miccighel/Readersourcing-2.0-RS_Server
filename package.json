@@ -15,6 +15,7 @@
 		"jquery.counterup": "^2.1.0",
 		"jquery.scrollto": "^2.1.2",
 		"js-cookie": "^2.2.0",
+		"load-awesome": "^1.1.0",
 		"owl.carousel": "^2.3.4",
 		"owl.carousel2.thumbs": "^0.1.8",
 		"parsleyjs": "^2.8.1",

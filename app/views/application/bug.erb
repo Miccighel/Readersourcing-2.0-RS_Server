@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<%= csrf_meta_tags %>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+	<%= stylesheet_link_tag 'application' %>
+	<title>RS_Server</title>
+</head>
+<body>
+<%= render partial: 'shared/preloader' %>
+<div class="min-h-100 d-flex flex-column align-items-center justify-content-center">
+	<div class="w-100 mb-3">
+		<%= render partial: 'shared/menu', locals: {active: "bug", appearance: "dark"} %>
+	</div>
+	<div class="row m-auto">
+		<div class="col-12">
+			<section id="success-sect" class="col-lg-8 col-sm-12 col-xs-12 m-auto p-0">
+				<div role="alert" class="alert alert-success"></div>
+			</section>
+			<div class="heading text-center">
+				<h4>Readersourcing 2.0</h4>
+				<p class="lead mb-0">Describe what happened</p>
+			</div>
+		</div>
+		<div class="col-lg-8 col-sm-8 col-xs-12 m-auto">
+			<form id="bug-form" data-parsley-validate>
+				<div class="row">
+					<div class="col-12">
+						<div class="form-group">
+							<label for="email">Your Email <span class="small">(e.g. address@example.com)</span></label>
+							<input id="email" type="text" class="form-control" placeholder="" data-parsley-type="email" required>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="form-group">
+							<label for="message">Message</label>
+							<textarea
+								id="message"
+								name="message"
+								class="form-control"
+								data-parsley-trigger="keyup"
+								data-parsley-minlength="20"
+								data-parsley-maxlength="200"
+								data-parsley-minlength-message="You need to enter at least a 20 character comment"
+								data-parsley-validation-threshold="10"
+								required
+							>
+							</textarea>
+						</div>
+					</div>
+					<div class="col-12 pt-1">
+						<p class="text-sm text-center">
+							<small>Your email will be sent to an administrator.</small>
+						</p>
+					</div>
+					<div class="col-12 text-center">
+						<section class="errors-sect text-left">
+							<div role="alert" class="alert alert-danger"></div>
+						</section>
+						<button type="submit" id="do-bug-btn" class="btn btn-success btn-block">
+							Send
+							<i id="message-icon" class="fas fa-envelope"></i>
+							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+						</button>
+						<button type="button" class="btn btn-danger error-btn btn-block">
+							<i class="fa fa-exclamation-triangle danger-icon"></i>
+							Error
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="row w-100 mt-3">
+		<%= render partial: "shared/footer" %>
+	</div>
+</div>
+<%= render partial: 'shared/modal_profile' %>
+<%= javascript_include_tag "application" %>
+<%= javascript_include_tag "menu" %>
+<%= javascript_include_tag "bug" %>
+</body>
+</html>

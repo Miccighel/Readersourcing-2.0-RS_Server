@@ -9,6 +9,10 @@ Rails.application.config.assets.paths  += %w( chrome-webstore-badge.png )
 Rails.application.config.assets.precompile += %w( application.css )
 Rails.application.config.assets.precompile += %w( application.js )
 
+Rails.application.config.assets.precompile += %w( resources.js )
+
+Rails.application.config.assets.precompile += %w( bug.js )
+
 Rails.application.config.assets.precompile += %w( menu.js )
 
 Rails.application.config.assets.precompile += %w( home.js )

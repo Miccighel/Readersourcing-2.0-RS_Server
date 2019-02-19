@@ -32,6 +32,11 @@ Rails.application.routes.draw do
 	post 'request_authorization', to: 'application#request_authorization', as: :request_authorization, constraints: {:format => 'json'}
 	get 'unauthorized', to: 'application#unauthorized', as: :unauthorized, constraints: {:format => 'json'}
 
+	get 'resources', to: 'application#resources', as: :resources, constraints: {:format => 'html'}
+
+	get 'bug', to: 'application#bug', as: :bug, constraints: {:format => 'html'}
+	post 'report', to: 'application#report', as: :report, constraints: {:format => 'json'}
+
 	get 'login', to: 'authentication#login', as: :login, constraints: {:format => 'html'}
 	post 'authenticate', to: 'authentication#authenticate', as: :authenticate, constraints: {:format => :json}
 

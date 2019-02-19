@@ -147,6 +147,7 @@ it:
       password_recovery: "Recupero Password"
       rating_confirm: "Conferma Assegnamento Giudizio"
       registration_confirm: "Conferma Registrazione"
+      bug_report: "Bug Segnalato"
     password:
       to_get_a_new_one: "Per ottenere una nuova password è sufficiente cliccare sul seguente link. Riceverai una mail contenente la password."
       edit_first_access: "Per la tua sicurezza, modificala al primo accesso alla piattaforma."

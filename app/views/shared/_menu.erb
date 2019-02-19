@@ -70,10 +70,10 @@
 							</li>
 						</ul>
 					</li>
-					<li id="literature-menu-item" class="nav-item <%= "active" if active == "profile-update" %>">
-						<a id="literature-btn" class="<%= "color-white" if appearance == "dark" %>" href="#">
-							Literature
-							<i id="literature-icon" class="fas fa-book-open"></i>
+					<li id="resources-menu-item" class="nav-item <%= "active" if active == "resources" %>">
+						<a id="resources-btn" class="<%= "color-white" if appearance == "dark" %>" href="<%= resources_path %>">
+							Resources
+							<i id="resources-icon" class="fas fa-book-open"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>
@@ -105,8 +105,8 @@
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>
-					<li id="bug-menu-item" class="nav-item">
-						<a id="bug-btn" class="color-red" href="<%= login_path %>">
+					<li id="bug-menu-item" class="nav-item <%= "active" if active == "bug" %>">
+						<a id="bug-btn" class="color-red" href="<%= bug_path %>">
 							Bug Report
 							<i class="fas fa-bug"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>

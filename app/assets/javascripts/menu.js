@@ -11,12 +11,12 @@ let logoutMenuItem = $("#logout-menu-item");
 let profileMenuItem = $("#profile-menu-item");
 let publicationsMenuItem = $("#publications-menu-item");
 let readersMenuItem = $("#readers-menu-item");
-let literatureMenuItem = $("#literature-menu-item");
+let resourcesMenuItem = $("#resources-menu-item");
 let bugMenuItem = $("#bug-menu-item");
 let reloadFakeMenuItem = $("#reload-fake-menu-item");
 
 let homeButton = $("#home-btn");
-let literatureButton = $("#literature-btn");
+let resourcesButton = $("#resources-btn");
 let logoutButton = $("#logout-btn");
 let loginButton = $("#login-btn");
 let signUpButton = $("#sign-up-btn");
@@ -32,7 +32,7 @@ let userScoreRSMValue = $("#user-score-rsm-val");
 let userScoreTRMValue = $("#user-score-trm-val");
 
 let homeIcons = $(".home-icon");
-let literatureIcon = $("#literature-icon");
+let literatureIcon = $("#resources-icon");
 let signUpIcons = $(".sign-up-icon");
 let signOutIcon = $("#sign-out-icon");
 let signInIcons = $(".sign-in-icon");
@@ -48,7 +48,7 @@ loginMenuItem.hide();
 logoutMenuItem.hide();
 profileMenuItem.hide();
 readersMenuItem.hide();
-literatureMenuItem.hide();
+resourcesMenuItem.hide();
 publicationsMenuItem.hide();
 bugMenuItem.hide();
 
@@ -59,7 +59,7 @@ let menuSuccessCallback = (data, status, jqXHR) => {
 	loginMenuItem.hide();
 	homeMenuItem.show();
 	profileMenuItem.show();
-	literatureMenuItem.show();
+	resourcesMenuItem.show();
 	readersMenuItem.show();
 	publicationsMenuItem.show();
 	logoutMenuItem.show();
@@ -69,7 +69,7 @@ let menuSuccessCallback = (data, status, jqXHR) => {
 };
 let menuErrorCallback = (jqXHR, status) => {
 	homeMenuItem.show();
-	literatureMenuItem.show();
+	resourcesMenuItem.show();
 	signUpMenuItem.show();
 	loginMenuItem.show();
 	bugMenuItem.show();
@@ -114,9 +114,9 @@ homeButton.on("click", () => {
 
 //######### GO TO LITERATURE HANDLING #########//
 
-literatureButton.on("click", () => {
-	literatureButton.find(literatureIcon).toggle();
-	literatureButton.find(reloadIcons).toggle();
+resourcesButton.on("click", () => {
+	resourcesButton.find(literatureIcon).toggle();
+	resourcesButton.find(reloadIcons).toggle();
 });
 
 //####### LOGOUT HANDLING #########//
