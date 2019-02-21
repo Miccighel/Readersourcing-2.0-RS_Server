@@ -17,7 +17,7 @@
 	<div class="w-100 mb-3">
 		<%= render partial: 'shared/menu', locals: {active: "bug", appearance: "dark"} %>
 	</div>
-	<div class="row m-auto">
+	<div class="row w-100 m-auto">
 		<div class="col-12">
 			<section id="success-sect" class="col-lg-8 col-sm-12 col-xs-12 m-auto p-0">
 				<div role="alert" class="alert alert-success"></div>
@@ -27,7 +27,7 @@
 				<p class="lead mb-0">Describe what happened</p>
 			</div>
 		</div>
-		<div class="col-lg-8 col-sm-8 col-xs-12 m-auto">
+		<div class="col-lg-5 col-sm-8 col-xs-12 m-auto">
 			<form id="bug-form" data-parsley-validate>
 				<div class="row">
 					<div class="col-12">
@@ -55,7 +55,7 @@
 					</div>
 					<div class="col-12 pt-1">
 						<p class="text-sm text-center">
-							<small>Your email will be sent to an administrator.</small>
+							<small>Your bug report will be sent to an administrator</small>
 						</p>
 					</div>
 					<div class="col-12 text-center">

@@ -110,7 +110,7 @@ body.bg-gray-dark input {
 	border-color: rgba(255, 0, 0, 0.7) !important;
 }
 
-#bug-btn:hover, #bug-btn:active {
+#bug-btn:hover, #bug-btn:active, #bug-btn:focus, #bug-btn:visited {
 	background-color: rgba(255, 0, 0, 0.7) !important;
 	color: #fff !important;
 	border-color: rgba(255, 0, 0, 0.98) !important;

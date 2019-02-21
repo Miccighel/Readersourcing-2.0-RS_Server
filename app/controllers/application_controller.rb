@@ -19,7 +19,8 @@ class ApplicationController < ActionController::API
 
 	# POST /report.json
 	def report
-		ApplicationMailer.report(params[:mail], params[:message]).deliver_now
+		ApplicationMailer.report(params[:email], params[:message]).deliver_now
+		render json: {message: I18n.t("confirmations.messages.bug_report_sent")}, status: :ok
 	end
 
 	# POST /request_authorization.json

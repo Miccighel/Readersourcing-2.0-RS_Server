@@ -78,6 +78,7 @@ it:
       fetchable_publication: "Il file esiste, è scaricabile ed è codificato in formato PDF."
       authorization_completed: "Sei autorizzato a procedere"
       base_url_found: "L'URL di voto è stata estratta dal tuo file PDF."
+      bug_report_sent: "La tua segnalazione di un bug è stata correttamente inviata ad un amministratore."
   errors:
     messages:
       invalid_credentials: "Credenziali non valide. Per favore, riprova."
@@ -160,3 +161,6 @@ it:
       registration_confirm: "Grazie per esserti registrato! Per favore, clicca il collegamento sottostante per confermare la tua registrazione."
       unsubscribe: "Se non desideri più ricevere mail come questa, disiscriviti"
       unsubscribe_successful: "Non sei più iscritto alle mail (eccetto quelle di sistema) provenienti da Readersourcing 2.0. Riceverai ancora quelle di sistema. Puoi iscriverti nuovamente in qualsiasi momento dalla sezione di modifica del profilo."
+    report:
+      user_report: "Un utente ha segnalato un bug con il messaggio sottostante."
+      user_mail: "L'indirizzo email dell'utente è: "

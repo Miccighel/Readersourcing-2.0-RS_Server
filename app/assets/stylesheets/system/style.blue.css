@@ -767,10 +767,10 @@ header.nav-holder.sticky {
 }
 
 #navbar .navbar-nav > li > a:focus {
-  background: #467fbf !important;
-  color: #fff !important;
-  text-decoration: none !important;
-  border-color: #36669c !important;
+  background: #467fbf;
+  color: #fff;
+  text-decoration: none;
+  border-color: #36669c;
 }
 
 #navbar.nav-light .navbar-nav > li.active a.dropdown-toggle,
@@ -787,10 +787,10 @@ header.nav-holder.sticky {
 }
 
 #navbar.nav-light .navbar-nav > li > a:focus {
-  background: none !important;
-  color: #555 !important;
-  text-decoration: underline !important;
-  border-color: #467fbf !important;
+  background: none;
+  color: #555;
+  text-decoration: underline;
+  border-color: #467fbf;
 }
 
 @media (max-width: 991px) {

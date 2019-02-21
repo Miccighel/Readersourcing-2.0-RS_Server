@@ -8,3 +8,8 @@
 .parsley-errors-list li {
 	color: indianred !important;
 }
+
+.readersourcing-score:hover, .readersourcing-score:active {
+	background-color: #467fbf !important;
+	border: 1px solid rgb(70, 127, 191) !important;
+}

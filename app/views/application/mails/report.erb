@@ -1,2 +1,20 @@
 <h1><%= I18n.t "mails.labels.dear" %> Readersourcing 2.0 Administrator,</h1>
-<%= message %>
+<%= I18n.t "mails.report.user_report" %>
+<br/>
+<br/>
+<%= "------------------------------------------------------" %>
+<br/>
+<br/>
+<%= @message %>
+<br/>
+<br/>
+<%= "------------------------------------------------------" %>
+<br/>
+<br/>
+<%= I18n.t "mails.report.user_mail" %><strong><%= @mail %></strong>
+<br/>
+<br/>
+<%= I18n.t "mails.labels.cheers" %>
+<br/>
+<br/>
+<%= I18n.t "mails.labels.team" %>

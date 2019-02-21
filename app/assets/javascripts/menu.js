@@ -22,6 +22,7 @@ let loginButton = $("#login-btn");
 let signUpButton = $("#sign-up-btn");
 let goToPasswordEditButton = $("#go-to-password-edit-btn");
 let goToProfileUpdateButton = $("#go-to-profile-update-btn");
+let bugButton = $("#bug-btn");
 
 let firstNameValue = $("#first-name-val");
 let lastNameValue = $("#last-name-val");
@@ -36,6 +37,7 @@ let literatureIcon = $("#resources-icon");
 let signUpIcons = $(".sign-up-icon");
 let signOutIcon = $("#sign-out-icon");
 let signInIcons = $(".sign-in-icon");
+let bugIcon = $("#bug-icon");
 let reloadIcons = $(".reload-icon");
 
 //######## UI INITIAL SETUP ########//
@@ -140,6 +142,14 @@ signUpButton.on("click", () => {
 	signUpButton.find(signUpIcons).toggle();
 	signUpButton.find(reloadIcons).toggle();
 });
+
+//######### BUG REPORT HANDLING #########//
+
+bugButton.on("click", () => {
+	bugButton.find(bugIcon).toggle();
+	bugButton.find(reloadIcons).toggle();
+});
+
 
 //####### GO TO PASSWORD EDIT HANDLING #########//
 

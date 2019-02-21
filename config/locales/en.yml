@@ -24,6 +24,7 @@ en:
       fetchable_publication: "File exists, is downloadable and it is encoded in PDF format."
       authorization_completed: "You are authorized to proceed"
       base_url_found: "The rating URL has been extracted from your PDF file."
+      bug_report_sent: "Your bug report has been successfully sent to an administrator."
   information:
     messages:
       rate: "Rate this publication"
@@ -93,3 +94,6 @@ en:
       registration_confirm: "Thanks for registering! To confirm your registration click the URL below."
       unsubscribe: "If you do not want to get more mails like this one, unsubscribe here."
       unsubscribe_successful: "You are not subscribed anymore to emails (except for system ones) from Readersourcing 2.0. You can subscribe again at any time from profile editing section."
+    report:
+      user_report: "An user reported a bug with the message below."
+      user_mail: "The email address of the user is: "

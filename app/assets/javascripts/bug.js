@@ -21,15 +21,7 @@ let alertSuccess = $(".alert-success");
 
 //######## UI INITIAL SETUP ########//
 
-let message = localStorage.getItem('message');
-if (message == null) {
-	successSection.hide();
-} else {
-	successSection.show();
-	successSection.find(alertSuccess).append(message);
-	localStorage.removeItem('message')
-}
-
+successSection.hide();
 errorsSection.hide();
 errorButton.hide();
 
@@ -45,7 +37,10 @@ doBugReportButton.on("click", () => {
 		doBugReportButton.find(reloadIcons).toggle();
 		let data = {email: emailField.val(), message: messageField.val()};
 		let successCallback = (data, status, jqXHR) => {
-
+			doBugReportButton.text("Bug Report Sent!");
+			doBugReportButton.prop("disabled", true);
+			successSection.show();
+			successSection.find(alertSuccess).append(data["message"]);
 		};
 		let errorCallback = (jqXHR, status) => {
 			doBugReportButton.find(messageIcon).toggle();
