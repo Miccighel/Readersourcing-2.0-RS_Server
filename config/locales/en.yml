@@ -36,7 +36,7 @@ en:
   errors:
     messages:
       invalid_credentials: "Invalid credentials. Please, try again."
-      rating_already_given: "You have already rated the publication."
+      rating_already_given: "You have already rated this publication."
       rating_unsuccessful: "Something went wrong during rating assignment. Please, try again."
       not_the_same_user: "The data do not match with the ones of the user that has created the link inside the file."
       unauthorized: "You are not authorized to proceed"
@@ -52,7 +52,8 @@ en:
       not_authorized: "You are not authorized to see this page."
       ip_address_changed: "IP address changed."
       expired_login_token: "Expired authentication token."
-      unfetchable_publication: "File does not exists, it is not downloadable or it is not encoded in PDF format."
+      unfetchable_publication: "File is not encoded in PDF format or an error happened during its download."
+      unfetchable_publication_host: "Host is valid, but domain looks weird. Please, check your URL and try again."
       base_url_not_found: "The PDF file does not contain a rating URL to extract."
       error_reading_base_url: "Error reading rating URL metadata. Please, try again"
       pdf_not_uploaded: "No PDF file has been uploaded. Please, try again."

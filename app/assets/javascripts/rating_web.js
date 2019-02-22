@@ -10,6 +10,7 @@ let ratingSectionSubControls = $(".rating-sect-sub");
 let publicationScoreSection = $("#publication-score-sect");
 let userScoreSection = $("#user-score-sect");
 let undetectedPublicationSection = $("#undetected-publication-sect");
+let undetectedPublicationDetails = $(".undetected-publication-details");
 let errorsSection = $(".errors-sect");
 let loadingSection = $("#loading-sect");
 
@@ -42,6 +43,7 @@ let publicationUrlField = $("#publication-url");
 
 let annotatedPublicationDropzone;
 let annotatedPublicationDropzoneSuccess = $("#dropzone-success");
+let annotatedPublicationDropzoneError = $("#dropzone-error");
 
 let publicationScoreRSMValue = $("#publication-score-rsm-val");
 let publicationScoreTRMValue = $("#publication-score-trm-val");
@@ -79,6 +81,7 @@ ratingSection.show();
 ratingSectionSubControls.hide();
 publicationScoreSection.hide();
 annotatedPublicationDropzoneSuccess.hide();
+annotatedPublicationDropzoneError.hide();
 goToRatingButton.hide();
 errorsSection.hide();
 
@@ -205,8 +208,13 @@ if (authToken != null) {
 					ratingSection.hide();
 					ratingSectionSubControls.hide();
 					publicationScoreSection.hide();
-					undetectedPublicationSection.show();
-					loadingSection.hide()
+					let errorPromise = buildErrors(jqXHR.responseText).then(result => {
+						undetectedPublicationDetails.parent().find(errorsSection).find(alert).empty();
+						undetectedPublicationDetails.parent().find(errorsSection).find(alert).append(result);
+						undetectedPublicationDetails.parent().find(errorsSection).show();
+						undetectedPublicationSection.show();
+						loadingSection.hide()
+					});
 				};
 				let promise = ajax("POST", "publications/is_fetchable.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 			}
@@ -288,9 +296,8 @@ if (authToken != null) {
 		goToRatingButton.prop("href", data["baseUrl"])
 	});
 	annotatedPublicationDropzone.on('error', (file, response, xhr) => {
-		if (response.hasOwnProperty('errors')) {
-			$(file.previewElement).find('.dz-error-message').text(response["errors"][0]);
-		}
+		if (response.hasOwnProperty('errors')) annotatedPublicationDropzoneError.text(response["errors"][0]); else annotatedPublicationDropzoneError.text(response)
+		annotatedPublicationDropzoneError.show();
 	});
 }
 

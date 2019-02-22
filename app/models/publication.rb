@@ -30,7 +30,10 @@ class Publication < ApplicationRecord
 			publication = open(pdf_url)
 		rescue SystemCallError => exception
 			logger.info "Could not fetch file: #{exception.message}"
-			return false
+			raise
+		rescue SocketError => exception
+			logger.info "Could not fetch file: #{exception.message}"
+			raise
 		end
 		content_type = publication.meta['content-type']
 		logger.info "Content type found: #{content_type}"

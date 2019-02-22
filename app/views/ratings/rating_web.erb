@@ -29,18 +29,38 @@
 			</div>
 		</div>
 	</div>
-	<div id="undetected-publication-sect" class="row m-auto">
-		<div class="col-12">
-			<div class="heading text-center">
-				<h4>Fetch a new publication</h4>
-				<p class="lead mb-0">The inserted URL does not contain a rateable publication, please check it
-					again.</p>
+	<div id="undetected-publication-sect" class="row m-auto w-100">
+		<div class="col-lg-5 col-sm-8 col-xs-12 m-auto">
+			<div class="col-12">
+				<div class="heading text-center">
+					<h4>Fetch a new publication</h4>
+					<p class="lead mb-0 text-justify">The inserted URL does not contain a rateable publication, please check it
+						again.</p>
+				</div>
 			</div>
-			<div class="mt-3">
+			<div class="col-12">
 				<button type="button" id="reload-btn" class="btn btn-danger btn-block">
 					<i class="fas fa-redo-alt"></i>
 					Reload
 				</button>
+			</div>
+			<div id="accordion" role="tablist" class="undetected-publication-details col-12 accordion-dark">
+				<div class="card">
+					<div id="headingOne" role="tab" class="card-header">
+						<h5 class="mb-0">
+							<a data-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="color-white collapsed">View Details <small>(Click to toggle)</small></a>
+						</h5>
+					</div>
+					<div id="collapseOne" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" class="collapse" style="">
+						<div class="card-body">
+							<div class="row">
+								<section class="col-12 errors-sect text-justify">
+									<div role="alert" class="alert alert-danger"></div>
+								</section>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -114,7 +134,7 @@
 					<div role="alert" class="alert alert-danger"></div>
 				</section>
 				<button type="button" id="load-save-btn" class="btn btn-primary btn-block m-0">
-					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+					<i class="fas fa-sync-alt fa-spin"></i>
 				</button>
 				<button type="button" id="save-btn" class="btn btn-primary btn-block m-0">
 					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
@@ -150,7 +170,7 @@
 				<div class="heading text-center mb-1">
 					<h4>Automatic extraction of a rating URL</h4>
 					<p class="lead mb-0 text-justify">If you already have a link-annotated publication, drop it below
-						and extract the rating URL.</p>
+						to extract the rating URL.</p>
 				</div>
 			</div>
 			<div class="col-12">
@@ -164,11 +184,14 @@
 				<div role="alert" id="dropzone-success" class="alert alert-success"></div>
 			</div>
 			<div class="col-12 m-auto">
-				<a href="" id="go-to-rating-btn" class="btn btn-primary btn-block link-white">
+				<a href="" id="go-to-rating-btn" target="_blank" class="btn btn-primary btn-block link-white">
 					Rating Page
 					<i id="go-to-rating-icon" class="fas fa-arrow-right"></i>
 					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 				</a>
+			</div>
+			<div class="col-12 mt-2">
+				<div role="alert" id="dropzone-error" class="alert alert-danger color-red-dark mb-2"></div>
 			</div>
 		</div>
 	</div>

@@ -81,11 +81,19 @@ class PublicationsController < ApplicationController
 			render "publications/show_without_paths", status: :ok, location: @publication
 		else
 			@publication = Publication.new(pdf_url: publication_params[:pdf_url])
-			if @publication.is_fetchable
-				render json: {message: I18n.t("confirmations.messages.fetchable_publication")}, status: :ok
-			else
-				@error_manager.add_error(I18n.t("errors.messages.unfetchable_publication"))
-				render json: {errors: @error_manager.get_errors}, status: :not_found
+			begin
+				if @publication.is_fetchable
+					render json: {message: I18n.t("confirmations.messages.fetchable_publication")}, status: :ok
+				else
+					@error_manager.add_error(I18n.t("errors.messages.unfetchable_publication"))
+					render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
+				end
+			rescue SocketError
+				@error_manager.add_error(message: I18n.t("errors.messages.unfetchable_publication_host"))
+				render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
+			rescue SystemCallError => error
+				@error_manager.add_error(error.message)
+				render json: {errors: @error_manager.get_errors}, status: :internal_server_error
 			end
 		end
 	end

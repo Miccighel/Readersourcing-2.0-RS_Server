@@ -21,7 +21,7 @@
 	<div class="w-100 mb-3">
 		<%= render partial: 'shared/menu', locals: {active: "errors", appearance: "light"} %>
 	</div>
-	<div class="row w-100 m-auto">
+	<div class="row ml-auto mr-auto mt-auto mb-0 w-100">
 		<div class="col-lg-5 col-sm-8 col-xs-12 m-auto">
 			<div class="heading text-center">
 				<h1><%= I18n.t("errors.messages.unauthorized") %></h1>
@@ -30,6 +30,8 @@
 				<% end %>
 			</div>
 		</div>
+	</div>
+	<div class="row ml-auto mr-auto mb-auto mt-3 w-100">
 		<div class="col-lg-5 col-sm-8 col-xs-12 m-auto text-center">
 			<a href="<%= login_path %>" id="go-to-login-btn" class="btn btn-primary btn-block link-white">
 				Login
