@@ -5,23 +5,20 @@
 let menuLinks = $(".header a");
 
 let homeMenuItem = $("#home-menu-item");
-let signUpMenuItem = $("#sign-up-menu-item");
-let loginMenuItem = $("#login-menu-item");
-let logoutMenuItem = $("#logout-menu-item");
-let profileMenuItem = $("#profile-menu-item");
-let publicationsMenuItem = $("#publications-menu-item");
-let readersMenuItem = $("#readers-menu-item");
-let resourcesMenuItem = $("#resources-menu-item");
+let dashboardMenuItem = $("#dashboard-menu-item");
+let itemsMenuItem = $("#items-menu-item");
+let aboutMenuItem = $("#about-menu-item");
+let userMenuItem = $("#user-menu-item");
 let bugMenuItem = $("#bug-menu-item");
 let reloadFakeMenuItem = $("#reload-fake-menu-item");
 
 let homeButton = $("#home-btn");
-let resourcesButton = $("#resources-btn");
+let dashboardButton = $("#dashboard-btn");
+let goToPasswordEditButton = $("#go-to-password-edit-btn");
+let goToProfileUpdateButton = $("#go-to-profile-update-btn");
 let logoutButton = $("#logout-btn");
 let loginButton = $("#login-btn");
 let signUpButton = $("#sign-up-btn");
-let goToPasswordEditButton = $("#go-to-password-edit-btn");
-let goToProfileUpdateButton = $("#go-to-profile-update-btn");
 let bugButton = $("#bug-btn");
 
 let firstNameValue = $("#first-name-val");
@@ -33,9 +30,8 @@ let userScoreRSMValue = $("#user-score-rsm-val");
 let userScoreTRMValue = $("#user-score-trm-val");
 
 let homeIcons = $(".home-icon");
-let literatureIcon = $("#resources-icon");
+let pdfIcon = $("#pdf-icon");
 let signUpIcons = $(".sign-up-icon");
-let signOutIcon = $("#sign-out-icon");
 let signInIcons = $(".sign-in-icon");
 let bugIcon = $("#bug-icon");
 let reloadIcons = $(".reload-icon");
@@ -45,35 +41,30 @@ let reloadIcons = $(".reload-icon");
 reloadIcons.hide();
 
 homeMenuItem.hide();
-signUpMenuItem.hide();
-loginMenuItem.hide();
-logoutMenuItem.hide();
-profileMenuItem.hide();
-readersMenuItem.hide();
-resourcesMenuItem.hide();
-publicationsMenuItem.hide();
+dashboardMenuItem.hide();
+itemsMenuItem.hide();
+aboutMenuItem.hide();
+userMenuItem.hide();
+signUpButton.hide();
+loginButton.hide();
 bugMenuItem.hide();
 
 menuLinks.on("click", (event) => event.preventDefault());
 
 let menuSuccessCallback = (data, status, jqXHR) => {
-	signUpMenuItem.hide();
-	loginMenuItem.hide();
 	homeMenuItem.show();
-	profileMenuItem.show();
-	resourcesMenuItem.show();
-	readersMenuItem.show();
-	publicationsMenuItem.show();
-	logoutMenuItem.show();
-	publicationsMenuItem.show();
+	dashboardMenuItem.show();
+	itemsMenuItem.show();
+	aboutMenuItem.show();
+	userMenuItem.show();
 	bugMenuItem.show();
 	reloadFakeMenuItem.hide();
 };
 let menuErrorCallback = (jqXHR, status) => {
 	homeMenuItem.show();
-	resourcesMenuItem.show();
-	signUpMenuItem.show();
-	loginMenuItem.show();
+	aboutMenuItem.show();
+	loginButton.show();
+	signUpButton.show();
 	bugMenuItem.show();
 	reloadFakeMenuItem.hide();
 };
@@ -114,20 +105,16 @@ homeButton.on("click", () => {
 	homeButton.find(reloadIcons).toggle();
 });
 
-//######### GO TO LITERATURE HANDLING #########//
+//######### GO TO DASHBOARD HANDLING #########//
 
-resourcesButton.on("click", () => {
-	resourcesButton.find(literatureIcon).toggle();
-	resourcesButton.find(reloadIcons).toggle();
+dashboardMenuItem.on("click", () => {
+	dashboardButton.find(pdfIcon).toggle();
+	dashboardButton.find(reloadIcons).toggle();
 });
 
 //####### LOGOUT HANDLING #########//
 
-logoutButton.on("click", () => {
-	logoutButton.find(reloadIcons).toggle();
-	logoutButton.find(signOutIcon).toggle();
-	deleteToken().then(() => window.location.href = "/");
-});
+logoutButton.on("click", () => deleteToken().then(() => window.location.href = "/"));
 
 //######### GO TO LOGIN HANDLING #########//
 
@@ -139,6 +126,7 @@ loginButton.on("click", () => {
 //######### GO TO SIGN UP HANDLING #########//
 
 signUpButton.on("click", () => {
+	console.log("hey");
 	signUpButton.find(signUpIcons).toggle();
 	signUpButton.find(reloadIcons).toggle();
 });

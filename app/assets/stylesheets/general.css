@@ -104,18 +104,6 @@ body.bg-gray-dark input {
 
 /* ////////// MENU  ////////// */
 
-#bug-btn:hover, #bug-btn:active, #bug-btn {
-	background-color: rgba(255, 0, 0, 0.5) !important;
-	color: #fff !important;
-	border-color: rgba(255, 0, 0, 0.7) !important;
-}
-
-#bug-btn:hover, #bug-btn:active, #bug-btn:focus, #bug-btn:visited {
-	background-color: rgba(255, 0, 0, 0.7) !important;
-	color: #fff !important;
-	border-color: rgba(255, 0, 0, 0.98) !important;
-}
-
 #reload-fake-menu-item a {
 	position: relative;
 	right: 3%;
@@ -126,12 +114,20 @@ body.bg-gray-dark input {
 	width: fit-content !important;
 }
 
-#publications-menu-item .megamenu {
-	left: 39.9% !important;
+#user-menu-item .megamenu .logged {
+	left: 64.1% !important;
 }
 
-#readers-menu-item .megamenu {
-	left: 47.25% !important;
+#items-menu-item .megamenu {
+	left: 50% !important;
+}
+
+#items-menu-item .logged {
+	left: 100% !important;
+}
+
+#about-menu-item .megamenu .logged{
+	left: 58.2% !important;
 }
 
 /* ////////// ERRORS  ////////// */
