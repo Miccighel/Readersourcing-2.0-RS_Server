@@ -5,8 +5,8 @@
 let menuLinks = $(".header a");
 
 let homeMenuItem = $("#home-menu-item");
-let dashboardMenuItem = $("#dashboard-menu-item");
-let itemsMenuItem = $("#items-menu-item");
+let rateMenuItem = $("#rate-menu-item");
+let ratedItemsMenuItem = $("#rated-items-menu-item");
 let aboutMenuItem = $("#about-menu-item");
 let userMenuItem = $("#user-menu-item");
 let bugMenuItem = $("#bug-menu-item");
@@ -41,8 +41,8 @@ let reloadIcons = $(".reload-icon");
 reloadIcons.hide();
 
 homeMenuItem.hide();
-dashboardMenuItem.hide();
-itemsMenuItem.hide();
+rateMenuItem.hide();
+ratedItemsMenuItem.hide();
 aboutMenuItem.hide();
 userMenuItem.hide();
 signUpButton.hide();
@@ -53,16 +53,22 @@ menuLinks.on("click", (event) => event.preventDefault());
 
 let menuSuccessCallback = (data, status, jqXHR) => {
 	homeMenuItem.show();
-	dashboardMenuItem.show();
-	itemsMenuItem.show();
+	rateMenuItem.show();
+	ratedItemsMenuItem.show();
+	ratedItemsMenuItem.find('ul').addClass("logged");
 	aboutMenuItem.show();
+	aboutMenuItem.find('ul').addClass("logged");
 	userMenuItem.show();
+	userMenuItem.find('ul').addClass("logged");
 	bugMenuItem.show();
 	reloadFakeMenuItem.hide();
 };
 let menuErrorCallback = (jqXHR, status) => {
 	homeMenuItem.show();
+	ratedItemsMenuItem.find('ul').removeClass("logged");
 	aboutMenuItem.show();
+	aboutMenuItem.find('ul').removeClass("logged");
+	userMenuItem.find('ul').removeClass("logged");
 	loginButton.show();
 	signUpButton.show();
 	bugMenuItem.show();
@@ -107,7 +113,7 @@ homeButton.on("click", () => {
 
 //######### GO TO DASHBOARD HANDLING #########//
 
-dashboardMenuItem.on("click", () => {
+rateMenuItem.on("click", () => {
 	dashboardButton.find(pdfIcon).toggle();
 	dashboardButton.find(reloadIcons).toggle();
 });

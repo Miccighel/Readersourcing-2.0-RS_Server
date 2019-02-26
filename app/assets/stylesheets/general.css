@@ -114,20 +114,30 @@ body.bg-gray-dark input {
 	width: fit-content !important;
 }
 
-#user-menu-item .megamenu .logged {
-	left: 64.1% !important;
+#user-menu-item .logged {
+	left: 53.34% !important;
 }
 
-#items-menu-item .megamenu {
-	left: 50% !important;
+#rated-items-menu-item .logged {
+	left: 38.45% !important;
 }
 
-#items-menu-item .logged {
-	left: 100% !important;
+@media (max-width: 991px) {
+	#navbar .menu-large .megamenu {
+		width: 100% !important;
+	}
+
+	#navbar .menu-large .megamenu li a {
+		text-align: center !important;
+	}
 }
 
-#about-menu-item .megamenu .logged{
-	left: 58.2% !important;
+#about-menu-item .megamenu {
+	left: 33.8% !important;
+}
+
+#about-menu-item .logged {
+	left: 47.4% !important;
 }
 
 /* ////////// ERRORS  ////////// */

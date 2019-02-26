@@ -22,22 +22,22 @@
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>
-					<li id="dashboard-menu-item" class="nav-item">
-						<a href="<%= rate_web_path %>" class="<%= "color-white" if appearance == "dark" %>" id="dashboard-btn">
-							Dashboard
+					<li id="rate-menu-item" class="nav-item">
+						<a href="<%= rate_web_path %>" class="<%= "color-white" if appearance == "dark" %>" id="rate-btn">
+							Rate
 							<i id="pdf-icon" class="fas fa-file-pdf"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>
-					<li id="items-menu-item" class="nav-item dropdown menu-large">
+					<li id="rated-items-menu-item" class="nav-item dropdown menu-large">
 						<a href="#" data-toggle="dropdown" class="dropdown-toggle">
 							<span class="<%= "color-white" if appearance == "dark" %>">
-								Items
+								Rated Items
 								<i class="fas fa-book-reader"></i>
 								<b class="caret"></b>
 							</span>
 						</a>
-						<ul class="dropdown-menu megamenu pt-1 pb-1 logged">
+						<ul class="dropdown-menu megamenu pt-1 pb-1">
 							<li>
 								<div class="row">
 									<div class="col-12">
@@ -52,13 +52,6 @@
 									</div>
 								</div>
 							</li>
-						</ul>
-					</li>
-					<li class="nav-item dropdown show"><a href="#" data-toggle="dropdown" class="dropdown-toggle" aria-expanded="true">Contact <b class="caret"></b></a>
-						<ul class="dropdown-menu show" style="display: block;">
-							<li class="dropdown-item"><a href="contact.html" class="nav-link">Contact option 1</a></li>
-							<li class="dropdown-item"><a href="contact2.html" class="nav-link">Contact option 2</a></li>
-							<li class="dropdown-item"><a href="contact3.html" class="nav-link">Contact option 3</a></li>
 						</ul>
 					</li>
 					<li id="about-menu-item" class="nav-item dropdown menu-large">
@@ -99,7 +92,7 @@
 								<div class="row">
 									<div class="col-12">
 										<ul class="list-unstyled">
-											<li class="nav-item">
+											<li class="nav-item ">
 												<a href="#" id="profile-btn" data-toggle="modal" data-target="#modal-profile" class="nav-link">
 													Profile
 												</a>
