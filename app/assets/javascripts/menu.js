@@ -13,7 +13,7 @@ let bugMenuItem = $("#bug-menu-item");
 let reloadFakeMenuItem = $("#reload-fake-menu-item");
 
 let homeButton = $("#home-btn");
-let dashboardButton = $("#dashboard-btn");
+let rateButton = $("#rate-btn");
 let goToPasswordEditButton = $("#go-to-password-edit-btn");
 let goToProfileUpdateButton = $("#go-to-profile-update-btn");
 let logoutButton = $("#logout-btn");
@@ -114,8 +114,8 @@ homeButton.on("click", () => {
 //######### GO TO DASHBOARD HANDLING #########//
 
 rateMenuItem.on("click", () => {
-	dashboardButton.find(pdfIcon).toggle();
-	dashboardButton.find(reloadIcons).toggle();
+	rateButton.find(pdfIcon).toggle();
+	rateButton.find(reloadIcons).toggle();
 });
 
 //####### LOGOUT HANDLING #########//

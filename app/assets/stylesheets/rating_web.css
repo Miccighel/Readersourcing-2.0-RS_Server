@@ -3,7 +3,7 @@
 .form-check-label {
 	position: relative;
 	left: 4%;
-	bottom: 15%;
+	bottom: 20%;
 }
 
 .parsley-errors-list li {
@@ -37,13 +37,13 @@
 /* ////////// DROPZONE ////////// */
 
 #annotated-publication-dropzone {
-	background: url(texture-bw.png) center center repeat !important;
+	background-color: #EFEFEF;
 }
 
 .dropzone {
-	border: 1px solid #0087F7;
+	border: 3px dashed #0087F7;
 	background: white;
-	color: #212529 !important;
+	color: #555 !important;
 	padding: 0 !important;
 	min-height: 115px !important;
 }

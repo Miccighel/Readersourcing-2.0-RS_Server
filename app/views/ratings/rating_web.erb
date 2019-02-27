@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" xmlns="http://www.w3.org/1999/html">
 <head>
 	<%= csrf_meta_tags %>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -30,7 +30,7 @@
 		</div>
 	</div>
 	<div id="undetected-publication-sect" class="row m-auto w-100">
-		<div class="col-lg-5 col-sm-8 col-xs-12 m-auto">
+		<div class="col-lg-4 col-sm-8 col-xs-12 m-auto">
 			<div class="col-12">
 				<div class="heading text-center">
 					<h4>Fetch a new publication</h4>
@@ -65,12 +65,11 @@
 		</div>
 	</div>
 	<div id="rating-sect" class="row m-auto w-100">
-		<div class="col-lg-5 col-sm-8 col-xs-12 m-auto">
+		<div class="col-lg-4 col-sm-8 col-xs-12 m-auto">
 			<div class="col-12">
 				<div class="heading text-center mb-1">
-					<h4>Rating Section</h4>
-					<p id="rating-info" class="lead mb-0 text-justify">Insert an URL to a publication to rate it. If it
-						is fetchable, the rating interface will appear.</p>
+					<h4>Rate a publication</h4>
+					<p id="rating-info" class="lead mb-0 text-justify">Insert an URL to a publication encoded in a .pdf file to rate it.</p>
 					<p id="rating-caption" class="lead mb-0">Use the slider below to select a rating for the current publication</p>
 					<p id="rating-subcaption" class="lead mb-0">Publication rated with score</p>
 				</div>
@@ -100,94 +99,80 @@
 			<div class="col-12 m-auto text-center rating-sect-sub">
 				<h1 id="rating-text"><i class="fas fa-sync-alt fa-spin"></i></h1>
 			</div>
-			<div class="col-12 m-auto rating-sect-sub">
+			<div class="col-12 m-auto rating-sect-sub text-center">
 				<section class="errors-sect text-left">
 					<div role="alert" class="alert alert-danger"></div>
 				</section>
-				<button type="button" id="load-rate-btn" class="btn btn-primary btn-block">
+				<button type="button" id="load-rate-btn" class="btn btn-primary">
 					<i class="fas fa-sync-alt fa-spin"></i>
 				</button>
-				<button type="button" id="vote-btn" class="btn btn-success w-75 m-auto">
+				<button type="button" id="vote-btn" class=" w-35 btn btn-success m-auto">
 					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 					Rate
 				</button>
 				<a href="#" data-toggle="modal" data-target="#modal-configuration" id="configure-btn"
-				   class="btn btn-primary link-white w-24 pull-right">
+				   class="btn btn-primary link-white">
 					<i class="fas fa-cog"></i>
 				</a>
-				<button type="button" id="vote-success-btn" class="btn btn-success btn-block">
+				<button type="button" id="vote-success-btn" class="btn btn-success w-35">
 					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 					Rating saved
 				</button>
-				<button type="button" class="btn btn-danger error-btn btn-block">
+				<button type="button" class="btn btn-danger error-btn w-35">
 					<i class="fa fa-exclamation-triangle danger-icon"></i>
 					Error
 				</button>
 			</div>
 			<div id="buttons-caption" class="col-12 m-auto rating-sect-sub">
 				<div class="col-12 text-center mt-3">
-					<p class="lead mb-3">Otherwise</p>
+					<p class="lead mb-3">Save for later</p>
 				</div>
 			</div>
-			<div class="col-12 m-auto rating-sect-sub">
+			<div class="col-12 mt-auto ml-auto mr-auto mb-3 text-center rating-sect-sub">
 				<section class="errors-sect text-left">
 					<div role="alert" class="alert alert-danger"></div>
 				</section>
-				<button type="button" id="load-save-btn" class="btn btn-primary btn-block m-0">
+				<button type="button" id="load-save-btn" class="btn btn-primary m-0">
+					<span>Loading...</span>
 					<i class="fas fa-sync-alt fa-spin"></i>
 				</button>
-				<button type="button" id="save-btn" class="btn btn-primary btn-block m-0">
+				<button type="button" id="save-btn" class="btn btn-primary w-35 m-0">
+					<span>Download</span>
 					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
-					Save For Later
 				</button>
-				<a href="#" id="download-btn" class="btn btn-primary link-white w-75" target="_blank">
-					Download
+				<a href="#" id="download-btn" class="btn btn-primary link-white w-35" target="_blank">
+					Open
 				</a>
-				<a href="#" id="refresh-btn" class="btn btn-primary link-white w-24 pull-right">
+				<a href="#" id="refresh-btn" class="btn btn-primary link-white">
 					<i class="fas fa-sync-alt"></i>
 				</a>
-				<button type="button" id="error-btn" class="btn btn-danger btn-block error-btn m-0">
+				<button type="button" id="error-btn" class="btn btn-danger w-35 error-btn m-0">
 					<i class="fa fa-exclamation-triangle danger-icon"></i>
 					Error
 				</button>
 			</div>
-			<div id="publication-score-sect" class="col-12 m-auto pt-3">
-				<div class="text-center">
-					<p class="lead mb-3">Scores</p>
-				</div>
-				<div class="text-center btn btn-primary btn-block mb-0 readersourcing-score">
-					Publication Score (RSM): <span id="publication-score-rsm-val"></span>/100
-				</div>
-				<div class="text-center btn btn-primary btn-block mt-0 mb-3 readersourcing-score">
-					Publication Score (TRM): <span id="publication-score-trm-val"></span>/100
-				</div>
-			</div>
 		</div>
 	</div>
 	<div class="row m-auto w-100">
-		<div class="col-lg-5 col-sm-8 col-xs-12 m-auto">
+		<div class="col-lg-4 col-sm-8 col-xs-12 m-auto">
 			<div class="col-12">
 				<div class="heading text-center mb-1">
-					<h4>Automatic extraction of a rating URL</h4>
-					<p class="lead mb-0 text-justify">If you already have a link-annotated publication, drop it below
-						to extract the rating URL.</p>
+					<h4>Automatic extraction</h4>
+					<p class="lead mb-0 text-justify">Upload here your link-annotated publication to extract the rating URL.</p>
 				</div>
 			</div>
 			<div class="col-12">
 				<form action="<%= extract_publications_path(format: :json) %>" id="annotated-publication-dropzone" class="dropzone border-primary">
-					<div class="dz-default dz-message text-center">
-						<h4 class="color-dark mt-3 mb-0">Drop Your Link-Annotated Publication Here</h4>
-						<br/><i class="fas fa-file-pdf fa-3x color-dark"></i></div>
+					<div class="dz-default dz-message text-center pt-1">
+						<br/><i class="fas fa-upload fa-2x"></i><br />.pdf file</div>
 				</form>
 			</div>
 			<div class="col-12 mt-3 ml-auto mr-auto mb-auto">
 				<div role="alert" id="dropzone-success" class="alert alert-success"></div>
 			</div>
-			<div class="col-12 m-auto">
-				<a href="" id="go-to-rating-btn" target="_blank" class="btn btn-primary btn-block link-white">
+			<div class="col-12 m-auto text-center">
+				<a href="" id="go-to-rating-btn" target="_blank" class="btn btn-primary w-35 link-white">
 					Rating Page
-					<i id="go-to-rating-icon" class="fas fa-arrow-right"></i>
-					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 				</a>
 			</div>
 			<div class="col-12 mt-2">
@@ -220,8 +205,8 @@
 			</div>
 			<div class="modal-footer">
 				<div class="row m-auto w-100">
-					<div class="col-12 p-0">
-						<button type="button" id="configuration-save-btn" class="btn btn-success btn-block">
+					<div class="col-12 p-0 text-center">
+						<button type="button" id="configuration-save-btn" class="btn btn-success w-35">
 							Save
 						</button>
 					</div>
@@ -240,15 +225,44 @@
 					aria-hidden="true">X</span></button>
 			</div>
 			<div class="modal-body">
-				<div class="box-simple box-dark">
-					<h5 class="mb-0">Click Below To Refresh</h5>
+				<div class="col-12 text-center color-dark">
+					<strong>Click Below To Refresh</strong>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<div class="row w-100 m-auto">
-					<div class="col-12 p-0">
-						<button type="button" id="modal-refresh-btn" class="btn btn-success btn-block">
-							Confirm
+					<div class="col-12 p-0 text-center">
+						<button type="button" id="modal-refresh-btn" class="btn btn-success w-35">
+							Okay!
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="modal-allow" tabindex="-1" role="dialog" aria-labelledby="modal-allow-label" aria-hidden="true"
+     class="modal fade">
+	<div role="document" class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 id="modal-allow-label" class="modal-title color-dark">About your download</h4>
+				<button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+					aria-hidden="true">X</span></button>
+			</div>
+			<div class="modal-body">
+				<div class="col-12 text-center">
+					<div role="alert" class="alert alert-danger">
+						Please, allow <strong>popups</strong> on this website for a smoother download experience.
+						Otherwise, <strong>you can use the "Open" button to download your link-annotated publication.</strong>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="row w-100 m-auto">
+					<div class="col-12 p-0 text-center">
+						<button type="button" id="modal-allow-btn" class="btn btn-primary w-35">
+							Okay!
 						</button>
 					</div>
 				</div>

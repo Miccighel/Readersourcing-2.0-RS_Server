@@ -1,11 +1,18 @@
 class PublicationsController < ApplicationController
 
+	skip_before_action :authorize_api_request, only: [:list]
+
 	before_action :set_user, :set_request_data
 	before_action :set_publication, only: [:show, :update, :destroy, :refresh, :is_rated, :is_saved_for_later]
 	before_action :set_error_manager, only: [:lookup, :is_rated, :is_saved_for_later, :fetch, :is_fetchable, :extract, :refresh, :create, :update]
 
 	# GET /publications.json
 	def index
+		@publications = Publication.all
+	end
+
+	# GET /publications/list
+	def list
 		@publications = Publication.all
 	end
 

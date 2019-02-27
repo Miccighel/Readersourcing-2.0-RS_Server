@@ -19,7 +19,7 @@
 		<%= render partial: 'shared/menu', locals: {active: "rating-paper", appearance: "light"} %>
 	</div>
 	<div class="row m-auto w-100">
-		<div class="col-lg-5 col-sm-8 col-xs-12 m-auto">
+		<div class="col-lg-4 col-sm-8 col-xs-12 m-auto">
 			<div class="col-12">
 				<div class="heading text-center">
 					<h4>Rating section</h4>
@@ -69,7 +69,7 @@
 							</div>
 						</div>
 						<div class="col-12 text-center mb-3">
-							<%= button_tag(type: 'submit', id: "vote-btn", class: "btn btn-success btn-block") do %>
+							<%= button_tag(type: 'submit', id: "vote-btn", class: "btn btn-success w-35") do %>
 								<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 								Rate
 							<% end %>

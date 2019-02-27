@@ -22,7 +22,7 @@
 		<%= render partial: 'shared/menu', locals: {active: "errors", appearance: "light"} %>
 	</div>
 	<div class="row ml-auto mr-auto mt-auto mb-0 w-100">
-		<div class="col-lg-5 col-sm-8 col-xs-12 m-auto">
+		<div class="col-lg-4 col-sm-8 col-xs-12 m-auto">
 			<div class="heading text-center">
 				<h1><%= I18n.t("errors.messages.unauthorized") %></h1>
 				<% errors.each do |error| %>
@@ -32,13 +32,13 @@
 		</div>
 	</div>
 	<div class="row ml-auto mr-auto mb-auto mt-3 w-100">
-		<div class="col-lg-5 col-sm-8 col-xs-12 m-auto text-center">
-			<a href="<%= login_path %>" id="go-to-login-btn" class="btn btn-primary btn-block link-white">
+		<div class="col-lg-4 col-sm-8 col-xs-12 m-auto text-center">
+			<a href="<%= login_path %>" id="go-to-login-btn" class="btn btn-primary w-35 link-white">
 				Login
 				<i class="fas fa-sign-in-alt sign-in-icon"></i>
 				<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 			</a>
-			<a href="<%= root_path %>" id="go-to-home-btn" class="btn btn-primary btn-block link-white">
+			<a href="<%= root_path %>" id="go-to-home-btn" class="btn btn-primary w-35 link-white">
 				Home
 				<i class="fas fa-home home-icon"></i>
 				<i class="fas fa-sync-alt fa-spin reload-icon"></i>

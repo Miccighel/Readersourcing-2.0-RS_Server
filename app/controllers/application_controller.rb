@@ -2,7 +2,14 @@ class ApplicationController < ActionController::API
 
 	include ::ActionController::RequestForgeryProtection
 
-	before_action :authorize_api_request, except: [:home, :resources, :bug, :report, :request_authorization, :unauthorized]
+	before_action :authorize_api_request, except: [
+		:home,
+		:resources,
+		:bug,
+		:report,
+		:request_authorization,
+		:unauthorized
+	]
 	attr_reader :current_user
 
 	# GET /

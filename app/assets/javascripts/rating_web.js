@@ -4,11 +4,8 @@ let body = $("body");
 
 //######## CONTENT SECTIONS ########//
 
-let buttonsSections = $("#buttons-sect");
 let ratingSection = $("#rating-sect");
 let ratingSectionSubControls = $(".rating-sect-sub");
-let publicationScoreSection = $("#publication-score-sect");
-let userScoreSection = $("#user-score-sect");
 let undetectedPublicationSection = $("#undetected-publication-sect");
 let undetectedPublicationDetails = $(".undetected-publication-details");
 let errorsSection = $(".errors-sect");
@@ -18,6 +15,7 @@ let loadingSection = $("#loading-sect");
 
 let modalConfigure = $("#modal-configuration");
 let modalRefresh = $("#modal-refresh");
+let modalAllow = $("#modal-allow");
 
 //######## UI COMPONENTS ########//
 
@@ -36,6 +34,7 @@ let reloadButton = $("#reload-btn");
 let goToRatingButton = $("#go-to-rating-btn");
 let errorButtons = $(".error-btn");
 let modalRefreshButton = $("#modal-refresh-btn");
+let modalAllowButton = $("#modal-allow-btn");
 
 let alert = $(".alert");
 
@@ -44,9 +43,6 @@ let publicationUrlField = $("#publication-url");
 let annotatedPublicationDropzone;
 let annotatedPublicationDropzoneSuccess = $("#dropzone-success");
 let annotatedPublicationDropzoneError = $("#dropzone-error");
-
-let publicationScoreRSMValue = $("#publication-score-rsm-val");
-let publicationScoreTRMValue = $("#publication-score-trm-val");
 
 let ratingInfo = $("#rating-info");
 let ratingCaption = $("#rating-caption");
@@ -79,7 +75,6 @@ loadingSection.hide();
 ratingText.show();
 ratingSection.show();
 ratingSectionSubControls.hide();
-publicationScoreSection.hide();
 annotatedPublicationDropzoneSuccess.hide();
 annotatedPublicationDropzoneError.hide();
 goToRatingButton.hide();
@@ -115,8 +110,6 @@ if (authToken != null) {
 				let successCallback = (secondData, status, jqXHR) => {
 					// 1.2 Publication exists, so it may be rated by the user
 					let successCallback = (data, status, jqXHR) => {
-						publicationScoreRSMValue.text((data["score_rsm"] * 100).toFixed(2));
-						publicationScoreTRMValue.text((data["score_trm"] * 100).toFixed(2));
 						// 2.2 Publication has been rated by the user, so it is not necessary to check if it has been annotated
 						let secondSuccessCallback = (data, status, jqXHR) => {
 							validationInstance.reset();
@@ -129,7 +122,6 @@ if (authToken != null) {
 							saveButton.hide();
 							ratingSection.show();
 							ratingSectionSubControls.show();
-							publicationScoreSection.show();
 							buttonsCaption.hide();
 							loadingSection.hide();
 							voteSuccessButton.show();
@@ -151,7 +143,6 @@ if (authToken != null) {
 							ratingInfo.hide();
 							ratingSection.show();
 							ratingSectionSubControls.show();
-							publicationScoreSection.show();
 							loadingSection.hide();
 							buttonsCaption.show();
 							ratingCaption.show();
@@ -188,7 +179,6 @@ if (authToken != null) {
 						voteSuccessButton.hide();
 						ratingSection.show();
 						ratingSectionSubControls.show();
-						publicationScoreSection.show();
 						saveButton.show();
 						configureButton.show();
 						voteButton.show();
@@ -198,8 +188,6 @@ if (authToken != null) {
 						ratingText.text("50");
 						ratingSlider.slider({});
 						ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
-						publicationScoreRSMValue.text("...");
-						publicationScoreTRMValue.text("...");
 					};
 					// 1.1 Does the publication exists on the database?
 					let promise = ajax("POST", "publications/lookup.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
@@ -207,7 +195,6 @@ if (authToken != null) {
 				let errorCallback = (jqXHR, status) => {
 					ratingSection.hide();
 					ratingSectionSubControls.hide();
-					publicationScoreSection.hide();
 					let errorPromise = buildErrors(jqXHR.responseText).then(result => {
 						undetectedPublicationDetails.parent().find(errorsSection).find(alert).empty();
 						undetectedPublicationDetails.parent().find(errorsSection).find(alert).append(result);
@@ -245,6 +232,7 @@ if (authToken != null) {
 					pdf_url: currentUrl
 				}
 			};
+			saveButton.find('span').text("Downloading...");
 			saveButton.find(reloadIcons).toggle();
 			// 1.2 Publication fetched, hide save for later button and show the download one
 			let successCallback = (data, status, jqXHR) => {
@@ -253,6 +241,13 @@ if (authToken != null) {
 				downloadButton.show();
 				downloadButton.attr("href", data["pdf_download_url_link"]);
 				refreshButton.show();
+				let pdfWindow = window.open(data["pdf_download_url_link"], '_blank');
+				if (pdfWindow) {
+					pdfWindow.focus();
+					pdfWindow.alert("edòkfldfjsdids")
+				} else {
+					modalAllow.modal('show');
+				}
 			};
 			// 1.3 Error during publication fetching, hide save for later and download buttons
 			let errorCallback = (jqXHR, status) => {
@@ -272,6 +267,10 @@ if (authToken != null) {
 		}
 	});
 }
+
+modalAllowButton.on("click", () => {
+	modalAllow.modal('hide')
+});
 
 //######### EXTRACT HANDLING #########//
 
@@ -301,13 +300,6 @@ if (authToken != null) {
 	});
 }
 
-//######### GO TO RATING URL HANDLING #########//
-
-goToRatingButton.on("click", () => {
-	goToRatingButton.find(goToRatingIcon).toggle();
-	goToRatingButton.find(reloadIcons).toggle();
-});
-
 ///######### REFRESH HANDLING #########//
 
 modalRefresh.on('show.bs.modal', function (e) {
@@ -331,6 +323,7 @@ modalRefreshButton.on("click", () => {
 	modalRefresh.modal("hide");
 	downloadButton.hide();
 	refreshButton.hide();
+	loadSaveButton.find('span').text("Downloading...");
 	loadSaveButton.show();
 	let currentUrl = publicationUrlField.val();
 	let data = {
@@ -427,8 +420,6 @@ if (authToken != null) {
 					ratingSubCaption.show();
 					voteSuccessButton.show();
 					voteSuccessButton.prop("disabled", true);
-					publicationScoreRSMValue.text((data["score_rsm"] * 100).toFixed(2));
-					publicationScoreTRMValue.text((data["score_trm"] * 100).toFixed(2));
 				};
 				let secondErrorCallback = (jqXHR, status) => {
 					voteButton.find(reloadIcons).toggle();
@@ -436,8 +427,6 @@ if (authToken != null) {
 					configureButton.hide();
 					voteSuccessButton.show();
 					voteSuccessButton.prop("disabled", true);
-					publicationScoreRSMValue.text("...");
-					publicationScoreTRMValue.text("...");
 				};
 				let secondPromise = ajax("POST", "publications/lookup.json", "application/json; charset=utf-8", "json", true, secondData, secondSuccessCallback, secondErrorCallback);
 				let thirdSuccessCallback = (data, status, jqXHR) => {
