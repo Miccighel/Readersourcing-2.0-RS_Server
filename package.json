@@ -1,7 +1,7 @@
 {
-	"name": "RATSM-ReadersourcingServerSide",
+	"name": "RS_Server",
 	"version": "1.0.0",
-	"repository": "git@bitbucket.org:Miccighel/r-sm-readersourcingserverside.git",
+	"repository": "git@bitbucket.org:Miccighel/Readersourcing-2.0-RS_Server.git",
 	"author": "Miccighel <miccighel@gmail.com>",
 	"license": "MIT",
 	"dependencies": {

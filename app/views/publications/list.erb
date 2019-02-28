@@ -8,6 +8,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-colvis-1.5.4/b-html5-1.5.4/b-print-1.5.4/cr-1.5.0/fh-3.1.4/r-2.2.2/rr-1.2.4/datatables.min.css"/>
 	<%= stylesheet_link_tag 'application' %>
 	<title>RS_Server</title>
 </head>
@@ -15,17 +16,53 @@
 <%= render partial: 'shared/preloader' %>
 <div class="min-h-100 d-flex flex-column align-items-center justify-content-center">
 	<div class="w-100 mb-3">
-		<%= render partial:'shared/menu', locals: {active: "list", appearance: "dark"} %>
+		<%= render partial: 'shared/menu', locals: {active: "rated-items", appearance: "dark"} %>
 	</div>
 	<div class="row w-100 m-auto">
-
+		<div class="col-12">
+			<div class="heading text-center">
+				<h4>Publications</h4>
+				<p class="lead mb-0">Lorem ipsum dolor sit amet ahaha hey you know that.</p>
+			</div>
+		</div>
+		<div class="col-lg-10 col-sm-10 col-xs-12 m-auto">
+			<table id="publications-table" class="table table-hover datatable" style="width:100%">
+				<thead>
+				<tr>
+					<th>DOI</th>
+					<th>Title</th>
+					<th>Subject</th>
+					<th>Author</th>
+					<th>Score (RSM)</th>
+					<th>Score (TRM)</th>
+					<th></th>
+				</tr>
+				</thead>
+				<tbody>
+				<% @publications.each do |publication| %>
+					<tr>
+						<td><%= publication.doi %></td>
+						<td><%= publication.title %></td>
+						<td><%= publication.subject %></td>
+						<td><%= publication.author %></td>
+						<td><%= publication.score_rsm.round(3) %></td>
+						<td><%= publication.score_trm.round(3) %></td>
+						<td><a href="<%= publication.pdf_url %>" class="btn btn-primary">View</a></td>
+					</tr>
+				<% end %>
+				</tbody>
+			</table>
+		</div>
 	</div>
 	<div class="row w-100 mt-3">
 		<%= render partial: "shared/footer" %>
 	</div>
 </div>
-<%= render partial:'shared/modal_profile' %>
+<%= render partial: 'shared/modal_profile' %>
 <%= javascript_include_tag "application" %>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-colvis-1.5.4/b-html5-1.5.4/b-print-1.5.4/cr-1.5.0/fh-3.1.4/r-2.2.2/rr-1.2.4/datatables.min.js"></script>
 <%= javascript_include_tag "menu" %>
 <%= javascript_include_tag "publications/list" %>
 </body>

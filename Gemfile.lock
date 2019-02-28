@@ -120,6 +120,7 @@ GEM
     jbuilder (2.8.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
+    jquery-datatables (1.10.19.1)
     jwt (2.1.0)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -236,6 +237,7 @@ DEPENDENCIES
   dotenv-rails
   http
   jbuilder (~> 2.5)
+  jquery-datatables
   jwt
   letter_opener
   nokogiri
