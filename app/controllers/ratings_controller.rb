@@ -18,14 +18,12 @@ class RatingsController < ApplicationController
 		if params.key? :authToken
 			delete_old_rating = params[:delete]
 			@publication = Publication.find(params[:pubId])
-			@crypted_auth_token = params[:authToken]
-			auth_token = decrypt(params[:authToken])
+			auth_token = unescape_jwt params[:authToken]
 			payload = JsonWebToken.decode(auth_token)
 			expiration_time = Time.at payload[:expiration_time]
 			@user = User.find(payload[:user_id])
 			@rating = Rating.new
 			logger.info "Publication: #{@publication}"
-			logger.info "Crypted Auth Token: #{@crypted_auth_token}"
 			logger.info "Auth Token: #{auth_token}"
 			logger.info "Payload: #{payload}"
 			logger.info "Expiration Time: #{expiration_time}"
@@ -78,7 +76,7 @@ class RatingsController < ApplicationController
 
 	# POST /load
 	def load
-		@crypted_auth_token = params[:cryptedAuthToken]
+		@auth_token = params[:authToken]
 		inserted_email = params[:email]
 		inserted_password = params[:password]
 		publication = Publication.find params[:pubId]

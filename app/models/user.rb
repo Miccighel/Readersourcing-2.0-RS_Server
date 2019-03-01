@@ -5,6 +5,8 @@ class User < ApplicationRecord
 	validates :email, presence: true, length: {maximum: 255}, format: {with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i}, uniqueness: {case_sensitive: false}
 	validates :orcid, length: {maximum: 19}, format: {with: /[0-9]{4}-[0-9]{4}-[0-9]{4}-([0-9]{3}X|[0-9]{4})/}, uniqueness: true, allow_nil: true
 
+	# PASSWORD HANDLING
+
 	has_secure_password
 
 	def password
@@ -32,6 +34,8 @@ class User < ApplicationRecord
 		save!
 	end
 
+	# EMAIL HANDLING
+
 	def generate_confirm_token
 		if self.confirm_token.blank?
 			self.confirm_token = generate_token
@@ -44,6 +48,8 @@ class User < ApplicationRecord
 		save!(:validate => false)
 	end
 
+	# QUERIES
+
 	def is_subscribed
 		self.subscribe
 	end
@@ -54,6 +60,23 @@ class User < ApplicationRecord
 
 	def given_ratings
 		Rating.where(user_id: self.id).all
+	end
+
+	# PRETTY PRINTING
+
+	def orcid_url
+		if self.orcid.present?
+			host = URI::HTTPS.build(:host => "orcid.org")
+			"#{host}/#{self.orcid}"
+		end
+	end
+
+	def pretty_score_rsm
+		"#{(self.score*100).round(2).prettify}/100"
+	end
+
+	def pretty_score_trm
+		"#{(self.bonus*100).round(2).prettify}/100"
 	end
 
 	private

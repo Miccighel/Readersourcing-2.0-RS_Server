@@ -9,6 +9,14 @@ class Publication < ApplicationRecord
 	validates :doi, uniqueness: true, allow_nil: true, format: {with: /\b(10[.][0-9]{4,}(?:[.][0-9]+)*\/(?:(?!["&\'<>])[[:graph:]])+)\b/}
 	validates :pdf_url, presence: true, uniqueness: true, format: {with: URI.regexp}, if: Proc.new {|publication| publication.pdf_url.present?}
 
+	def pretty_score_rsm
+		"#{(self.score_rsm*100).round(2).prettify}/100"
+	end
+
+	def pretty_score_trm
+		"#{(self.score_trm*100).round(2).prettify}/100"
+	end
+
 	def is_rated(user)
 		logger.info "Starting to look for ratings given by user #{user.id}"
 		self.ratings.each do |rating|

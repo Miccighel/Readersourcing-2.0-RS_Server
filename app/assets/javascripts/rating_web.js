@@ -244,7 +244,6 @@ if (authToken != null) {
 				let pdfWindow = window.open(data["pdf_download_url_link"], '_blank');
 				if (pdfWindow) {
 					pdfWindow.focus();
-					pdfWindow.alert("edòkfldfjsdids")
 				} else {
 					modalAllow.modal('show');
 				}
@@ -292,7 +291,13 @@ if (authToken != null) {
 		annotatedPublicationDropzoneSuccess.show();
 		annotatedPublicationDropzoneSuccess.text(data["message"]);
 		goToRatingButton.show();
-		goToRatingButton.prop("href", data["baseUrl"])
+		goToRatingButton.prop("href", data["baseUrl"]);
+		let ratingPageWindow = window.open(data["baseUrl"], '_blank');
+		if (ratingPageWindow) {
+			ratingPageWindow.focus();
+		} else {
+			modalAllow.modal('show');
+		}
 	});
 	annotatedPublicationDropzone.on('error', (file, response, xhr) => {
 		if (response.hasOwnProperty('errors')) annotatedPublicationDropzoneError.text(response["errors"][0]); else annotatedPublicationDropzoneError.text(response)

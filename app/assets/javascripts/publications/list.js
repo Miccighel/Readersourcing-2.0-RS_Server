@@ -23,7 +23,6 @@ datatables.DataTable({
 	]
 });
 
-
 let successCallback = (data, status, jqXHR) => removePreloader();
 let errorCallback = (jqXHR, status) => window.location.href = "/unauthorized";
 let promise = emptyAjax("POST", '/request_authorization.json', "application/json; charset=utf-8", "json", true, successCallback, errorCallback);

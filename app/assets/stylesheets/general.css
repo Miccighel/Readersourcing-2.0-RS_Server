@@ -106,6 +106,12 @@ body.bg-gray-dark input {
 	border: 1px solid #0087F7;
 }
 
+/* ////////// TABLES ///////// */
+
+.empty-cell {
+	background-color: rgba(0, 0, 0, 0.075) !important;
+}
+
 /* ////////// MENU  ////////// */
 
 #reload-fake-menu-item a {

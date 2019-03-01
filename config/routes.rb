@@ -40,6 +40,7 @@ Rails.application.routes.draw do
 
 	get 'publications/list', to: 'publications#list', as: :publications_list, constraints: {:format => 'html'}
 
+	get 'readers/list', to: 'users#list', as: :users_list, constraints: {:format => 'html'}
 	get 'profile/edit', to: 'users#edit', as: :profile, constraints: {:format => 'html'}
 	get 'confirm/:id/:confirmToken', to: 'users#confirm_email', as: :confirm, constraints: {:format => 'html'}
 	get 'unsubscribe/:id', to: 'users#unsubscribe', as: :unsubscribe, constraints: {:format => 'html'}

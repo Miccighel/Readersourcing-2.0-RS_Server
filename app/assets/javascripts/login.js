@@ -43,8 +43,8 @@ doLoginButton.on("click", () => {
 		doLoginButton.find(reloadIcons).toggle();
 		let data = {email: emailField.val(), password: passwordField.val()};
 		let successCallback = (data, status, jqXHR) => {
-			//doBugReportButton.find(signInIcon).toggle();
-			//doBugReportButton.find(reloadIcons).toggle();
+			//doLoginButton.find(signInIcon).toggle();
+			//doLoginButton.find(reloadIcons).toggle();
 			localStorage.setItem("authToken", data["auth_token"]);
 			window.location.href = "/";
 		};

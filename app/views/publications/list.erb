@@ -22,7 +22,7 @@
 		<div class="col-12">
 			<div class="heading text-center">
 				<h4>Publications</h4>
-				<p class="lead mb-0">Lorem ipsum dolor sit amet ahaha hey you know that.</p>
+				<p class="lead mb-0">See the publications which have been indexed and their quality scores.</p>
 			</div>
 		</div>
 		<div class="col-lg-10 col-sm-10 col-xs-12 m-auto">
@@ -33,6 +33,7 @@
 					<th>Title</th>
 					<th>Subject</th>
 					<th>Author</th>
+					<th>Your Rating</th>
 					<th>Score (RSM)</th>
 					<th>Score (TRM)</th>
 					<th></th>
@@ -41,13 +42,30 @@
 				<tbody>
 				<% @publications.each do |publication| %>
 					<tr>
-						<td><%= publication.doi %></td>
-						<td><%= publication.title %></td>
-						<td><%= publication.subject %></td>
-						<td><%= publication.author %></td>
-						<td><%= publication.score_rsm.round(3) %></td>
-						<td><%= publication.score_trm.round(3) %></td>
-						<td><a href="<%= publication.pdf_url %>" class="btn btn-primary">View</a></td>
+						<% if publication.doi.present? %>
+							<td><%= publication.doi %></td>
+						<% else %>
+							<td class="empty-cell"></td>
+						<% end %>
+						<% if publication.title.present? %>
+							<td><%= publication.title %></td>
+						<% else %>
+							<td class="empty-cell"></td>
+						<% end %>
+						<% if publication.subject.present? %>
+							<td><%= publication.subject %></td>
+						<% else %>
+							<td class="empty-cell"></td>
+						<% end %>
+						<% if publication.author.present? %>
+							<td><%= publication.author %></td>
+						<% else %>
+							<td class="empty-cell"></td>
+						<% end %>
+						<td><%=  %></td>
+						<td class="text-center"><%= publication.pretty_score_rsm %></td>
+						<td class="text-center"><%= publication.pretty_score_trm %></td>
+						<td><a target="_blank" href="<%= publication.pdf_url %>" class="btn btn-primary"><i class="fas fa-external-link-alt"></i></a></td>
 					</tr>
 				<% end %>
 				</tbody>

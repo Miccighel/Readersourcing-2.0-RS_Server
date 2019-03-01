@@ -38,6 +38,9 @@ let reloadIcons = $(".reload-icon");
 
 //######## UI INITIAL SETUP ########//
 
+let authToken = localStorage.getItem('authToken');
+let host = localStorage.getItem('host');
+
 reloadIcons.hide();
 
 homeMenuItem.hide();
@@ -51,7 +54,7 @@ bugMenuItem.hide();
 
 menuLinks.on("click", (event) => event.preventDefault());
 
-let menuSuccessCallback = (data, status, jqXHR) => {
+if (authToken != null) {
 	homeMenuItem.show();
 	rateMenuItem.show();
 	ratedItemsMenuItem.show();
@@ -62,8 +65,7 @@ let menuSuccessCallback = (data, status, jqXHR) => {
 	userMenuItem.find('ul').addClass("logged");
 	bugMenuItem.show();
 	reloadFakeMenuItem.hide();
-};
-let menuErrorCallback = (jqXHR, status) => {
+} else {
 	homeMenuItem.show();
 	ratedItemsMenuItem.find('ul').removeClass("logged");
 	aboutMenuItem.show();
@@ -73,14 +75,12 @@ let menuErrorCallback = (jqXHR, status) => {
 	signUpButton.show();
 	bugMenuItem.show();
 	reloadFakeMenuItem.hide();
-};
-menuPromise = emptyAjax("POST", '/request_authorization.json', "application/json; charset=utf-8", "json", true, menuSuccessCallback, menuErrorCallback);
+}
 
 ////////// USER  //////////
 
 //####### STATUS HANDLING (SCORES, ...) #########//
 
-let authToken = localStorage.getItem('authToken');
 if (authToken != null) {
 	let successCallback = (data, status, jqXHR) => {
 		firstNameValue.text(data["first_name"]);
@@ -111,7 +111,7 @@ homeButton.on("click", () => {
 	homeButton.find(reloadIcons).toggle();
 });
 
-//######### GO TO DASHBOARD HANDLING #########//
+//######### GO TO RATING HANDLING #########//
 
 rateMenuItem.on("click", () => {
 	rateButton.find(pdfIcon).toggle();
@@ -132,7 +132,6 @@ loginButton.on("click", () => {
 //######### GO TO SIGN UP HANDLING #########//
 
 signUpButton.on("click", () => {
-	console.log("hey");
 	signUpButton.find(signUpIcons).toggle();
 	signUpButton.find(reloadIcons).toggle();
 });

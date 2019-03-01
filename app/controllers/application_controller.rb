@@ -32,6 +32,7 @@ class ApplicationController < ActionController::API
 
 	# POST /request_authorization.json
 	def request_authorization
+		request.headers['Authorization'] = unescape_jwt(request.headers['Authorization'])
 		@current_user = AuthorizeApiRequest.call(request.headers, request.remote_ip).result
 		if @current_user
 			render json: {message: I18n.t("confirmations.messages.authorization_completed")}, status: :ok
@@ -51,27 +52,18 @@ class ApplicationController < ActionController::API
 
 	protected
 
-	def encrypt(text)
-		text = text.to_s unless text.is_a? String
-		len = ActiveSupport::MessageEncryptor.key_len
-		salt = SecureRandom.hex len
-		key = ActiveSupport::KeyGenerator.new(Rails.application.secrets.secret_key_base).generate_key salt, len
-		crypt = ActiveSupport::MessageEncryptor.new key
-		encrypted_data = crypt.encrypt_and_sign text
-		"#{salt}!!!!!!!!!!#{encrypted_data}"
+	def escape_jwt(unescaped_auth_token)
+		CGI.escape(unescaped_auth_token.to_s.gsub!(/\./,"/"))
 	end
 
-	def decrypt(text)
-		salt, data = text.split "!!!!!!!!!!"
-		len = ActiveSupport::MessageEncryptor.key_len
-		key = ActiveSupport::KeyGenerator.new(Rails.application.secrets.secret_key_base).generate_key salt, len
-		crypt = ActiveSupport::MessageEncryptor.new key
-		crypt.decrypt_and_verify data
+	def unescape_jwt(escape_auth_token)
+		CGI.unescape(escape_auth_token).gsub!(/\//,".")
 	end
 
 	private
 
 	def authorize_api_request
+		request.headers['Authorization'] = unescape_jwt(request.headers['Authorization'])
 		@current_user = AuthorizeApiRequest.call(request.headers, request.remote_ip).result
 		@error_manager = ErrorManager.new
 		@error_manager.add_error(I18n.t("errors.messages.not_authorized"))

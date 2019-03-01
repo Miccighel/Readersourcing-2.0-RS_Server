@@ -10,11 +10,11 @@ let successCallback = (data, status, jqXHR) => {
 		localStorage['redirected'] = true;
 		window.location.href = "/rate";
 	} else {
-		menuPromise.then(data => removePreloader());
+		removePreloader()
 	}
 };
 let errorCallback = (jqXHR, status) => {
-	menuPromise.then(data => removePreloader());
+	removePreloader();
 };
 promise = emptyAjax("POST", '/request_authorization.json', "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
 

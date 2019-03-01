@@ -50,7 +50,7 @@ unless Rails.env.production?
 	p4 = Publication.new({pdf_url: "https://innovation-entrepreneurship.springeropen.com/track/pdf/10.1186/s13731-018-0086-3"})
 	p5 = Publication.new({pdf_url: "https://geochemicaltransactions.springeropen.com/track/pdf/10.1186/s12932-018-0056-5"})
 
-	auth_token = "bf9c15d6a6ad390c36915fe31649d1c66dfc836fc5a8739ea7c0823f0879a730$$RpkBx+0OSzzQWvis2/cLJ9eqDpkXibVcERKSG1ZLHOYvmuHJTcO4JJEQBC2h5bauj85OUU3CSTb7iZvrGx2KxMKm/b9c5KAo+KwfSfmQOj4uIclTAk12o3Wp2k/UVgSMU9NMyxFmb6S/5+YKkH+7gD+5k9fKeQ==--4vM+DLuTaxGyv5ce--pkUJwp+xPVgORbtUMGugxA=="
+	auth_token = "eyJhbGciOiJIUzI1NiJ9%2FeyJ1c2VyX2lkIjoxLCJpcF9hZGRyZXNzIjoiMTI3LjAuMC4xIiwiZXhwaXJhdGlvbl90aW1lIjoxNTUyMDU5ODk3fQ%2Fxyz_lW4QSVpUhzpfHILyNYYnHJRdrOhq4fmvvn_qO58"
 	data = Hash.new
 	data[:authToken] = auth_token
 	data[:host] = "http://localhost:3000"

@@ -2,7 +2,7 @@ class PublicationsController < ApplicationController
 
 	skip_before_action :authorize_api_request, only: [:list]
 
-	before_action :set_user, :set_request_data
+	before_action :set_user, :set_request_data, except: [:list]
 	before_action :set_publication, only: [:show, :update, :destroy, :refresh, :is_rated, :is_saved_for_later]
 	before_action :set_error_manager, only: [:lookup, :is_rated, :is_saved_for_later, :fetch, :is_fetchable, :extract, :refresh, :create, :update]
 
@@ -210,7 +210,7 @@ class PublicationsController < ApplicationController
 
 	def set_request_data
 		@request_data = Hash.new
-		@request_data[:authToken] = encrypt request.headers["Authorization"]
+		@request_data[:authToken] = escape_jwt(request.headers["Authorization"])
 		@request_data[:host] = "#{request.protocol}#{request.host_with_port}"
 		@request_data[:user] = current_user
 	end

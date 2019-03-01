@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 
 	layout "application", only: [:confirm_email]
 
-	skip_before_action :authorize_api_request, only: [:sign_up, :create, :confirm_email, :unsubscribe, :edit]
+	skip_before_action :authorize_api_request, only: [:list, :sign_up, :create, :confirm_email, :unsubscribe, :edit]
 
 	before_action :set_user, only: [:show, :update, :unsubscribe, :destroy]
 	before_action :set_error_manager, only: [:confirm_email]
@@ -13,6 +13,11 @@ class UsersController < ApplicationController
 
 	# GET /users.json
 	def index
+		@users = User.all
+	end
+
+	# GET /readers/list
+	def list
 		@users = User.all
 	end
 
@@ -92,6 +97,6 @@ class UsersController < ApplicationController
 	end
 
 	def user_params
-		params.require(:user).permit(:first_name, :last_name, :email, :orcid, :subscribe, :password, :password_confirmation, :recaptcha_response)
+		params.require(:user).permit(:first_name, :last_name, :email, :orcid, :subscribe, :password, :password_confirmation)
 	end
 end

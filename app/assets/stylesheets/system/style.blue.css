@@ -535,12 +535,6 @@ table {
   font-size: 0.9rem;
 }
 
-table img {
-  min-width: 50px !important;
-  max-width: 50px !important;
-  height: 50px;
-}
-
 table input[type="number"] {
   max-width: 50px;
 }
