@@ -69,3 +69,9 @@ function removePreloader() {
 	$('body').removeClass('preloader');
 	$('.preloader').css('overflow','visible');
 }
+
+function showPreloader() {
+	$('.preloader-wrapper').show();
+	$('body').addClass('preloader');
+	$('.preloader').css('overflow','hidden');
+}

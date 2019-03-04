@@ -10,28 +10,28 @@
 			</button>
 			<div id="navigation" class="navbar-collapse collapse text-center">
 				<div id="reload-fake-menu-item" class="nav-item w-100 h-100">
-					<a href="#" class="<%= "color-white" if appearance == "dark" %>">
+					<a href="#">
 						<i class="fas fa-sync-alt fa-spin fa-2x"></i>
 					</a>
 				</div>
 				<ul class="nav navbar-nav mr-auto">
-					<li id="home-menu-item" class="nav-item <%= "active" if active == "home" %>">
-						<a href="<%= root_path %>" class="<%= "color-white" if appearance == "dark" %>" id="home-btn">
+					<li id="home-menu-item" class="nav-item active">
+						<a href="<%= root_path %>" id="home-btn">
 							Home
 							<i class="fas fa-home home-icon"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>
 					<li id="rate-menu-item" class="nav-item">
-						<a href="<%= rate_web_path %>" class="<%= "color-white" if appearance == "dark" %>" id="rate-btn">
+						<a href="<%= rate_web_path %>" id="rate-btn">
 							Rate
 							<i id="pdf-icon" class="fas fa-file-pdf"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>
-					<li id="rated-items-menu-item" class="nav-item dropdown menu-large <%= "active" if active == "rated-items" %>">
+					<li id="rated-items-menu-item" class="nav-item dropdown menu-large">
 						<a href="#" data-toggle="dropdown" class="dropdown-toggle">
-							<span class="<%= "color-white" if appearance == "dark" %>">
+							<span>
 								Rated Items
 								<i class="fas fa-book-reader"></i>
 								<b class="caret"></b>
@@ -42,11 +42,11 @@
 								<div class="row">
 									<div class="col-12">
 										<ul class="list-unstyled">
-											<li class="nav-item">
-												<a href="<%= publications_list_path %>" class="nav-link">Publications</a>
+											<li>
+												<a href="#" id="publication-list-btn" class="nav-link">Publications</a>
 											</li>
-											<li class="nav-item">
-												<a href="<%= users_list_path %>" class="nav-link">Readers</a>
+											<li>
+												<a href="#" id="readers-list-btn" class="nav-link">Readers</a>
 											</li>
 										</ul>
 									</div>
@@ -56,7 +56,7 @@
 					</li>
 					<li id="about-menu-item" class="nav-item dropdown menu-large">
 						<a href="#" data-toggle="dropdown" class="dropdown-toggle">
-							<span class="<%= "color-white" if appearance == "dark" %>">
+							<span>
 								About
 								<i class="fas fa-info"></i>
 								<b class="caret"></b>
@@ -67,10 +67,10 @@
 								<div class="row">
 									<div class="col-12">
 										<ul class="list-unstyled">
-											<li class="nav-item">
+											<li>
 												<a href="<%= resources_path %>" class="nav-link">Resources</a>
 											</li>
-											<li class="nav-item">
+											<li>
 												<a href="#" class="nav-link">Extensions</a>
 											</li>
 										</ul>
@@ -81,7 +81,7 @@
 					</li>
 					<li id="user-menu-item" class="nav-item dropdown menu-large">
 						<a href="#" data-toggle="dropdown" class="dropdown-toggle">
-							<span class="<%= "color-white" if appearance == "dark" %>">
+							<span>
 								User
 							    <i id="user-icon" class="fa fa-user"></i>
 								<b class="caret"></b>
@@ -92,12 +92,12 @@
 								<div class="row">
 									<div class="col-12">
 										<ul class="list-unstyled">
-											<li class="nav-item ">
+											<li>
 												<a href="#" id="profile-btn" data-toggle="modal" data-target="#modal-profile" class="nav-link">
 													Profile
 												</a>
 											</li>
-											<li class="nav-item">
+											<li>
 												<a id="logout-btn" class="nav-link" href="#">
 													Logout
 												</a>
@@ -108,22 +108,22 @@
 							</li>
 						</ul>
 					</li>
-					<li id="sign-up-menu-item" class="nav-item <%= "active" if active == "sign-up" %>">
-						<a id="sign-up-btn" class="<%= "color-white" if appearance == "dark" %>" href="<%= sign_up_path %>">
+					<li id="sign-up-menu-item" class="nav-item">
+						<a id="sign-up-btn" href="<%= sign_up_path %>">
 							Sign Up
 							<i class="fa fa-user-plus sign-up-icon"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>
-					<li id="login-menu-item" class="nav-item <%= "active" if active == "login" %>">
-						<a id="login-btn" class="<%= "color-white" if appearance == "dark" %>" href="<%= login_path %>">
+					<li id="login-menu-item" class="nav-item">
+						<a id="login-btn" href="<%= login_path %>">
 							Login
 							<i class="fas fa-sign-in-alt sign-in-icon"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>
-					<li id="bug-menu-item" class="pull-right nav-item <%= "active" if active == "bug" %>">
-						<a id="bug-btn" href="<%= bug_path %>" class="<%= "color-white" if appearance == "dark" %>">
+					<li id="bug-menu-item" class="pull-right nav-item flat">
+						<a id="bug-btn" href="<%= bug_path %>">
 							<i id="bug-icon" class="fas fa-bug"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>

@@ -38,9 +38,9 @@ Rails.application.routes.draw do
 	get 'login', to: 'authentication#login', as: :login, constraints: {:format => 'html'}
 	post 'authenticate', to: 'authentication#authenticate', as: :authenticate, constraints: {:format => :json}
 
-	get 'publications/list', to: 'publications#list', as: :publications_list, constraints: {:format => 'html'}
+	post 'publications/list', to: 'publications#list', as: :publications_list, constraints: {:format => 'html'}
 
-	get 'readers/list', to: 'users#list', as: :users_list, constraints: {:format => 'html'}
+	post 'readers/list', to: 'users#list', as: :users_list, constraints: {:format => 'html'}
 	get 'profile/edit', to: 'users#edit', as: :profile, constraints: {:format => 'html'}
 	get 'confirm/:id/:confirmToken', to: 'users#confirm_email', as: :confirm, constraints: {:format => 'html'}
 	get 'unsubscribe/:id', to: 'users#unsubscribe', as: :unsubscribe, constraints: {:format => 'html'}

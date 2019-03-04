@@ -7,6 +7,10 @@ class Rating < ApplicationRecord
 		self.score / 100.0
 	end
 
+	def pretty_score
+		"#{self.score}/100"
+	end
+
 	def compute_scores
 		logger.info "Computing scores with RSM Model"
 		readersourcing = Readersourcing.new RsmStrategy.new self

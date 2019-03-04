@@ -7,7 +7,6 @@ Rails.application.config.assets.paths  += %w( logo-small.png )
 Rails.application.config.assets.paths  += %w( chrome-webstore-badge.png )
 Rails.application.config.assets.paths  += %w( orcid_id.gif )
 
-Rails.application.config.assets.precompile += %w( menu.js )
 Rails.application.config.assets.precompile += %w( errors.js )
 Rails.application.config.assets.precompile += %w( success.js )
 Rails.application.config.assets.precompile += %w( halted.js )
@@ -19,9 +18,6 @@ Rails.application.config.assets.precompile += %w( bug.js )
 Rails.application.config.assets.precompile += %w( home.js )
 Rails.application.config.assets.precompile += %w( login.js )
 
-Rails.application.config.assets.precompile += %w( publications/list.js )
-
-Rails.application.config.assets.precompile += %w( users/list.js )
 Rails.application.config.assets.precompile += %w( profile_update.css )
 Rails.application.config.assets.precompile += %w( profile_update.js )
 
