@@ -1,4 +1,5 @@
 //= require jquery/dist/jquery
+//= require turbolinks
 //= require popper.js/dist/umd/popper.min
 //= require bootstrap/dist/js/bootstrap.bundle.min
 //= require jquery.cookie/jquery.cookie.js

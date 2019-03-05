@@ -209,6 +209,9 @@ GEM
     thread_safe (0.3.6)
     tilt (2.0.9)
     ttfunk (1.5.1)
+    turbolinks (5.2.0)
+      turbolinks-source (~> 5.2)
+    turbolinks-source (5.2.0)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     tzinfo-data (1.2018.9)
@@ -246,6 +249,7 @@ DEPENDENCIES
   rails (~> 5.2.0)
   sendgrid-ruby
   simple_command
+  turbolinks
   tzinfo-data
   uglifier
 
