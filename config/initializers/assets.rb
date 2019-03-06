@@ -16,7 +16,6 @@ Rails.application.config.assets.precompile += %w( application.js )
 Rails.application.config.assets.precompile += %w( resources.js )
 Rails.application.config.assets.precompile += %w( bug.js )
 Rails.application.config.assets.precompile += %w( home.js )
-Rails.application.config.assets.precompile += %w( login.js )
 
 Rails.application.config.assets.precompile += %w( profile_update.css )
 Rails.application.config.assets.precompile += %w( profile_update.js )

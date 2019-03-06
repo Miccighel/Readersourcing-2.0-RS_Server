@@ -1,9 +1,6 @@
 class ApplicationController < ActionController::API
 
 	include ::ActionController::RequestForgeryProtection
-	include ::ActionView::Layouts
-
-	layout "application", only: [:home]
 
 	before_action :authorize_api_request, except: [
 		:home,

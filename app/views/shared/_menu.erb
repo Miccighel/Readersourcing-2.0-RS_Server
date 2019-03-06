@@ -1,5 +1,5 @@
 <header class="nav-holder make-sticky">
-	<div id="navbar" role="navigation" class="navbar navbar-expand-lg <%= "bg-gray-dark" if appearance == "dark" %>">
+	<div id="navbar" role="navigation" class="navbar navbar-expand-lg  <%= "bg-gray-dark" if appearance == "dark" %>">
 		<div class="container pl-3 pr-3">
 			<a href="<%= root_path %>" class="navbar-brand home">
 				<img src="<%= image_path("logo.png") %>" alt="Logo" class="d-none d-md-inline-block">
@@ -9,28 +9,24 @@
 				<span class="sr-only">Toggle Navigation</span><i class="fa fa-align-justify"></i>
 			</button>
 			<div id="navigation" class="navbar-collapse collapse text-center">
-				<div id="reload-fake-menu-item" class="nav-item w-100 h-100">
-					<a href="#">
-						<i class="fas fa-sync-alt fa-spin fa-2x"></i>
-					</a>
-				</div>
 				<ul class="nav navbar-nav mr-auto">
-					<li id="home-menu-item" class="nav-item active">
-						<a href="<%= root_path %>" id="home-btn">
+					<li id="home-menu-item" class="nav-item  <%= "active" if active == "home" %>">
+						<a href="<%= root_path %>" id="home-btn" class="<%= "color-white" if appearance == "dark" %>" >
 							Home
 							<i class="fas fa-home home-icon"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>
-					<li id="rate-menu-item" class="nav-item">
-						<a href="<%= rate_web_path %>" id="rate-btn">
+
+					<li id="rate-menu-item" class="nav-item  <%= "active" if active == "rate" %>">
+						<a href="<%= rate_web_path %>" id="rate-btn" class="<%= "color-white" if appearance == "dark" %>">
 							Rate
 							<i id="pdf-icon" class="fas fa-file-pdf"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>
-					<li id="rated-items-menu-item" class="nav-item dropdown menu-large">
-						<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+					<li id="rated-items-menu-item" class="nav-item dropdown menu-large  <%= "active" if active == "rated-items" %>">
+						<a href="#" data-toggle="dropdown" class="<%= "color-white" if appearance == "dark" %> dropdown-toggle">
 							<span>
 								Rated Items
 								<i class="fas fa-book-reader"></i>
@@ -54,8 +50,8 @@
 							</li>
 						</ul>
 					</li>
-					<li id="about-menu-item" class="nav-item dropdown menu-large">
-						<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+					<li id="about-menu-item" class="nav-item dropdown menu-large  <%= "active" if active == "about" %>">
+						<a href="#" data-toggle="dropdown" class="dropdown-toggle <%= "color-white" if appearance == "dark" %>">
 							<span>
 								About
 								<i class="fas fa-info"></i>
@@ -79,8 +75,8 @@
 							</li>
 						</ul>
 					</li>
-					<li id="user-menu-item" class="nav-item dropdown menu-large">
-						<a href="#" data-toggle="dropdown" class="dropdown-toggle">
+					<li id="user-menu-item" class="nav-item dropdown menu-large  <%= "active" if active == "user" %>">
+						<a href="#" data-toggle="dropdown" class="dropdown-toggle <%= "color-white" if appearance == "dark" %>">
 							<span>
 								User
 							    <i id="user-icon" class="fa fa-user"></i>
@@ -108,22 +104,22 @@
 							</li>
 						</ul>
 					</li>
-					<li id="sign-up-menu-item" class="nav-item">
-						<a id="sign-up-btn" href="<%= sign_up_path %>">
+					<li id="sign-up-menu-item" class="nav-item  <%= "active" if active == "sign-up" %>">
+						<a id="sign-up-btn" href="<%= sign_up_path %>" class="<%= "color-white" if appearance == "dark" %>">
 							Sign Up
 							<i class="fa fa-user-plus sign-up-icon"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>
-					<li id="login-menu-item" class="nav-item">
-						<a id="login-btn" href="<%= login_path %>">
+					<li id="login-menu-item" class="nav-item  <%= "active" if active == "login" %>">
+						<a id="login-btn" href="<%= login_path %>" class="<%= "color-white" if appearance == "dark" %>">
 							Login
 							<i class="fas fa-sign-in-alt sign-in-icon"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>
-					<li id="bug-menu-item" class="pull-right nav-item flat">
-						<a id="bug-btn" href="<%= bug_path %>">
+					<li id="bug-menu-item" class="pull-right nav-item flat  <%= "active" if active == "bug" %>">
+						<a id="bug-btn" href="<%= bug_path %>" class="<%= "color-white" if appearance == "dark" %>">
 							<i id="bug-icon" class="fas fa-bug"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>

@@ -1,47 +1,80 @@
-<div class="col-12">
-	<div class="heading text-center">
-		<h1>Readersourcing 2.0</h1>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<%= csrf_meta_tags %>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-colvis-1.5.4/b-flash-1.5.4/b-html5-1.5.4/b-print-1.5.4/cr-1.5.0/r-2.2.2/rr-1.2.4/datatables.min.css"/>
+	<%= stylesheet_link_tag 'application' %>
+	<%= javascript_include_tag "application" %>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-colvis-1.5.4/b-flash-1.5.4/b-html5-1.5.4/b-print-1.5.4/cr-1.5.0/r-2.2.2/rr-1.2.4/datatables.min.js"></script>
+	<%= javascript_include_tag "home" %>
+	<title>RS_Server</title>
+</head>
+<body class="bg-gray-dark color-white">
+<div id="home-page" class="min-h-100 d-flex flex-column align-items-center justify-content-center">
+	<div class="w-100 mb-3">
+		<%= render partial: 'shared/menu', locals: {active: "home", appearance: "light"} %>
+	</div>
+	<div class="row w-100 m-auto">
+		<div class="col-12">
+			<div class="heading text-center">
+				<h1>Readersourcing 2.0</h1>
+			</div>
+		</div>
+		<div class="col-12 mb-3">
+			<div class="col-lg-6 col-sm-8 col-xs-12 m-auto">
+				<p class="lead text-justify mb-1">
+					<strong>Readersourcing.org</strong> is an independent, third-party, non-profit, academic/scientific endeavour, aimed at quality rating of both scholarly
+					literature and scholars.
+				</p>
+			</div>
+		</div>
+		<div class="col-12">
+			<div class="heading text-center">
+				<h1>How To</h1>
+			</div>
+		</div>
+		<div class="col-12 mb-3">
+			<div class="col-lg-6 col-sm-8 col-xs-12 m-auto">
+				<p class="lead text-justify mb-2">
+					To start exploiting Readersourcing 2.0 ecosystem, you can freely sign up and perform the login through this web interface.
+					Once you become a registered user, you can actively participate within the system by rating publications from other authors.
+					Doing so will improve your authority. To find out more about this ecosystem, its internals and its virtuous dynamics
+					<a class="link-white" href="<%= resources_path %>">check out the <strong>About/Resources</strong> page</a>.
+				</p>
+			</div>
+		</div>
+		<div class="col-12">
+			<div class="heading text-center">
+				<h1>Browser Extension</h1>
+			</div>
+		</div>
+		<div class="col-12 mb-3">
+			<div class="col-lg-6 col-sm-8 col-xs-12 m-auto">
+				<p class="lead text-justify mb-2">
+					<a class="link-white" href="https://chrome.google.com/webstore/detail/readersourcing-20-rsrate/hlkdlngpijhdkbdlhmgeemffaoacjagg?hl=it"><strong>RS_Rate</strong></a>
+					is
+					an extension for Google Chrome available on its store. It is a client for Readersourcing 2.0 that can be used by
+					readers of publications to rate them directly from the browser without the need of using this web interface. Click on the banner below to install it.
+				</p>
+				<p class="text-center">
+					<a href="https://chrome.google.com/webstore/detail/readersourcing-20-rsrate/hlkdlngpijhdkbdlhmgeemffaoacjagg?hl=it" target="_blank">
+						<img class="img-responsive" src="<%= image_path("chrome-webstore-badge.png") %>">
+					</a>
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="row w-100 mt-3">
+		<%= render partial: "shared/footer" %>
 	</div>
 </div>
-<div class="col-12 mb-3">
-	<div class="col-lg-6 col-sm-8 col-xs-12 m-auto">
-		<p class="lead text-justify mb-1">
-			<strong>Readersourcing.org</strong> is an independent, third-party, non-profit, academic/scientific endeavour, aimed at quality rating of both scholarly
-			literature and scholars.
-		</p>
-	</div>
-</div>
-<div class="col-12">
-	<div class="heading text-center">
-		<h1>How To</h1>
-	</div>
-</div>
-<div class="col-12 mb-3">
-	<div class="col-lg-6 col-sm-8 col-xs-12 m-auto">
-		<p class="lead text-justify mb-2">
-			To start exploiting Readersourcing 2.0 ecosystem, you can freely sign up and perform the login through this web interface.
-			Once you become a registered user, you can actively participate within the system by rating publications from other authors.
-			Doing so will improve your authority. To find out more about this ecosystem, its internals and its virtuous dynamics
-			<a class="link-white" href="<%= resources_path %>">check out the <strong>About/Resources</strong> page</a>.
-		</p>
-	</div>
-</div>
-<div class="col-12">
-	<div class="heading text-center">
-		<h1>Browser Extension</h1>
-	</div>
-</div>
-<div class="col-12 mb-3">
-	<div class="col-lg-6 col-sm-8 col-xs-12 m-auto">
-		<p class="lead text-justify mb-2">
-			<a class="link-white" href="https://chrome.google.com/webstore/detail/readersourcing-20-rsrate/hlkdlngpijhdkbdlhmgeemffaoacjagg?hl=it"><strong>RS_Rate</strong></a> is
-			an extension for Google Chrome available on its store. It is a client for Readersourcing 2.0 that can be used by
-			readers of publications to rate them directly from the browser without the need of using this web interface. Click on the banner below to install it.
-		</p>
-		<p class="text-center">
-			<a href="https://chrome.google.com/webstore/detail/readersourcing-20-rsrate/hlkdlngpijhdkbdlhmgeemffaoacjagg?hl=it" target="_blank">
-				<img class="img-responsive" src="<%= image_path("chrome-webstore-badge.png") %>">
-			</a>
-		</p>
-	</div>
-</div>
+</body>
+</html>

@@ -1,22 +1,28 @@
-document.addEventListener("turbolinks:load", function () {
+$(document).on("turbolinks:load", () => {
+	////////// USER INTERFACE - GENERAL  //////////
 
-	////////// INIT  //////////
-
-	//######## UI COMPONENTS ########//
+	//######## CONTENT ########//
 
 	let body = $("body");
 	let content = $(".content");
 
-	let menu = $("#navbar");
-	let menuLinks = $(".header a");
+	let successSection = $("#success-sect");
+	let errorsSection = $(".errors-sect");
 
+	let homePage = $("#home-page");
+	let loginPage = $("#login-page");
+
+	//######## MENU ########//
+
+	let menu = $("#navbar");
 	let homeMenuItem = $("#home-menu-item");
 	let rateMenuItem = $("#rate-menu-item");
 	let ratedItemsMenuItem = $("#rated-items-menu-item");
 	let aboutMenuItem = $("#about-menu-item");
 	let userMenuItem = $("#user-menu-item");
+	let loginMenuItem = $("#login-menu-item");
+	let signUpMenuItem = $("#sign-up-menu-item");
 	let bugMenuItem = $("#bug-menu-item");
-	let reloadFakeMenuItem = $("#reload-fake-menu-item");
 
 	let homeButton = $("#home-btn");
 	let rateButton = $("#rate-btn");
@@ -29,6 +35,8 @@ document.addEventListener("turbolinks:load", function () {
 	let signUpButton = $("#sign-up-btn");
 	let bugButton = $("#bug-btn");
 
+	//######## PROFILE MODAL ########//
+
 	let firstNameValue = $("#first-name-val");
 	let lastNameValue = $("#last-name-val");
 	let emailValue = $("#email-val");
@@ -37,6 +45,13 @@ document.addEventListener("turbolinks:load", function () {
 	let userScoreRSMValue = $("#user-score-rsm-val");
 	let userScoreTRMValue = $("#user-score-trm-val");
 
+	//######## ALERTS ########//
+
+	let alert = $(".alert");
+	let alertSuccess = $(".alert-success");
+
+	//######## ICONS ########//
+
 	let homeIcons = $(".home-icon");
 	let pdfIcon = $("#pdf-icon");
 	let signUpIcons = $(".sign-up-icon");
@@ -44,55 +59,41 @@ document.addEventListener("turbolinks:load", function () {
 	let bugIcon = $("#bug-icon");
 	let reloadIcons = $(".reload-icon");
 
-	//######## UI INITIAL SETUP ########//
+	////////// USER INTERFACE - LOGIN  //////////
 
+	let loginForm = $("#login-form");
+
+	let emailField = $("#email");
+	let passwordField = $("#password");
+
+	let doLoginButton = $("#do-login-btn");
+	let errorButton = $(".error-btn");
+
+	////////// USER INTERFACE - SETUP //////////
 
 	let authToken = localStorage.getItem('authToken');
 	let host = localStorage.getItem('host');
+	let message = localStorage.getItem('message');
+
+	if (authToken != null) {
+		ratedItemsMenuItem.find('ul').addClass("logged");
+		aboutMenuItem.find('ul').addClass("logged");
+		userMenuItem.find('ul').addClass("logged");
+		signUpMenuItem.hide();
+		loginMenuItem.hide();
+	} else {
+		ratedItemsMenuItem.find('ul').removeClass("logged");
+		aboutMenuItem.find('ul').removeClass("logged");
+		userMenuItem.find('ul').removeClass("logged");
+		rateMenuItem.hide();
+		ratedItemsMenuItem.hide();
+		userMenuItem.hide();
+	}
 
 	reloadIcons.hide();
 
-	homeMenuItem.hide();
-	rateMenuItem.hide();
-	ratedItemsMenuItem.hide();
-	aboutMenuItem.hide();
-	userMenuItem.hide();
-	signUpButton.hide();
-	loginButton.hide();
-	bugMenuItem.hide();
-
-	if (authToken != null) {
-		let redirected = localStorage['redirected'];
-		if (!redirected) {
-			localStorage['redirected'] = true;
-			window.location.href = "/rate";
-		} else {
-			homeMenuItem.show();
-			rateMenuItem.show();
-			ratedItemsMenuItem.show();
-			ratedItemsMenuItem.find('ul').addClass("logged");
-			aboutMenuItem.show();
-			aboutMenuItem.find('ul').addClass("logged");
-			userMenuItem.show();
-			userMenuItem.find('ul').addClass("logged");
-			bugMenuItem.show();
-			reloadFakeMenuItem.hide();
-		}
-	} else {
-		homeMenuItem.show();
-		ratedItemsMenuItem.find('ul').removeClass("logged");
-		aboutMenuItem.show();
-		aboutMenuItem.find('ul').removeClass("logged");
-		userMenuItem.find('ul').removeClass("logged");
-		loginButton.show();
-		signUpButton.show();
-		bugMenuItem.show();
-		reloadFakeMenuItem.hide();
-	}
-
-	////////// USER  //////////
-
-	//####### STATUS HANDLING (SCORES, ...) #########//
+	errorsSection.hide();
+	errorButton.hide();
 
 	if (authToken != null) {
 		let successCallback = (data, status, jqXHR) => {
@@ -117,39 +118,23 @@ document.addEventListener("turbolinks:load", function () {
 		let promise = emptyAjax("POST", "users/info.json", "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
 	}
 
+	if (message == null) {
+		successSection.hide();
+	} else {
+		successSection.show();
+		successSection.find(alertSuccess).append(message);
+		localStorage.removeItem('message')
+	}
 
-	////////// MENU //////////
-
-	//######### GO TO HOME HANDLING #########//
-
-	homeButton.on("click", () => {
-		homeButton.find(homeIcons).toggle();
-		homeButton.find(reloadIcons).toggle();
-	});
-
-	//######### GO TO RATING HANDLING #########//
-
-	rateMenuItem.on("click", () => {
-		rateButton.find(pdfIcon).toggle();
-		rateButton.find(reloadIcons).toggle();
-	});
-
-	//######### GO TO PUBLICATION LIST HANDLING #########//
-
-	rateMenuItem.on("click", () => {
-		rateButton.find(pdfIcon).toggle();
-		rateButton.find(reloadIcons).toggle();
-	});
+	////////// FUNCTIONALITIES - MENU   //////////
 
 	//######### PUBLICATION LIST HANDLING #########//
 
 	publicationListButton.on("click", () => {
 		let successCallback = (data, status, jqXHR) => {
 			content.html(data);
-			menu.addClass("bg-gray-dark").find(".nav-item > a:first-child").addClass("color-white");
 			menu.find(".active").removeClass("active");
 			ratedItemsMenuItem.addClass("active");
-			body.removeClass("bg-gray-dark");
 			let publicationsTable = $("#publications-table");
 			publicationsTable.DataTable({
 				dom: 'Bfrtip',
@@ -176,7 +161,6 @@ document.addEventListener("turbolinks:load", function () {
 	readersListButton.on("click", () => {
 		let successCallback = (data, status, jqXHR) => {
 			content.html(data);
-			menu.addClass("bg-gray-dark").find(".nav-item > a:first-child").addClass("color-white");
 			menu.find(".active").removeClass("active");
 			ratedItemsMenuItem.addClass("active");
 			body.removeClass("bg-gray-dark");
@@ -200,33 +184,41 @@ document.addEventListener("turbolinks:load", function () {
 
 	logoutButton.on("click", () => deleteToken().then(() => window.location.href = "/"));
 
-	//######### GO TO LOGIN HANDLING #########//
+	////////// FUNCTIONALITIES - LOGIN   //////////
 
-	loginButton.on("click", () => {
-		loginButton.find(signInIcons).toggle();
-		loginButton.find(reloadIcons).toggle();
+	let validationInstance = loginForm.parsley();
+
+	doLoginButton.on("click", () => {
+		if (validationInstance.isValid()) {
+			doLoginButton.find(signInIcons).toggle();
+			doLoginButton.find(reloadIcons).toggle();
+			let data = {email: emailField.val(), password: passwordField.val()};
+			let successCallback = (data, status, jqXHR) => {
+				//doLoginButton.find(signInIcon).toggle();
+				//doLoginButton.find(reloadIcons).toggle();
+				localStorage.setItem("authToken", data["auth_token"]);
+				window.location.href = "/";
+			};
+			let errorCallback = (jqXHR, status) => {
+				doLoginButton.find(signInIcons).toggle();
+				doLoginButton.find(reloadIcons).toggle();
+				if (jqXHR.responseText == null) {
+					doLoginButton.hide();
+					let button = doLoginButton.parent().find(errorButton);
+					button.show();
+					button.prop("disabled", true)
+				} else {
+					let errorPromise = buildErrors(jqXHR.responseText).then(result => {
+						doLoginButton.parent().find(errorsSection).find(alert).empty();
+						doLoginButton.parent().find(errorsSection).find(alert).append(result);
+						doLoginButton.parent().find(errorsSection).show();
+					});
+				}
+			};
+			// noinspection JSIgnoredPromiseFromCall
+			ajax("POST", "authenticate", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
+		}
 	});
 
-	//######### GO TO SIGN UP HANDLING #########//
-
-	signUpButton.on("click", () => {
-		signUpButton.find(signUpIcons).toggle();
-		signUpButton.find(reloadIcons).toggle();
-	});
-
-	//######### BUG REPORT HANDLING #########//
-
-	bugButton.on("click", () => {
-		bugButton.find(bugIcon).toggle();
-		bugButton.find(reloadIcons).toggle();
-	});
-
-	//####### GO TO PASSWORD EDIT HANDLING #########//
-
-	goToPasswordEditButton.on("click", () => goToPasswordEditButton.find(reloadIcons).toggle());
-
-	//####### GO TO PROFILE UPDATE HANDLING #########//
-
-	goToProfileUpdateButton.on("click", () => goToProfileUpdateButton.find(reloadIcons).toggle());
-
+	loginForm.submit(event => event.preventDefault());
 });

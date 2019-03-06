@@ -4,6 +4,11 @@ class AuthenticationController < ApplicationController
 
 	before_action :set_error_manager
 
+	# GET /login
+
+	def login
+	end
+
 	# POST /authenticate
 	def authenticate
 		command = AuthenticateUser.call(params[:email], params[:password], request.remote_ip)

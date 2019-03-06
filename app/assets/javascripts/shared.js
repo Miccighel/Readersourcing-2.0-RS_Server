@@ -2,7 +2,6 @@
 
 async function deleteToken() {
 	localStorage.removeItem('authToken');
-	localStorage.removeItem('redirected');
 }
 
 async function ajax(type, url, contentType, dataType, crossDomain, data, success, error) {
@@ -40,7 +39,7 @@ async function emptyAjax(type, url, contentType, dataType, crossDomain, success,
 
 ////////// UTILITY SECTION //////////
 
-String.prototype.capitalize = function() {
+String.prototype.capitalize = function () {
 	return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
@@ -67,5 +66,5 @@ async function buildErrors(errors) {
 function removePreloader() {
 	$('.preloader-wrapper').fadeOut(1500);
 	$('body').removeClass('preloader');
-	$('.preloader').css('overflow','visible');
+	$('.preloader').css('overflow', 'visible');
 }
