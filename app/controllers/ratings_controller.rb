@@ -2,7 +2,7 @@ class RatingsController < ApplicationController
 
 	before_action :set_rating, only: [:show]
 
-	skip_before_action :authorize_api_request, only: [:rate, :load]
+	skip_before_action :authorize_api_request, only: [:rate_web, :rate_paper, :load]
 
 	# GET /ratings.json
 	def index
@@ -13,42 +13,35 @@ class RatingsController < ApplicationController
 	def show
 	end
 
-	# GET /rate/:pubId/:authToken or /rate
-	def rate
-		if params.key? :authToken
-			delete_old_rating = params[:delete]
+	# GET /rate/:pubId/:authToken
+	def rate_paper
+		request.headers['Authorization'] = unescape_jwt(params[:authToken])
+		command = AuthorizeApiRequest.call(request.headers, request.remote_ip)
+		if command.success?
+			@user = command.result
 			@publication = Publication.find(params[:pubId])
-			auth_token = unescape_jwt params[:authToken]
-			payload = JsonWebToken.decode(auth_token)
-			expiration_time = Time.at payload[:expiration_time]
-			@user = User.find(payload[:user_id])
-			@rating = Rating.new
-			logger.info "Publication: #{@publication}"
-			logger.info "Auth Token: #{auth_token}"
-			logger.info "Payload: #{payload}"
-			logger.info "Expiration Time: #{expiration_time}"
-			logger.info "Current Time: #{Time.now}"
-			logger.info "User: #{@user}"
-			if Time.now < expiration_time
-				if delete_old_rating
-					Rating.where(user_id: @user.id, publication_id: @publication.id).destroy_all
-				else
-					if Rating.exists?(user_id: @user.id, publication_id: @publication.id)
-						render "shared/halted", locals: {
-							pubId: @publication.id,
-							message: "",
-							title: I18n.t("errors.messages.rating_already_given")
-						}, status: :ok
-					else
-						render 'ratings/rating_paper'
-					end
-				end
+			if Rating.exists?(user_id: @user.id, publication_id: @publication.id)
+				render "shared/halted", locals: {
+					pubId: @publication.id,
+					message: "",
+					title: I18n.t("errors.messages.rating_already_given")
+				}, status: :ok
 			else
-				@error_manager.add_error(I18n.t("errors.messages.password_do_not_match"))
-				render "shared/errors", status: :unprocessable_entity, locals: {errors: @error_manager.get_errors}, layout: false
+				render 'ratings/rating_paper'
 			end
 		else
+			render "shared/errors", status: :unprocessable_entity, locals: {errors: command.errors[:token]}, layout: false
+		end
+	end
+
+	# GET /rate/:authToken
+	def rate_web
+		request.headers['Authorization'] = unescape_jwt(params[:authToken])
+		command = AuthorizeApiRequest.call(request.headers, request.remote_ip)
+		if command.success?
 			render 'ratings/rating_web'
+		else
+			render "shared/errors", status: :unprocessable_entity, locals: {errors: command.errors[:token]}, layout: false
 		end
 	end
 

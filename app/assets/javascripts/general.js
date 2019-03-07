@@ -63,5 +63,3 @@ Parsley.addValidator('password', {
 });
 
 Parsley.setLocale('en');
-
-Dropzone.autoDiscover = false;

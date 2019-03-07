@@ -11,7 +11,7 @@
 			<div id="navigation" class="navbar-collapse collapse text-center">
 				<ul class="nav navbar-nav mr-auto">
 					<li id="home-menu-item" class="nav-item  <%= "active" if active == "home" %>">
-						<a href="<%= root_path %>" id="home-btn" class="<%= "color-white" if appearance == "dark" %>" >
+						<a href="<%= root_path %>" id="home-btn" class="<%= "color-white" if appearance == "dark" %>">
 							Home
 							<i class="fas fa-home home-icon"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
@@ -19,7 +19,7 @@
 					</li>
 
 					<li id="rate-menu-item" class="nav-item  <%= "active" if active == "rate" %>">
-						<a href="<%= rate_web_path %>" id="rate-btn" class="<%= "color-white" if appearance == "dark" %>">
+						<a href="<%= rate_web_path(authToken: '') %>" id="rate-btn" class="<%= "color-white" if appearance == "dark" %>">
 							Rate
 							<i id="pdf-icon" class="fas fa-file-pdf"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
@@ -39,10 +39,10 @@
 									<div class="col-12">
 										<ul class="list-unstyled">
 											<li>
-												<a href="#" id="publication-list-btn" class="nav-link" data-turbolinks="false">Publications</a>
+												<a href="<%= publications_list_path(authToken: '') %>" id="publication-list-btn" class="nav-link">Publications</a>
 											</li>
 											<li>
-												<a href="#" id="readers-list-btn" class="nav-link" data-turbolinks="false">Readers</a>
+												<a href="<%= users_list_path(authToken: '') %>" id="readers-list-btn" class="nav-link" data-turbolinks="false">Readers</a>
 											</li>
 										</ul>
 									</div>
@@ -89,7 +89,7 @@
 									<div class="col-12">
 										<ul class="list-unstyled">
 											<li>
-												<a href="#" id="profile-btn" data-toggle="modal" data-target="#modal-profile" class="nav-link">
+												<a href="#" id="profile-btn" data-toggle="modal" data-target="#modal-profile" class="nav-link" data-turbolinks="false">
 													Profile
 												</a>
 											</li>
@@ -129,3 +129,4 @@
 		</div>
 	</div>
 </header>
+<%= render "shared/modal_profile" %>

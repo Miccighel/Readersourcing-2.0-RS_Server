@@ -1,22 +1,10 @@
 <!DOCTYPE html>
-<html lang="it" xmlns="http://www.w3.org/1999/html">
-<head>
-	<%= csrf_meta_tags %>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-	<%= stylesheet_link_tag 'application' %>
-	<%= stylesheet_link_tag 'rating_web' %>
-	<title>RS_Server</title>
-</head>
+<html lang="en">
+<%= render partial: 'shared/assets' %>
 <body class="bg-gray-dark color-white">
-<%= render partial: 'shared/preloader' %>
 <div class="min-h-100 d-flex flex-column align-items-center justify-content-center">
 	<div class="w-100 mb-3">
-		<%= render partial: 'shared/menu', locals: {active: "rating-web", appearance: "light"} %>
+		<%= render partial: 'shared/menu', locals: {active: "rate", appearance: "light"} %>
 	</div>
 	<div id="loading-sect" class="row m-auto">
 		<div class="col-12">
@@ -48,7 +36,9 @@
 				<div class="card">
 					<div id="headingOne" role="tab" class="card-header">
 						<h5 class="mb-0">
-							<a data-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="color-white collapsed">View Details <small>(Click to toggle)</small></a>
+							<a data-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="color-white collapsed">View Details
+								<small>(Click to toggle)</small>
+							</a>
 						</h5>
 					</div>
 					<div id="collapseOne" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" class="collapse" style="">
@@ -164,7 +154,8 @@
 			<div class="col-12">
 				<form action="<%= extract_publications_path(format: :json) %>" id="annotated-publication-dropzone" class="dropzone border-primary">
 					<div class="dz-default dz-message text-center pt-1">
-						<br/><i class="fas fa-upload fa-2x"></i><br />.pdf file</div>
+						<br/><i class="fas fa-upload fa-2x"></i><br/>.pdf file
+					</div>
 				</form>
 			</div>
 			<div class="col-12 mt-3 ml-auto mr-auto mb-auto">
@@ -271,9 +262,5 @@
 		</div>
 	</div>
 </div>
-<%= render partial: 'shared/modal_profile' %>
-<%= javascript_include_tag "application" %>
-<%= javascript_include_tag "menu" %>
-<%= javascript_include_tag "rating_web" %>
 </body>
 </html>

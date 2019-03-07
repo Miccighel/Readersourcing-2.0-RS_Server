@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 
 	layout "application", only: [:confirm_email]
 
-	skip_before_action :authorize_api_request, only: [:sign_up, :create, :confirm_email, :unsubscribe, :edit]
+	skip_before_action :authorize_api_request, only: [:list, :sign_up, :create, :confirm_email, :unsubscribe, :edit]
 
 	before_action :set_user, only: [:show, :update, :unsubscribe, :destroy]
 	before_action :set_error_manager, only: [:confirm_email]
@@ -16,10 +16,16 @@ class UsersController < ApplicationController
 		@users = User.all
 	end
 
-	# POST /readers/list
+	# GET /readers/list/:authToken
 	def list
-		@users = User.all
-		render partial: 'users/list'
+		request.headers['Authorization'] = unescape_jwt(params[:authToken])
+		command = AuthorizeApiRequest.call(request.headers, request.remote_ip)
+		if command.success?
+			@users = User.all
+			render 'list'
+		else
+			render "shared/errors", status: :unprocessable_entity, locals: {errors: command.errors[:token]}, layout: false
+		end
 	end
 
 	# GET /users/1.json

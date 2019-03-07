@@ -1,5 +1,7 @@
 class PublicationsController < ApplicationController
 
+	skip_before_action :authorize_api_request, only: [:list]
+
 	before_action :set_user, :set_request_data, except: [:list]
 	before_action :set_publication, only: [:show, :update, :destroy, :refresh, :is_rated, :is_saved_for_later]
 	before_action :set_error_manager, only: [:lookup, :is_rated, :is_saved_for_later, :fetch, :is_fetchable, :extract, :refresh, :create, :update]
@@ -9,11 +11,17 @@ class PublicationsController < ApplicationController
 		@publications = Publication.all
 	end
 
-	# POST /publications/list
+	# GET /publications/list/:authToken
 	def list
-		@publications = Publication.all
-		@user = current_user
-		render partial: 'publications/list'
+		request.headers['Authorization'] = unescape_jwt(params[:authToken])
+		command = AuthorizeApiRequest.call(request.headers, request.remote_ip)
+		if command.success?
+			@publications = Publication.all
+			@user = command.result
+			render 'list'
+		else
+			render "shared/errors", status: :unprocessable_entity, locals: {errors: command.errors[:token]}, layout: false
+		end
 	end
 
 	# GET /publications/1.json

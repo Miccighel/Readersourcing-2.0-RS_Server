@@ -38,17 +38,17 @@ Rails.application.routes.draw do
 	get 'login', to: 'authentication#login', as: :login, constraints: {:format => 'html'}
 	post 'authenticate', to: 'authentication#authenticate', as: :authenticate, constraints: {:format => :json}
 
-	post 'publications/list', to: 'publications#list', as: :publications_list, constraints: {:format => 'html'}
+	get 'publications/list/:authToken', to: 'publications#list', as: :publications_list, constraints: {:format => 'html'}
 
-	post 'readers/list', to: 'users#list', as: :users_list, constraints: {:format => 'html'}
+	get 'readers/list/:authToken', to: 'users#list', as: :users_list, constraints: {:format => 'html'}
 	get 'profile/edit', to: 'users#edit', as: :profile, constraints: {:format => 'html'}
 	get 'confirm/:id/:confirmToken', to: 'users#confirm_email', as: :confirm, constraints: {:format => 'html'}
 	get 'unsubscribe/:id', to: 'users#unsubscribe', as: :unsubscribe, constraints: {:format => 'html'}
 	get 'sign_up', to: 'users#sign_up', as: :sign_up, constraints: {:format => 'html'}
 
 	post 'load', to: 'ratings#load', as: :load, constraints: {:format => 'html'}
-	get 'rate/:pubId/:authToken/', to: 'ratings#rate', as: :rate_paper, constraints: {:format => 'html'}
-	get 'rate/', to: 'ratings#rate', as: :rate_web, constraints: {:format => 'html'}
+	get 'rate/:pubId/:authToken/', to: 'ratings#rate_paper', as: :rate_paper, constraints: {:format => 'html'}
+	get 'rate/:authToken', to: 'ratings#rate_web', as: :rate_web, constraints: {:format => 'html'}
 
 	get 'password/edit', to: 'passwords#edit', as: :edit, constraints: {:format => 'html'}
 	post 'password/update', to: 'passwords#update', constraints: {:format => /(html|json)/}

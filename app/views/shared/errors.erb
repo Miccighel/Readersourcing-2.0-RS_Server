@@ -1,25 +1,10 @@
 <!DOCTYPE html>
-<html lang="it">
-<head>
-	<%= csrf_meta_tags %>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-	<%= stylesheet_link_tag 'application' %>
-	<title>RS_Server</title>
-</head>
-<body clasS="bg-gray-dark">
-<div class="preloader-wrapper">
-	<div class="preloader">
-		<img src="<%= image_path("preloader.svg") %>" alt="Loading...">
-	</div>
-</div>
-<div class="bg-gray-dark color-white min-h-100 d-flex flex-column align-items-center justify-content-center">
+<html lang="en">
+<%= render partial: 'shared/assets' %>
+<body class="bg-gray-dark color-white">
+<div id="login-page" class="min-h-100 d-flex flex-column align-items-center justify-content-center">
 	<div class="w-100 mb-3">
-		<%= render partial: 'shared/menu', locals: {active: "errors", appearance: "light"} %>
+		<%= render partial: 'shared/menu', locals: {active: "home", appearance: "light"} %>
 	</div>
 	<div class="row ml-auto mr-auto mt-auto mb-0 w-100">
 		<div class="col-lg-4 col-sm-8 col-xs-12 m-auto">
@@ -49,9 +34,5 @@
 		<%= render partial: "shared/footer" %>
 	</div>
 </div>
-<%= render partial: 'shared/modal_profile' %>
-<%= javascript_include_tag "application" %>
-<%= javascript_include_tag "menu" %>
-<%= javascript_include_tag "errors" %>
 </body>
 </html>

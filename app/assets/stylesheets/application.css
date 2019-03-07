@@ -19,5 +19,6 @@
  *= require load-awesome/css/ball-grid-pulse
  *= require system/style.blue
  *= require general
+ *= require rating
  *= require_self
 */
