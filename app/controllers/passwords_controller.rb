@@ -1,16 +1,18 @@
 class PasswordsController < ApplicationController
 
-	include ::ActionView::Layouts
-
-	layout "application", only: [:reset]
-
 	skip_before_action :authorize_api_request, only: [:edit, :forgot, :reset]
 
 	before_action :set_error_manager, only: [:update, :forgot, :reset]
 
-	# POST /password/edit
+	# GET /password/edit/:authToken
 	def edit
-		render :update
+		request.headers['Authorization'] = unescape_jwt(params[:authToken])
+		command = AuthorizeApiRequest.call(request.headers, request.remote_ip)
+		if command.success?
+			render :update
+		else
+			render "shared/errors", status: :unauthorized, locals: {errors: command.errors[:token]}, layout: false
+		end
 	end
 
 	# POST /password/update.json
@@ -41,7 +43,7 @@ class PasswordsController < ApplicationController
 		end
 	end
 
-	# POST /password/forgot.json
+	# POST /password/forgot.json or GET /password/forgot
 	def forgot
 		if params.key?(:email)
 			email = params[:email]

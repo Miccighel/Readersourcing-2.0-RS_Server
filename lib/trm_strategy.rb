@@ -23,9 +23,9 @@ class TrmStrategy < ReadersourcingStrategy
 				qi_past = mean(past_ratings)
 				qi_future = mean(future_ratings)
 
-				rating.informativeness = quadratic_loss(qi_past, qi_future)
-				rating.accuracy_loss = quadratic_loss(rating.normalize_score, qi_future)
-				rating.bonus = rating.informativeness * logistic_fuction(rating.accuracy_loss)
+				rating.informativeness = quadratic_loss(qi_past, qi_future).round(16)
+				rating.accuracy_loss = quadratic_loss(rating.normalize_score, qi_future).round(16)
+				rating.bonus = rating.informativeness * logistic_fuction(rating.accuracy_loss).round(16)
 				rating.save
 
 				puts "Informativeness: #{rating.informativeness}"
@@ -35,7 +35,7 @@ class TrmStrategy < ReadersourcingStrategy
 		end
 
 		puts "Publication score at time t(i) #{@publication.score_trm}"
-		@publication.score_trm = mean(scores)
+		@publication.score_trm = mean(scores).round(16)
 		@publication.save
 		puts "Publication score at time t(i+1) #{@publication.score_trm}"
 
@@ -43,7 +43,7 @@ class TrmStrategy < ReadersourcingStrategy
 			puts "User bonus at time t(i) #{user.bonus}"
 			bonuses = []
 			user.given_ratings.each {|rating| bonuses.push rating.bonus}
-			user.bonus = mean(bonuses)
+			user.bonus = mean(bonuses).round(16)
 			puts "User bonus at time t(i+1) #{user.bonus}"
 			user.save
 		end

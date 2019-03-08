@@ -1,7 +1,12 @@
+$(document).on("ready", () => {
+	Dropzone.autoDiscover = false;
+});
+
 $(document).on("turbolinks:load", () => {
+
 	////////// USER INTERFACE - GENERAL  //////////
 
-	//######## CONTENT ########//
+	//######## SECTIONS ########//
 
 	let successSection = $("#success-sect");
 	let errorsSection = $(".errors-sect");
@@ -89,7 +94,6 @@ $(document).on("turbolinks:load", () => {
 
 	let checkIcon = $("#check-icon");
 
-
 	////////// USER INTERFACE - BUG  //////////
 
 	let bugForm = $("#bug-form");
@@ -111,7 +115,7 @@ $(document).on("turbolinks:load", () => {
 
 	let body = $("body");
 
-	//######## CONTENT SECTIONS ########//
+	//######## SECTIONS ########//
 
 	let ratingSection = $("#rating-sect");
 	let ratingSectionSubControls = $(".rating-sect-sub");
@@ -165,12 +169,74 @@ $(document).on("turbolinks:load", () => {
 
 	let goToRatingIcon = $("#go-to-rating-icon");
 
+	////////// USER INTERFACE - RATING PAPER  //////////
+
+	let ratePaperForm = $("#new_rating");
+
+	let votePaperButton = $("#vote-paper-btn");
+
+	//let ratingSlider = $("#rating-slider");
+
+	//let ratingText = $("#rating-text");
+
+	let authTokenUserField = $("#authTokenUser");
+
+	////////// USER INTERFACE - PASSWORD UPDATE  //////////
+
+	let passwordEditForm = $("#password-edit-form");
+
+	//let errorsSection = $(".errors-sect");
+
+	let currentPasswordField = $("#current-password");
+	let newPasswordField = $("#new-password");
+	let newPasswordConfirmationField = $("#new-password-confirmation");
+
+	let doPasswordEditButton = $("#do-password-edit-btn");
+	//let errorButton = $(".error-btn");
+
+	//let alert = $(".alert");
+
+	//let checkIcon = $("#check-icon");
+
+	////////// USER INTERFACE - PROFILE UPDATE  //////////
+
+	let profileUpdatePage = $("#profile-update-page");
+
+	//let signUpForm = $("#sign-up-form");
+
+	//let errorsSection = $(".errors-sect");
+
+	//let firstNameField = $("#first-name");
+	//let lastNameField = $("#last-name");
+	//let orcidField = $("#orcid");
+
+	//let subscribeCheckbox = $("#subscribe");
+
+	let backButton = $("#back-btn");
+	let updateButton = $("#update-btn");
+	//let errorButton = $(".error-btn");
+
+	//let alert = $(".alert");
+
+	//let checkIcon = $("#check-icon");
+
+	////////// USER INTERFACE - SUCCESS, ERRORS & HALTED  //////////
+
+	let goToHomeButton = $("#go-to-home-btn");
+	let goToLoginButton = $("#go-to-login-btn");
 
 	////////// USER INTERFACE - SETUP //////////
 
+	//######### GENERAL #########//
+
 	let authToken = localStorage.getItem('authToken');
-	let host = localStorage.getItem('host');
 	let message = localStorage.getItem('message');
+
+	reloadIcons.hide();
+
+	successSection.hide();
+	errorsSection.hide();
+	errorButtons.hide();
 
 	if (authToken != null) {
 		ratedItemsMenuItem.find('ul').addClass("logged");
@@ -184,6 +250,10 @@ $(document).on("turbolinks:load", () => {
 		readersListButton.attr("href", `${link}${authToken}`);
 		link = rateButton.attr("href");
 		rateButton.attr("href", `${link}${authToken}`);
+		link = goToPasswordEditButton.attr("href");
+		goToPasswordEditButton.attr("href", `${link}${authToken}`);
+		link = goToProfileUpdateButton.attr("href");
+		goToProfileUpdateButton.attr("href", `${link}${authToken}`);
 	} else {
 		ratedItemsMenuItem.find('ul').removeClass("logged");
 		aboutMenuItem.find('ul').removeClass("logged");
@@ -192,12 +262,6 @@ $(document).on("turbolinks:load", () => {
 		ratedItemsMenuItem.hide();
 		userMenuItem.hide();
 	}
-
-	reloadIcons.hide();
-
-	successSection.hide();
-	errorsSection.hide();
-	errorButtons.hide();
 
 	if (authToken != null) {
 		let successCallback = (data, status, jqXHR) => {
@@ -255,40 +319,58 @@ $(document).on("turbolinks:load", () => {
 
 	Dropzone.autoDiscover = false;
 
+	//######### RATING PAPER #########//
+
+	ratingText.text("50");
+	ratingSlider.slider({});
+
+	if (authToken != null) authTokenUserField.val(authToken);
+
+	//######### PROFILE UPDATE #########//
+
+	if (profileUpdatePage.is(":visible")) {
+
+		firstNameField.hide();
+		lastNameField.hide();
+		orcidField.hide();
+		subscribeCheckbox.hide();
+		backButton.find(reloadIcons).hide();
+		updateButton.find(reloadIcons).hide();
+
+		updateButton.prop("disabled", true);
+
+		signUpForm.submit(event => event.preventDefault());
+
+		if (authToken != null) {
+			let thirdSuccessCallback = (data, status, jqXHR) => {
+				firstNameField.val(data["first_name"]);
+				firstNameField.show();
+				firstNameField.parent().parent().find(reloadIcons).hide();
+				lastNameField.val(data["last_name"]);
+				lastNameField.show();
+				lastNameField.parent().parent().find(reloadIcons).hide();
+				orcidField.val(data["orcid"]);
+				orcidField.show();
+				orcidField.parent().parent().find(reloadIcons).hide();
+				(data["subscribe"]) === true ? subscribeCheckbox.prop('checked', true) : subscribeCheckbox.prop('checked', false);
+				subscribeCheckbox.show();
+				subscribeCheckbox.parent().parent().find(reloadIcons).hide();
+				updateButton.prop("disabled", false);
+				removePreloader();
+			};
+			let thirdErrorCallback = (jqXHR, status) => {
+				firstNameField.val();
+				lastNameField.val();
+				orcidField.val();
+				subscribeCheckbox.prop('checked', false);
+				updateButton.prop("disabled", false);
+				removePreloader();
+			};
+			let thirdPromise = emptyAjax("POST", "/users/info.json", "application/json; charset=utf-8", "json", true, thirdSuccessCallback, thirdErrorCallback);
+		}
+	}
+
 	////////// FUNCTIONALITIES - MENU   //////////
-
-	//######### PUBLICATION LIST HANDLING #########//
-
-	let publicationsTable = $("#publications-table");
-	publicationsTable.DataTable({
-		dom: 'Bfrtip',
-		buttons: [
-			'copyHtml5',
-			'excelHtml5',
-			'csvHtml5',
-			'pdfHtml5'
-		],
-		columnDefs: [
-			{"width": "20%", "targets": 1},
-			{"width": "20%", "targets": 2},
-			{"orderable": false, "targets": 6}
-		],
-		responsive: true
-	});
-
-	//######### READERS LIST HANDLING #########//
-
-	let usersTable = $("#users-table");
-	usersTable.DataTable({
-		dom: 'Bfrtip',
-		buttons: [
-			'copyHtml5',
-			'excelHtml5',
-			'csvHtml5',
-			'pdfHtml5'
-		],
-		responsive: true
-	});
 
 	//####### LOGOUT HANDLING #########//
 
@@ -333,7 +415,7 @@ $(document).on("turbolinks:load", () => {
 
 	////////// FUNCTIONALITIES - SIGN UP   //////////
 
-	//########## REGISTRATION HANDLING ##########//
+	//########## SIGN UP HANDLING ##########//
 
 	signUpForm.submit(event => event.preventDefault());
 
@@ -419,7 +501,7 @@ $(document).on("turbolinks:load", () => {
 				}
 			};
 			// noinspection JSIgnoredPromiseFromCall
-			ajax("POST", "/forgot.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
+			ajax("POST", "/password/forgot.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 		}
 	});
 
@@ -444,7 +526,7 @@ $(document).on("turbolinks:load", () => {
 				doBugReportButton.find(reloadIcons).toggle();
 				if (jqXHR.responseText == null) {
 					doBugReportButton.hide();
-					let button = doBugReportButton.parent().find(errorButton);
+					let button = doBugReportButton.parent().find(errorButtons);
 					button.show();
 					button.prop("disabled", true)
 				} else {
@@ -464,13 +546,14 @@ $(document).on("turbolinks:load", () => {
 
 	////////// FUNCTIONALITIES - RATING WEB   //////////
 
-	//######### PUBLICATION #######//
+	////////// PUBLICATION //////////
 
 	//#########  STATUS HANDLING (EXISTS ON THE DB, RATED BY THE LOGGED IN USER, SAVED FOR LATER...) #########//
 
 	authToken = localStorage.getItem('authToken');
 	if (authToken != null) {
 		publicationUrlField.change(() => {
+			let validationInstance = rateForm.parsley();
 			validationInstance.validate();
 			if (validationInstance.isValid()) {
 				ratingSection.hide();
@@ -650,6 +733,14 @@ $(document).on("turbolinks:load", () => {
 	//######### EXTRACT HANDLING #########//
 
 	if (annotatedPublicationDropzone.is(":visible")) {
+
+		$('.dropzone').each(function () {
+			let dropzoneControl = $(this)[0].dropzone;
+			if (dropzoneControl) {
+				dropzoneControl.destroy();
+			}
+		});
+
 		Dropzone.options.annotatedPublicationDropzone = {
 			paramName: "file", // The name that will be used to transfer the file
 			acceptedFiles: "application/pdf",
@@ -685,6 +776,8 @@ $(document).on("turbolinks:load", () => {
 
 	///######### REFRESH HANDLING #########//
 
+	modalRefreshButton.click(event => event.preventDefault());
+
 	modalRefresh.on('show.bs.modal', function (e) {
 		validationInstance.validate();
 		if (!validationInstance.isValid()) {
@@ -692,15 +785,9 @@ $(document).on("turbolinks:load", () => {
 		}
 	});
 
-	authToken = localStorage.getItem('authToken');
-	if (authToken != null) {
-		refreshButton.on("click", () => {
-			validationInstance.validate();
-			if (validationInstance.isValid()) {
-				modalRefresh.modal("show");
-			}
-		});
-	}
+	refreshButton.on("click", () => {
+		modalRefresh.modal("show");
+	});
 
 	modalRefreshButton.on("click", () => {
 		modalRefresh.modal("hide");
@@ -722,6 +809,12 @@ $(document).on("turbolinks:load", () => {
 				downloadButton.show();
 				downloadButton.attr("href", data["pdf_download_url_link"]);
 				refreshButton.show();
+				let pdfWindow = window.open(data["pdf_download_url_link"], '_blank');
+				if (pdfWindow) {
+					pdfWindow.focus();
+				} else {
+					modalAllow.modal('show');
+				}
 			};
 			// 2.3 Error during publication refresh, it is not safe to show the download button
 			let secondErrorCallback = (jqXHR, status) => {
@@ -736,7 +829,7 @@ $(document).on("turbolinks:load", () => {
 				});
 			};
 			// 2.1 Refresh the publication
-			let secondPromise = emptyAjax("GET", `/ublications/${data["id"]}/refresh.json`, "application/json; charset=utf-8", "json", true, secondSuccessCallback, secondErrorCallback);
+			let secondPromise = emptyAjax("GET", `/publications/${data["id"]}/refresh.json`, "application/json; charset=utf-8", "json", true, secondSuccessCallback, secondErrorCallback);
 		};
 		// 1.3 Publication was never rated, so it does not exists on the database
 		let errorCallback = function (jqXHR, status) {
@@ -845,32 +938,174 @@ $(document).on("turbolinks:load", () => {
 
 	configureSaveButton.on("click", () => modalConfigure.modal("hide"));
 
-	////////// USER  //////////
+	////////// RATING //////////
 
-	//####### STATUS HANDLING (SCORES, ...) #########//
+	////////// FUNCTIONALITIES - RATING PAPER  //////////
+
+	ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
+
+	//#######  ACTION HANDLING #########//
+
+	votePaperButton.on("click", () => {
+		let validationInstance = ratePaperForm.parsley();
+		validationInstance.validate();
+		if (validationInstance.isValid()) {
+			votePaperButton.find(reloadIcons).toggle();
+		}
+	});
+
+	////////// FUNCTIONALITIES - PASSWORD UPDATE  //////////
+
+	passwordEditForm.submit(event => event.preventDefault());
+
+	doPasswordEditButton.on("click", () => {
+		let validationInstance = passwordEditForm.parsley();
+		validationInstance.validate();
+		if (validationInstance.isValid()) {
+			doPasswordEditButton.find(checkIcon).toggle();
+			doPasswordEditButton.find(reloadIcons).toggle();
+			let data = {
+				current_password: currentPasswordField.val(),
+				new_password: newPasswordField.val(),
+				new_password_confirmation: newPasswordConfirmationField.val()
+			};
+			let successCallback = (data, status, jqXHR) => {
+				//doPasswordEditButton.find(reloadIcons).toggle();
+				deleteToken().then(() => {
+					localStorage.setItem("message", data["message"]);
+					window.location.href = "/login";
+				});
+			};
+			let errorCallback = (jqXHR, status) => {
+				goToPasswordEditButton.find(checkIcon).toggle();
+				goToPasswordEditButton.find(reloadIcons).toggle();
+				if (jqXHR.responseText == null) {
+					doPasswordEditButton.hide();
+					let button = doPasswordEditButton.parent().find(errorButton);
+					button.show();
+					button.prop("disabled", true)
+				} else {
+					let errorPromise = buildErrors(jqXHR.responseText).then(result => {
+						doPasswordEditButton.parent().find(errorsSection).find(alert).empty();
+						doPasswordEditButton.parent().find(errorsSection).find(alert).append(result);
+						doPasswordEditButton.parent().find(errorsSection).show();
+					});
+				}
+			};
+			// noinspection JSIgnoredPromiseFromCall
+			ajax("POST", "/password/update.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
+		}
+	});
+
+	////////// FUNCTIONALITIES - PROFILE UPDATE  //////////
 
 	authToken = localStorage.getItem('authToken');
 	if (authToken != null) {
-		let successCallback = (data, status, jqXHR) => {
-			firstNameValue.text(data["first_name"]);
-			lastNameValue.text(data["last_name"]);
-			emailValue.text(data["email"]);
-			orcidValue.text(data["orcid"]);
-			(data["subscribe"]) ? subscribeValue.text("Yes") : subscribeValue.text("No");
-			userScoreRSMValue.text((data["score"] * 100).toFixed(2));
-			userScoreTRMValue.text((data["bonus"] * 100).toFixed(2));
-		};
-		let errorCallback = (jqXHR, status) => {
-			firstNameValue.text("...");
-			firstNameValue.text("...");
-			lastNameValue.text("...");
-			emailValue.text("...");
-			orcidValue.text("...");
-			subscribeValue.text("...");
-			userScoreRSMValue.text("...");
-			userScoreTRMValue.text("...");
-		};
-		let promise = emptyAjax("POST", "/users/info.json", "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
+		updateButton.on("click", () => {
+			let validationInstance = signUpForm.parsley();
+			validationInstance.validate();
+			if (validationInstance.isValid()) {
+				updateButton.find(checkIcon).toggle();
+				updateButton.find(reloadIcons).toggle();
+				let successCallback = (data, status, jqXHR) => {
+					let secondData = {
+						user: {
+							first_name: firstNameField.val(),
+							last_name: lastNameField.val(),
+							orcid: orcidField.val(),
+							subscribe: !!subscribeCheckbox.is(":checked")
+						},
+					};
+					if (orcidField.val() === "")
+						delete secondData.user.orcid;
+					let secondSuccessCallback = (data, status, jqXHR) => {
+						//updateButton.find(reloadIcons).toggle();
+						deleteToken().then(() => {
+							localStorage.setItem("message", data["message"]);
+							window.location.href = "/login";
+						});
+					};
+					let secondErrorCallback = (jqXHR, status) => {
+						updateButton.find(reloadIcons).toggle();
+						updateButton.find(checkIcon).toggle();
+						if (jqXHR.responseText == null) {
+							updateButton.hide();
+							let button = updateButton.parent().find(errorButtons);
+							button.show();
+							button.prop("disabled", true)
+						} else {
+							let errorPromise = buildErrors(jqXHR.responseText).then(result => {
+								updateButton.parent().find(errorsSection).find(alert).empty();
+								updateButton.parent().find(errorsSection).find(alert).append(result);
+								updateButton.parent().find(errorsSection).show();
+							});
+						}
+					};
+					let secondPromise = ajax("PUT", `/users/${data["id"]}.json`, "application/json; charset=utf-8", "json", true, secondData, secondSuccessCallback, secondErrorCallback);
+				};
+				let errorCallback = (jqXHR, status) => {
+					updateButton.find(reloadIcons).toggle();
+					updateButton.find(checkIcon).toggle();
+					if (jqXHR.responseText == null) {
+						updateButton.hide();
+						let button = updateButton.parent().find(errorButtons);
+						button.show();
+						button.prop("disabled", true)
+					} else {
+						let errorPromise = buildErrors(jqXHR.responseText).then(result => {
+							updateButton.parent().find(errorsSection).find(alert).empty();
+							updateButton.parent().find(errorsSection).find(alert).append(result);
+							updateButton.parent().find(errorsSection).show();
+						});
+					}
+				};
+				let promise = emptyAjax("POST", "/users/info.json", "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
+			}
+		});
 	}
 
+	////////// FUNCTIONALITIES - PUBLICATION LIST  //////////
+
+	let publicationsTable = $("#publications-table");
+	publicationsTable.DataTable({
+		dom: 'Bfrtip',
+		buttons: [
+			'copyHtml5',
+			'excelHtml5',
+			'csvHtml5',
+			'pdfHtml5'
+		],
+		columnDefs: [
+			{"width": "20%", "targets": 1},
+			{"width": "20%", "targets": 2},
+			{"orderable": false, "targets": 6}
+		],
+		responsive: true
+	});
+
+	////////// FUNCTIONALITIES - READERS LIST  //////////
+
+	let usersTable = $("#users-table");
+	usersTable.DataTable({
+		dom: 'Bfrtip',
+		buttons: [
+			'copyHtml5',
+			'excelHtml5',
+			'csvHtml5',
+			'pdfHtml5'
+		],
+		responsive: true
+	});
+
+	////////// FUNCTIONALITIES - SUCCESS, HALTED & ERRORS  //////////
+
+	goToHomeButton.on("click", () => {
+		goToHomeButton.find(homeIcons).toggle();
+		goToHomeButton.find(reloadIcons).toggle();
+	});
+
+	goToLoginButton.on("click", () => {
+		goToLoginButton.find(signInIcons).toggle();
+		goToLoginButton.find(reloadIcons).toggle();
+	});
 });

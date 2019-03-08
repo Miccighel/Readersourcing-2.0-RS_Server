@@ -6,6 +6,11 @@
 	bottom: 20%;
 }
 
+.form-paper-check-label {
+	position: relative;
+	bottom: 5%;
+}
+
 .parsley-errors-list li {
 	color: indianred !important;
 }

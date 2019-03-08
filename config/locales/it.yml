@@ -63,7 +63,7 @@ it:
       try_again: "Desideri tentare nuovamente?"
       rate_again: "Desideri riassegnare il giudizio?"
       mail_confirmation: "Riceverai una conferma via mail."
-      not_the_same_user: "Se sei tale utente, prova nuovamente ad inserire i tuoi dati."
+      not_the_same_user: "Per favore, salva per dopo di nuovo questa pubblicazione."
       validate_user: "Valida la tua utenza"
   confirmations:
     messages:
@@ -103,7 +103,7 @@ it:
       too_short: "troppo corto (minimo %{count} caratteri)"
       wrong_length: "lunghezza errata (deve essere di {{count}} caratteri)"
       required: "deve esistere"
-      not_the_same_user: "I dati inseriti non sono quelli dell'utente che ha generato il collegamento all'interno del file."
+      not_the_same_user: "Questa pubblicazione è stata salvata per dopo da un altro utente."
       rating_already_given: "Hai già assegnato un giudizio alla pubblicazione."
       rating_unsuccessful: "Qualcosa è andato storto durante l'assegnamento del giudizio. Per favore, riprova."
       unauthorized: "Non sei autorizzato a procedere."

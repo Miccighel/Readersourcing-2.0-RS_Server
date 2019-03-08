@@ -57,11 +57,11 @@
 			<div class="modal-footer">
 				<div class="row m-auto w-100 text-center">
 					<div class="col-12 mb-1 p-0">
-						<a href="<%= profile_path %>" id="go-to-profile-update-btn" class="btn btn-primary link-white">
+						<a href="<%= profile_path(authToken:'') %>" id="go-to-profile-update-btn" class="btn btn-primary link-white">
 							Update Profile
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
-						<a href="<%= edit_path %>" id="go-to-password-edit-btn" class="btn btn-primary link-white">
+						<a href="<%= edit_path(authToken:'') %>" id="go-to-password-edit-btn" class="btn btn-primary link-white">
 							Edit Password
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>

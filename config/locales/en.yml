@@ -31,14 +31,14 @@ en:
       try_again: "Do you want to try again?"
       rate_again: "Do you want to give a new rating?"
       mail_confirmation: "You will get an email confirmation."
-      not_the_same_user: "If you are that user, insert your login data again."
+      not_the_same_user: "Please, save this publication for later again."
       validate_user: "Validate yourself"
   errors:
     messages:
       invalid_credentials: "Invalid credentials. Please, try again."
       rating_already_given: "You have already rated this publication."
       rating_unsuccessful: "Something went wrong during rating assignment. Please, try again."
-      not_the_same_user: "The data do not match with the ones of the user that has created the link inside the file."
+      not_the_same_user: "This publication has been saved for later by another user."
       unauthorized: "You are not authorized to proceed"
       expired_token: "The clicked link contains an expired token. <br />To proceed, you must annotate the publication again and click the new link."
       password_do_not_match: "The new password and its confirmation do not match. Please, try again."

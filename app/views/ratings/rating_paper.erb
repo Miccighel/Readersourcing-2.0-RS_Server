@@ -1,22 +1,10 @@
 <!DOCTYPE html>
-<html lang="it">
-<head>
-	<%= csrf_meta_tags %>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-	<%= stylesheet_link_tag 'application' %>
-	<%= stylesheet_link_tag 'rating_paper' %>
-	<title>RS_Server</title>
-</head>
+<html lang="en">
+<%= render partial: 'shared/assets' %>
 <body class="bg-gray-dark color-white">
-<%= render partial: 'shared/preloader' %>
 <div class="min-h-100 d-flex flex-column align-items-center justify-content-center">
 	<div class="w-100 mb-3">
-		<%= render partial: 'shared/menu', locals: {active: "rating-paper", appearance: "light"} %>
+		<%= render partial: 'shared/menu', locals: {active: "rate", appearance: "light"} %>
 	</div>
 	<div class="row m-auto w-100">
 		<div class="col-lg-4 col-sm-8 col-xs-12 m-auto">
@@ -48,47 +36,28 @@
 						</div>
 						<div class="col-12 text-center">
 							<%= f.check_box :anonymous, id: "anonymize-check", class: 'form-check-input' %>
-							<label class="form-check-label lead" for="anonymize-check">
+							<label class="form-paper-check-label lead" for="anonymize-check">
 								<%= I18n.t "labels.anonimyze" %>
 							</label>
 						</div>
-						<div class="col-12 text-center mt-3">
-							<p class="lead mb-2"><%= I18n.t("information.messages.validate_user") %></p>
-						</div>
-						<div class="col-12">
-							<div class="form-group">
-								<label class="text-white" for="email">Email
-									<span class="small text-white">(e.g. address@example.com)</span></label>
-								<%= email_field_tag "email", "", class: "form-control form-control-light", id: "email", required: true, build_data: {"parsley-type": "email"} %>
-							</div>
-						</div>
-						<div class="col-12">
-							<div class="form-group">
-								<label class="text-white" for="email">Password</label><br/>
-								<%= password_field_tag "password", "", class: "form-control form-control-light", id: "password", required: true, build_data: {"parsley-minlength": "6"} %>
-							</div>
-						</div>
 						<div class="col-12 text-center mb-3">
-							<%= button_tag(type: 'submit', id: "vote-btn", class: "btn btn-success w-35") do %>
+							<%= button_tag(type: 'submit', id: "vote-paper-btn", class: "btn btn-success w-35") do %>
 								<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 								Rate
 							<% end %>
 						</div>
 						<%= hidden_field_tag "pubId", @publication.id %>
 						<%= hidden_field_tag "userId", @user.id %>
-						<%= hidden_field_tag "cryptedAuthToken", @crypted_auth_token %>
+						<%= hidden_field_tag "authTokenPaper", @auth_token_paper %>
+						<%= hidden_field_tag "authTokenUser", '' %>
 					</div>
 				<% end %>
 			</div>
 		</div>
 	</div>
-	<div class="row mt-auto ml-auto mr-auto mb-0 w-100">
+	<div class="row mt-3 w-100">
 		<%= render partial: "shared/footer" %>
 	</div>
 </div>
 </body>
 </html>
-<%= render partial: 'shared/modal_profile' %>
-<%= javascript_include_tag "application" %>
-<%= javascript_include_tag "menu" %>
-<%= javascript_include_tag "rating_paper" %>

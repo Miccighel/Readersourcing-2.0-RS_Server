@@ -1,21 +1,10 @@
 <!DOCTYPE html>
-<html lang="it">
-<head>
-	<%= csrf_meta_tags %>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-	<%= stylesheet_link_tag 'application' %>
-	<title>RS_Server</title>
-</head>
+<html lang="en">
+<%= render partial: 'shared/assets' %>
 <body>
-<%= render partial: 'shared/preloader' %>
-<div class="min-h-100 d-flex flex-column align-items-center justify-content-center">
+<div id="profile-update-page" class="min-h-100 d-flex flex-column align-items-center justify-content-center">
 	<div class="w-100 mb-3">
-		<%= render partial:'shared/menu', locals: {active: "profile-update", appearance: "dark"} %>
+		<%= render partial: 'shared/menu', locals: {active: "user", appearance: "dark"} %>
 	</div>
 	<div class="row w-100 m-auto">
 		<div class="col-12">
@@ -77,9 +66,5 @@
 		<%= render partial: "shared/footer" %>
 	</div>
 </div>
-<%= render partial:'shared/modal_profile' %>
-<%= javascript_include_tag "application" %>
-<%= javascript_include_tag "menu" %>
-<%= javascript_include_tag "profile_update" %>
 </body>
 </html>

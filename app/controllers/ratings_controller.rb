@@ -18,8 +18,10 @@ class RatingsController < ApplicationController
 		request.headers['Authorization'] = unescape_jwt(params[:authToken])
 		command = AuthorizeApiRequest.call(request.headers, request.remote_ip)
 		if command.success?
+			@auth_token_paper = params[:authToken]
 			@user = command.result
 			@publication = Publication.find(params[:pubId])
+			@rating = Rating.new
 			if Rating.exists?(user_id: @user.id, publication_id: @publication.id)
 				render "shared/halted", locals: {
 					pubId: @publication.id,
@@ -69,46 +71,39 @@ class RatingsController < ApplicationController
 
 	# POST /load
 	def load
-		@auth_token = params[:authToken]
-		inserted_email = params[:email]
-		inserted_password = params[:password]
+		@auth_token_user = unescape_jwt(params[:authTokenUser])
+		@auth_token_paper = unescape_jwt(params[:authTokenPaper])
+		decoded_auth_token_user = JsonWebToken.decode(@auth_token_user)
+		decoded_auth_token_paper = JsonWebToken.decode(@auth_token_paper)
+		requesting_user = User.find(decoded_auth_token_paper[:user_id])
+		logged_user = User.find(decoded_auth_token_user[:user_id])
 		publication = Publication.find params[:pubId]
-		requesting_user = User.find params[:userId]
-		if User.exists?(email: inserted_email)
-			logged_user = User.find_by_email inserted_email
-			if requesting_user.id == logged_user.id and requesting_user.email == logged_user.email and BCrypt::Password.new(logged_user.password_digest) == inserted_password
-				if Rating.exists?(user_id: requesting_user.id, publication_id: publication.id)
-					render "shared/halted", locals: {
-						pubId: publication.id,
-						message: "",
-						title: I18n.t("errors.messages.rating_already_given")
-					}, status: :ok
-				else
-					@rating = Rating.new rating_params
-					@rating.publication = publication
-					@rating.user = requesting_user
-					if @rating.save
-						@rating.compute_scores
-						RatingMailer.confirm(@rating.user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(@rating.user.id)).deliver
-						render "shared/success", locals: {
-							pubId: @rating.publication.id,
-							message: I18n.t("information.messages.mail_confirmation"),
-							title: I18n.t("confirmations.messages.rating_successful")
-						}, status: :ok
-					else
-						render "shared/halted", locals: {
-							pubId: @rating.publication.id,
-							message: I18n.t("information.messages.try_again"),
-							title: I18n.t("errors.messages.rating_unsuccessful")
-						}, status: :ok
-					end
-				end
-			else
+		if requesting_user.id == logged_user.id
+			if Rating.exists?(user_id: requesting_user.id, publication_id: publication.id)
 				render "shared/halted", locals: {
 					pubId: publication.id,
-					message: I18n.t("information.messages.not_the_same_user"),
-					title: I18n.t("errors.messages.not_the_same_user")
+					message: "",
+					title: I18n.t("errors.messages.rating_already_given")
 				}, status: :ok
+			else
+				@rating = Rating.new rating_params
+				@rating.publication = publication
+				@rating.user = requesting_user
+				if @rating.save
+					@rating.compute_scores
+					RatingMailer.confirm(@rating.user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(@rating.user.id)).deliver
+					render "shared/success", locals: {
+						pubId: @rating.publication.id,
+						message: I18n.t("information.messages.mail_confirmation"),
+						title: I18n.t("confirmations.messages.rating_successful")
+					}, status: :ok
+				else
+					render "shared/halted", locals: {
+						pubId: @rating.publication.id,
+						message: I18n.t("information.messages.try_again"),
+						title: I18n.t("errors.messages.rating_unsuccessful")
+					}, status: :ok
+				end
 			end
 		else
 			render "shared/halted", locals: {
@@ -132,4 +127,5 @@ class RatingsController < ApplicationController
 	def rating_params
 		params.require(:rating).permit(:score, :anonymous, :user_id, :publication_id, :pdf_url)
 	end
+
 end

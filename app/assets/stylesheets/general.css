@@ -125,11 +125,11 @@ body.bg-gray-dark input {
 }
 
 #user-menu-item .logged {
-	left: 52.7% !important;
+	left: 53.34% !important;
 }
 
 #rated-items-menu-item .logged {
-	left: 40.45% !important;
+	left: 38.45% !important;
 }
 
 @media (max-width: 991px) {
@@ -143,11 +143,11 @@ body.bg-gray-dark input {
 }
 
 #about-menu-item .megamenu {
-	left: 36.6% !important;
+	left: 33.8% !important;
 }
 
 #about-menu-item .logged {
-	left: 47.85% !important;
+	left: 47.4% !important;
 }
 
 /* ////////// ERRORS  ////////// */

@@ -1,9 +1,5 @@
 class UsersController < ApplicationController
 
-	include ::ActionView::Layouts
-
-	layout "application", only: [:confirm_email]
-
 	skip_before_action :authorize_api_request, only: [:list, :sign_up, :create, :confirm_email, :unsubscribe, :edit]
 
 	before_action :set_user, only: [:show, :update, :unsubscribe, :destroy]
@@ -65,9 +61,15 @@ class UsersController < ApplicationController
 		end
 	end
 
-	# POST /profile/edit
+	# GET /profile/edit/:authToken
 	def edit
-		render :update
+		request.headers['Authorization'] = unescape_jwt(params[:authToken])
+		command = AuthorizeApiRequest.call(request.headers, request.remote_ip)
+		if command.success?
+			render :update
+		else
+			render "shared/errors", status: :unauthorized, locals: {errors: command.errors[:token]}, layout: false
+		end
 	end
 
 	# PATCH/PUT /users/1.json
