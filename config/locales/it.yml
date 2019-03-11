@@ -65,6 +65,7 @@ it:
       mail_confirmation: "Riceverai una conferma via mail."
       not_the_same_user: "Per favore, salva per dopo di nuovo questa pubblicazione."
       validate_user: "Valida la tua utenza"
+      test_url: "Questa è solo un'URL di test. Nulla verrà salvato."
   confirmations:
     messages:
       registration_successful: "Benvenuto su Readersourcing 2.0! Il tuo indirizzo email è stato confermato con successo."

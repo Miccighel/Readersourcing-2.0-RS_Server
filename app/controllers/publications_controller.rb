@@ -48,22 +48,30 @@ class PublicationsController < ApplicationController
 
 	# GET /publications/1/is_rated.json
 	def is_rated
-		rating = @publication.is_rated(current_user)
-		if rating != nil
-			render rating, status: :ok
+		if @publication.pdf_url == "https://arxiv.org/pdf/1812.05594.pdf"
+			render json: {errors: [I18n.t("information.messages.test_url")]}, status: :not_found
 		else
-			@error_manager.add_error(I18n.t("models.publications.errors.messages.is_rated_error"))
-			render json: {errors: @error_manager.get_errors}, status: :not_found
+			rating = @publication.is_rated(current_user)
+			if rating != nil
+				render rating, status: :ok
+			else
+				@error_manager.add_error(I18n.t("models.publications.errors.messages.is_rated_error"))
+				render json: {errors: @error_manager.get_errors}, status: :not_found
+			end
 		end
 	end
 
 	# GET /publications/1/is_saved_for_later.json
 	def is_saved_for_later
-		if @publication.is_saved_for_later(current_user)
-			render :show, status: :ok, location: @publication
+		if @publication.pdf_url == "https://arxiv.org/pdf/1812.05594.pdf"
+			render json: {errors: [I18n.t("information.messages.test_url")]}, status: :not_found
 		else
-			@error_manager.add_error(I18n.t("errors.messages.publication_not_saved_for_later"))
-			render json: {errors: @error_manager.get_errors}, status: :not_found
+			if @publication.is_saved_for_later(current_user)
+				render :show, status: :ok, location: @publication
+			else
+				@error_manager.add_error(I18n.t("errors.messages.publication_not_saved_for_later"))
+				render json: {errors: @error_manager.get_errors}, status: :not_found
+			end
 		end
 	end
 

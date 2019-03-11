@@ -10,11 +10,11 @@ class Publication < ApplicationRecord
 	validates :pdf_url, presence: true, uniqueness: true, format: {with: URI.regexp}, if: Proc.new {|publication| publication.pdf_url.present?}
 
 	def pretty_score_rsm
-		"#{(self.score_rsm*100).round(2).prettify}/100"
+		"#{(self.score_rsm * 100).round(2).prettify}/100"
 	end
 
 	def pretty_score_trm
-		"#{(self.score_trm*100).round(2).prettify}/100"
+		"#{(self.score_trm * 100).round(2).prettify}/100"
 	end
 
 	def is_rated(user)
@@ -29,7 +29,11 @@ class Publication < ApplicationRecord
 	end
 
 	def is_saved_for_later(user)
-		File.file?(absolute_pdf_download_path_link(user))
+		begin
+			File.file?(absolute_pdf_download_path_link(user))
+		rescue TypeError
+			false
+		end
 	end
 
 	def is_fetchable
@@ -321,6 +325,8 @@ class Publication < ApplicationRecord
 	end
 
 	def absolute_pdf_download_path_link(user)
+		logger.info user.id.to_s
+		logger.info pdf_download_path_link
 		Rails.public_path.join("user").join(user.id.to_s).join(pdf_download_path_link)
 	end
 

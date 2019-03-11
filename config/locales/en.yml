@@ -33,6 +33,7 @@ en:
       mail_confirmation: "You will get an email confirmation."
       not_the_same_user: "Please, save this publication for later again."
       validate_user: "Validate yourself"
+      test_url: "This is just a test URL. Nothing will be saved."
   errors:
     messages:
       invalid_credentials: "Invalid credentials. Please, try again."

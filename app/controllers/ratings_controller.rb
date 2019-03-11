@@ -54,18 +54,22 @@ class RatingsController < ApplicationController
 		@rating.anonymous = rating_params[:anonymous]
 		@rating.user = current_user
 		publication = Publication.find_by_pdf_url(rating_params[:pdf_url])
-		unless publication
-			publication = Publication.new
-			publication.pdf_url = rating_params[:pdf_url]
-			publication.save
-		end
-		@rating.publication = publication
-		if @rating.save
-			@rating.compute_scores
-			RatingMailer.confirm(current_user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(current_user.id)).deliver
-			render :show, status: :created, location: @rating
+		if rating_params[:pdf_url] == "https://arxiv.org/pdf/1812.05594.pdf"
+			render json: {errors: [I18n.t("information.messages.test_url")]}, status: :ok
 		else
-			render json: @rating.errors, status: :unprocessable_entity
+			unless publication
+				publication = Publication.new
+				publication.pdf_url = rating_params[:pdf_url]
+				publication.save
+			end
+			@rating.publication = publication
+			if @rating.save
+				@rating.compute_scores
+				RatingMailer.confirm(current_user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(current_user.id)).deliver
+				render :show, status: :created, location: @rating
+			else
+				render json: @rating.errors, status: :unprocessable_entity
+			end
 		end
 	end
 
@@ -78,39 +82,43 @@ class RatingsController < ApplicationController
 		requesting_user = User.find(decoded_auth_token_paper[:user_id])
 		logged_user = User.find(decoded_auth_token_user[:user_id])
 		publication = Publication.find params[:pubId]
-		if requesting_user.id == logged_user.id
-			if Rating.exists?(user_id: requesting_user.id, publication_id: publication.id)
-				render "shared/halted", locals: {
-					pubId: publication.id,
-					message: "",
-					title: I18n.t("errors.messages.rating_already_given")
-				}, status: :ok
-			else
-				@rating = Rating.new rating_params
-				@rating.publication = publication
-				@rating.user = requesting_user
-				if @rating.save
-					@rating.compute_scores
-					RatingMailer.confirm(@rating.user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(@rating.user.id)).deliver
-					render "shared/success", locals: {
-						pubId: @rating.publication.id,
-						message: I18n.t("information.messages.mail_confirmation"),
-						title: I18n.t("confirmations.messages.rating_successful")
+		if publication.pdf_url == "https://arxiv.org/pdf/1812.05594.pdf"
+			render "shared/errors", status: :ok, locals: {errors: [I18n.t("information.messages.test_url")]}, layout: false
+		else
+			if requesting_user.id == logged_user.id
+				if Rating.exists?(user_id: requesting_user.id, publication_id: publication.id)
+					render "shared/halted", locals: {
+						pubId: publication.id,
+						message: "",
+						title: I18n.t("errors.messages.rating_already_given")
 					}, status: :ok
 				else
-					render "shared/halted", locals: {
-						pubId: @rating.publication.id,
-						message: I18n.t("information.messages.try_again"),
-						title: I18n.t("errors.messages.rating_unsuccessful")
-					}, status: :ok
+					@rating = Rating.new rating_params
+					@rating.publication = publication
+					@rating.user = requesting_user
+					if @rating.save
+						@rating.compute_scores
+						RatingMailer.confirm(@rating.user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(@rating.user.id)).deliver
+						render "shared/success", locals: {
+							pubId: @rating.publication.id,
+							message: I18n.t("information.messages.mail_confirmation"),
+							title: I18n.t("confirmations.messages.rating_successful")
+						}, status: :ok
+					else
+						render "shared/halted", locals: {
+							pubId: @rating.publication.id,
+							message: I18n.t("information.messages.try_again"),
+							title: I18n.t("errors.messages.rating_unsuccessful")
+						}, status: :ok
+					end
 				end
+			else
+				render "shared/halted", locals: {
+					pubId: publication.id,
+					message: I18n.t("information.messages.not_the_same_user"),
+					title: I18n.t("errors.messages.not_the_same_user")
+				}, status: :ok
 			end
-		else
-			render "shared/halted", locals: {
-				pubId: publication.id,
-				message: I18n.t("information.messages.not_the_same_user"),
-				title: I18n.t("errors.messages.not_the_same_user")
-			}, status: :ok
 		end
 	end
 

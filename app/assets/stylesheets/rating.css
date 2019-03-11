@@ -1,5 +1,9 @@
 /* ////////// GENERAL ////////// */
 
+#rating-text {
+	font-size: 5rem !important;
+}
+
 .form-check-label {
 	position: relative;
 	left: 4%;

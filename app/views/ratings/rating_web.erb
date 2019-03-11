@@ -6,62 +6,55 @@
 	<div class="w-100 mb-3">
 		<%= render partial: 'shared/menu', locals: {active: "rate", appearance: "light"} %>
 	</div>
-	<div id="loading-sect" class="row m-auto">
-		<div class="col-12">
-			<div class="heading text-center">
-				<h4>Fetch a new publication</h4>
-				<p id="check-par" class="lead mb-0">Checking if there is a fetchable publication in PDF format...</p>
-			</div>
-			<div class="text-center mt-3">
-				<h1><i class="fas fa-sync-alt fa-spin"></i></h1>
-			</div>
-		</div>
-	</div>
-	<div id="undetected-publication-sect" class="row m-auto w-100">
-		<div class="col-lg-4 col-sm-8 col-xs-12 m-auto">
-			<div class="col-12">
-				<div class="heading text-center">
-					<h4>Fetch a new publication</h4>
-					<p class="lead mb-0 text-justify">The inserted URL does not contain a rateable publication, please check it
-						again.</p>
+	<div class="row m-auto w-100">
+		<div class="col-lg-4 col-sm-10 col-xs-12 m-auto">
+			<div id="rating-sect" class="col-12">
+				<div class="heading text-center mb-1">
+					<h4>Rate a publication</h4>
+					<p id="rating-caption-first" class="lead mb-0">Insert an URL to a publication encoded in a .pdf file to rate it.</p>
+					<p id="rating-caption-second" class="lead mb-0">Use the slider below to select a rating for the current publication</p>
+					<p id="rating-caption-third" class="lead mb-0">A rating for this publication already exists.</p>
 				</div>
 			</div>
-			<div class="col-12">
-				<button type="button" id="reload-btn" class="btn btn-danger btn-block">
-					<i class="fas fa-redo-alt"></i>
-					Reload
-				</button>
+			<div id="loading-sect" class="col-12">
+				<div class="heading text-center">
+					<h4>Fetch a new publication</h4>
+					<p id="check-par" class="lead mb-0">Checking if there is a fetchable publication in PDF format...</p>
+				</div>
+				<div class="text-center mt-3">
+					<h1><i class="fas fa-sync-alt fa-spin"></i></h1>
+				</div>
 			</div>
-			<div id="accordion" role="tablist" class="undetected-publication-details col-12 accordion-dark">
-				<div class="card">
-					<div id="headingOne" role="tab" class="card-header">
-						<h5 class="mb-0">
-							<a data-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="color-white collapsed">View Details
-								<small>(Click to toggle)</small>
-							</a>
-						</h5>
-					</div>
-					<div id="collapseOne" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" class="collapse" style="">
-						<div class="card-body">
-							<div class="row">
-								<section class="col-12 errors-sect text-justify">
-									<div role="alert" class="alert alert-danger"></div>
-								</section>
+			<div id="undetected-publication-sect" class="col-12 text-center">
+				<div class="heading text-center">
+					<h4>Fetch a new publication</h4>
+					<p class="lead mb-0">The inserted URL does not contain a rateable publication, please check it
+						again.
+					</p>
+				</div>
+					<button type="button" id="reload-btn" class="btn btn-danger w-35">
+						<i class="fas fa-redo-alt"></i>
+						Reload
+					</button>
+				<div id="accordion" role="tablist" class="undetected-publication-details col-12 accordion-dark">
+					<div class="card">
+						<div id="headingOne" role="tab" class="card-header">
+							<h5 class="mb-0">
+								<a data-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="color-white collapsed">View Details
+									<small>(Click to toggle)</small>
+								</a>
+							</h5>
+						</div>
+						<div id="collapseOne" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" class="collapse" style="">
+							<div class="card-body">
+								<div class="row">
+									<section class="col-12 errors-sect text-justify">
+										<div role="alert" class="alert alert-danger"></div>
+									</section>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div id="rating-sect" class="row m-auto w-100">
-		<div class="col-lg-4 col-sm-8 col-xs-12 m-auto">
-			<div class="col-12">
-				<div class="heading text-center mb-1">
-					<h4>Rate a publication</h4>
-					<p id="rating-info" class="lead mb-0 text-justify">Insert an URL to a publication encoded in a .pdf file to rate it.</p>
-					<p id="rating-caption" class="lead mb-0">Use the slider below to select a rating for the current publication</p>
-					<p id="rating-subcaption" class="lead mb-0">Publication rated with score</p>
 				</div>
 			</div>
 			<div class="col-12">
@@ -74,7 +67,7 @@
 					</form>
 				</div>
 			</div>
-			<div class="col-12 text-center rating-sect-sub mb-3">
+			<div class="col-12 text-center rating-controls mb-3">
 				<input
 					id="rating-slider"
 					data-slider-id='ratingSlider'
@@ -86,25 +79,26 @@
 					title="Rating Slider"
 					/>
 			</div>
-			<div class="col-12 m-auto text-center rating-sect-sub">
+			<div class="col-12 m-auto text-center">
 				<h1 id="rating-text"><i class="fas fa-sync-alt fa-spin"></i></h1>
 			</div>
-			<div class="col-12 m-auto rating-sect-sub text-center">
+			<div class="col-12 m-auto text-center">
 				<section class="errors-sect text-left">
 					<div role="alert" class="alert alert-danger"></div>
 				</section>
 				<button type="button" id="load-rate-btn" class="btn btn-primary">
+					<span>Loading... </span>
 					<i class="fas fa-sync-alt fa-spin"></i>
 				</button>
-				<button type="button" id="vote-btn" class=" w-35 btn btn-success m-auto">
+				<button type="button" id="do-rate-btn" class="rating-button w-35 btn btn-success m-auto">
 					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 					Rate
 				</button>
 				<button data-toggle="modal" data-target="#modal-configuration" id="configure-btn"
-				   class="btn btn-primary link-white" data-turbolinks="false">
+				        class="rating-button btn btn-primary link-white" data-turbolinks="false">
 					<i class="fas fa-cog"></i>
 				</button>
-				<button type="button" id="vote-success-btn" class="btn btn-success w-35">
+				<button type="button" id="do-rate-success-btn" class="btn btn-success w-35">
 					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 					Rating saved
 				</button>
@@ -113,27 +107,33 @@
 					Error
 				</button>
 			</div>
-			<div id="buttons-caption" class="col-12 m-auto rating-sect-sub">
-				<div class="col-12 text-center mt-3">
-					<p class="lead mb-3">Save for later</p>
+		</div>
+	</div>
+	<div class="row m-auto w-100">
+		<div id="save-for-later-section" class="col-lg-4 col-sm-10 col-xs-12 mt-3 mb-3 ml-auto mr-auto">
+			<div class="col-12">
+				<div class="heading text-center mb-2">
+					<h4>Save For Later</h4>
+					<p id="save-for-later-caption-first" class="lead mb-0">Link-annotate a publication with a rating URL and store it on your devices.</p>
+					<p id="save-for-later-caption-second" class="lead mb-0">Click below to open your link-annotated publication or to refresh it.</p>
 				</div>
 			</div>
-			<div class="col-12 mt-auto ml-auto mr-auto mb-3 text-center rating-sect-sub">
+			<div class="col-12 text-center">
 				<section class="errors-sect text-left">
 					<div role="alert" class="alert alert-danger"></div>
 				</section>
 				<button type="button" id="load-save-btn" class="btn btn-primary m-0">
-					<span>Loading...</span>
+					<span>Loading... </span>
 					<i class="fas fa-sync-alt fa-spin"></i>
 				</button>
-				<button type="button" id="save-btn" class="btn btn-primary w-35 m-0">
+				<button type="button" id="download-btn" class="rating-button btn btn-primary w-35 m-0">
 					<span>Download</span>
 					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 				</button>
-				<a href="#" id="download-btn" class="btn btn-primary link-white w-35" target="_blank">
+				<button id="open-btn" class="rating-button btn btn-primary link-white w-35">
 					Open
-				</a>
-				<button id="refresh-btn" class="btn btn-primary link-white">
+				</button>
+				<button id="refresh-btn" class="rating-button btn btn-primary link-white">
 					<i class="fas fa-sync-alt"></i>
 				</button>
 				<button type="button" id="error-btn" class="btn btn-danger w-35 error-btn m-0">
@@ -144,11 +144,12 @@
 		</div>
 	</div>
 	<div class="row m-auto w-100">
-		<div class="col-lg-4 col-sm-8 col-xs-12 m-auto">
+		<div class="col-lg-4 col-sm-10 col-xs-12 m-auto">
 			<div class="col-12">
 				<div class="heading text-center mb-1">
 					<h4>Automatic extraction</h4>
-					<p class="lead mb-0 text-justify">Upload here your link-annotated publication to extract the rating URL.</p>
+					<p id="extract-caption-first" class="lead mb-0">Upload here your link-annotated publication to extract the rating URL.</p>
+					<p id="extract-caption-second" class="lead mb-0">Click below to go to the rating page.</p>
 				</div>
 			</div>
 			<div class="col-12">

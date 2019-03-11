@@ -118,7 +118,7 @@ $(document).on("turbolinks:load", () => {
 	//######## SECTIONS ########//
 
 	let ratingSection = $("#rating-sect");
-	let ratingSectionSubControls = $(".rating-sect-sub");
+	let ratingControls = $(".rating-controls");
 	let undetectedPublicationSection = $("#undetected-publication-sect");
 	let undetectedPublicationDetails = $(".undetected-publication-details");
 	//let errorsSection = $(".errors-sect");
@@ -135,15 +135,16 @@ $(document).on("turbolinks:load", () => {
 	let rateForm = $("#rate-form");
 
 	let loadRateButton = $("#load-rate-btn");
-	let voteButton = $("#vote-btn");
-	let voteSuccessButton = $("#vote-success-btn");
+	let doRateButton = $("#do-rate-btn");
+	let doRateSuccessButton = $("#do-rate-success-btn");
 	let configureButton = $("#configure-btn");
 	let configureSaveButton = $("#configuration-save-btn");
 	let loadSaveButton = $("#load-save-btn");
-	let saveButton = $("#save-btn");
 	let downloadButton = $("#download-btn");
+	let openButton = $("#open-btn");
 	let refreshButton = $("#refresh-btn");
 	let reloadButton = $("#reload-btn");
+	let ratingButtons = $(".rating-button");
 	let goToRatingButton = $("#go-to-rating-btn");
 	let modalRefreshButton = $("#modal-refresh-btn");
 	let modalAllowButton = $("#modal-allow-btn");
@@ -156,16 +157,22 @@ $(document).on("turbolinks:load", () => {
 	let annotatedPublicationDropzoneSuccess = $("#dropzone-success");
 	let annotatedPublicationDropzoneError = $("#dropzone-error");
 
-	let ratingInfo = $("#rating-info");
-	let ratingCaption = $("#rating-caption");
-	let ratingSubCaption = $("#rating-subcaption");
+	let ratingCaptionFirst = $("#rating-caption-first");
+	let ratingCaptionSecond = $("#rating-caption-second");
+	let ratingCaptionThird = $("#rating-caption-third");
 	let ratingSlider = $("#rating-slider");
 
 	let ratingText = $("#rating-text");
 
-	let buttonsCaption = $("#buttons-caption");
-
 	let anonymizeCheckbox = $("#anonymize-check");
+
+	let saveForLaterSection = $("#save-for-later-section");
+
+	let saveForLaterCaptionFirst = $("#save-for-later-caption-first");
+	let saveForLaterCaptionSecond = $("#save-for-later-caption-second");
+
+	let extractCaptionFirst = $("#extract-caption-first");
+	let extractCaptionSecond = $("#extract-caption-second");
 
 	let goToRatingIcon = $("#go-to-rating-icon");
 
@@ -296,25 +303,30 @@ $(document).on("turbolinks:load", () => {
 
 	//######### RATING WEB #########//
 
-	downloadButton.hide();
-	refreshButton.hide();
-	saveButton.hide();
-	loadRateButton.show();
-	loadSaveButton.show();
-	voteButton.hide();
-	configureButton.hide();
-	voteSuccessButton.hide();
-	//errorButtons.hide();
-	ratingCaption.hide();
-	ratingSubCaption.hide();
-	undetectedPublicationSection.hide();
 	loadingSection.hide();
-	ratingText.show();
-	ratingSection.show();
-	ratingSectionSubControls.hide();
+	undetectedPublicationSection.hide();
+
+	ratingCaptionSecond.hide();
+	ratingCaptionThird.hide();
+	ratingText.hide();
+	ratingControls.hide();
+	doRateSuccessButton.hide();
+	loadRateButton.hide();
+	doRateButton.prop("disabled", true);
+	configureButton.prop("disabled", true);
+
+	refreshButton.hide();
+	loadSaveButton.hide();
+	openButton.hide();
+	downloadButton.prop("disabled", true);
+	saveForLaterCaptionSecond.hide();
+
+	extractCaptionSecond.hide();
 	annotatedPublicationDropzoneSuccess.hide();
 	annotatedPublicationDropzoneError.hide();
 	goToRatingButton.hide();
+
+	//errorButtons.hide();
 	errorsSection.hide();
 
 	Dropzone.autoDiscover = false;
@@ -538,7 +550,7 @@ $(document).on("turbolinks:load", () => {
 				}
 			};
 			// noinspection JSIgnoredPromiseFromCall
-			ajax("POST", "report", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
+			ajax("POST", "/report", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 		}
 	});
 
@@ -556,8 +568,20 @@ $(document).on("turbolinks:load", () => {
 			let validationInstance = rateForm.parsley();
 			validationInstance.validate();
 			if (validationInstance.isValid()) {
-				ratingSection.hide();
 				loadingSection.show();
+				// RATING SECTION
+				ratingSection.hide();
+				rateForm.parent().hide();
+				ratingControls.hide();
+				ratingText.hide();
+				ratingButtons.prop("disabled", true);
+				// SAVE FOR LATER SECTION
+				saveForLaterCaptionFirst.show();
+				saveForLaterCaptionSecond.hide();
+				downloadButton.find('span').text("Download");
+				downloadButton.show();
+				openButton.hide();
+				refreshButton.hide();
 				let currentUrl = publicationUrlField.val();
 				if (currentUrl !== "") {
 					let data = {
@@ -571,58 +595,75 @@ $(document).on("turbolinks:load", () => {
 						let successCallback = (data, status, jqXHR) => {
 							// 2.2 Publication has been rated by the user, so it is not necessary to check if it has been annotated
 							let secondSuccessCallback = (data, status, jqXHR) => {
+								// RATING SECTION
 								validationInstance.reset();
-								loadRateButton.hide();
-								loadSaveButton.hide();
-								voteButton.hide();
-								configureButton.hide();
-								downloadButton.hide();
-								refreshButton.hide();
-								saveButton.hide();
-								ratingSection.show();
-								ratingSectionSubControls.show();
-								buttonsCaption.hide();
 								loadingSection.hide();
-								voteSuccessButton.show();
-								voteSuccessButton.prop("disabled", true);
+								loadRateButton.hide();
+								ratingSection.show();
+								doRateButton.hide();
+								configureButton.hide();
+								rateForm.parent().show();
+								ratingControls.show();
+								doRateSuccessButton.show();
+								doRateSuccessButton.prop("disabled", true);
 								ratingText.parent().removeClass("mt-3");
-								ratingCaption.hide();
-								ratingInfo.hide();
-								ratingSubCaption.show();
+								ratingText.show();
+								ratingCaptionSecond.hide();
+								ratingCaptionFirst.hide();
+								ratingCaptionThird.show();
 								ratingSlider.slider('destroy');
 								ratingSlider.hide();
 								ratingText.text(data["score"]);
+								// SAVE FOR LATER SECTION
+								saveForLaterSection.show();
 							};
 							// 2.3 Publication has not been rated by the user
 							let secondErrorCallback = (jqXHR, status) => {
+								// RATING SECTION
+								validationInstance.reset();
 								loadingSection.hide();
 								loadRateButton.hide();
-								voteSuccessButton.hide();
-								ratingSubCaption.hide();
-								ratingInfo.hide();
+								doRateSuccessButton.hide();
+								doRateButton.show();
+								doRateButton.prop("disabled", false);
+								configureButton.show();
+								configureButton.prop("disabled", false);
 								ratingSection.show();
-								ratingSectionSubControls.show();
-								loadingSection.hide();
-								buttonsCaption.show();
-								ratingCaption.show();
+								rateForm.parent().show();
+								ratingCaptionFirst.hide();
+								ratingCaptionSecond.show();
+								ratingCaptionThird.hide();
+								ratingControls.show();
+								ratingText.show();
 								ratingText.text("50");
 								ratingSlider.slider({});
-								voteButton.show();
-								configureButton.show();
+								ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
 								// 3.1 The rated publication was also annotated
 								let thirdSuccessCallback = (data, status, jqXHR) => {
+									// SAVE FOR LATER SECTION
+									saveForLaterSection.show();
 									loadSaveButton.hide();
-									saveButton.hide();
-									downloadButton.show();
-									downloadButton.attr("href", data["pdf_download_url_link"]);
+									downloadButton.hide();
+									saveForLaterCaptionFirst.hide();
+									saveForLaterCaptionSecond.show();
+									openButton.show();
+									openButton.attr("href", data["pdf_download_url_link"]);
+									openButton.on("click", () => window.open(data["pdf_download_url_link"], '_blank'));
+									openButton.prop("disabled", false);
 									refreshButton.show();
+									refreshButton.prop("disabled", false);
 								};
 								// 3.2 The rated publication was not annotated
 								let thirdErrorCallback = (jqXHR, status) => {
+									// SAVE FOR LATER SECTION
+									saveForLaterSection.show();
+									saveForLaterCaptionFirst.show();
+									saveForLaterCaptionSecond.hide();
 									loadSaveButton.hide();
-									downloadButton.hide();
+									openButton.hide();
 									refreshButton.hide();
-									saveButton.show();
+									downloadButton.prop("disabled", false);
+									downloadButton.show();
 								};
 								// 3.1 Does the rated publication has been already annotated?
 								let thirdPromise = emptyAjax("GET", `/publications/${data["id"]}/is_saved_for_later.json`, "application/json; charset=utf-8", "json", true, thirdSuccessCallback, thirdErrorCallback);
@@ -632,28 +673,46 @@ $(document).on("turbolinks:load", () => {
 						};
 						// 1.3 Publication was never rated, so it does not exists on the database
 						let errorCallback = (jqXHR, status) => {
+							// RATING SECTION
 							loadingSection.hide();
 							loadRateButton.hide();
-							loadSaveButton.hide();
-							voteSuccessButton.hide();
-							ratingSection.show();
-							ratingSectionSubControls.show();
-							saveButton.show();
+							doRateSuccessButton.hide();
+							doRateButton.show();
+							doRateButton.prop("disabled", false);
 							configureButton.show();
-							voteButton.show();
-							ratingCaption.show();
-							ratingInfo.hide();
-							ratingSubCaption.hide();
+							configureButton.prop("disabled", false);
+							ratingSection.show();
+							rateForm.parent().show();
+							ratingControls.show();
+							ratingCaptionFirst.hide();
+							ratingCaptionSecond.show();
+							ratingCaptionThird.hide();
+							ratingText.show();
 							ratingText.text("50");
 							ratingSlider.slider({});
 							ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
+							// SAVE FOR LATER SECTION
+							saveForLaterCaptionFirst.show();
+							saveForLaterCaptionSecond.hide();
+							loadSaveButton.hide();
+							downloadButton.prop("disabled", false);
+							downloadButton.show();
+							openButton.hide();
+							openButton.prop("disabled", false);
+							refreshButton.hide();
+							refreshButton.prop("disabled", false);
 						};
 						// 1.1 Does the publication exists on the database?
 						let promise = ajax("POST", "/publications/lookup.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 					};
 					let errorCallback = (jqXHR, status) => {
 						ratingSection.hide();
-						ratingSectionSubControls.hide();
+						ratingControls.hide();
+						ratingButtons.hide();
+						saveForLaterSection.hide();
+						saveForLaterCaptionFirst.show();
+						saveForLaterCaptionSecond.hide();
+						undetectedPublicationSection.show();
 						let errorPromise = buildErrors(jqXHR.responseText).then(result => {
 							undetectedPublicationDetails.parent().find(errorsSection).find(alert).empty();
 							undetectedPublicationDetails.parent().find(errorsSection).find(alert).append(result);
@@ -682,7 +741,7 @@ $(document).on("turbolinks:load", () => {
 
 	authToken = localStorage.getItem('authToken');
 	if (authToken != null) {
-		saveButton.on("click", () => {
+		downloadButton.on("click", () => {
 			validationInstance.validate();
 			if (validationInstance.isValid()) {
 				let currentUrl = publicationUrlField.val();
@@ -691,15 +750,19 @@ $(document).on("turbolinks:load", () => {
 						pdf_url: currentUrl
 					}
 				};
-				saveButton.find('span').text("Downloading...");
-				saveButton.find(reloadIcons).toggle();
+				downloadButton.find('span').text("Downloading...");
+				downloadButton.find(reloadIcons).toggle();
 				// 1.2 Publication fetched, hide save for later button and show the download one
 				let successCallback = (data, status, jqXHR) => {
-					saveButton.find(reloadIcons).toggle();
-					saveButton.hide();
-					downloadButton.show();
-					downloadButton.attr("href", data["pdf_download_url_link"]);
+					saveForLaterCaptionFirst.hide();
+					saveForLaterCaptionSecond.show();
+					downloadButton.find(reloadIcons).toggle();
+					downloadButton.hide();
+					openButton.show();
+					openButton.attr("href", data["pdf_download_url_link"]);
+					openButton.on("click", () => window.open(data["pdf_download_url_link"], '_blank'));
 					refreshButton.show();
+					refreshButton.prop("disabled", false);
 					let pdfWindow = window.open(data["pdf_download_url_link"], '_blank');
 					if (pdfWindow) {
 						pdfWindow.focus();
@@ -709,15 +772,17 @@ $(document).on("turbolinks:load", () => {
 				};
 				// 1.3 Error during publication fetching, hide save for later and download buttons
 				let errorCallback = (jqXHR, status) => {
-					saveButton.find(reloadIcons).toggle();
-					saveButton.hide();
-					let errorButton = saveButton.parent().find(errorButtons);
+					saveForLaterCaptionFirst.show();
+					saveForLaterCaptionSecond.hide();
+					downloadButton.find(reloadIcons).toggle();
+					downloadButton.hide();
+					let errorButton = downloadButton.parent().find(errorButtons);
 					errorButton.show();
 					errorButton.prop("disabled", true);
 					let errorPromise = buildErrors(jqXHR.responseText).then(result => {
-						saveButton.parent().find(errorsSection).find(alert).empty();
-						saveButton.parent().find(errorsSection).find(alert).append(result);
-						saveButton.parent().find(errorsSection).show();
+						downloadButton.parent().find(errorsSection).find(alert).empty();
+						downloadButton.parent().find(errorsSection).find(alert).append(result);
+						downloadButton.parent().find(errorsSection).show();
 					});
 				};
 				// 1.1 Fetch and annotate the publication
@@ -756,6 +821,8 @@ $(document).on("turbolinks:load", () => {
 		if (authToken != null) {
 			annotatedPublicationDropzone.on("sending", (file, xhr, formData) => xhr.setRequestHeader("Authorization", authToken));
 			annotatedPublicationDropzone.on("success", (file, data) => {
+				extractCaptionFirst.hide();
+				extractCaptionSecond.show();
 				annotatedPublicationDropzoneSuccess.show();
 				annotatedPublicationDropzoneSuccess.text(data["message"]);
 				goToRatingButton.show();
@@ -791,7 +858,7 @@ $(document).on("turbolinks:load", () => {
 
 	modalRefreshButton.on("click", () => {
 		modalRefresh.modal("hide");
-		downloadButton.hide();
+		openButton.hide();
 		refreshButton.hide();
 		loadSaveButton.find('span').text("Downloading...");
 		loadSaveButton.show();
@@ -806,8 +873,10 @@ $(document).on("turbolinks:load", () => {
 			// 2.2 Publication refreshed, so it it safe to show the download button
 			let secondSuccessCallback = (data, status, jqXHR) => {
 				loadSaveButton.hide();
-				downloadButton.show();
-				downloadButton.attr("href", data["pdf_download_url_link"]);
+				openButton.show();
+				openButton.attr("href", data["pdf_download_url_link"]);
+				openButton.on("click", () => window.open(data["pdf_download_url_link"], '_blank'));
+				openButton.prop("disabled", false);
 				refreshButton.show();
 				let pdfWindow = window.open(data["pdf_download_url_link"], '_blank');
 				if (pdfWindow) {
@@ -819,7 +888,7 @@ $(document).on("turbolinks:load", () => {
 			// 2.3 Error during publication refresh, it is not safe to show the download button
 			let secondErrorCallback = (jqXHR, status) => {
 				loadSaveButton.hide();
-				let errorButton = downloadButton.parent().find(errorButtons);
+				let errorButton = openButton.parent().find(errorButtons);
 				errorButton.show();
 				errorButton.prop("disabled", true);
 				let errorPromise = buildErrors(jqXHR.responseText).then(result => {
@@ -834,7 +903,7 @@ $(document).on("turbolinks:load", () => {
 		// 1.3 Publication was never rated, so it does not exists on the database
 		let errorCallback = function (jqXHR, status) {
 			loadSaveButton.hide();
-			let errorButton = downloadButton.parent().find(errorButtons);
+			let errorButton = openButton.parent().find(errorButtons);
 			errorButton.show();
 			errorButton.prop("disabled", true);
 			let errorPromise = buildErrors(jqXHR.responseText).then(result => {
@@ -861,11 +930,11 @@ $(document).on("turbolinks:load", () => {
 
 	authToken = localStorage.getItem('authToken');
 	if (authToken != null) {
-		voteButton.on("click", () => {
+		doRateButton.on("click", () => {
 			validationInstance.validate();
 			if (validationInstance.isValid()) {
 				let currentUrl = publicationUrlField.val();
-				voteButton.find(reloadIcons).toggle();
+				doRateButton.find(reloadIcons).toggle();
 				let score = ratingSlider.val();
 				let data = {
 					rating: {
@@ -882,27 +951,29 @@ $(document).on("turbolinks:load", () => {
 						}
 					};
 					let secondSuccessCallback = (data, status, jqXHR) => {
-						voteButton.find(reloadIcons).toggle();
-						voteButton.hide();
+						// RATING SECTION
+						doRateButton.find(reloadIcons).toggle();
+						doRateButton.hide();
 						configureButton.hide();
-						buttonsCaption.hide();
-						downloadButton.hide();
-						saveButton.hide();
-						refreshButton.hide();
-						ratingCaption.hide();
+						ratingCaptionSecond.hide();
 						ratingSlider.slider('destroy');
 						ratingSlider.hide();
 						ratingText.parent().removeClass("mt-3");
-						ratingSubCaption.show();
-						voteSuccessButton.show();
-						voteSuccessButton.prop("disabled", true);
+						ratingCaptionThird.show();
+						doRateSuccessButton.show();
+						doRateSuccessButton.prop("disabled", true);
+						// SAVE FOR LATER SECTION
+						downloadButton.prop("disabled", true);
+						openButton.prop("disabled", true);
+						refreshButton.prop("disabled", true);
 					};
 					let secondErrorCallback = (jqXHR, status) => {
-						voteButton.find(reloadIcons).toggle();
-						voteButton.hide();
+						// RATING SECTION
+						doRateButton.find(reloadIcons).toggle();
+						doRateButton.hide();
 						configureButton.hide();
-						voteSuccessButton.show();
-						voteSuccessButton.prop("disabled", true);
+						doRateSuccessButton.show();
+						doRateSuccessButton.prop("disabled", true);
 					};
 					let secondPromise = ajax("POST", "/publications/lookup.json", "application/json; charset=utf-8", "json", true, secondData, secondSuccessCallback, secondErrorCallback);
 					let thirdSuccessCallback = (data, status, jqXHR) => {
@@ -917,15 +988,15 @@ $(document).on("turbolinks:load", () => {
 				};
 				// 1.3 Error during rating creation
 				let errorCallback = (jqXHR, status) => {
-					voteButton.hide();
+					doRateButton.hide();
 					configureButton.hide();
-					let errorButton = voteButton.parent().find(errorButtons);
+					let errorButton = doRateButton.parent().find(errorButtons);
 					errorButton.show();
 					errorButton.prop("disabled", true);
 					let errorPromise = buildErrors(jqXHR.responseText).then(result => {
-						voteButton.parent().find(errorsSection).find(alert).empty();
-						voteButton.parent().find(errorsSection).find(alert).append(result);
-						voteButton.parent().find(errorsSection).show();
+						doRateButton.parent().find(errorsSection).find(alert).empty();
+						doRateButton.parent().find(errorsSection).find(alert).append(result);
+						doRateButton.parent().find(errorsSection).show();
 					});
 				};
 				// 1.1 Create a new rating with the selected score
