@@ -761,7 +761,19 @@ $(document).on("turbolinks:load", () => {
 	if (authToken != null) {
 		reloadButton.on("click", () => {
 			undetectedPublicationSection.hide();
+			// RATING SECTION
 			ratingSection.show();
+			ratingCaptionFirst.show();
+			ratingCaptionSecond.hide();
+			ratingCaptionThird.hide();
+			rateForm.parent().show();
+			doRateButton.show();
+			configureButton.show();
+			// SAVE FOR LATER SECTION
+			saveForLaterSection.show();
+			saveForLaterCaptionFirst.show();
+			saveForLaterCaptionSecond.hide();
+			downloadButton.show();
 		});
 	}
 
@@ -992,6 +1004,7 @@ $(document).on("turbolinks:load", () => {
 						doRateSuccessButton.show();
 						doRateSuccessButton.prop("disabled", true);
 						editRateButton.show();
+						editRateButton.prop("disabled", false);
 						updateRateButton.data('id', id);
 						// SAVE FOR LATER SECTION
 						downloadButton.prop("disabled", true);
@@ -1210,9 +1223,7 @@ $(document).on("turbolinks:load", () => {
 			'pdfHtml5'
 		],
 		columnDefs: [
-			{"width": "20%", "targets": 1},
-			{"width": "20%", "targets": 2},
-			{"orderable": false, "targets": 6}
+			{"max-width": "10%", "targets": 0},
 		],
 		responsive: true
 	});
@@ -1242,4 +1253,5 @@ $(document).on("turbolinks:load", () => {
 		goToLoginButton.find(signInIcons).toggle();
 		goToLoginButton.find(reloadIcons).toggle();
 	});
+
 });

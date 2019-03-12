@@ -14,14 +14,14 @@ unless Rails.env.production?
 
 	puts "---------- CREATING USER 1 ----------"
 
-	mario_rossi = User.new(first_name: "Mario", last_name: "Rossi", email: 'mail@mail.com', email_confirmed: true, orcid: '0000-0002-1825-0097', subscribe: true, password: '123456', password_confirmation: '123456')
+	mario_rossi = User.new(first_name: "Mario", last_name: "Rossi", email: 'mail@mail.com', email_confirmed: true, orcid: '0000-0002-1825-009X', subscribe: true, password: '123456', password_confirmation: '123456')
 	mario_rossi.save
 
 	puts "---------- CREATION COMPLETED ----------"
 
 	puts "---------- CREATING USER 2 ----------"
 
-	luca_bianchi = User.new(first_name: "Luca", last_name: "Bianchi", email: 'bianchi@mail.com', email_confirmed: true, orcid: '0000-0002-1825-009X', subscribe: true, password: '123456', password_confirmation: '123456')
+	luca_bianchi = User.new(first_name: "Luca", last_name: "Bianchi", email: 'bianchi@mail.com', email_confirmed: true, orcid: '0000-0002-1825-009A', subscribe: true, password: '123456', password_confirmation: '123456')
 	luca_bianchi.save
 
 	puts "---------- CREATION COMPLETED ----------"
@@ -33,7 +33,7 @@ unless Rails.env.production?
 	5.times do |index|
 		puts "---------- CREATING FAKE USER #{index} ----------"
 
-		fake_user = User.new(first_name: "FirstName#{index}", last_name: "LastName#{index}", email: "email#{index}@mail.com", subscribe: false, password: '123456', password_confirmation: '123456')
+		fake_user = User.new(first_name: "FirstName#{index}", last_name: "LastName#{index}", email: "email#{index}@mail.com", orcid: "0000-0002-1825-009#{index}", subscribe: false, password: '123456', password_confirmation: '123456')
 		fake_user.save
 
 		puts "---------- CREATION COMPLETED ----------"
@@ -50,7 +50,7 @@ unless Rails.env.production?
 	p4 = Publication.new({pdf_url: "https://innovation-entrepreneurship.springeropen.com/track/pdf/10.1186/s13731-018-0086-3"})
 	p5 = Publication.new({pdf_url: "https://geochemicaltransactions.springeropen.com/track/pdf/10.1186/s12932-018-0056-5"})
 
-	auth_token = "eyJhbGciOiJIUzI1NiJ9%2FeyJ1c2VyX2lkIjoxLCJpcF9hZGRyZXNzIjoiMTI3LjAuMC4xIiwiZXhwaXJhdGlvbl90aW1lIjoxNTUyMDU5ODk3fQ%2Fxyz_lW4QSVpUhzpfHILyNYYnHJRdrOhq4fmvvn_qO58"
+	auth_token = "eyJhbGciOiJIUzI1NiJ9%2FeyJ1c2VyX2lkIjoyLCJpcF9hZGRyZXNzIjoiMTU4LjExMC4xNDcuMjUiLCJleHBpcmF0aW9uX3RpbWUiOjE1NTMwMDg5NjN9%2FGwWQF-N1HYSetHHQXXuLRG9asfuxbWP-QATeoHNbhCw"
 	data = Hash.new
 	data[:authToken] = auth_token
 	data[:host] = "http://localhost:3000"

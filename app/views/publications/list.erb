@@ -17,6 +17,7 @@
 			<table id="publications-table" class="table table-hover datatable" style="width:100%">
 				<thead>
 				<tr>
+					<th>URL</th>
 					<th>DOI</th>
 					<th>Title</th>
 					<th>Subject</th>
@@ -24,13 +25,13 @@
 					<th>Your Rating</th>
 					<th>Score (RSM)</th>
 					<th>Score (TRM)</th>
-					<th></th>
 				</tr>
 				</thead>
 				<tbody>
 				<% @publications.each do |publication| %>
 					<% given_rating = @user.given_rating(publication) %>
 					<tr>
+						<td><a target="_blank" href="<%= publication.pdf_url %>"></i><%= publication.pdf_url %></a></td>
 						<% if publication.doi.present? %>
 							<td><%= publication.doi %></td>
 						<% else %>
@@ -58,7 +59,6 @@
 						<% end %>
 						<td class="text-center"><%= publication.pretty_score_rsm %></td>
 						<td class="text-center"><%= publication.pretty_score_trm %></td>
-						<td><a target="_blank" href="<%= publication.pdf_url %>" class="btn btn-primary"><i class="fas fa-external-link-alt"></i></a></td>
 					</tr>
 				<% end %>
 				</tbody>

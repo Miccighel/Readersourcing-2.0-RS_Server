@@ -95,7 +95,7 @@ class RatingsController < ApplicationController
 		logged_user = User.find(decoded_auth_token_user[:user_id])
 		publication = Publication.find params[:pubId]
 		if publication.pdf_url == "https://arxiv.org/pdf/1812.05594.pdf"
-			render "shared/errors", status: :ok, locals: {errors: [I18n.t("information.messages.test_url")]}, layout: false
+			render "shared/success", status: :ok, locals: {errors: [I18n.t("information.messages.test_url")]}, layout: false
 		else
 			if requesting_user.id == logged_user.id
 				if Rating.exists?(user_id: requesting_user.id, publication_id: publication.id)
