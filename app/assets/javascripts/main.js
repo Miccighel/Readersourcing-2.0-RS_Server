@@ -137,6 +137,8 @@ $(document).on("turbolinks:load", () => {
 	let loadRateButton = $("#load-rate-btn");
 	let doRateButton = $("#do-rate-btn");
 	let doRateSuccessButton = $("#do-rate-success-btn");
+	let editRateButton = $("#edit-rate-btn");
+	let updateRateButton = $("#update-rate-btn");
 	let configureButton = $("#configure-btn");
 	let configureSaveButton = $("#configuration-save-btn");
 	let loadSaveButton = $("#load-save-btn");
@@ -311,6 +313,8 @@ $(document).on("turbolinks:load", () => {
 	ratingText.hide();
 	ratingControls.hide();
 	doRateSuccessButton.hide();
+	editRateButton.hide();
+	updateRateButton.hide();
 	loadRateButton.hide();
 	doRateButton.prop("disabled", true);
 	configureButton.prop("disabled", true);
@@ -334,6 +338,7 @@ $(document).on("turbolinks:load", () => {
 	//######### RATING PAPER #########//
 
 	ratingText.text("50");
+	ratingText.show();
 	ratingSlider.slider({});
 
 	if (authToken != null) authTokenUserField.val(authToken);
@@ -606,6 +611,10 @@ $(document).on("turbolinks:load", () => {
 								ratingControls.show();
 								doRateSuccessButton.show();
 								doRateSuccessButton.prop("disabled", true);
+								editRateButton.show();
+								editRateButton.prop("disabled", false);
+								updateRateButton.data('id', data["id"]);
+								updateRateButton.hide();
 								ratingText.parent().removeClass("mt-3");
 								ratingText.show();
 								ratingCaptionSecond.hide();
@@ -624,6 +633,8 @@ $(document).on("turbolinks:load", () => {
 								loadingSection.hide();
 								loadRateButton.hide();
 								doRateSuccessButton.hide();
+								editRateButton.hide();
+								updateRateButton.hide();
 								doRateButton.show();
 								doRateButton.prop("disabled", false);
 								configureButton.show();
@@ -677,6 +688,8 @@ $(document).on("turbolinks:load", () => {
 							loadingSection.hide();
 							loadRateButton.hide();
 							doRateSuccessButton.hide();
+							editRateButton.hide();
+							updateRateButton.hide();
 							doRateButton.show();
 							doRateButton.prop("disabled", false);
 							configureButton.show();
@@ -724,6 +737,21 @@ $(document).on("turbolinks:load", () => {
 					let promise = ajax("POST", "/publications/is_fetchable.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 				}
 			}
+		});
+	}
+
+	//######### EDIT HANDLING #########//
+
+	authToken = localStorage.getItem('authToken');
+	if (authToken != null) {
+		editRateButton.on("click", () => {
+			ratingSlider.slider({});
+			ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
+			doRateSuccessButton.hide();
+			editRateButton.prop("disabled", true);
+			updateRateButton.find("span").text("Confirm");
+			updateRateButton.prop("disabled", false);
+			updateRateButton.show();
 		});
 	}
 
@@ -945,6 +973,7 @@ $(document).on("turbolinks:load", () => {
 				};
 				// 1.2 Rating created successfully
 				let successCallback = (data, status, jqXHR) => {
+					let id = data["id"];
 					let secondData = {
 						publication: {
 							pdf_url: currentUrl
@@ -962,6 +991,8 @@ $(document).on("turbolinks:load", () => {
 						ratingCaptionThird.show();
 						doRateSuccessButton.show();
 						doRateSuccessButton.prop("disabled", true);
+						editRateButton.show();
+						updateRateButton.data('id', id);
 						// SAVE FOR LATER SECTION
 						downloadButton.prop("disabled", true);
 						openButton.prop("disabled", true);
@@ -1001,6 +1032,38 @@ $(document).on("turbolinks:load", () => {
 				};
 				// 1.1 Create a new rating with the selected score
 				let promise = ajax("POST", "/ratings.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
+			}
+		});
+	}
+
+	//######### UPDATE HANDLING #########//
+
+	authToken = localStorage.getItem('authToken');
+	if (authToken != null) {
+		updateRateButton.on("click", () => {
+			validationInstance.validate();
+			if (validationInstance.isValid()) {
+				updateRateButton.find(reloadIcons).toggle();
+				let score = ratingSlider.val();
+				let id = updateRateButton.data('id');
+				let data = {
+					rating: {
+						score: score,
+					}
+				};
+				let successCallback = (data, status, jqXHR) => {
+					ratingSlider.slider('destroy');
+					ratingSlider.hide();
+					updateRateButton.find(reloadIcons).toggle();
+					updateRateButton.find("span").text("Rating Updated");
+					updateRateButton.prop("disabled", true);
+					editRateButton.prop("disabled", false);
+					editRateButton.show();
+				};
+				let errorCallback = (jqXHR, status) => {
+
+				};
+				let promise = ajax("PUT", `/ratings/${id}.json`, "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 			}
 		});
 	}
@@ -1052,7 +1115,7 @@ $(document).on("turbolinks:load", () => {
 				goToPasswordEditButton.find(reloadIcons).toggle();
 				if (jqXHR.responseText == null) {
 					doPasswordEditButton.hide();
-					let button = doPasswordEditButton.parent().find(errorButton);
+					let button = doPasswordEditButton.parent().find(errorButtons);
 					button.show();
 					button.prop("disabled", true)
 				} else {

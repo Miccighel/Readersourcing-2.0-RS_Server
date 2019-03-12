@@ -5,6 +5,7 @@ class ApplicationController < ActionController::API
 	before_action :authorize_api_request, except: [
 		:home,
 		:resources,
+		:software,
 		:bug,
 		:report,
 		:request_authorization,
@@ -18,6 +19,10 @@ class ApplicationController < ActionController::API
 
 	# GET /resources
 	def resources
+	end
+
+	# GET /software
+	def software
 	end
 
 	# GET /bug

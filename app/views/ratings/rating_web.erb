@@ -12,7 +12,7 @@
 				<div class="heading text-center mb-1">
 					<h4>Rate a publication</h4>
 					<p id="rating-caption-first" class="lead mb-0">Insert an URL to a publication encoded in a .pdf file to rate it.</p>
-					<p id="rating-caption-second" class="lead mb-0">Use the slider below to select a rating for the current publication</p>
+					<p id="rating-caption-second" class="lead mb-0">Use the slider below to select a rating for the current publication.</p>
 					<p id="rating-caption-third" class="lead mb-0">A rating for this publication already exists.</p>
 				</div>
 			</div>
@@ -32,10 +32,10 @@
 						again.
 					</p>
 				</div>
-					<button type="button" id="reload-btn" class="btn btn-danger w-35">
-						<i class="fas fa-redo-alt"></i>
-						Reload
-					</button>
+				<button type="button" id="reload-btn" class="btn btn-danger w-35">
+					<i class="fas fa-redo-alt"></i>
+					Reload
+				</button>
 				<div id="accordion" role="tablist" class="undetected-publication-details col-12 accordion-dark">
 					<div class="card">
 						<div id="headingOne" role="tab" class="card-header">
@@ -101,6 +101,14 @@
 				<button type="button" id="do-rate-success-btn" class="btn btn-success w-35">
 					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 					Rating saved
+				</button>
+				<button type="button" id="update-rate-btn" class="rating-button btn btn-success w-35">
+					<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+					<span>Confirm</span>
+				</button>
+				<button type="button" id="edit-rate-btn" class="rating-button btn btn-primary">
+					<i class="fas fa-edit"></i>
+					Edit
 				</button>
 				<button type="button" class="btn btn-danger error-btn w-35">
 					<i class="fa fa-exclamation-triangle danger-icon"></i>

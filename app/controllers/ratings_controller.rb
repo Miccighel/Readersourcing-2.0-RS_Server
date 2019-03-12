@@ -1,6 +1,6 @@
 class RatingsController < ApplicationController
 
-	before_action :set_rating, only: [:show]
+	before_action :set_rating, only: [:show, :update]
 
 	skip_before_action :authorize_api_request, only: [:rate_web, :rate_paper, :load]
 
@@ -47,10 +47,22 @@ class RatingsController < ApplicationController
 		end
 	end
 
+	# PATCH/PUT /rating/1.json
+	def update
+		@rating.score = rating_params[:score]
+		@rating.edited = true
+		if @rating.save
+			render :show, status: :ok, location: @rating
+		else
+			render json: @rating.errors, status: :unprocessable_entity
+		end
+	end
+
 	# POST /ratings.json
 	def create
 		@rating = Rating.new
 		@rating.score = rating_params[:score]
+		@rating.original_score = rating_params[:score]
 		@rating.anonymous = rating_params[:anonymous]
 		@rating.user = current_user
 		publication = Publication.find_by_pdf_url(rating_params[:pdf_url])
@@ -94,6 +106,7 @@ class RatingsController < ApplicationController
 					}, status: :ok
 				else
 					@rating = Rating.new rating_params
+					@rating.original_score = rating_params[:score]
 					@rating.publication = publication
 					@rating.user = requesting_user
 					if @rating.save
@@ -133,7 +146,7 @@ class RatingsController < ApplicationController
 	end
 
 	def rating_params
-		params.require(:rating).permit(:score, :anonymous, :user_id, :publication_id, :pdf_url)
+		params.require(:rating).permit(:score, :original_score, :anonymous, :user_id, :publication_id, :pdf_url)
 	end
 
 end

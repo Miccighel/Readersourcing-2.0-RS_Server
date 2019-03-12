@@ -37,7 +37,9 @@ ActiveRecord::Schema.define(version: 2018_07_18_090558) do
 
   create_table "ratings", force: :cascade do |t|
     t.integer "score"
+    t.integer "original_score"
     t.boolean "anonymous", default: false
+    t.boolean "edited", default: false
     t.decimal "goodness", default: "0.0"
     t.decimal "informativeness", default: "0.0"
     t.decimal "accuracy_loss", default: "0.0"
