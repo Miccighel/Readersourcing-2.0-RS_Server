@@ -1,8 +1,4 @@
-/* ////////// GENERAL ////////// */
-
-#rating-text {
-	font-size: 5rem !important;
-}
+/* ////////// CHECKBOXES ////////// */
 
 .form-check-label {
 	position: relative;
@@ -15,13 +11,16 @@
 	bottom: 5%;
 }
 
-.parsley-errors-list li {
-	color: indianred !important;
+/* ////////// RATING SECTION ////////// */
+
+#rating-text {
+	font-size: 5rem !important;
 }
 
-.readersourcing-score:hover, .readersourcing-score:active {
-	background-color: #467fbf !important;
-	border: 1px solid rgb(70, 127, 191) !important;
+/* ////////// ACCORDION DETAILS ////////// */
+
+.parsley-errors-list li {
+	color: indianred !important;
 }
 
 .accordion-dark .card {
@@ -43,7 +42,7 @@
 	padding: 0 !important;
 }
 
-/* ////////// DROPZONE ////////// */
+/* ////////// AUTOMATED EXTRACTION SECTION ////////// */
 
 #annotated-publication-dropzone {
 	background-color: #EFEFEF;

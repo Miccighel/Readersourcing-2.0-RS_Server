@@ -9,19 +9,19 @@ body, html {
 }
 
 .w-49 {
-	width: 49% !important;
+	min-width: 49% !important;
 }
 
 .w-35 {
-	width: 35% !important;
+	min-width: 35% !important;
 }
 
 .w-74 {
-	width: 74% !important;
+	min-width: 74% !important;
 }
 
 .w-24 {
-	width: 24% !important;
+	min-width: 24% !important;
 }
 
 hr.separator {
