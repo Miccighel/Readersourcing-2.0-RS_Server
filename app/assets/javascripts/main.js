@@ -347,6 +347,8 @@ $(document).on("turbolinks:load", () => {
 
 	if (profileUpdatePage.is(":visible")) {
 
+		signUpForm.find(reloadIcons).toggle();
+
 		firstNameField.hide();
 		lastNameField.hide();
 		orcidField.hide();
