@@ -1,5 +1,3 @@
-////////// INIT  //////////
-
 //######## CLIENT SIDE VALIDATION SETUP ########//
 
 Parsley.addMessages('it', {
