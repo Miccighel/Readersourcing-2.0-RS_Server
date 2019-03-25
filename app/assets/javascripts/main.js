@@ -740,21 +740,6 @@ $(document).on("turbolinks:load", () => {
 		});
 	}
 
-	//######### EDIT HANDLING #########//
-
-	authToken = localStorage.getItem('authToken');
-	if (authToken != null) {
-		editRateButton.on("click", () => {
-			ratingSlider.slider({});
-			ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
-			doRateSuccessButton.hide();
-			editRateButton.prop("disabled", true);
-			updateRateButton.find("span").text("Confirm");
-			updateRateButton.prop("disabled", false);
-			updateRateButton.show();
-		});
-	}
-
 	//########## RELOAD HANDLING #########//
 
 	authToken = localStorage.getItem('authToken');
@@ -804,11 +789,7 @@ $(document).on("turbolinks:load", () => {
 					refreshButton.show();
 					refreshButton.prop("disabled", false);
 					let pdfWindow = window.open(data["pdf_download_url_link"], '_blank');
-					if (pdfWindow) {
-						pdfWindow.focus();
-					} else {
-						modalAllow.modal('show');
-					}
+					if (pdfWindow) pdfWindow.focus(); else modalAllow.modal('show');
 				};
 				// 1.3 Error during publication fetching, hide save for later and download buttons
 				let errorCallback = (jqXHR, status) => {
@@ -834,52 +815,6 @@ $(document).on("turbolinks:load", () => {
 	modalAllowButton.on("click", () => {
 		modalAllow.modal('hide')
 	});
-
-	//######### EXTRACT HANDLING #########//
-
-	if (annotatedPublicationDropzone.is(":visible")) {
-
-		$('.dropzone').each(function () {
-			let dropzoneControl = $(this)[0].dropzone;
-			if (dropzoneControl) {
-				dropzoneControl.destroy();
-			}
-		});
-
-		Dropzone.options.annotatedPublicationDropzone = {
-			paramName: "file", // The name that will be used to transfer the file
-			acceptedFiles: "application/pdf",
-			maxFiles: 1,
-			headers: {
-				"Authorization": authToken
-			}
-		};
-
-		annotatedPublicationDropzone = new Dropzone("#annotated-publication-dropzone");
-
-		authToken = localStorage.getItem('authToken');
-		if (authToken != null) {
-			annotatedPublicationDropzone.on("sending", (file, xhr, formData) => xhr.setRequestHeader("Authorization", authToken));
-			annotatedPublicationDropzone.on("success", (file, data) => {
-				extractCaptionFirst.hide();
-				extractCaptionSecond.show();
-				annotatedPublicationDropzoneSuccess.show();
-				annotatedPublicationDropzoneSuccess.text(data["message"]);
-				goToRatingButton.show();
-				goToRatingButton.prop("href", data["baseUrl"]);
-				let ratingPageWindow = window.open(data["baseUrl"], '_blank');
-				if (ratingPageWindow) {
-					ratingPageWindow.focus();
-				} else {
-					modalAllow.modal('show');
-				}
-			});
-			annotatedPublicationDropzone.on('error', (file, response, xhr) => {
-				if (response.hasOwnProperty('errors')) annotatedPublicationDropzoneError.text(response["errors"][0]); else annotatedPublicationDropzoneError.text(response)
-				annotatedPublicationDropzoneError.show();
-			});
-		}
-	}
 
 	///######### REFRESH HANDLING #########//
 
@@ -955,6 +890,46 @@ $(document).on("turbolinks:load", () => {
 		// 1.1 Does the publication exists on the database?
 		let promise = ajax("POST", "/publications/lookup.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 	});
+
+	//######### EXTRACT HANDLING #########//
+
+	if (annotatedPublicationDropzone.is(":visible")) {
+		$('.dropzone').each(function () {
+			let dropzoneControl = $(this)[0].dropzone;
+			if (dropzoneControl) dropzoneControl.destroy();
+		});
+		Dropzone.options.annotatedPublicationDropzone = {
+			paramName: "file", // The name that will be used to transfer the file
+			acceptedFiles: "application/pdf",
+			maxFiles: 1,
+			headers: {
+				"Authorization": authToken
+			}
+		};
+		annotatedPublicationDropzone = new Dropzone("#annotated-publication-dropzone");
+		authToken = localStorage.getItem('authToken');
+		if (authToken != null) {
+			annotatedPublicationDropzone.on("sending", (file, xhr, formData) => xhr.setRequestHeader("Authorization", authToken));
+			annotatedPublicationDropzone.on("success", (file, data) => {
+				extractCaptionFirst.hide();
+				extractCaptionSecond.show();
+				annotatedPublicationDropzoneSuccess.show();
+				annotatedPublicationDropzoneSuccess.text(data["message"]);
+				goToRatingButton.show();
+				goToRatingButton.prop("href", data["baseUrl"]);
+				let ratingPageWindow = window.open(data["baseUrl"], '_blank');
+				if (ratingPageWindow) {
+					ratingPageWindow.focus();
+				} else {
+					modalAllow.modal('show');
+				}
+			});
+			annotatedPublicationDropzone.on('error', (file, response, xhr) => {
+				if (response.hasOwnProperty('errors')) annotatedPublicationDropzoneError.text(response["errors"][0]); else annotatedPublicationDropzoneError.text(response)
+				annotatedPublicationDropzoneError.show();
+			});
+		}
+	}
 
 	////////// RATING //////////
 
@@ -1046,6 +1021,21 @@ $(document).on("turbolinks:load", () => {
 				// 1.1 Create a new rating with the selected score
 				let promise = ajax("POST", "/ratings.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 			}
+		});
+	}
+
+	//######### EDIT HANDLING #########//
+
+	authToken = localStorage.getItem('authToken');
+	if (authToken != null) {
+		editRateButton.on("click", () => {
+			ratingSlider.slider({});
+			ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
+			doRateSuccessButton.hide();
+			editRateButton.prop("disabled", true);
+			updateRateButton.find("span").text("Confirm");
+			updateRateButton.prop("disabled", false);
+			updateRateButton.show();
 		});
 	}
 
