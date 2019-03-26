@@ -1,8 +1,10 @@
 class RatingsController < ApplicationController
 
-	before_action :set_rating, only: [:show, :update]
+	before_action :authorize_api_request, only: [:index, :show, :update, :create]
+	before_action :authorize_server_request, only: [:rate_web, :rate_paper, :load]
 
-	skip_before_action :authorize_api_request, only: [:rate_web, :rate_paper, :load]
+	before_action :set_rating, only: [:show, :update]
+	before_action :set_rating, only: [:show, :update]
 
 	# GET /ratings.json
 	def index
@@ -13,38 +15,25 @@ class RatingsController < ApplicationController
 	def show
 	end
 
-	# GET /rate/:pubId/:authToken
+	# GET /rate/:pubId
 	def rate_paper
-		request.headers['Authorization'] = unescape_jwt(params[:authToken])
-		command = AuthorizeApiRequest.call(request.headers, request.remote_ip)
-		if command.success?
-			@auth_token_paper = params[:authToken]
-			@user = command.result
-			@publication = Publication.find(params[:pubId])
-			@rating = Rating.new
-			if Rating.exists?(user_id: @user.id, publication_id: @publication.id)
-				render "shared/halted", locals: {
-					pubId: @publication.id,
-					message: "",
-					title: I18n.t("errors.messages.rating_already_given")
-				}, status: :ok
-			else
-				render 'ratings/rating_paper'
-			end
+		session[:auth_token_paper] = decrypt params[:authToken]
+		@rating = Rating.new
+		@pub_id = params[:pub_id]
+		if Rating.exists?(user_id: @current_user.id, publication_id: @pub_id)
+			render "shared/halted", locals: {
+				pubId: @pub_id,
+				message: "",
+				title: I18n.t("errors.messages.rating_already_given")
+			}, status: :ok
 		else
-			render "shared/errors", status: :unprocessable_entity, locals: {errors: command.errors[:token]}, layout: false
+			render 'ratings/rating_paper'
 		end
 	end
 
-	# GET /rate/:authToken
+	# GET /rate
 	def rate_web
-		request.headers['Authorization'] = unescape_jwt(params[:authToken])
-		command = AuthorizeApiRequest.call(request.headers, request.remote_ip)
-		if command.success?
-			render 'ratings/rating_web'
-		else
-			render "shared/errors", status: :unprocessable_entity, locals: {errors: command.errors[:token]}, layout: false
-		end
+		render 'ratings/rating_web'
 	end
 
 	# PATCH/PUT /rating/1.json
@@ -87,8 +76,9 @@ class RatingsController < ApplicationController
 
 	# POST /load
 	def load
-		@auth_token_user = unescape_jwt(params[:authTokenUser])
-		@auth_token_paper = unescape_jwt(params[:authTokenPaper])
+		@auth_token_user = fetch_token
+		@auth_token_paper = session[:auth_token_paper]
+		session.delete(:auth_token_paper)
 		decoded_auth_token_user = JsonWebToken.decode(@auth_token_user)
 		decoded_auth_token_paper = JsonWebToken.decode(@auth_token_paper)
 		requesting_user = User.find(decoded_auth_token_paper[:user_id])

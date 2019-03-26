@@ -1,9 +1,9 @@
-class AuthorizeApiRequest
+class Authorizer
 
 	prepend SimpleCommand
 
-	def initialize(headers = {}, ip_address)
-		@headers = headers
+	def initialize(auth_token, ip_address)
+		@auth_token = auth_token
 		@ip_address = ip_address
 	end
 
@@ -17,8 +17,8 @@ class AuthorizeApiRequest
 
 	def authorize_user
 		decoded_auth_token = nil
-		if headers['Authorization'].present?
-			decoded_auth_token = JsonWebToken.decode headers['Authorization'].split(' ').last
+		if @auth_token.present?
+			decoded_auth_token = JsonWebToken.decode @auth_token
 		else
 			errors.add(:token, I18n.t("errors.messages.missing_token"))
 		end

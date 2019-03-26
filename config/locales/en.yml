@@ -25,6 +25,7 @@ en:
       authorization_completed: "You are authorized to proceed"
       base_url_found: "The rating URL has been extracted from your PDF file."
       bug_report_sent: "Your bug report has been successfully sent to an administrator."
+      logout: "Logout successful."
   information:
     messages:
       rate: "Rate this publication"
@@ -34,6 +35,7 @@ en:
       not_the_same_user: "Please, save this publication for later again."
       validate_user: "Validate yourself"
       test_url: "This is just a test URL. Nothing will be saved."
+      login: "You must be logged in to proceed."
   errors:
     messages:
       invalid_credentials: "Invalid credentials. Please, try again."

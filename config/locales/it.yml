@@ -66,6 +66,7 @@ it:
       not_the_same_user: "Per favore, salva per dopo di nuovo questa pubblicazione."
       validate_user: "Valida la tua utenza"
       test_url: "Questa è solo un'URL di test. Nulla verrà salvato."
+      login: "Devi essere collegato per procedere."
   confirmations:
     messages:
       registration_successful: "Benvenuto su Readersourcing 2.0! Il tuo indirizzo email è stato confermato con successo."
@@ -80,6 +81,7 @@ it:
       authorization_completed: "Sei autorizzato a procedere"
       base_url_found: "L'URL di voto è stata estratta dal tuo file PDF."
       bug_report_sent: "La tua segnalazione di un bug è stata correttamente inviata ad un amministratore."
+      logout: "Logout avvenuto correttamente."
   errors:
     messages:
       invalid_credentials: "Credenziali non valide. Per favore, riprova."

@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
 
-	skip_before_action :authorize_api_request, only: [:list, :sign_up, :create, :confirm_email, :unsubscribe, :edit]
+	before_action :authorize_api_request, only: [:index, :show, :info, :update, :unsubscribe, :destroy]
+	before_action :authorize_server_request, only: [:list, :edit]
 
 	before_action :set_user, only: [:show, :update, :unsubscribe, :destroy]
 	before_action :set_error_manager, only: [:confirm_email]
@@ -12,16 +13,10 @@ class UsersController < ApplicationController
 		@users = User.all
 	end
 
-	# GET /readers/list/:authToken
+	# GET /readers/list/
 	def list
-		request.headers['Authorization'] = unescape_jwt(params[:authToken])
-		command = AuthorizeApiRequest.call(request.headers, request.remote_ip)
-		if command.success?
-			@users = User.all
-			render 'list'
-		else
-			render "shared/errors", status: :unprocessable_entity, locals: {errors: command.errors[:token]}, layout: false
-		end
+		@users = User.all
+		render 'list'
 	end
 
 	# GET /users/1.json
@@ -61,15 +56,9 @@ class UsersController < ApplicationController
 		end
 	end
 
-	# GET /profile/edit/:authToken
+	# GET /profile/edit/
 	def edit
-		request.headers['Authorization'] = unescape_jwt(params[:authToken])
-		command = AuthorizeApiRequest.call(request.headers, request.remote_ip)
-		if command.success?
-			render :update
-		else
-			render "shared/errors", status: :unauthorized, locals: {errors: command.errors[:token]}, layout: false
-		end
+		render :update
 	end
 
 	# PATCH/PUT /users/1.json

@@ -1,18 +1,13 @@
 class PasswordsController < ApplicationController
 
-	skip_before_action :authorize_api_request, only: [:edit, :forgot, :reset]
+	before_action :authorize_api_request, only: [:update]
+	before_action :authorize_server_request, only: [:edit]
 
 	before_action :set_error_manager, only: [:update, :forgot, :reset]
 
-	# GET /password/edit/:authToken
+	# GET /password/edit/
 	def edit
-		request.headers['Authorization'] = unescape_jwt(params[:authToken])
-		command = AuthorizeApiRequest.call(request.headers, request.remote_ip)
-		if command.success?
-			render :update
-		else
-			render "shared/errors", status: :unauthorized, locals: {errors: command.errors[:token]}, layout: false
-		end
+		render :update
 	end
 
 	# POST /password/update.json

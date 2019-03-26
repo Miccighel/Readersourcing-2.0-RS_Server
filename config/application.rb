@@ -20,7 +20,7 @@ require "i18n"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module RSmReadersourcingserverside
+module Readersourcing2
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
@@ -37,5 +37,7 @@ module RSmReadersourcingserverside
 	config.assets.enabled = true
 	config.eager_load_paths << Rails.root.join('lib')
 	config.action_mailer.default_url_options = { host: 'localhost:3000' }
+	config.middleware.use ActionDispatch::Cookies
+	config.middleware.use ActionDispatch::Session::CookieStore
   end
 end

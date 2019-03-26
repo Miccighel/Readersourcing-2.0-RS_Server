@@ -1,6 +1,7 @@
 class PublicationsController < ApplicationController
 
-	skip_before_action :authorize_api_request, only: [:list]
+	before_action :authorize_api_request, only: [:index, :show, :lookup, :random, :is_rated, :is_saved_for_later, :create, :is_fetchable, :extract, :fetch, :refresh, :update, :destroy]
+	before_action :authorize_server_request, only: [:list]
 
 	before_action :set_user, :set_request_data, except: [:list]
 	before_action :set_publication, only: [:show, :update, :destroy, :refresh, :is_rated, :is_saved_for_later]
@@ -11,17 +12,10 @@ class PublicationsController < ApplicationController
 		@publications = Publication.all
 	end
 
-	# GET /publications/list/:authToken
+	# GET /publications/list/
 	def list
-		request.headers['Authorization'] = unescape_jwt(params[:authToken])
-		command = AuthorizeApiRequest.call(request.headers, request.remote_ip)
-		if command.success?
-			@publications = Publication.all
-			@user = command.result
-			render 'list'
-		else
-			render "shared/errors", status: :unprocessable_entity, locals: {errors: command.errors[:token]}, layout: false
-		end
+		@publications = Publication.all
+		render 'list'
 	end
 
 	# GET /publications/1.json
@@ -226,7 +220,7 @@ class PublicationsController < ApplicationController
 
 	def set_request_data
 		@request_data = Hash.new
-		@request_data[:authToken] = escape_jwt(request.headers["Authorization"])
+		@request_data[:authToken] = encrypt request.headers["Authorization"]
 		@request_data[:host] = "#{request.protocol}#{request.host_with_port}"
 		@request_data[:user] = current_user
 	end

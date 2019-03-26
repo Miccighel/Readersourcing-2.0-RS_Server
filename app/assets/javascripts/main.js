@@ -238,12 +238,11 @@ $(document).on("turbolinks:load", () => {
 
 	//######### GENERAL #########//
 
-	let authToken = localStorage.getItem('authToken');
+	let authToken = fetchToken();
 	let message = localStorage.getItem('message');
 
 	reloadIcons.hide();
 
-	successSection.hide();
 	errorsSection.hide();
 	errorButtons.hide();
 
@@ -253,16 +252,6 @@ $(document).on("turbolinks:load", () => {
 		userMenuItem.find('ul').addClass("logged");
 		signUpMenuItem.hide();
 		loginMenuItem.hide();
-		let link = publicationListButton.attr("href");
-		publicationListButton.attr("href", `${link}${authToken}`);
-		link = readersListButton.attr("href");
-		readersListButton.attr("href", `${link}${authToken}`);
-		link = rateButton.attr("href");
-		rateButton.attr("href", `${link}${authToken}`);
-		link = goToPasswordEditButton.attr("href");
-		goToPasswordEditButton.attr("href", `${link}${authToken}`);
-		link = goToProfileUpdateButton.attr("href");
-		goToProfileUpdateButton.attr("href", `${link}${authToken}`);
 	} else {
 		ratedItemsMenuItem.find('ul').removeClass("logged");
 		aboutMenuItem.find('ul').removeClass("logged");
@@ -296,7 +285,9 @@ $(document).on("turbolinks:load", () => {
 	}
 
 	if (message == null) {
-		successSection.hide();
+		if(successSection.find(alertSuccess).length) {
+			successSection.hide();
+		}
 	} else {
 		successSection.show();
 		successSection.find(alertSuccess).append(message);
@@ -340,8 +331,6 @@ $(document).on("turbolinks:load", () => {
 	ratingText.text("50");
 	ratingText.show();
 	ratingSlider.slider({});
-
-	if (authToken != null) authTokenUserField.val(authToken);
 
 	//######### PROFILE UPDATE #########//
 
@@ -393,7 +382,14 @@ $(document).on("turbolinks:load", () => {
 
 	//####### LOGOUT HANDLING #########//
 
-	logoutButton.on("click", () => deleteToken().then(() => window.location.href = "/"));
+	logoutButton.on("click", () => {
+		let successCallback = (data, status, jqXHR) => {
+			deleteToken();
+			window.location.href = "/"
+		};
+		let errorCallback = (jqXHR, status) => {};
+		let thirdPromise = emptyAjax("POST", "/logout.json", "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
+	});
 
 	////////// FUNCTIONALITIES - LOGIN   //////////
 
@@ -406,8 +402,8 @@ $(document).on("turbolinks:load", () => {
 			let successCallback = (data, status, jqXHR) => {
 				//doLoginButton.find(signInIcon).toggle();
 				//doLoginButton.find(reloadIcons).toggle();
-				localStorage.setItem("authToken", data["auth_token"]);
-				window.location.href = "/";
+				storeToken(data["auth_token"]);
+				window.location.href = "/"
 			};
 			let errorCallback = (jqXHR, status) => {
 				doLoginButton.find(signInIcons).toggle();
@@ -456,10 +452,9 @@ $(document).on("turbolinks:load", () => {
 			};
 			let successCallback = (data, status, jqXHR) => {
 				//doSignUpButton.find(reloadIcons).toggle();
-				deleteToken().then(() => {
-					localStorage.setItem("message", data["message"]);
-					window.location.href = "/login";
-				});
+				deleteToken();
+				localStorage.setItem("message", data["message"]);
+				window.location.href = "/login";
 			};
 			let errorCallback = (jqXHR, status) => {
 				doSignUpButton.find(reloadIcons).toggle();
@@ -498,10 +493,9 @@ $(document).on("turbolinks:load", () => {
 			};
 			let successCallback = (data, status, jqXHR) => {
 				//passwordForgotButton.find(reloadIcons).toggle();
-				deleteToken().then(() => {
-					localStorage.setItem("message", data["message"]);
-					window.location.href = "/login";
-				});
+				deleteToken();
+				localStorage.setItem("message", data["message"]);
+				window.location.href = "/login";
 			};
 			let errorCallback = (jqXHR, status) => {
 				passwordForgotButton.find(checkIcon).toggle();
@@ -569,7 +563,6 @@ $(document).on("turbolinks:load", () => {
 
 	//#########  STATUS HANDLING (EXISTS ON THE DB, RATED BY THE LOGGED IN USER, SAVED FOR LATER...) #########//
 
-	authToken = localStorage.getItem('authToken');
 	if (authToken != null) {
 		publicationUrlField.change(() => {
 			let validationInstance = rateForm.parsley();
@@ -744,7 +737,6 @@ $(document).on("turbolinks:load", () => {
 
 	//########## RELOAD HANDLING #########//
 
-	authToken = localStorage.getItem('authToken');
 	if (authToken != null) {
 		reloadButton.on("click", () => {
 			undetectedPublicationSection.hide();
@@ -766,7 +758,6 @@ $(document).on("turbolinks:load", () => {
 
 	//######### SAVE FOR LATER HANDLING #########//
 
-	authToken = localStorage.getItem('authToken');
 	if (authToken != null) {
 		downloadButton.on("click", () => {
 			validationInstance.validate();
@@ -909,7 +900,6 @@ $(document).on("turbolinks:load", () => {
 			}
 		};
 		annotatedPublicationDropzone = new Dropzone("#annotated-publication-dropzone");
-		authToken = localStorage.getItem('authToken');
 		if (authToken != null) {
 			annotatedPublicationDropzone.on("sending", (file, xhr, formData) => xhr.setRequestHeader("Authorization", authToken));
 			annotatedPublicationDropzone.on("success", (file, data) => {
@@ -945,7 +935,6 @@ $(document).on("turbolinks:load", () => {
 
 	rateForm.submit(event => event.preventDefault());
 
-	authToken = localStorage.getItem('authToken');
 	if (authToken != null) {
 		doRateButton.on("click", () => {
 			validationInstance.validate();
@@ -1028,7 +1017,6 @@ $(document).on("turbolinks:load", () => {
 
 	//######### EDIT HANDLING #########//
 
-	authToken = localStorage.getItem('authToken');
 	if (authToken != null) {
 		editRateButton.on("click", () => {
 			ratingSlider.slider({});
@@ -1043,7 +1031,6 @@ $(document).on("turbolinks:load", () => {
 
 	//######### UPDATE HANDLING #########//
 
-	authToken = localStorage.getItem('authToken');
 	if (authToken != null) {
 		updateRateButton.on("click", () => {
 			validationInstance.validate();
@@ -1110,10 +1097,9 @@ $(document).on("turbolinks:load", () => {
 			};
 			let successCallback = (data, status, jqXHR) => {
 				//doPasswordEditButton.find(reloadIcons).toggle();
-				deleteToken().then(() => {
-					localStorage.setItem("message", data["message"]);
-					window.location.href = "/login";
-				});
+				deleteToken();
+				localStorage.setItem("message", data["message"]);
+				window.location.href = "/login";
 			};
 			let errorCallback = (jqXHR, status) => {
 				goToPasswordEditButton.find(checkIcon).toggle();
@@ -1138,7 +1124,6 @@ $(document).on("turbolinks:load", () => {
 
 	////////// FUNCTIONALITIES - PROFILE UPDATE  //////////
 
-	authToken = localStorage.getItem('authToken');
 	if (authToken != null) {
 		updateButton.on("click", () => {
 			let validationInstance = signUpForm.parsley();
@@ -1159,10 +1144,9 @@ $(document).on("turbolinks:load", () => {
 						delete secondData.user.orcid;
 					let secondSuccessCallback = (data, status, jqXHR) => {
 						//updateButton.find(reloadIcons).toggle();
-						deleteToken().then(() => {
-							localStorage.setItem("message", data["message"]);
-							window.location.href = "/login";
-						});
+						deleteToken();
+						localStorage.setItem("message", data["message"]);
+						window.location.href = "/login";
 					};
 					let secondErrorCallback = (jqXHR, status) => {
 						updateButton.find(reloadIcons).toggle();

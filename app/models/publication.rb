@@ -59,9 +59,9 @@ class Publication < ApplicationRecord
 		data = Hash.new
 		data[:authToken] = request_data.values[0]
 		data[:host] = request_data.values[1]
-		data[:pubId] = self.id
+		data[:pub_id] = self.id
 		data[:user] = request_data.values[2]
-		data[:rate_path] = "#{request_data.values[1]}#{Rails.application.routes.url_helpers.rate_paper_path(data[:pubId], data[:authToken])}"
+		data[:rate_path] = "#{request_data.values[1]}#{Rails.application.routes.url_helpers.rate_paper_path(data[:pub_id], data[:authToken])}"
 
 		# FILE FETCHING STARTS HERE
 
@@ -199,7 +199,7 @@ class Publication < ApplicationRecord
 			logger.info "-pOut: #{absolute_pdf_storage_path(data[:user])}"
 			logger.info "-u: #{data[:rate_path]}"
 			logger.info "-c: Click here"
-			logger.info "-pId: #{data[:pubId]}"
+			logger.info "-pId: #{data[:pub_id]}"
 			logger.info "-a: #{data[:authToken]}"
 			logger.info "Complete command:"
 			logger.info "java -jar #{absolute_rs_pdf_path} -pIn #{absolute_pdf_download_path(data[:user])} -pOut #{absolute_pdf_storage_path(data[:user])} -u #{data[:rate_path]} -c \"Express your rating\""

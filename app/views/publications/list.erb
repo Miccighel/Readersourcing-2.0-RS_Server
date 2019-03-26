@@ -29,9 +29,9 @@
 				</thead>
 				<tbody>
 				<% @publications.each do |publication| %>
-					<% given_rating = @user.given_rating(publication) %>
+					<% given_rating = @current_user.given_rating(publication) %>
 					<tr>
-						<td><a target="_blank" href="<%= publication.pdf_url %>"></i><%= publication.pdf_url %></a></td>
+						<td><a target="_blank" href="<%= publication.pdf_url %>"><%= publication.pdf_url %></a></td>
 						<% if publication.doi.present? %>
 							<td><%= publication.doi %></td>
 						<% else %>

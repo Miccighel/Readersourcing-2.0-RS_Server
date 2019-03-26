@@ -1,11 +1,19 @@
 ////////// NETWORKING SECTION //////////
 
-async function deleteToken() {
-	localStorage.removeItem('authToken');
+function storeToken(authToken) {
+	Cookies.set('authToken', authToken);
+}
+
+function fetchToken() {
+	return Cookies.get('authToken');
+}
+
+function deleteToken() {
+	Cookies.remove('authToken');
 }
 
 async function ajax(type, url, contentType, dataType, crossDomain, data, success, error) {
-	let authToken = localStorage.getItem('authToken');
+	let authToken = fetchToken();
 	$.ajax({
 		type: type,
 		url: `${url}`,
@@ -22,7 +30,7 @@ async function ajax(type, url, contentType, dataType, crossDomain, data, success
 }
 
 async function emptyAjax(type, url, contentType, dataType, crossDomain, success, error) {
-	let authToken = localStorage.getItem('authToken');
+	let authToken = fetchToken();
 	$.ajax({
 		type: type,
 		url: `${url}`,

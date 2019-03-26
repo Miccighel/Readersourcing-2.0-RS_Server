@@ -109,7 +109,7 @@ body.bg-gray-dark input {
 /* ////////// TABLES ///////// */
 
 .empty-cell {
-	background-color: rgba(0, 0, 0, 0.075) !important;
+	background-color: rgba(0, 0, 0, 0.05) !important;
 }
 
 /* ////////// MENU  ////////// */

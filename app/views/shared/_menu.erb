@@ -19,7 +19,7 @@
 					</li>
 
 					<li id="rate-menu-item" class="nav-item  <%= "active" if active == "rate" %>">
-						<a href="<%= rate_web_path(authToken: '') %>" id="rate-btn" class="<%= "color-white" if appearance == "dark" %>">
+						<a href="<%= rate_web_path %>" id="rate-btn" class="<%= "color-white" if appearance == "dark" %>">
 							Rate
 							<i id="pdf-icon" class="fas fa-file-pdf"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
@@ -39,10 +39,10 @@
 									<div class="col-12">
 										<ul class="list-unstyled">
 											<li>
-												<a href="<%= publications_list_path(authToken: '') %>" id="publication-list-btn" class="nav-link">Publications</a>
+												<a href="<%= publications_list_path %>" id="publication-list-btn" class="nav-link">Publications</a>
 											</li>
 											<li>
-												<a href="<%= users_list_path(authToken: '') %>" id="readers-list-btn" class="nav-link" data-turbolinks="false">Readers</a>
+												<a href="<%= users_list_path %>" id="readers-list-btn" class="nav-link" data-turbolinks="false">Readers</a>
 											</li>
 										</ul>
 									</div>
