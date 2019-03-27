@@ -15,7 +15,7 @@ class RatingsController < ApplicationController
 	def show
 	end
 
-	# GET /rate/:pubId
+	# GET /rate/:pubId/:authToken
 	def rate_paper
 		session[:auth_token_paper] = decrypt params[:authToken]
 		@rating = Rating.new
@@ -34,17 +34,6 @@ class RatingsController < ApplicationController
 	# GET /rate
 	def rate_web
 		render 'ratings/rating_web'
-	end
-
-	# PATCH/PUT /rating/1.json
-	def update
-		@rating.score = rating_params[:score]
-		@rating.edited = true
-		if @rating.save
-			render :show, status: :ok, location: @rating
-		else
-			render json: @rating.errors, status: :unprocessable_entity
-		end
 	end
 
 	# POST /ratings.json
@@ -122,6 +111,17 @@ class RatingsController < ApplicationController
 					title: I18n.t("errors.messages.not_the_same_user")
 				}, status: :ok
 			end
+		end
+	end
+
+	# PATCH/PUT /rating/1.json
+	def update
+		@rating.score = rating_params[:score]
+		@rating.edited = true
+		if @rating.save
+			render :show, status: :ok, location: @rating
+		else
+			render json: @rating.errors, status: :unprocessable_entity
 		end
 	end
 
