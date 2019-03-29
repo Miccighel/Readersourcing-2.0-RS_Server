@@ -1,11 +1,6 @@
 development:
   adapter: postgresql
-  encoding: unicode
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  user: admin
-  password: puyes46r
-  host: 127.0.0.1
-  database: rs_server
+  url: postgres://<%= ENV['POSTGRES_USER'] %>:<%= ENV['POSTGRES_PASSWORD'] %>@postgres/<%= ENV['POSTGRES_DB'] %>
 
 production:
   adapter: postgresql
