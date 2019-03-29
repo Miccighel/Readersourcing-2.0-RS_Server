@@ -30,9 +30,9 @@ This deploy modality allows to manually downwload and start RS_Server locally to
 
 <h3>Requirements</h3>
 
- - <a href="https://www.ruby-lang.org/en/downloads/">Ruby</a> >= 2.4.4;
+ - <a href="https://www.ruby-lang.org/en/downloads/">Ruby</a> >= 2.5.3;
  - <a href="https://www.java.com/it/download/">JRE (Java Runtime Environment)</a> >= 1.8.0;
- - <a href="https://www.postgresql.org/download/">PostgreSQL</a> >= 10.5.
+ - <a href="https://www.postgresql.org/download/">PostgreSQL</a> >= 11.0.
  
  <h3>How To</h3>
 
@@ -99,8 +99,8 @@ Clone this repository and move inside the main directory using a command line pr
 - ```heroku container:push web --app your-app-name```;
 - ```heroku container:release web --app your-app-name```;
 - ```heroku open --app your-app-name``` (optional);
-- ```heroku run rake db:create --app your-app-name```;
-- ```heroku run rake db:migrate --app your-app-name```.
+- ```heroku run rake db:create --app your-app-name``` (optional);
+- ```heroku run rake db:migrate --app your-app-name``` (optional).
 
 <h2>Environment Variables</h2>
 
@@ -114,8 +114,7 @@ Regardless of the chosen deploy modality, there is the need to set some environm
 | SENDGRID_PASSWORD  | Password of your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
 | SENDGRID_API_KEY  | API key of your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
 | SENDGRID_DOMAIN  | A domain registered within your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
-| RECAPTCHA_SECRET_KEY  | Private key used by Google ReCAPTCHA v2 within a registered domain | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
-| RECAPTCHA_SITE_KEY  | API key of your Google ReCAPTCHA v2 account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
+| BUG_REPORT_MAIL | An email address to receive bug reports | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App |
 | RAILS_LOG_TO_STD  | If set to ```true```, Rails writes its logs to the standard output. Useful for debugging purposes. | 3 | production | ```.env``` file, Heroku App |
 
 <h3>.env File</h3>
