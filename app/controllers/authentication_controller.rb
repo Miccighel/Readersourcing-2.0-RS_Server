@@ -29,7 +29,6 @@ class AuthenticationController < ApplicationController
 		if command.success?
 			# Unescaped auth token (a duplicate) is saved on server session (implemented through HTTP-ONLY COOKIES)
 			store_token command.result.dup
-			# The URL-escaped token is returned to the client
 			render json: {auth_token: command.result}
 		else
 			render json: {errors: command.errors[:user_authentication]}, status: :unauthorized

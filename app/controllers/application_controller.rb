@@ -5,6 +5,8 @@ class ApplicationController < ActionController::API
 
 	attr_reader :current_user
 
+	protect_from_forgery unless: -> { request.format.json? }
+
 	# GET /
 	def home
 	end
