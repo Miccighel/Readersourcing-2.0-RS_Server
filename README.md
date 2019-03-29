@@ -8,6 +8,7 @@ Please, note that this is an early alpha release and it is not ready for the use
 
 <h1>Useful Links</h1>
 
+- <a href="https://readersourcing.org">Readersourcing 2.0 (Web Interface)</a>
 - <a href="https://github.com/Miccighel/Readersourcing-2.0">Readersourcing 2.0 (GitHub)</a>
 - <a href="https://zenodo.org/record/1446468">Original Article</a>
 - <a href="https://zenodo.org/record/1452397">Technical Documentation (Zenodo)</a>
@@ -99,8 +100,8 @@ Clone this repository and move inside the main directory using a command line pr
 - ```heroku container:push web --app your-app-name```;
 - ```heroku container:release web --app your-app-name```;
 - ```heroku open --app your-app-name``` (optional);
-- ```heroku run rake db:create --app your-app-name```;
-- ```heroku run rake db:migrate --app your-app-name```.
+- ```heroku run rake db:create --app your-app-name``` (optional);
+- ```heroku run rake db:migrate --app your-app-name``` (optional).
 
 <h2>Environment Variables</h2>
 
@@ -114,8 +115,7 @@ Regardless of the chosen deploy modality, there is the need to set some environm
 | SENDGRID_PASSWORD  | Password of your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
 | SENDGRID_API_KEY  | API key of your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
 | SENDGRID_DOMAIN  | A domain registered within your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
-| RECAPTCHA_SECRET_KEY  | Private key used by Google ReCAPTCHA v2 within a registered domain | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
-| RECAPTCHA_SITE_KEY  | API key of your Google ReCAPTCHA v2 account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
+| BUG_REPORT_MAIL | An email address to receive bug reports | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App |
 | RAILS_LOG_TO_STD  | If set to ```true```, Rails writes its logs to the standard output. Useful for debugging purposes. | 3 | production | ```.env``` file, Heroku App |
 
 <h3>.env File</h3>
