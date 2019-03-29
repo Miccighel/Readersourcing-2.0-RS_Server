@@ -33,7 +33,7 @@ This deploy modality allows to manually downwload and start RS_Server locally to
 
  - <a href="https://www.ruby-lang.org/en/downloads/">Ruby</a> >= 2.5.3;
  - <a href="https://www.java.com/it/download/">JRE (Java Runtime Environment)</a> >= 1.8.0;
- - <a href="https://www.postgresql.org/download/">PostgreSQL</a> >= 11.0.
+ - <a href="https://www.postgresql.org/download/">PostgreSQL</a> >= 11.2.
  
  <h3>How To</h3>
 
