@@ -40,7 +40,7 @@ EXPOSE 3000
 # DEVELOPMENT MODE
 # CMD ["bundle", "exec", "rails", "server", "-b", "-p", "3000", "-e", "development"]
 # PRODUCTION MODE
-# CMD ["bundle", "exec", "rails", "server", "-e", "production"]
+CMD ["bundle", "exec", "rails", "server", "-e", "production"]
 
 # ---------- SCENARIO 2: DEPLOY WITH LOCAL BUILD ----------
 
