@@ -24,11 +24,11 @@ class RsmStrategy < ReadersourcingStrategy
 
 		puts "Updating values at time t(i+1)"
 
-		@publication.steadiness = (old_publication_steadiness + @user.score).round(16)
-		@publication.score_rsm = (((old_publication_steadiness * old_publication_score) + (old_user_score * @rating.normalize_score)) / @publication.steadiness).round(16)
-		@user.steadiness = (old_user_steadiness + @publication.steadiness).round(16)
-		@rating.goodness =  (1 - Math.sqrt((@rating.normalize_score - @publication.score_rsm).abs)).round(16)
-		@user.score = (((old_user_steadiness * old_user_score) + (@publication.steadiness * @rating.goodness)) / @user.steadiness).round(16)
+		@publication.steadiness = (old_publication_steadiness + @user.score)
+		@publication.score_rsm = (((old_publication_steadiness * old_publication_score) + (old_user_score * @rating.normalize_score)) / @publication.steadiness)
+		@user.steadiness = (old_user_steadiness + @publication.steadiness)
+		@rating.goodness =  (1 - Math.sqrt((@rating.normalize_score - @publication.score_rsm).abs))
+		@user.score = (((old_user_steadiness * old_user_score) + (@publication.steadiness * @rating.goodness)) / @user.steadiness)
 
 		puts "Publication steadiness at time t(i+1) #{@publication.steadiness}"
 		puts "Publication score at time t(i+1) #{@publication.score_rsm}"
@@ -57,9 +57,9 @@ class RsmStrategy < ReadersourcingStrategy
 
 			puts "Updating previous values at time t(i+1)"
 
-			old_rating.goodness =  (1 - Math.sqrt((old_rating.normalize_score - @publication.score_rsm).abs)).round(16)
-			previous_user.steadiness = (old_previous_user_steadiness + old_user_score).round(16)
-			previous_user.score = (((old_previous_user_steadiness * old_previous_user_score) - (old_publication_steadiness * old_rating_goodness) + (@publication.steadiness * old_rating.goodness)) / previous_user.steadiness).round(16)
+			old_rating.goodness =  (1 - Math.sqrt((old_rating.normalize_score - @publication.score_rsm).abs))
+			previous_user.steadiness = (old_previous_user_steadiness + old_user_score)
+			previous_user.score = (((old_previous_user_steadiness * old_previous_user_score) - (old_publication_steadiness * old_rating_goodness) + (@publication.steadiness * old_rating.goodness)) / previous_user.steadiness)
 
 			puts "Previous user steadiness at time t(i+1) #{previous_user.steadiness}"
 			puts "Previous rating goodness at time t(i+1) #{old_rating.goodness}"

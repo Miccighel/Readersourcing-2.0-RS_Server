@@ -87,7 +87,7 @@ unless Rails.env.production?
 
 	puts "########## PUBLICATIONS SEEDING COMPLETED ##########"
 
-	# puts "########## FAKE RATINGS SEEDING STARTED ##########"
+	# puts "########## RANDOM SIMULATION STARTED ##########"
 
 	# 250.times do |index|
 	#	puts "---------- CREATING FAKE RATING #{index} ----------"
@@ -113,20 +113,120 @@ unless Rails.env.production?
 	#	puts "---------- CREATION COMPLETED ----------"
 	# end
 
-	#puts "########## FAKE RATING SEEDING COMPLETED #########"
+	# puts "########## RANDOM SIMULATION COMPLETED ##########"
 
-	puts "########## RATING SIMULATION STARTED #########"
+	# puts "########## GROUND_TRUTH_1 SIMULATION STARTED #########"
+	#
+	# publication_id_1 = 1
+	# publication_id_2 = 2
+	# user_id_1 = 1
+	# user_id_2 = 2
+	# user_id_3 = 3
+	# user_id_4 = 4
+	#
+	# rating_1 = Rating.new
+	# rating_1.score = 80
+	# rating_1.original_score = 80
+	# rating_1.user_id = user_id_1
+	# rating_1.publication_id = publication_id_1
+	# rating_1.save
+	#
+	# sm_strategy = RsmStrategy.new(rating_1)
+	# readersourcing = Readersourcing.new(sm_strategy)
+	# readersourcing.compute_scores
+	#
+	# true_review_strategy = TrmStrategy.new(rating_1)
+	# readersourcing = Readersourcing.new(true_review_strategy)
+	# readersourcing.compute_scores
+	#
+	# rating_2 = Rating.new
+	# rating_2.score = 20
+	# rating_2.original_score = 20
+	# rating_2.user_id = user_id_2
+	# rating_2.publication_id = publication_id_1
+	# rating_2.save
+	#
+	# sm_strategy = RsmStrategy.new(rating_2)
+	# readersourcing = Readersourcing.new(sm_strategy)
+	# readersourcing.compute_scores
+	#
+	# true_review_strategy = TrmStrategy.new(rating_2)
+	# readersourcing = Readersourcing.new(true_review_strategy)
+	# readersourcing.compute_scores
+	#
+	# rating_3 = Rating.new
+	# rating_3.score = 20
+	# rating_3.original_score = 20
+	# rating_3.user_id = user_id_3
+	# rating_3.publication_id = publication_id_1
+	# rating_3.save
+	#
+	# sm_strategy = RsmStrategy.new(rating_3)
+	# readersourcing = Readersourcing.new(sm_strategy)
+	# readersourcing.compute_scores
+	#
+	# true_review_strategy = TrmStrategy.new(rating_3)
+	# readersourcing = Readersourcing.new(true_review_strategy)
+	# readersourcing.compute_scores
+	#
+	# rating_4 = Rating.new
+	# rating_4.score = 50
+	# rating_4.original_score = 50
+	# rating_4.user_id = user_id_3
+	# rating_4.publication_id = publication_id_2
+	# rating_4.save
+	#
+	# sm_strategy = RsmStrategy.new(rating_4)
+	# readersourcing = Readersourcing.new(sm_strategy)
+	# readersourcing.compute_scores
+	#
+	# true_review_strategy = TrmStrategy.new(rating_4)
+	# readersourcing = Readersourcing.new(true_review_strategy)
+	# readersourcing.compute_scores
+	#
+	# rating_5 = Rating.new
+	# rating_5.score = 50
+	# rating_5.original_score = 50
+	# rating_5.user_id = user_id_4
+	# rating_5.publication_id = publication_id_2
+	# rating_5.save
+	#
+	# sm_strategy = RsmStrategy.new(rating_5)
+	# readersourcing = Readersourcing.new(sm_strategy)
+	# readersourcing.compute_scores
+	#
+	# true_review_strategy = TrmStrategy.new(rating_5)
+	# readersourcing = Readersourcing.new(true_review_strategy)
+	# readersourcing.compute_scores
+	#
+	# rating_6 = Rating.new
+	# rating_6.score = 80
+	# rating_6.original_score = 80
+	# rating_6.user_id = user_id_4
+	# rating_6.publication_id = publication_id_1
+	# rating_6.save
+	#
+	# sm_strategy = RsmStrategy.new(rating_6)
+	# readersourcing = Readersourcing.new(sm_strategy)
+	# readersourcing.compute_scores
+	#
+	# true_review_strategy = TrmStrategy.new(rating_6)
+	# readersourcing = Readersourcing.new(true_review_strategy)
+	# readersourcing.compute_scores
+	#
+	# puts "########## GROUND_TRUTH_1 SIMULATION COMPLETED #########"
+
+	puts "########## GROUND_TRUTH_2 SIMULATION STARTED #########"
 
 	publication_id_1 = 1
 	publication_id_2 = 2
 	user_id_1 = 1
 	user_id_2 = 2
 	user_id_3 = 3
-	user_id_4 = 4
 
 	rating_1 = Rating.new
-	rating_1.score = 80
-	rating_1.original_score = 80
+	rating_1.score = 51
+	rating_1.original_score = 51
 	rating_1.user_id = user_id_1
 	rating_1.publication_id = publication_id_1
 	rating_1.save
@@ -140,10 +240,10 @@ unless Rails.env.production?
 	readersourcing.compute_scores
 
 	rating_2 = Rating.new
-	rating_2.score = 20
-	rating_2.original_score = 20
-	rating_2.user_id = user_id_2
-	rating_2.publication_id = publication_id_1
+	rating_2.score = 36
+	rating_2.original_score = 36
+	rating_2.user_id = user_id_1
+	rating_2.publication_id = publication_id_2
 	rating_2.save
 
 	sm_strategy = RsmStrategy.new(rating_2)
@@ -155,9 +255,9 @@ unless Rails.env.production?
 	readersourcing.compute_scores
 
 	rating_3 = Rating.new
-	rating_3.score = 20
-	rating_3.original_score = 20
-	rating_3.user_id = user_id_3
+	rating_3.score = 51
+	rating_3.original_score = 51
+	rating_3.user_id = user_id_2
 	rating_3.publication_id = publication_id_1
 	rating_3.save
 
@@ -170,9 +270,9 @@ unless Rails.env.production?
 	readersourcing.compute_scores
 
 	rating_4 = Rating.new
-	rating_4.score = 50
-	rating_4.original_score = 50
-	rating_4.user_id = user_id_3
+	rating_4.score = 93
+	rating_4.original_score = 93
+	rating_4.user_id = user_id_2
 	rating_4.publication_id = publication_id_2
 	rating_4.save
 
@@ -185,10 +285,10 @@ unless Rails.env.production?
 	readersourcing.compute_scores
 
 	rating_5 = Rating.new
-	rating_5.score = 50
-	rating_5.original_score = 50
-	rating_5.user_id = user_id_4
-	rating_5.publication_id = publication_id_2
+	rating_5.score = 59
+	rating_5.original_score = 59
+	rating_5.user_id = user_id_3
+	rating_5.publication_id = publication_id_1
 	rating_5.save
 
 	sm_strategy = RsmStrategy.new(rating_5)
@@ -200,10 +300,10 @@ unless Rails.env.production?
 	readersourcing.compute_scores
 
 	rating_6 = Rating.new
-	rating_6.score = 80
-	rating_6.original_score = 80
-	rating_6.user_id = user_id_4
-	rating_6.publication_id = publication_id_1
+	rating_6.score = 3
+	rating_6.original_score = 3
+	rating_6.user_id = user_id_3
+	rating_6.publication_id = publication_id_2
 	rating_6.save
 
 	sm_strategy = RsmStrategy.new(rating_6)
@@ -214,7 +314,7 @@ unless Rails.env.production?
 	readersourcing = Readersourcing.new(true_review_strategy)
 	readersourcing.compute_scores
 
-	puts "########## RATING SIMULATION COMPLETED #########"
+	puts "########## GROUND_TRUTH_2 SIMULATION COMPLETED #########"
 
 	puts "@@@@@@@@@@ SEEDING COMPLETED @@@@@@@@@@"
 
