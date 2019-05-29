@@ -3,7 +3,7 @@
 version: '3'
 services:
   rs_server_webapp:
-    image: miccighel/rs_server:v1.0.12-alpha
+    image: miccighel/rs_server:v1.0.13-alpha
     command: rails server -p 3000 -b '0.0.0.0' -e development
     env_file: .env
     ports:
@@ -26,7 +26,7 @@ services:
 #services:
 #  rs_server_webapp:
 #    build: .
-#    image: miccighel/rs_server:v1.0.12-alpha
+#    image: miccighel/rs_server:v1.0.13-alpha
 #    env_file: .env
 #    command: rails server -p 3000 -b '0.0.0.0' -e production
 #    volumes:
