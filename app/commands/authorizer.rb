@@ -8,6 +8,7 @@ class Authorizer
 	end
 
 	def call
+		# Code wrapped to private method to avoid public attributes
 		authorize_user
 	end
 

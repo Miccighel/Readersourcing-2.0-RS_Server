@@ -1,4 +1,4 @@
-class AuthenticateUser
+class Authenticator
 
 	prepend SimpleCommand
 
@@ -9,6 +9,7 @@ class AuthenticateUser
 	end
 
 	def call
+		# Code wrapped to private method to avoid public attributes
 		JsonWebToken.encode(user_id: user.id, ip_address: ip_address) if user
 	end
 
