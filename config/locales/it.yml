@@ -66,7 +66,7 @@ it:
       not_the_same_user: "Per favore, salva per dopo di nuovo questa pubblicazione."
       validate_user: "Valida la tua utenza"
       test_url: "Questa è solo un'URL di test. Nulla verrà salvato."
-      login: "Devi essere collegato per procedere."
+      login: "Devi essere collegato per procedere. Inserisci i tuoi dati e riprova."
   confirmations:
     messages:
       registration_successful: "Benvenuto su Readersourcing 2.0! Il tuo indirizzo email è stato confermato con successo."

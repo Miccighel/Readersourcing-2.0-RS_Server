@@ -1,4 +1,4 @@
-class Authorizer
+class  Authorizer
 
 	prepend SimpleCommand
 

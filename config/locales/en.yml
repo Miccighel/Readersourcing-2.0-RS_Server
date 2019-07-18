@@ -35,7 +35,7 @@ en:
       not_the_same_user: "Please, save this publication for later again."
       validate_user: "Validate yourself"
       test_url: "This is just a test URL. Nothing will be saved."
-      login: "You must be logged in to proceed."
+      login: "You must be logged in to proceed. Insert your data and try again."
   errors:
     messages:
       invalid_credentials: "Invalid credentials. Please, try again."

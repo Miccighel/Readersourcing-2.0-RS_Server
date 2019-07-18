@@ -285,7 +285,7 @@ $(document).on("turbolinks:load", () => {
 	}
 
 	if (message == null) {
-		if(successSection.find(alertSuccess).length) {
+		if(successSection.find(alertSuccess).find("span").text().length===0) {
 			successSection.hide();
 		}
 	} else {

@@ -38,7 +38,7 @@ EXPOSE 3000
 # default.
 
 # DEVELOPMENT MODE
-# CMD ["bundle", "exec", "rails", "server", "-b", "-p", "3000", "-e", "development"]
+#CMD ["bundle", "exec", "rails", "server", "-b", "-p", "3000", "-e", "development"]
 # PRODUCTION MODE
 CMD ["bundle", "exec", "rails", "server", "-e", "production"]
 
@@ -53,5 +53,6 @@ CMD ["bundle", "exec", "rails", "server", "-e", "production"]
 # heroku open --app rs-server
 # heroku run rake db:create --app rs-server
 # heroku run rake db:migrate --app rs-server
+# heroku logs --tail --app rs-server
 
 # ---------- END ----------

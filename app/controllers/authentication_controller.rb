@@ -6,7 +6,6 @@ class AuthenticationController < ApplicationController
 
 	# GET /login
 	def login
-		@message = ""
 	end
 
 	# GET /logout or POST/logout.json
@@ -28,7 +27,7 @@ class AuthenticationController < ApplicationController
 		command = Authenticator.call(params[:email], params[:password], request.remote_ip)
 		if command.success?
 			# Unescaped auth token (a duplicate) is saved on server session (implemented through HTTP-ONLY COOKIES)
-			store_token command.result.dup
+			store_token command.result
 			render json: {auth_token: command.result}
 		else
 			render json: {errors: command.errors[:user_authentication]}, status: :unauthorized
