@@ -4,6 +4,19 @@ $(document).on("ready", () => {
 
 $(document).on("turbolinks:load", () => {
 
+	window.cookieconsent.initialise({
+		"palette": {
+			"popup": {
+				"background": "#252e39"
+			},
+			"button": {
+				"background": "#14a7d0"
+			}
+		},
+		"theme": "edgeless",
+		"type": "opt-out"
+	});
+
 	////////// USER INTERFACE - GENERAL  //////////
 
 	//######## SECTIONS ########//

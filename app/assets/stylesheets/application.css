@@ -17,6 +17,7 @@
  *= require owl.carousel/dist/assets/owl.theme.default
  *= require dropzone/dist/dropzone
  *= require load-awesome/css/ball-grid-pulse
+ *= require cookieconsent/build/cookieconsent.min
  *= require system/style.blue
  *= require general
  *= require rating
