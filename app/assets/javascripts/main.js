@@ -4,19 +4,6 @@ $(document).on("ready", () => {
 
 $(document).on("turbolinks:load", () => {
 
-	window.cookieconsent.initialise({
-		"palette": {
-			"popup": {
-				"background": "#252e39"
-			},
-			"button": {
-				"background": "#14a7d0"
-			}
-		},
-		"theme": "edgeless",
-		"type": "opt-out"
-	});
-
 	////////// USER INTERFACE - GENERAL  //////////
 
 	//######## SECTIONS ########//
@@ -106,6 +93,21 @@ $(document).on("turbolinks:load", () => {
 	//let alert = $(".alert");
 
 	let checkIcon = $("#check-icon");
+
+	////////// USER INTERFACE - CONTACT  //////////
+
+	let contactForm = $("#contact-form");
+	//let successSection = $("#success-sect");
+	//let errorsSection = $(".errors-sect");
+
+	//let emailField = $("#email");
+	//let messageField = $("#message");
+
+	let doContactButton = $("#do-contact-btn");
+	//let errorButton = $(".error-btn");
+
+	//let alert = $(".alert");
+	//let alertSuccess = $(".alert-success");
 
 	////////// USER INTERFACE - BUG  //////////
 
@@ -306,6 +308,32 @@ $(document).on("turbolinks:load", () => {
 		successSection.find(alertSuccess).append(message);
 		localStorage.removeItem('message')
 	}
+
+	window.cookieconsent.initialise({
+		"cookie": {
+			"name": "Readersourcing-Cookie-Consent",
+			"domain": "readersourcing.org"
+		},
+		"content": {
+			"href": "/privacy",
+			"dismiss": "Dismiss"
+		},
+		"elements": {
+			"dismiss": '<a aria-label="dismiss cookie message" tabindex="0" class="btn btn-primary cc-btn cc-dismiss">{{dismiss}}</a>',
+			"link": '<a aria-label="learn more about cookies" tabindex="0" href="{{href}}" target="_blank">{{link}}</a>',
+		},
+		"palette": {
+			"popup": {
+				"background": "#333333",
+				"text": "#ffffff"
+			},
+			"button": {
+				"background": "#467fbf",
+				"text": "#ffffff"
+			}
+		},
+		"theme": "edgeless",
+	});
 
 	//######### RATING WEB #########//
 
@@ -530,6 +558,45 @@ $(document).on("turbolinks:load", () => {
 			ajax("POST", "/password/forgot.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 		}
 	});
+
+	////////// FUNCTIONALITIES - CONTACT   //////////
+
+	//########## CONTACT HANDLING ##########//
+
+	doContactButton.on("click", () => {
+		let validationInstance = contactForm.parsley();
+		if (validationInstance.isValid()) {
+			doContactButton.find(messageIcon).toggle();
+			doContactButton.find(reloadIcons).toggle();
+			let data = {email: emailField.val(), message: messageField.val()};
+			let successCallback = (data, status, jqXHR) => {
+				doContactButton.text("Contact Mail Sent!");
+				doContactButton.prop("disabled", true);
+				successSection.show();
+				successSection.find(alertSuccess).append(data["message"]);
+			};
+			let errorCallback = (jqXHR, status) => {
+				doContactButton.find(messageIcon).toggle();
+				doContactButton.find(reloadIcons).toggle();
+				if (jqXHR.responseText == null) {
+					doContactButton.hide();
+					let button = doContactButton.parent().find(errorButtons);
+					button.show();
+					button.prop("disabled", true)
+				} else {
+					let errorPromise = buildErrors(jqXHR.responseText).then(result => {
+						doContactButton.parent().find(errorsSection).find(alert).empty();
+						doContactButton.parent().find(errorsSection).find(alert).append(result);
+						doContactButton.parent().find(errorsSection).show();
+					});
+				}
+			};
+			// noinspection JSIgnoredPromiseFromCall
+			ajax("POST", "/ask", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
+		}
+	});
+
+	bugForm.submit(event => event.preventDefault());
 
 	////////// FUNCTIONALITIES - BUG   //////////
 

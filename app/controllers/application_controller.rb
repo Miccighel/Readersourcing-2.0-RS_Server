@@ -17,6 +17,20 @@ class ApplicationController < ActionController::API
 	def software
 	end
 
+	# GET /privacy
+	def privacy
+	end
+
+	# GET /contact
+	def contact
+	end
+
+	# POST /ask.json
+	def ask
+		ApplicationMailer.ask(params[:email], params[:message]).deliver_now
+		render json: {message: I18n.t("confirmations.messages.ask_sent")}, status: :ok
+	end
+
 	# GET /bug
 	def bug
 	end

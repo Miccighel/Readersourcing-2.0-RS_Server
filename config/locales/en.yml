@@ -25,6 +25,7 @@ en:
       authorization_completed: "You are authorized to proceed"
       base_url_found: "The rating URL has been extracted from your PDF file."
       bug_report_sent: "Your bug report has been successfully sent to an administrator."
+      ask_sent: "Your question has been successfully sent to an administrator."
       logout: "Logout successful."
   information:
     messages:
@@ -86,6 +87,7 @@ en:
       rating_confirm: "Rating Assignment Confirmation"
       registration_confirm: "Registration Confirmation"
       bug_report: "Bug Report"
+      question_asked: "Question Asked"
     password:
       to_get_a_new_one: "To get a new password just click on the link below. You will get an email containing the new password."
       edit_first_access: "For your safety, change it during the first login to the platform."
@@ -101,3 +103,5 @@ en:
     report:
       user_report: "An user reported a bug with the message below."
       user_mail: "The email address of the user is: "
+    ask:
+      question_asked: "An user asked the question below."

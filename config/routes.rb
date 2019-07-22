@@ -32,6 +32,9 @@ Rails.application.routes.draw do
 	get 'unauthorized', to: 'application#unauthorized', as: :unauthorized, constraints: {:format => 'json'}
 	get 'resources', to: 'application#resources', as: :resources, constraints: {:format => 'html'}
 	get 'software', to: 'application#software', as: :software, constraints: {:format => 'html'}
+	get 'privacy', to: 'application#privacy', as: :privacy, constraints: {:format => 'html'}
+	get 'contact', to: 'application#contact', as: :contact, constraints: {:format => 'html'}
+	post 'ask', to: 'application#ask', as: :ask, constraints: {:format => 'json'}
 	get 'bug', to: 'application#bug', as: :bug, constraints: {:format => 'html'}
 	post 'report', to: 'application#report', as: :report, constraints: {:format => 'json'}
 

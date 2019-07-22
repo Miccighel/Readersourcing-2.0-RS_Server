@@ -69,6 +69,9 @@
 											<li>
 												<a href="<%= software_path %>" class="nav-link">Software</a>
 											</li>
+											<li>
+												<a href="<%= privacy_path %>" class="nav-link">Privacy</a>
+											</li>
 										</ul>
 									</div>
 								</div>
@@ -115,6 +118,12 @@
 						<a id="login-btn" href="<%= login_path %>" class="<%= "color-white" if appearance == "dark" %>">
 							Login
 							<i class="fas fa-sign-in-alt sign-in-icon"></i>
+							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+						</a>
+					</li>
+					<li id="contact-menu-item" class="pull-right nav-item flat  <%= "active" if active == "contact" %>">
+						<a id="contact-btn" href="<%= contact_path %>" class="<%= "color-white" if appearance == "dark" %>">
+							<i id="contact-icon" class="fas fa-envelope"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>

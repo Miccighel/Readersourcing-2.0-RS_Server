@@ -106,6 +106,34 @@ body.bg-gray-dark input {
 	border: 1px solid #0087F7;
 }
 
+/* Cookie consent customization */
+
+.cc-window {
+	height: 6.2% !important;
+}
+
+.cc-message, .cc-compliance {
+	height: 100% !important;
+}
+
+.cc-message {
+	padding-top: 0.8%;
+}
+
+.cc-compliance .btn {
+	height: 100% !important;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba(70, 127, 191, 0.3) !important;
+}
+
+.cc-compliance .btn:hover {
+	background-color: #467FBF !important;
+	text-underline: #ffffff;
+}
+
+
 /* ////////// TABLES ///////// */
 
 .empty-cell {
