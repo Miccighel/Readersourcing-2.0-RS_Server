@@ -103,7 +103,7 @@ Clone this repository and move inside the main directory using a command line pr
 - ```heroku run rake db:create --app your-app-name``` (optional);
 - ```heroku run rake db:migrate --app your-app-name``` (optional).
 
-<h2>Environment Variables</h2>
+<h3>Environment Variables</h3>
 
 Regardless of the chosen deploy modality, there is the need to set some environment variables which cannot be checked into a repository as a safety measure. In the following each of these environment variables is described along with an explanation of where to set them on the basis of the chosen deploy modality/environment. 
 
@@ -119,7 +119,7 @@ Regardless of the chosen deploy modality, there is the need to set some environm
 | CONTACT_MAIL | An email address to receive general questions | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App |
 | RAILS_LOG_TO_STD  | If set to ```true```, Rails writes its logs to the standard output. Useful for debugging purposes. | 3 | production | ```.env``` file, Heroku App |
 
-<h3>.env File</h3>
+<h4>.env File</h4>
  
  To set an environment variable in a local ```.env``` file, create it inside the main directory of RS_Server. Then, populate it in a ```key=value``` fashion. To provide an example, the following is the content of a valid ```.env``` file:
 
@@ -129,6 +129,8 @@ SENDGRID_USERNAME=your_sendgrid_username
 SENDGRID_PASSWORD=your_sendgrid_password
 SENDGRID_DOMAIN=your_sendgrid_domain
 SENDGRID_API_KEY=your_sendgrid_secret_api_key
+BUG_REPORT_MAIL=your_bug_report_mail
+CONTACT_MAIL=your_contact_mail
 ```
 
 <h3>Heroku App</h3>
