@@ -309,32 +309,6 @@ $(document).on("turbolinks:load", () => {
 		localStorage.removeItem('message')
 	}
 
-	window.cookieconsent.initialise({
-		"cookie": {
-			"name": "Readersourcing-Cookie-Consent",
-			"domain": "readersourcing.org"
-		},
-		"content": {
-			"href": "/privacy",
-			"dismiss": "Dismiss"
-		},
-		"elements": {
-			"dismiss": '<a aria-label="dismiss cookie message" tabindex="0" class="btn btn-primary cc-btn cc-dismiss">{{dismiss}}</a>',
-			"link": '<a aria-label="learn more about cookies" tabindex="0" href="{{href}}" target="_blank">{{link}}</a>',
-		},
-		"palette": {
-			"popup": {
-				"background": "#333333",
-				"text": "#ffffff"
-			},
-			"button": {
-				"background": "#467fbf",
-				"text": "#ffffff"
-			}
-		},
-		"theme": "edgeless",
-	});
-
 	//######### RATING WEB #########//
 
 	loadingSection.hide();
@@ -417,6 +391,43 @@ $(document).on("turbolinks:load", () => {
 			};
 			let thirdPromise = emptyAjax("POST", "/users/info.json", "application/json; charset=utf-8", "json", true, thirdSuccessCallback, thirdErrorCallback);
 		}
+	}
+
+	////////// FUNCTIONALITIES - APPLICATION   //////////
+
+	//####### COOKIE HANDLING #########//
+
+	let cookieStatus = fetchCookie("cookieConsentStatus");
+	console.log(cookieStatus);
+	if (cookieStatus !== "dismiss") {
+		window.cookieconsent.initialise({
+			"cookie": {
+				"name": "Readersourcing-Cookie-Consent",
+				"domain": "readersourcing.org"
+			},
+			"content": {
+				"href": "/privacy",
+				"dismiss": "Dismiss"
+			},
+			"elements": {
+				"dismiss": '<a aria-label="dismiss cookie message" tabindex="0" class="btn btn-primary cc-btn cc-dismiss">{{dismiss}}</a>',
+				"link": '<a aria-label="learn more about cookies" tabindex="0" href="{{href}}" target="_blank">{{link}}</a>',
+			},
+			"palette": {
+				"popup": {
+					"background": "#333333",
+					"text": "#ffffff"
+				},
+				"button": {
+					"background": "#467fbf",
+					"text": "#ffffff"
+				}
+			},
+			"theme": "edgeless",
+			onStatusChange: function (status) {
+				setCookie("cookieConsentStatus", status)
+			},
+		});
 	}
 
 	////////// FUNCTIONALITIES - MENU   //////////
@@ -1271,16 +1282,16 @@ $(document).on("turbolinks:load", () => {
 
 	let publicationsTable = $("#publications-table");
 	publicationsTable.DataTable({
-		dom: 'Bfrtip',
+		dom: 'frtipB',
 		buttons: [
 			'copyHtml5',
 			'excelHtml5',
 			'csvHtml5',
 			'pdfHtml5'
 		],
-		columnDefs: [
-			{"max-width": "10%", "targets": 0},
-		],
+		language: {
+			zeroRecords: "It appears this publication you are looking for has never been rated. <a href=\"/rate\"> Rate it for the first time</a>"
+		},
 		responsive: true
 	});
 
@@ -1288,13 +1299,16 @@ $(document).on("turbolinks:load", () => {
 
 	let usersTable = $("#users-table");
 	usersTable.DataTable({
-		dom: 'Bfrtip',
+		dom: 'frtipB',
 		buttons: [
 			'copyHtml5',
 			'excelHtml5',
 			'csvHtml5',
 			'pdfHtml5'
 		],
+		language: {
+			zeroRecords: "The reader you are looking for is not present."
+		},
 		responsive: true
 	});
 

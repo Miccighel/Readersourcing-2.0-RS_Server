@@ -6,6 +6,8 @@ Rails.application.config.assets.paths  += %w( logo.png )
 Rails.application.config.assets.paths  += %w( logo-small.png )
 Rails.application.config.assets.paths  += %w( chrome-webstore-badge.png )
 Rails.application.config.assets.paths  += %w( orcid_id.gif )
+Rails.application.config.assets.paths  += %w( rating-section.png )
+Rails.application.config.assets.paths  += %w( publication-table.png )
 
 Rails.application.config.assets.precompile += %w( application.css )
 Rails.application.config.assets.precompile += %w( application.js )

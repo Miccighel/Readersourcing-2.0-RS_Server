@@ -69,7 +69,7 @@ it:
       login: "Devi essere collegato per procedere. Inserisci i tuoi dati e riprova."
   confirmations:
     messages:
-      registration_successful: "Benvenuto su Readersourcing 2.0! Il tuo indirizzo email è stato confermato con successo."
+      registration_successful: "Benvenuto su Readersourcing! Il tuo indirizzo email è stato confermato con successo."
       please_confirm: "Per favore, controlla la tua casella di posta e conferma il tuo indirizzo email per proseguire."
       operation_completed: "Operazione completata con successo."
       rating_successful: "Giudizio assegnato correttamente alla pubblicazione."
@@ -140,10 +140,10 @@ it:
       bad-request: "Richiesta non valida o malformata."
   mails:
     labels:
-      platform_name: "Readersourcing 2.0"
+      platform_name: "Readersourcing"
       dear: "Gentile"
       cheers: "Saluti,"
-      team: "Il Team di Readersourcing 2.0"
+      team: "Il Team di Readersourcing"
       new_password: "Ottieni una nuova password"
       view_publication: "Vai alla pubblicazione"
       registration_confirm: "Conferma registrazione"
@@ -166,7 +166,7 @@ it:
     user:
       registration_confirm: "Grazie per esserti registrato! Per favore, clicca il collegamento sottostante per confermare la tua registrazione."
       unsubscribe: "Se non desideri più ricevere mail come questa, disiscriviti"
-      unsubscribe_successful: "Non sei più iscritto alle mail (eccetto quelle di sistema) provenienti da Readersourcing 2.0. Riceverai ancora quelle di sistema. Puoi iscriverti nuovamente in qualsiasi momento dalla sezione di modifica del profilo."
+      unsubscribe_successful: "Non sei più iscritto alle mail (eccetto quelle di sistema) provenienti da Readersourcing. Riceverai ancora quelle di sistema. Puoi iscriverti nuovamente in qualsiasi momento dalla sezione di modifica del profilo."
     report:
       user_report: "Un utente ha segnalato un bug con il messaggio sottostante."
       user_mail: "L'indirizzo email dell'utente è: "

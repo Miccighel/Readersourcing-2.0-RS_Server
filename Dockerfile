@@ -51,8 +51,9 @@ CMD ["bundle", "exec", "rails", "server", "-e", "production"]
 # heroku container:push web --app rs-server
 # heroku container:release web --app rs-server
 # heroku open --app rs-server
-# heroku run rake db:create --app rs-server
-# heroku run rake db:migrate --app rs-server
+# heroku run rake db:create RAILS_ENV=production --app rs-server
+# heroku run rake db:migrate RAILS_ENV=production --app rs-server
+# heroku run rake db:seed RAILS_ENV=production --app rs-server
 # heroku logs --tail --app rs-server
 
 # ---------- END ----------

@@ -2,57 +2,65 @@
 <html lang="en">
 <%= render partial: 'shared/assets' %>
 <body class="bg-gray-dark color-white">
-<div id="home-page" class="min-h-100 d-flex flex-column align-items-center justify-content-center">
-	<div class="w-100 mb-3">
-		<%= render partial: 'shared/menu', locals: {active: "home", appearance: "light"} %>
-	</div>
-	<div class="row w-100 m-auto">
-		<div class="col-12">
-			<div class="heading text-center">
-				<h1>Readersourcing 2.0</h1>
-			</div>
-		</div>
-		<div class="col-12 mb-3">
-			<div class="col-lg-6 col-sm-10 col-xs-12 m-auto">
-				<p class="lead text-justify mb-1">
-					<strong>Readersourcing.org</strong> is an independent, third-party, non-profit, academic/scientific endeavour, aimed at quality rating of both scholarly
-					literature and scholars.
-				</p>
-			</div>
-		</div>
-		<div class="col-12">
-			<div class="heading text-center">
-				<h1>How To</h1>
-			</div>
-		</div>
-		<div class="col-12 mb-3">
-			<div class="col-lg-6 col-sm-10 col-xs-12 m-auto">
-				<p class="lead text-justify mb-2">
-					To start exploiting the Readersourcing 2.0 ecosystem, you can freely sign up and perform the login through this web interface.
-					Once you become a registered user, you can actively participate within the system by rating publications from other authors.
-					Doing so will improve your authority. To find out more about this ecosystem, its internals and its virtuous dynamics
-					<a class="link-white" href="<%= resources_path %>">check out the <strong>About/Resources</strong> page</a>.
-				</p>
-			</div>
-		</div>
-		<div class="col-12">
-			<div class="heading text-center">
-				<h1>Software</h1>
-			</div>
-		</div>
-		<div class="col-12 mb-3">
-			<div class="col-lg-6 col-sm-10 col-xs-12 m-auto">
-				<p class="lead text-justify mb-2">
-					The Readersourcing 2.0 ecosystem provides software which allow to exploit its functionalities even without being on this website.
-					To provide an example, a browser extension which allows the reader to rate a publication directly from its browser is available.
-					To find out more about the available software, <a class="link-white" href="<%= resources_path %>">check out the <strong>About/Software</strong> page</a>.
-				</p>
-			</div>
-		</div>
-	</div>
-	<div class="row w-100 mt-3">
-		<%= render partial: "shared/footer" %>
+<div class="w-100">
+	<%= render partial: 'shared/menu', locals: {active: "home", appearance: "light"} %>
+</div>
+<div class="jumbotron jumbotron-fluid mb-5">
+	<div class="container">
+		<h1 class="heading text-uppercase">Readersourcing</h1>
+		<p class="lead text-uppercase">Crowdsourcing in Scholarly Peer Review</p>
+		<hr class="my-4">
+		<p>An independent, third-party, no-profit, academic project aimed at quality rating of scholarly literature and scholars.</p>
 	</div>
 </div>
+<div id="home-page" class="container">
+	<div class="row">
+		<div class="col-lg-6 col-xs-12">
+			<div class="heading text-center">
+				<h1>Rate a publication</h1>
+			</div>
+			<p class="lead text-justify">
+				Enter the url of the publication'.pdf' you want to evaluate, and express your score from 0 to 100.<br>
+				If you haven't finished reading yet, you can annotate the pdf with a link that will allow you to express your rating later.<br>
+				Your rating weighs in relation to your reader score and your reader score depends on your ability to correctly evaluate the publications (more details).<br>
+				You can also choose to vote anonymously (in this case your reader score will not change).<br>
+			</p>
+		</div>
+		<div class="col-lg-6 col-xs-12 text-center">
+			<img src="<%= asset_path("rating-section.png") %>" alt="Rating Section">
+		</div>
+	</div>
+	<div class="row mt-5">
+		<div class="col-lg-6 col-xs-12 text-center">
+			<img class="img-fluid" src="<%= asset_path("publication-table.png") %>" alt="Publication Table">
+		</div>
+		<div class="col-lg-6 col-xs-12">
+			<div class="heading text-center">
+				<h1>Browse ratings</h1>
+			</div>
+			<p class="lead text-justify">
+				Browse the list of publications that have already received at least one score. You can download the annotated pdf and evaluate
+				them by contributing to the final score.<br> You can also browse the list of readers, see their score and download the annotated
+				PDFs of the publications they have rated.
+			</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-6 col-xs-12">
+			<div class="heading text-center">
+				<h1>Install the browser extension</h1>
+			</div>
+			<p class="lead text-justify">
+				If you install the Chrome extension of Readersourcing, you can evaluate publications directly from your browser.
+			</p>
+		</div>
+		<div class="col-lg-6 col-xs-12 text-center">
+			<a href="https://chrome.google.com/webstore/detail/readersourcing-20-rsrate/hlkdlngpijhdkbdlhmgeemffaoacjagg?hl=it" target="_blank">
+				<img class="img-fluid" alt="Available on Chrome Webstore" src="<%= image_path("chrome-webstore-badge.png") %>">
+			</a>
+		</div>
+	</div>
+</div>
+<%= render partial: "shared/footer" %>
 </body>
 </html>

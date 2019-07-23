@@ -17,27 +17,27 @@
 			<table id="users-table" class="table table-hover datatable" style="width:100%">
 				<thead>
 				<tr>
-					<th>First Name</th>
-					<th>Last Name</th>
-					<th>ORCID</th>
-					<th>Score (RSM)</th>
-					<th>Score (TRM)</th>
+					<th class="text-center">First Name</th>
+					<th class="text-center">Last Name</th>
+					<th class="text-center">ORCID</th>
+					<th class="text-center">Readersourcing Score</th>
+					<th class="text-center">TrueReview Score</th>
 				</tr>
 				</thead>
 				<tbody>
 				<% @users.each do |user| %>
 					<tr>
-						<td><%= user.first_name %></td>
-						<td><%= user.last_name %></td>
+						<td style="width: 20%" class="text-center"><%= user.first_name %></td>
+						<td style="width: 20%" class="text-center"><%= user.last_name %></td>
 						<% if user.orcid.present? %>
-							<td>
+							<td style="width: 20%" class="text-center">
 								<img src="<%= image_path("orcid_id.gif") %>" alt="ORCID ID"> <a target="_blank" href="<%= user.orcid_url %>"><%= user.orcid_url %></a>
 							</td>
 						<% else %>
-							<td class="empty-cell"></td>
+							<td style="width: 20%" class="empty-cell"></td>
 						<% end %>
-						<td class="text-center"><%= user.pretty_score_rsm %></td>
-						<td class="text-center"><%= user.pretty_score_trm %></td>
+						<td style="width: 20%" class="text-center"><%= user.pretty_score_rsm %></td>
+						<td style="width: 20%" class="text-center"><%= user.pretty_score_trm %></td>
 					</tr>
 				<% end %>
 				</tbody>

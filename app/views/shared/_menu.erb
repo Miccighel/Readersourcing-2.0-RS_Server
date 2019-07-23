@@ -67,9 +67,6 @@
 												<a href="<%= resources_path %>" class="nav-link">Resources</a>
 											</li>
 											<li>
-												<a href="<%= software_path %>" class="nav-link">Software</a>
-											</li>
-											<li>
 												<a href="<%= privacy_path %>" class="nav-link">Privacy</a>
 											</li>
 										</ul>
@@ -123,12 +120,14 @@
 					</li>
 					<li id="contact-menu-item" class="pull-right nav-item flat  <%= "active" if active == "contact" %>">
 						<a id="contact-btn" href="<%= contact_path %>" class="<%= "color-white" if appearance == "dark" %>">
+							Contact Us
 							<i id="contact-icon" class="fas fa-envelope"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>
 					</li>
 					<li id="bug-menu-item" class="pull-right nav-item flat  <%= "active" if active == "bug" %>">
 						<a id="bug-btn" href="<%= bug_path %>" class="<%= "color-white" if appearance == "dark" %>">
+							Bug Report
 							<i id="bug-icon" class="fas fa-bug"></i>
 							<i class="fas fa-sync-alt fa-spin reload-icon"></i>
 						</a>

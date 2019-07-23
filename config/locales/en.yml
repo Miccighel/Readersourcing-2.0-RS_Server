@@ -13,7 +13,7 @@ en:
     anonimyze: "Anonymize"
   confirmations:
     messages:
-      registration_successful: "Welcome to Readersourcing 2.0! Your email address has been confirmed successfully."
+      registration_successful: "Welcome to Readersourcing! Your email address has been confirmed successfully."
       please_confirm: "Please, check your inbox and confirm your email address to proceed."
       operation_completed: "Operation completed successfully."
       rating_successful: "Rating successfully given to the publication."
@@ -73,10 +73,10 @@ en:
       bad-request: "The request is invalid or malformed."
   mails:
     labels:
-      platform_name: "Readersourcing 2.0"
+      platform_name: "Readersourcing"
       dear: "Dear"
       cheers: "Cheers,"
-      team: "The Readersourcing 2.0 Team"
+      team: "The Readersourcing Team"
       new_password: "Get a new password"
       view_publication: "Go to the original publication"
       registration_confirm: "Registration Confirm"
@@ -99,7 +99,7 @@ en:
     user:
       registration_confirm: "Thanks for registering! To confirm your registration click the URL below."
       unsubscribe: "If you do not want to get more mails like this one, unsubscribe here."
-      unsubscribe_successful: "You are not subscribed anymore to emails (except for system ones) from Readersourcing 2.0. You can subscribe again at any time from profile editing section."
+      unsubscribe_successful: "You are not subscribed anymore to emails (except for system ones) from Readersourcing. You can subscribe again at any time from profile editing section."
     report:
       user_report: "An user reported a bug with the message below."
       user_mail: "The email address of the user is: "

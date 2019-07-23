@@ -17,48 +17,42 @@
 			<table id="publications-table" class="table table-hover datatable" style="width:100%">
 				<thead>
 				<tr>
-					<th>URL</th>
-					<th>DOI</th>
-					<th>Title</th>
-					<th>Subject</th>
-					<th>Author</th>
-					<th>Your Rating</th>
-					<th>Score (RSM)</th>
-					<th>Score (TRM)</th>
+					<th class="text-center">Title</th>
+					<th class="text-center">Subject</th>
+					<th class="text-center">Authors</th>
+					<th class="text-center">Your Rating</th>
+					<th class="text-center">Readersourcing Score</th>
+					<th class="text-center">TrueReview Score</th>
+					<th class="text-center">Actions</th>
 				</tr>
 				</thead>
 				<tbody>
 				<% @publications.each do |publication| %>
 					<% given_rating = @current_user.given_rating(publication) %>
 					<tr>
-						<td><a target="_blank" href="<%= publication.pdf_url %>"><%= publication.pdf_url %></a></td>
-						<% if publication.doi.present? %>
-							<td><%= publication.doi %></td>
-						<% else %>
-							<td class="empty-cell"></td>
-						<% end %>
 						<% if publication.title.present? %>
-							<td><%= publication.title %></td>
+							<td style="width:20%"><%= publication.title %></td>
 						<% else %>
-							<td class="empty-cell"></td>
+							<td style="width:20%" class="empty-cell"></td>
 						<% end %>
 						<% if publication.subject.present? %>
-							<td><%= publication.subject %></td>
+							<td style="width:20%"><%= publication.subject %></td>
 						<% else %>
-							<td class="empty-cell"></td>
+							<td style="width:20%" class="empty-cell"></td>
 						<% end %>
 						<% if publication.author.present? %>
-							<td><%= publication.author %></td>
+							<td style="width:15%"><%= publication.author %></td>
 						<% else %>
-							<td class="empty-cell"></td>
+							<td style="width:15%" class="empty-cell"></td>
 						<% end %>
 						<% if given_rating != nil %>
-							<td><%= given_rating.pretty_score %></td>
+							<td style="width:10%" class="text-center"><%= given_rating.pretty_score %></td>
 						<% else %>
-							<td class="empty-cell"></td>
+							<td style="width:10%" class="empty-cell"></td>
 						<% end %>
-						<td class="text-center"><%= publication.pretty_score_rsm %></td>
-						<td class="text-center"><%= publication.pretty_score_trm %></td>
+						<td style="width:12%" class="text-center"><%= publication.pretty_score_rsm %></td>
+						<td style="width:10%" class="text-center"><%= publication.pretty_score_trm %></td>
+						<td style="width:8%" class="text-center"><a href="<%= publication.pdf_url %>" class="btn btn-primary" target="_blank">Download</a></td>
 					</tr>
 				<% end %>
 				</tbody>

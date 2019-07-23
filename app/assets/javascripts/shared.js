@@ -1,5 +1,13 @@
 ////////// NETWORKING SECTION //////////
 
+function setCookie(name, value) {
+	Cookies.set(name, value);
+}
+
+function fetchCookie(name) {
+	return Cookies.get(name);
+}
+
 function storeToken(authToken) {
 	Cookies.set('authToken', authToken);
 }
