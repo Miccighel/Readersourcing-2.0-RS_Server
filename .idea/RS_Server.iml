@@ -31,6 +31,7 @@
     <orderEntry type="library" name="vfs_fonts" level="application" />
     <orderEntry type="library" name="pdfmake" level="application" />
     <orderEntry type="library" name="datatables" level="application" />
+    <orderEntry type="library" name="dataTables.material" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="Ascii85 (v1.0.3, ruby-2.5.3-p105) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="actioncable (v5.2.3, ruby-2.5.3-p105) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="actionmailer (v5.2.3, ruby-2.5.3-p105) [gem]" level="application" />
@@ -122,7 +123,6 @@
     <orderEntry type="library" scope="PROVIDED" name="unf_ext (v0.0.7.6, ruby-2.5.3-p105) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="websocket-driver (v0.7.1, ruby-2.5.3-p105) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="websocket-extensions (v0.1.4, ruby-2.5.3-p105) [gem]" level="application" />
-    <orderEntry type="library" name="dataTables.material" level="application" />
   </component>
   <component name="RModuleSettingsStorage">
     <LOAD_PATH number="1" string0="$MODULE_DIR$" />

@@ -316,8 +316,10 @@ $(document).on("turbolinks:load", () => {
 
 	ratingCaptionSecond.hide();
 	ratingCaptionThird.hide();
-	ratingText.hide();
-	ratingControls.hide();
+	ratingText.text("50");
+	ratingText.show();
+	ratingSlider.slider({});
+	ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
 	doRateSuccessButton.hide();
 	editRateButton.hide();
 	updateRateButton.hide();
@@ -398,7 +400,6 @@ $(document).on("turbolinks:load", () => {
 	//####### COOKIE HANDLING #########//
 
 	let cookieStatus = fetchCookie("cookieConsentStatus");
-	console.log(cookieStatus);
 	if (cookieStatus !== "dismiss") {
 		window.cookieconsent.initialise({
 			"cookie": {
@@ -732,7 +733,6 @@ $(document).on("turbolinks:load", () => {
 								ratingCaptionThird.hide();
 								ratingControls.show();
 								ratingText.show();
-								ratingText.text("50");
 								ratingSlider.slider({});
 								ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
 								// 3.1 The rated publication was also annotated
@@ -787,9 +787,6 @@ $(document).on("turbolinks:load", () => {
 							ratingCaptionSecond.show();
 							ratingCaptionThird.hide();
 							ratingText.show();
-							ratingText.text("50");
-							ratingSlider.slider({});
-							ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
 							// SAVE FOR LATER SECTION
 							saveForLaterCaptionFirst.show();
 							saveForLaterCaptionSecond.hide();
@@ -836,6 +833,8 @@ $(document).on("turbolinks:load", () => {
 			ratingCaptionFirst.show();
 			ratingCaptionSecond.hide();
 			ratingCaptionThird.hide();
+			ratingText.show();
+			ratingControls.show();
 			rateForm.parent().show();
 			doRateButton.show();
 			configureButton.show();
