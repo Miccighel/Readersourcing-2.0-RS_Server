@@ -85,7 +85,7 @@ class ApplicationController < ActionController::API
 
 	def authorize_server_request
 		@current_user = Authorizer.call(fetch_token, request.remote_ip).result
-		render "login", status: :unauthorized, locals: {message: I18n.t("information.messages.login")} unless @current_user
+		render "login", status: :ok, locals: {message: I18n.t("information.messages.login")} unless @current_user
 	end
 
 	def authorize_api_request
