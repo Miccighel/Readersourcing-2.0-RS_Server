@@ -100,25 +100,11 @@ $(document).on("turbolinks:load", () => {
 	//let successSection = $("#success-sect");
 	//let errorsSection = $(".errors-sect");
 
+	let messageField = $("#message");
 	//let emailField = $("#email");
-	//let messageField = $("#message");
+	let bugReportCheckbox = $("#bug-report");
 
 	let doContactButton = $("#do-contact-btn");
-	//let errorButton = $(".error-btn");
-
-	//let alert = $(".alert");
-	//let alertSuccess = $(".alert-success");
-
-	////////// USER INTERFACE - BUG  //////////
-
-	let bugForm = $("#bug-form");
-	//let successSection = $("#success-sect");
-	//let errorsSection = $(".errors-sect");
-
-	//let emailField = $("#email");
-	let messageField = $("#message");
-
-	let doBugReportButton = $("#do-bug-btn");
 	//let errorButton = $(".error-btn");
 
 	let messageIcon = $("#message-icon");
@@ -575,14 +561,16 @@ $(document).on("turbolinks:load", () => {
 
 	//########## CONTACT HANDLING ##########//
 
+	contactForm.submit(event => event.preventDefault());
+
 	doContactButton.on("click", () => {
 		let validationInstance = contactForm.parsley();
 		if (validationInstance.isValid()) {
 			doContactButton.find(messageIcon).toggle();
 			doContactButton.find(reloadIcons).toggle();
-			let data = {email: emailField.val(), message: messageField.val()};
+			let data = {email: emailField.val(), message: messageField.val(), bug_report: bugReportCheckbox.is(':checked')};
 			let successCallback = (data, status, jqXHR) => {
-				doContactButton.text("Contact Mail Sent!");
+				doContactButton.text("Message Sent");
 				doContactButton.prop("disabled", true);
 				successSection.show();
 				successSection.find(alertSuccess).append(data["message"]);
@@ -604,50 +592,9 @@ $(document).on("turbolinks:load", () => {
 				}
 			};
 			// noinspection JSIgnoredPromiseFromCall
-			ajax("POST", "/ask", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
+			ajax("POST", "/message", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 		}
 	});
-
-	bugForm.submit(event => event.preventDefault());
-
-	////////// FUNCTIONALITIES - BUG   //////////
-
-	//########## BUG REPORT HANDLING ##########//
-
-	doBugReportButton.on("click", () => {
-		let validationInstance = bugForm.parsley();
-		if (validationInstance.isValid()) {
-			doBugReportButton.find(messageIcon).toggle();
-			doBugReportButton.find(reloadIcons).toggle();
-			let data = {email: emailField.val(), message: messageField.val()};
-			let successCallback = (data, status, jqXHR) => {
-				doBugReportButton.text("Bug Report Sent!");
-				doBugReportButton.prop("disabled", true);
-				successSection.show();
-				successSection.find(alertSuccess).append(data["message"]);
-			};
-			let errorCallback = (jqXHR, status) => {
-				doBugReportButton.find(messageIcon).toggle();
-				doBugReportButton.find(reloadIcons).toggle();
-				if (jqXHR.responseText == null) {
-					doBugReportButton.hide();
-					let button = doBugReportButton.parent().find(errorButtons);
-					button.show();
-					button.prop("disabled", true)
-				} else {
-					let errorPromise = buildErrors(jqXHR.responseText).then(result => {
-						doBugReportButton.parent().find(errorsSection).find(alert).empty();
-						doBugReportButton.parent().find(errorsSection).find(alert).append(result);
-						doBugReportButton.parent().find(errorsSection).show();
-					});
-				}
-			};
-			// noinspection JSIgnoredPromiseFromCall
-			ajax("POST", "/report", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
-		}
-	});
-
-	bugForm.submit(event => event.preventDefault());
 
 	////////// FUNCTIONALITIES - RATING WEB   //////////
 

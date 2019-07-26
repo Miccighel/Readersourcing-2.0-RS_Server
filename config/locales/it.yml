@@ -81,7 +81,7 @@ it:
       authorization_completed: "Sei autorizzato a procedere"
       base_url_found: "L'URL di voto è stata estratta dal tuo file PDF."
       bug_report_sent: "La tua segnalazione di un bug è stata correttamente inviata ad un amministratore."
-      ask_sent: "La tua domanda è stata correttamente inviata ad un amministratore."
+      message_sent: "Il tuo messaggio è stato correttamente inviato ad un amministratore."
       logout: "Logout avvenuto correttamente."
   errors:
     messages:
@@ -154,7 +154,7 @@ it:
       rating_confirm: "Conferma Assegnamento Giudizio"
       registration_confirm: "Conferma Registrazione"
       bug_report: "Bug Segnalato"
-      question_asked: "Domanda Posta"
+      contact_message: "Messaggio"
     password:
       to_get_a_new_one: "Per ottenere una nuova password è sufficiente cliccare sul seguente link. Riceverai una mail contenente la password."
       edit_first_access: "Per la tua sicurezza, modificala al primo accesso alla piattaforma."
@@ -170,5 +170,5 @@ it:
     report:
       user_report: "Un utente ha segnalato un bug con il messaggio sottostante."
       user_mail: "L'indirizzo email dell'utente è: "
-    ask:
-      question_asked: "Un utente ha posto la domanda sottostante."
+    contact:
+      message: "Un utente ha scritto il messaggio sottostante."

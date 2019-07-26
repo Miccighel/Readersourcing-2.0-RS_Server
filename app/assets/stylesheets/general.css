@@ -272,7 +272,7 @@ input.parsley-error, select.parsley-error, textarea.parsley-error {
 	box-shadow: 0 8px 6px -6px black;
 }
 
-input#subscribe {
+input#subscribe, input#bug-report {
 	position: relative;
 	top: 1.5pt;
 }

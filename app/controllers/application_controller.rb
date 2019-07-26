@@ -25,20 +25,15 @@ class ApplicationController < ActionController::API
 	def contact
 	end
 
-	# POST /ask.json
-	def ask
-		ApplicationMailer.ask(params[:email], params[:message]).deliver_now
-		render json: {message: I18n.t("confirmations.messages.ask_sent")}, status: :ok
-	end
-
-	# GET /bug
-	def bug
-	end
-
-	# POST /report.json
-	def report
-		ApplicationMailer.report(params[:email], params[:message]).deliver_now
-		render json: {message: I18n.t("confirmations.messages.bug_report_sent")}, status: :ok
+	# POST /message.json
+	def message
+		if params[:bug_report]
+			ApplicationMailer.report(params[:email], params[:message]).deliver_now
+			render json: {message: I18n.t("confirmations.messages.bug_report_sent")}, status: :ok
+		else
+			ApplicationMailer.send_message(params[:email], params[:message]).deliver_now
+			render json: {message: I18n.t("confirmations.messages.message_sent")}, status: :ok
+		end
 	end
 
 	# GET /unauthorized
