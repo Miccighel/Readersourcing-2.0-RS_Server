@@ -119,14 +119,14 @@ body.bg-gray-dark input {
 	justify-content: center;
 	flex-direction: column;
 	text-align: center;
-	background-color: rgba(70, 127, 191, 0.5);
+	background-color: rgba(70, 127, 191, 0.75);
 	background-image: url("/assets/book.jpg");
 	background-size: cover;
 	font-weight: bolder;
 }
 
 .jumbotron .container {
-	background-color: rgba(70, 127, 191, 0.5);
+	background-color: rgba(70, 127, 191, 0.75);
 	color: #fff;
 }
 
