@@ -117,7 +117,7 @@ it:
       email_not_present: "Indirizzo mail non individuato. Per favore, controllalo e riprova."
       invalid_link: "Collegamento non valido o scaduto. Prova a generarne un altro."
       user_not_exists: "Questo utente non esiste oppure ha già confermato il suo indirizzo email. Utilizza il collegamento presente nella mail e riprova."
-      unconfirmed_mail: "Questo indirizzo email non risulta confermato. Per favore, controlla la tua casella di posta e clicca sul collegamento di conferma."
+      unconfirmed_mail: "Questo indirizzo email non risulta confermato. Un nuovo link di conferma è stato inviato. Per favore, controlla la tua casella di posta e clicca su tale link."
       invalid_token: "Token d'autenticazione non valido."
       missing_token: "Token d'autenticazione mancante."
       not_authorized: "Non sei autorizzato a vedere questa pagina."

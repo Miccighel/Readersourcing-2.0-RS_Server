@@ -50,7 +50,7 @@ en:
       email_not_present: "Email address not found. Please, check it and try again."
       invalid_link: "Link not valid or expired. Please, try to generate a new link."
       user_not_exists: "This user does not exists or has already confirmed his email address. Use confirmation link that you have received by mail and try again."
-      unconfirmed_mail: "This email address has not been confirmed. Please, check your inbox and click the confirmation link."
+      unconfirmed_mail: "This email address has not been confirmed. A new confirmation link has been sent. Please, check your inbox and click the confirmation link."
       invalid_token: "Invalid authentication token."
       missing_token: "Missing authentication token."
       not_authorized: "You are not authorized to see this page."
