@@ -100,8 +100,8 @@ Clone this repository and move inside the main directory using a command line pr
 - ```heroku container:push web --app your-app-name```;
 - ```heroku container:release web --app your-app-name```;
 - ```heroku open --app your-app-name``` (optional);
-- ```heroku run rake db:create --app your-app-name``` (optional);
-- ```heroku run rake db:migrate --app your-app-name``` (optional).
+- ```heroku run rake db:migrate -e production --app your-app-name``` (optional);
+- ```heroku run rake db:seed -e production --app your-app-name``` (optional).
 
 <h3>Environment Variables</h3>
 
