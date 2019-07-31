@@ -72,19 +72,19 @@ data[:user] = mario_rossi
 puts "---------- FETCHING FILE FOR PUBLICATION 1 ----------"
 p1.save
 p1.fetch data
-p1.remove_files(data[:user])
+p1.remove_annotated_file(data[:user])
 puts "---------- FETCHING COMPLETED ----------"
 
 puts "---------- FETCHING FILE FOR PUBLICATION 2 ----------"
 p2.save
 p2.fetch data
-p2.remove_files(data[:user])
+p2.remove_annotated_file(data[:user])
 puts "---------- FETCHING COMPLETED ----------"
 
 puts "---------- FETCHING FILE FOR PUBLICATION 3 ----------"
 p3.save
 p3.fetch data
-p3.remove_files(data[:user])
+p3.remove_annotated_file(data[:user])
 puts "---------- FETCHING COMPLETED ----------"
 
 data[:user] = luca_bianchi
@@ -92,7 +92,7 @@ data[:user] = luca_bianchi
 puts "---------- FETCHING FILE FOR PUBLICATION 4 ----------"
 p4.save
 p4.fetch data
-p4.remove_files(data[:user])
+p4.remove_annotated_file(data[:user])
 puts "---------- FETCHING COMPLETED ----------"
 
 data[:user] = mario_rossi
@@ -100,7 +100,7 @@ data[:user] = mario_rossi
 puts "---------- FETCHING FILE FOR PUBLICATION 5 ----------"
 p5.save
 p5.fetch data
-p5.remove_files(data[:user])
+p5.remove_annotated_file(data[:user])
 puts "---------- FETCHING COMPLETED ----------"
 
 puts "########## PUBLICATIONS SEEDING COMPLETED ##########"
