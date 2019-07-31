@@ -75,6 +75,10 @@ class RsmStrategy < ReadersourcingStrategy
 			puts "Previous rating goodness at time t(i+1) #{old_previous_rating.goodness}"
 			puts "Previous user score at time t(i+1) #{previous_user.score}"
 
+ 			previous_user.steadiness = previous_user.steadiness.round(32)
+			old_previous_rating.goodness = old_previous_rating.goodness.round(32)
+			previous_user.score = previous_user.score.round(32)
+
 			old_previous_rating.save
 			previous_user.save
 
