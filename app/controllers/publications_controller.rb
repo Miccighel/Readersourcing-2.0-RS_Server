@@ -3,7 +3,7 @@ class PublicationsController < ApplicationController
 	before_action :authorize_api_request, only: [:index, :show, :lookup, :random, :is_rated, :is_saved_for_later, :create, :is_fetchable, :extract, :fetch, :refresh, :update, :destroy]
 	before_action :authorize_server_request, only: [:list]
 
-	before_action :set_user, :set_request_data, except: [:list]
+	before_action :set_user, :set_request_data
 	before_action :set_publication, only: [:show, :update, :destroy, :refresh, :is_rated, :is_saved_for_later]
 	before_action :set_error_manager, only: [:lookup, :is_rated, :is_saved_for_later, :fetch, :is_fetchable, :extract, :refresh, :create, :update]
 

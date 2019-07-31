@@ -36,6 +36,12 @@ class RsmStrategy < ReadersourcingStrategy
 		puts "Rating goodness at time t(i+1) #{@rating.goodness}"
 		puts "User score at time t(i+1) #{@user.score}"
 
+		@publication.steadiness = @publication.steadiness.round(32)
+		@publication.score_rsm = @publication.score_rsm.round(32)
+		@user.steadiness = @user.steadiness.round(32)
+		@rating.goodness = @rating.goodness.round(32)
+		@user.score = @user.score.round(32)
+
 		@publication.save
 		@user.save
 		@rating.save

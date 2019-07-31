@@ -19,7 +19,7 @@ class RatingsController < ApplicationController
 	def rate_paper
 		session[:auth_token_paper] = decrypt params[:authToken]
 		@rating = Rating.new
-		@pub_id = params[:pub_id]
+		@pub_id = params[:pubId]
 		if Rating.exists?(user_id: @current_user.id, publication_id: @pub_id)
 			render "shared/halted", locals: {
 				pubId: @pub_id,

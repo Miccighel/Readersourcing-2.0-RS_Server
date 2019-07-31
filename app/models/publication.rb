@@ -325,8 +325,6 @@ class Publication < ApplicationRecord
 	end
 
 	def absolute_pdf_download_path_link(user)
-		logger.info user.id.to_s
-		logger.info pdf_download_path_link
 		Rails.public_path.join("user").join(user.id.to_s).join(pdf_download_path_link)
 	end
 

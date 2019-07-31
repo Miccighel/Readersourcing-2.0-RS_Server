@@ -52,7 +52,29 @@
 						<% end %>
 						<td style="width:12%" class="text-center"><%= publication.pretty_score_rsm %></td>
 						<td style="width:10%" class="text-center"><%= publication.pretty_score_trm %></td>
-						<td style="width:8%" class="text-center"><a href="<%= publication.pdf_url %>" class="btn btn-primary" target="_blank">Download</a></td>
+						<td style="width:8%" class="text-center">
+							<% if publication.is_saved_for_later(@current_user) %>
+								<a href="<%= publication.pdf_download_url_link(@request_data[:host], @current_user) %>" id="open-list-btn" class="btn btn-primary">Open</a>
+								<button type="button" class="download-list-btn btn btn-primary d-none" disabled>
+									<span>Download</span>
+									<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+								</button>
+							<% else %>
+								<input type="hidden" class="publication-identifier" name="publication-identifier" value="<%= publication.id %>">
+								<button type="button" class="open-list-btn btn btn-primary d-none" disabled>Open</button>
+								<button type="button" class="download-list-btn btn btn-primary">
+									<span>Download</span>
+									<i class="fas fa-sync-alt fa-spin reload-icon"></i>
+								</button>
+							<% end %>
+							<button type="button" class="refresh-list-btn btn btn-primary d-none">
+								<i class="fas fa-sync-alt"></i>
+							</button>
+							<button class="error-list-btn btn btn-danger error-btn d-none">
+								<i class="fa fa-exclamation-triangle danger-icon"></i>
+								Error
+							</button>
+						</td>
 					</tr>
 				<% end %>
 				</tbody>

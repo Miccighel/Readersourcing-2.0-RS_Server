@@ -230,6 +230,15 @@ $(document).on("turbolinks:load", () => {
 
 	//let checkIcon = $("#check-icon");
 
+	////////// USER INTERFACE - PUBLICATION LIST //////////
+
+	let publicationsTable = $("#publications-table");
+	let publicationIdentifier = $(".publication-identifier");
+	let downloadListButtons = $(".download-list-btn");
+	let openListButton = $(".open-list-btn");
+	let refreshListButton = $(".refresh-list-btn");
+	let errorListButton = $(".error-list-btn");
+
 	////////// USER INTERFACE - SUCCESS, ERRORS & HALTED  //////////
 
 	let goToHomeButton = $("#go-to-home-btn");
@@ -286,7 +295,7 @@ $(document).on("turbolinks:load", () => {
 	}
 
 	if (message == null) {
-		if(successSection.find(alertSuccess).find("span").text().length===0) {
+		if (successSection.find(alertSuccess).find("span").text().length === 0) {
 			successSection.hide();
 		}
 	} else {
@@ -426,7 +435,8 @@ $(document).on("turbolinks:load", () => {
 			deleteToken();
 			window.location.href = "/"
 		};
-		let errorCallback = (jqXHR, status) => {};
+		let errorCallback = (jqXHR, status) => {
+		};
 		let thirdPromise = emptyAjax("POST", "/logout.json", "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
 	});
 
@@ -1226,7 +1236,8 @@ $(document).on("turbolinks:load", () => {
 
 	////////// FUNCTIONALITIES - PUBLICATION LIST  //////////
 
-	let publicationsTable = $("#publications-table");
+	//####### TABLE INITIALIZATION HANDLING #########//
+
 	publicationsTable.DataTable({
 		dom: 'frtipB',
 		buttons: [
@@ -1240,6 +1251,43 @@ $(document).on("turbolinks:load", () => {
 		},
 		responsive: true
 	});
+
+	//#######  DOWNLOAD FROM TABLE HANDLING #########//
+
+	if (authToken != null) {
+		downloadListButtons.on("click", (event) => {
+			if ($(event.target).is('span')) {
+				downloadButton = $(event.target).parent();
+			} else {
+				downloadButton = $(event.target);
+			}
+			let currentIdentifier = downloadButton.parent().find(publicationIdentifier).val();
+			downloadButton.find('span').text("");
+			downloadButton.find(reloadIcons).toggle();
+			// 1.2 Publication fetched, hide download and show the download one
+			let successCallback = (data, status, jqXHR) => {
+				downloadButton.find(reloadIcons).toggle();
+				downloadButton.hide();
+				openButton = downloadButton.parent().find(openListButton);
+				openButton.removeClass("d-none");
+				openButton.prop("disabled", false);
+				openButton.attr("href", data["pdf_download_url_link"]);
+				openButton.on("click", () => window.open(data["pdf_download_url_link"], '_blank'));
+				let pdfWindow = window.open(data["pdf_download_url_link"], '_blank');
+				if (pdfWindow) pdfWindow.focus(); else modalAllow.modal('show');
+			};
+			// 1.3 Error during publication fetching, hide download ad open button
+			let errorCallback = (jqXHR, status) => {
+				downloadButton.find(reloadIcons).toggle();
+				downloadButton.hide();
+				let errorButton = downloadButton.parent().find(errorListButton);
+				errorButton.show();
+				errorButton.prop("disabled", true);
+			};
+			// 1.1 Fetch and annotate the publication
+			let promise = emptyAjax("GET", `/publications/${currentIdentifier}/refresh.json`, "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
+		});
+	}
 
 	////////// FUNCTIONALITIES - READERS LIST  //////////
 

@@ -35,7 +35,7 @@ class TrmStrategy < ReadersourcingStrategy
 		end
 
 		puts "Publication score at time t(i) #{@publication.score_trm}"
-		@publication.score_trm = mean(scores).round(16)
+		@publication.score_trm = mean(scores).round(32)
 		@publication.save
 		puts "Publication score at time t(i+1) #{@publication.score_trm}"
 
@@ -43,7 +43,7 @@ class TrmStrategy < ReadersourcingStrategy
 			puts "User bonus at time t(i) #{user.bonus}"
 			bonuses = []
 			user.given_ratings.each {|rating| bonuses.push rating.bonus}
-			user.bonus = mean(bonuses).round(16)
+			user.bonus = mean(bonuses).round(32)
 			puts "User bonus at time t(i+1) #{user.bonus}"
 			user.save
 		end
