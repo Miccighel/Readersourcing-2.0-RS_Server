@@ -25,9 +25,9 @@
       <Owner>admin</Owner>
       <IntrospectionStateNumber>51819</IntrospectionStateNumber>
       <Current>1</Current>
-      <Relations>sequence|table|27992|27994|1
+      <Relations>sequence|table|28025|28027|1
+sequence|table|27992|27994|1
 sequence|table|28006|28008|1
-sequence|table|28025|28027|1
 </Relations>
       <Visible>1</Visible>
     </database>
