@@ -20,6 +20,7 @@ gem 'coffee-rails'
 gem 'pg'
 gem 'sendgrid-ruby'
 gem "http"
+gem 'sprockets', '~> 3.5'
 
 group :development, :test do
 	gem "letter_opener"
