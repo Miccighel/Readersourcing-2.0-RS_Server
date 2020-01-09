@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="RS_Server (Dev)">
-  <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.16">
+  <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.17">
     <root id="1">
       <ServerVersion>11.1</ServerVersion>
     </root>
@@ -22,9 +22,9 @@
       <Owner>admin</Owner>
       <IntrospectionStateNumber>51819</IntrospectionStateNumber>
       <Current>1</Current>
-      <Relations>sequence|table|28025|28027|1
-sequence|table|27992|27994|1
+      <Relations>sequence|table|27992|27994|1
 sequence|table|28006|28008|1
+sequence|table|28025|28027|1
 </Relations>
     </database>
     <role id="6" parent="1" name="admin">
