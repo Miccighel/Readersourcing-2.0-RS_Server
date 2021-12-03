@@ -2,18 +2,18 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 4
-  cacheKey: 7
+  version: 5
+  cacheKey: 8
 
 "RS_Server@workspace:.":
   version: 0.0.0-use.local
   resolution: "RS_Server@workspace:."
   dependencies:
-    bootstrap: ^4.6.0
+    bootstrap: ^4.6.1
     bootstrap-select: ^1.13.18
     bootstrap-slider: ^10.6.2
     cookieconsent: 3.1.1
-    dropzone: ^5.9.2
+    dropzone: ^5.9.3
     jquery: ^3.6.0
     jquery-parallax.js: ^1.5.0
     jquery.cookie: ^1.4.1
@@ -33,7 +33,7 @@ __metadata:
 animate.css@latest:
   version: 3.7.2
   resolution: "animate.css@npm:3.7.2"
-  checksum: 6b5be1b5fea17fda69f44aa81c38e48093ac00e0025c6329c15b340c7b54e49e1b4d6f120ca78b28febd966be26bf5c0b5d73d63420d78a977ccda224faae964
+  checksum: 7262dfe8fb7929c5c296b20e2a6d8d302bd80c02cb8ccf4cf751b7b142aea5c013d0b942aada5775991dd87f041f5a023135ba86110a0619ef3001913fb1afec
   languageName: node
   linkType: hard
 
@@ -43,38 +43,38 @@ animate.css@latest:
   peerDependencies:
     bootstrap: ">=3.0.0"
     jquery: 1.9.1 - 3
-  checksum: 7866bf4adff9975b6c554cc738c4c5a02d430a77873d5b4628151f4491994c216e0ee19f243d2b047d622ad86200e42e17260fc24fdea4033785eabd8d2fdfdf
+  checksum: b81e977c3b8837ce7125f0050e15343aa2a59a70b8df3e40c843c35f3bb07000a1977a04f19e56d44d06093106427293433f84c1da6f83e96257f62642137530
   languageName: node
   linkType: hard
 
 "bootstrap-slider@npm:^10.6.2":
   version: 10.6.2
   resolution: "bootstrap-slider@npm:10.6.2"
-  checksum: 9da946714811ed86371062fadd3569274c4783355e2470c6950f216755dc784677fc38026336946f7830769cb49ed87c243cf12e9ce0f92ac71c80280c133d71
+  checksum: 7a4853a188029b4ff463d408a649d934d16128da33028d9ae523d9bbd0a9eec6c49777a16399e4e333dd54bed8a5224bc478f815f339212e02dad487d804dbab
   languageName: node
   linkType: hard
 
-"bootstrap@npm:^4.6.0":
-  version: 4.6.0
-  resolution: "bootstrap@npm:4.6.0"
+"bootstrap@npm:^4.6.1":
+  version: 4.6.1
+  resolution: "bootstrap@npm:4.6.1"
   peerDependencies:
     jquery: 1.9.1 - 3
     popper.js: ^1.16.1
-  checksum: 66019b6969b997eb3bcec7276010263df643b2607db00dbbd13f451d6f6d57fa5b563cd9712a4814024e5489faf5e2d73c553a1ebea1b61d0e1ab766e4805229
+  checksum: ff44e13787aafe1e2b8ac77802eae0f19bf957ea53a40ce3d9d4af9b67eab8adc585dc5a62cb6be82a3bc33e7ae67b0efd75f02282c0ddca09272d5c18a0b379
   languageName: node
   linkType: hard
 
 "cookieconsent@npm:3.1.1":
   version: 3.1.1
   resolution: "cookieconsent@npm:3.1.1"
-  checksum: 4d6ab033d46da4246af0bdd9bffcfc43c4f0dd052cf568218126474c1f8aeef7c45f295362f3cae3d70430c476bb439d733d761b1a67b7363dc3abb5581a166a
+  checksum: fe116972b901011ff03025b9fa9ed96ad8e570853cbb17b4ea86cc7713ab1944b884ebf2ff44f34da8c7f07d0b235b8491cde3327571fdd6f583c961a7694557
   languageName: node
   linkType: hard
 
-"dropzone@npm:^5.9.2":
-  version: 5.9.2
-  resolution: "dropzone@npm:5.9.2"
-  checksum: 88bb1bb9d0ec4d3e78532f3d8f118afd4562deecdba119fe7b8f10d9f241c6b772d9e3b53a1d2bbd4d724f4dcf255d308d04fd4b44c3b31774c366a3472eab6d
+"dropzone@npm:^5.9.3":
+  version: 5.9.3
+  resolution: "dropzone@npm:5.9.3"
+  checksum: 7fe7e32ff188ab38bb3ddd468938ef78c158ce4cada8b2184cdd78a1d52fd961af56f1f0bec11a7881aab6d43d7fc9f9a6dc6addbfbea93c1ad784dbc6444e4d
   languageName: node
   linkType: hard
 
@@ -83,14 +83,14 @@ animate.css@latest:
   resolution: "jquery-parallax.js@npm:1.5.0"
   dependencies:
     jquery: ">=1.7"
-  checksum: 4df594881e4cfe9a8d9496ff2d434c7f7e2a65ff0a6ffc3ab5dae956aa6b5c553eaf4734f541bacdb76d082e9762370f1a31e2194736a1f63e7ee3b5ae9d9b58
+  checksum: 254d4f0ae8e2d29c266972a8d3c6071e16ae4ad40c3f268f386a4732721836527f6c76711b97db0197b5532b37ba22e934518c9a213a7b6d7e73050ff8f642c2
   languageName: node
   linkType: hard
 
 "jquery.cookie@npm:^1.4.1":
   version: 1.4.1
   resolution: "jquery.cookie@npm:1.4.1"
-  checksum: b41fbccf3513773a38240ca3d6995365f9da6298b67949d51d9bfcb4d28ffe6963774413adfc8534b9088fb41ca3c1861d776b8df649539ca612d00e19d5512e
+  checksum: bcb1335f47ef5c19613b45de7e53a0df90f36b9c23a4cd37ef0d81e4ca7f0da72197ad3c347bc24037f110e9b2e4dbe708b3a3f27046f599e108a2d63859655c
   languageName: node
   linkType: hard
 
@@ -100,7 +100,7 @@ animate.css@latest:
   dependencies:
     jquery: ">=1.5.0"
     waypoints: ">=3.0"
-  checksum: 0b2bfd3bcca065367f1374a480d3da08b3b7409bf03772f7bc8d456c99e4371ceca4babe91e9a25c6103fb1ac2107aac2943de696f67d136c3a32c50a9253eac
+  checksum: 3f6e88fd8f47efe4d6c662cf6aca48fa8ce34037640771e8fd4c6034e682da7031b612446106fc36dd1bbd1fcd7bd1fc53de0d6f20596330750574e9771f86ef
   languageName: node
   linkType: hard
 
@@ -109,42 +109,42 @@ animate.css@latest:
   resolution: "jquery.scrollto@npm:2.1.3"
   dependencies:
     jquery: ">=1.8"
-  checksum: b77e7a817ce1e26f4427a202d40d3fcca643b505167b27f2489404842c7791e73f3a31e86950cafe45a0f4fc7bee07723ba4ef5729152f0820d3729d3bdd2bd6
+  checksum: 97810def787bc06f3659363b5ec07e3526c28533e34fdc77f31bdaa2d4c362302cd9734b8f89c6a756efbfc643cbcf21d7145d8bc411e7094d1a2e86f527e734
   languageName: node
   linkType: hard
 
 "jquery@npm:>=1.5.0, jquery@npm:>=1.7, jquery@npm:>=1.8, jquery@npm:>=1.8.0, jquery@npm:>=1.8.3":
   version: 3.4.1
   resolution: "jquery@npm:3.4.1"
-  checksum: 918300d1c768ae029bc88be13dc248ae0e82e1282f0353a6cced10ba6dabb70342a581777dc594da339c1beec7a04d3754358934a098c6627c35c6fb7d9af440
+  checksum: bcd23da10fb4f39cc8609e71e7a5169f368a2ba81ef4e146826466935c9a448ada70582928aa473430c4238e5b2c32e97a43fc9de372de00d075d5ad1629e15a
   languageName: node
   linkType: hard
 
 "jquery@npm:^3.6.0":
   version: 3.6.0
   resolution: "jquery@npm:3.6.0"
-  checksum: a0a819022a1bdff5efa79bbd9d4d7352de5bd32dabe42108e6ec0797238dba36c09c108e0eea2724f5d03acc1b30ee87d76bec80e15b9510106532292ebe6ba4
+  checksum: 8fd5fef4aa48fd374ec716dd1c1df1af407814a228e15c1260ca140de3a697c2a77c30c54ff1d238b6a3ab4ddc445ddeef9adce6c6d28e4869d85eb9d3951c0e
   languageName: node
   linkType: hard
 
 "js-cookie@npm:^2.2.1":
   version: 2.2.1
   resolution: "js-cookie@npm:2.2.1"
-  checksum: c110f78427cb7715f67c69df0b3430f7cf9dafb5ddb13014df171d4fb61ccda0b1caf9767412cde63cab4bad697a5d4ce83b0c2e7ec650ec9929ed70750d20ae
+  checksum: 9b1fb980a1c5e624fd4b28ea4867bb30c71e04c4484bb3a42766344c533faa684de9498e443425479ec68609e96e27b60614bfe354877c449c631529b6d932f2
   languageName: node
   linkType: hard
 
 "load-awesome@npm:^1.1.0":
   version: 1.1.0
   resolution: "load-awesome@npm:1.1.0"
-  checksum: cc6d3c36b5ee9de2ae1864b0faa25e6d60d4590ae5188b63e9c5106de2e0db1843942e55847e08d3eb296c6d15b47c33ce57c5252162e05eca73c29bacbaa8ba
+  checksum: f91ad1b6d83f7df851805e16263dcf4dc1c800c3cc75ce2271f7df10e93b3eb9e6842c34acddb91e9b458a799c4e3d7acc5633547f9e333f527b81cb35e0d4ed
   languageName: node
   linkType: hard
 
 "owl.carousel2.thumbs@npm:^0.1.8":
   version: 0.1.8
   resolution: "owl.carousel2.thumbs@npm:0.1.8"
-  checksum: 5a3758aba2c286686dda421471ba096e62ae4612a640c9696b9c74b83d3c19546199cb83d6408a83bcc9fa02788192607e96fa76a2cb03ccc1ba28a7c4bb3f9b
+  checksum: e385bffa813fd5c97ffa2f19ef76e4fce5e2adac78ed9e247e367b0164c8ae60e8813132c34fbb9ef7356ca3c31556522a510ecd47336717611865a059cde63a
   languageName: node
   linkType: hard
 
@@ -153,7 +153,7 @@ animate.css@latest:
   resolution: "owl.carousel@npm:2.3.4"
   dependencies:
     jquery: ">=1.8.3"
-  checksum: 7aa9ab5d82246b4e92fb956a48df99e70241fa2a073281da81db1908c9daf3c948d6695def0e699c22304cf9bd3314aff1426ade60b0b3582896426abd820b94
+  checksum: fb28a3373c273d7210bf97739bcb35bfd552afa4e2541d4fc66f19cf1d253136cda927c60162a961902a72bd31dccc6c18084fc9a676d210356bb15677d6d571
   languageName: node
   linkType: hard
 
@@ -162,21 +162,21 @@ animate.css@latest:
   resolution: "parsleyjs@npm:2.9.2"
   dependencies:
     jquery: ">=1.8.0"
-  checksum: 132039eee8f2e5469ad8e181fbfca8f1424bced910af8de3f04453f7d6dc5ee7a8169d281c4571f981f7657c04392bf3046f67daa75eca1e7be3537707bce1fe
+  checksum: 259eab31084f4a294acda2690901bcf0aa5b4ecd6c0211fdf7116914d7888faec5cbd04c3bc59a36e2128bbd7b3bdf8b00820a5f7886614fad4e49997afb8d27
   languageName: node
   linkType: hard
 
 "popper.js@npm:^1.16.1":
   version: 1.16.1
   resolution: "popper.js@npm:1.16.1"
-  checksum: eb53806fb7680e31c7d1db096f95438a40a7cb869f7ee0e27100c0860f11583a0d322606c6073618e7fe8865f834ec36482901b547256d9a0cf2b22434bca75d
+  checksum: c56ae5001ec50a77ee297a8061a0221d99d25c7348d2e6bcd3e45a0d0f32a1fd81bca29d46cb0d4bdf13efb77685bd6a0ce93f9eb3c608311a461f945fffedbe
   languageName: node
   linkType: hard
 
 "waypoints@npm:>=3.0, waypoints@npm:^4.0.1":
   version: 4.0.1
   resolution: "waypoints@npm:4.0.1"
-  checksum: 2a1bd02e6980fa9a1b9e70df30af2707d91e30d0553cb99bd20c494ec405c975b431a397067387be7dd10250388488725caf125f931f9538aae3ef754e612d17
+  checksum: 0549b20be80202fbe8d1a5a736c1ee978aa48b56ba46b2e8e4a93fe4b4e2098b1fbbf8411f93965a415ed95294130fa4b3491f93e4d92c8af3ab377fff993788
   languageName: node
   linkType: hard
 
@@ -185,6 +185,6 @@ animate.css@latest:
   resolution: "wowjs@npm:1.1.3"
   dependencies:
     animate.css: latest
-  checksum: 80f2e98b48ef5297e17a1cbca1b2f0c84f7d629a155756f0043725a2f8fcc2b5e0656a183aed7d84d2022f7e4f2bf883ae0a7a3cd5bfbe0b10b7e72f99bea25b
+  checksum: 1425b9f7373300491545f962654c06891b7233b67a7ea723944a53d3d3dc9734dc3c63620b6cc089e1d46d5540d3c6a1ab3603ba541e353fe404b917311dd82a
   languageName: node
   linkType: hard

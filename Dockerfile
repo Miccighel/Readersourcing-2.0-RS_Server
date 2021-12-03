@@ -1,6 +1,6 @@
 # ---------- SCENARIO 2: DEPLOY WITH LOCAL BUILD ----------
 
-FROM ruby:2.6.6
+FROM ruby:2.7.5
 
 # Install apt based dependencies required to run Rails as
 # well as RubyGems. As the Ruby image itself is based on a
