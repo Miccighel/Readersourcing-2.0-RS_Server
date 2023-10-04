@@ -1,7 +1,13 @@
-development:
+# Use a single set of defaults with an anchor
+default: &default
   adapter: postgresql
-  url: postgres://<%= ENV['POSTGRES_USER'] %>:<%= ENV['POSTGRES_PASSWORD'] %>@postgres/<%= ENV['POSTGRES_DB'] %>
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+
+development:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] || "postgresql://#{ENV['POSTGRES_USER'] || 'postgres'}:#{ENV['POSTGRES_PASSWORD']}@#{ENV['POSTGRES_HOST'] || 'localhost'}/#{ENV['POSTGRES_DB'] || 'rs_server'}" %>
 
 production:
-  adapter: postgresql
-  url: <%= ENV['DATABASE_URL'] %>
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] || "postgresql://#{ENV['POSTGRES_USER'] || 'postgres'}:#{ENV['POSTGRES_PASSWORD']}@#{ENV['POSTGRES_HOST'] || 'localhost'}/#{ENV['POSTGRES_DB'] || 'rs_server'}" %>

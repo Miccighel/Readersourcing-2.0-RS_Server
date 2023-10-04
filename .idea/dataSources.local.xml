@@ -2,15 +2,15 @@
 <project version="4">
   <component name="dataSourceStorageLocal" created-in="RM-232.9921.48">
     <data-source name="RS_Server (Dev)" uuid="a5d8e2ad-53bf-4d2f-8f1b-41eede4dc976">
-      <database-info product="PostgreSQL" version="11.1" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.2.2" dbms="POSTGRES" exact-version="11.1" exact-driver-version="42.2">
+      <database-info product="PostgreSQL" version="11.21" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.6.0" dbms="POSTGRES" exact-version="11.21" exact-driver-version="42.6">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
       <secret-storage>master_key</secret-storage>
-      <user-name>admin</user-name>
+      <user-name>postgres</user-name>
       <schema-mapping>
         <introspection-scope>
-          <node kind="database" qname="@">
+          <node kind="database" qname="rs_server">
             <node kind="schema" qname="@" />
           </node>
         </introspection-scope>
