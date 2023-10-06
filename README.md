@@ -107,17 +107,17 @@ Clone this repository and move inside the main directory using a command line pr
 
 Regardless of the chosen deploy modality, there is the need to set some environment variables which cannot be checked into a repository as a safety measure. In the following each of these environment variables is described along with an explanation of where to set them on the basis of the chosen deploy modality/environment. 
 
-| Environment Variable  | Description | Deploy Modality | Environment | Where To Set |
-| ------------- | ------------- | ------------- | ------------- | ------------- |
-| SECRET_DEV_KEY  | Private key used to encrypt some strings  | 1 - 2 (Scenario 1, Scenario 2) | development | ```.env``` file |
-| SECRET_PROD_KEY  | Private key used to encrypt some strings  | 1 - 2 (Scenario 1, Scenario 2) - 3 | production | ```.env``` file, Heroku App |
-| SENDGRID_USERNAME  | Username of your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
-| SENDGRID_PASSWORD  | Password of your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
-| SENDGRID_API_KEY  | API key of your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
-| SENDGRID_DOMAIN  | A domain registered within your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
-| BUG_REPORT_MAIL | An email address to receive bug reports | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App |
-| CONTACT_MAIL | An email address to receive general questions | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App |
-| RAILS_LOG_TO_STD  | If set to ```true```, Rails writes its logs to the standard output. Useful for debugging purposes. | 3 | production | ```.env``` file, Heroku App |
+| Environment Variable | Description | Deploy Modality | Environment | Where To Set |
+|----------------------| ------------- | ------------- | ------------- | ------------- |
+| SECRET_DEV_KEY       | Private key used to encrypt some strings  | 1 - 2 (Scenario 1, Scenario 2) | development | ```.env``` file |
+| SECRET_PROD_KEY      | Private key used to encrypt some strings  | 1 - 2 (Scenario 1, Scenario 2) - 3 | production | ```.env``` file, Heroku App |
+| SENDGRID_USERNAME    | Username of your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
+| SENDGRID_PASSWORD    | Password of your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
+| SENDGRID_API_KEY     | API key of your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
+| SENDGRID_DOMAIN      | A domain registered within your SendGrid account | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App|
+| BUG_REPORT_MAIL      | An email address to receive bug reports | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App |
+| EMAIL_ADMIN          | An email address to receive general questions | 1 - 2 (Scenario 1, Scenario 2) - 3 | development, production | ```.env``` file , Heroku App |
+| RAILS_LOG_TO_STD     | If set to ```true```, Rails writes its logs to the standard output. Useful for debugging purposes. | 3 | production | ```.env``` file, Heroku App |
 
 <h4>.env File</h4>
  
@@ -130,7 +130,7 @@ SENDGRID_PASSWORD=your_sendgrid_password
 SENDGRID_DOMAIN=your_sendgrid_domain
 SENDGRID_API_KEY=your_sendgrid_secret_api_key
 BUG_REPORT_MAIL=your_bug_report_mail
-CONTACT_MAIL=your_contact_mail
+EMAIL_ADMIN=your_contact_mail
 ```
 
 <h3>Heroku App</h3>

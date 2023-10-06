@@ -48,6 +48,7 @@ class PasswordsController < ApplicationController
 			end
 			user = User.find_by(email: email)
 			if user.present?
+				delete_token
 				user.generate_password_token!
 				reset_url = "#{request.protocol}#{request.host_with_port}#{reset_path(email: user.email, reset_token: user.reset_password_token)}"
 				PasswordMailer.forgot(user, reset_url).deliver
@@ -79,6 +80,7 @@ class PasswordsController < ApplicationController
 				if user.present? && user.password_token_valid?
 					new_password = SecureRandom.hex (rand(6..10))
 					if user.reset_password!(new_password)
+						delete_token
 						PasswordMailer.reset(user, new_password).deliver
 						render "shared/success", locals: {message: I18n.t("confirmations.messages.reset_mail_sent")}, status: :ok, layout: false
 					else

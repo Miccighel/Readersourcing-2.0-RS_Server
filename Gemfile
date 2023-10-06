@@ -21,6 +21,7 @@ gem 'coffee-rails'
 gem 'pg'
 gem 'sendgrid-ruby'
 gem "http"
+gem "lograge", "~> 0.13.0"
 gem 'sprockets', '~> 3.5'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
@@ -28,5 +29,4 @@ group :development, :test do
 	gem "letter_opener"
 	gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
-
 

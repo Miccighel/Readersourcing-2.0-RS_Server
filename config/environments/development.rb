@@ -1,9 +1,8 @@
 Rails.application.configure do
 
-	Rails.application.routes.default_url_options[:host] = 'localhost:3000'
-	config.action_mailer.default_url_options = { host: 'localhost:3000' }
-
 	# Settings specified here will take precedence over those in config/application.rb.
+  #Rails.application.routes.default_url_options[:host] = request.host_with_port
+  #config.action_mailer.default_url_options = request.host_with_port
 
 	# In the development environment your application's code is reloaded on
 	# every request. This slows down response time but is perfect for development
@@ -59,4 +58,9 @@ Rails.application.configure do
 
 	config.secret_key_base = ENV["SECRET_DEV_KEY"]
 
+	config.lograge.enabled = true
+	# add time to lograge
+	config.lograge.custom_options = lambda do |event|
+		{ time: Time.now }
+	end
 end
