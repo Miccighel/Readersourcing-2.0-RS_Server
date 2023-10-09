@@ -1,10 +1,9 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
-![Maintainer](https://img.shields.io/badge/maintainer-Miccighel-blue)
+[![Maintainer](https://img.shields.io/badge/maintainer-Miccighel-blue)
 [![Github all releases](https://img.shields.io/github/downloads/Miccighel/Readersourcing-2.0-RS_Server/total.svg)](https://GitHub.com/Miccighel/Readersourcing-2.0-RS_Server/releases/)
 [![GitHub stars](https://badgen.net/github/stars/Miccighel/Readersourcing-2.0-RS_Server)](https://GitHub.com/Miccighel/Readersourcing-2.0-RS_Server/stargazers/)
 [![GitHub watchers](https://badgen.net/github/watchers/Miccighel/Readersourcing-2.0-RS_Server/)](https://GitHub.com/Miccighel/Readersourcing-2.0-RS_Server/watchers/)
-[![GitHub contributors](https://img.shields.io/github/contributors/Miccighel/Readersourcing-2.0-RS_Server.svg)](https://GitHub.com/Miccighel/Readersourcing-2.0-RS_Server/graphs/contributors/)[![GitHub
-issues](https://badgen.net/github/issues/Miccighel/Readersourcing-2.0-RS_Server/)](https://GitHub.com/Miccighel/Readersourcing-2.0-RS_Server/issues/)
+[![GitHub contributors](https://img.shields.io/github/contributors/Miccighel/Readersourcing-2.0-RS_Server.svg)](https://GitHub.com/Miccighel/Readersourcing-2.0-RS_Server/graphs/contributors/)
 [![GitHub issues](https://img.shields.io/github/issues/Miccighel/Readersourcing-2.0-RS_Server.svg)](https://GitHub.com/Miccighel/Readersourcing-2.0-RS_Server/issues/)
 [![GitHub issues-closed](https://img.shields.io/github/issues-closed/Miccighel/Readersourcing-2.0-RS_Server.svg)](https://GitHub.com/Miccighel/Readersourcing-2.0-RS_Server/issues?q=is%3Aissue+is%3Aclosed)
 [![GitHub pull-requests](https://img.shields.io/github/issues-pr/Miccighel/Readersourcing-2.0-RS_Server.svg)](https://GitHub.com/Miccighel/Readersourcing-2.0-RS_Server/pull/)
