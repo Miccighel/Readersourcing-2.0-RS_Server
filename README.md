@@ -1,4 +1,3 @@
-![Rails](https://img.shields.io/badge/rails-%23CC0000.svg?style=for-the-badge&logo=ruby-on-rails&logoColor=white)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 ![Maintainer](https://img.shields.io/badge/maintainer-Miccighel-blue)
 [![Github all releases](https://img.shields.io/github/downloads/Miccighel/Readersourcing-2.0-RS_Server/total.svg)](https://GitHub.com/Miccighel/Readersourcing-2.0-RS_Server/releases/)
@@ -12,9 +11,11 @@ issues](https://badgen.net/github/issues/Miccighel/Readersourcing-2.0-RS_Server/
 [![GitHub pull-requests closed](https://img.shields.io/github/issues-pr-closed/Miccighel/Readersourcing-2.0-RS_Server.svg)](https://GitHub.com/Miccighel/Readersourcing-2.0-RS_Server/pull/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-![GitHub Contributors Image](https://contrib.rocks/image?repo=Miccighel/Crowd_Frame)
+![GitHub Contributors Image](https://contrib.rocks/image?repo=Miccighel/Readersourcing-2.0-RS_Server)
 
-:star: Star us on GitHub — it motivates us a lot!
+:star: Star us on GitHub — it motivates me a lot!
+
+![Rails](https://img.shields.io/badge/rails-%23CC0000.svg?style=for-the-badge&logo=ruby-on-rails&logoColor=white)
 
 <h1>Info</h1>
 
