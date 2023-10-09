@@ -85,12 +85,12 @@
     <orderEntry type="library" scope="PROVIDED" name="launchy (v2.5.2, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="letter_opener (v1.8.1, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="llhttp-ffi (v0.4.0, ruby-2.7.8-p225) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="lograge (v0.13.0, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="loofah (v2.21.3, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="mail (v2.8.1, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="marcel (v1.0.2, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="method_source (v1.0.0, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="mini_mime (v1.1.5, ruby-2.7.8-p225) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="mini_portile2 (v2.8.4, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="minitest (v5.20.0, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="msgpack (v1.7.2, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="net-imap (v0.3.7, ruby-2.7.8-p225) [gem]" level="application" />
@@ -112,7 +112,6 @@
     <orderEntry type="library" scope="PROVIDED" name="rails-html-sanitizer (v1.6.0, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="railties (v5.2.8.1, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rake (v13.0.6, ruby-2.7.8-p225) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="request_store (v1.5.1, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ruby-rc4 (v0.1.5, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ruby_http_client (v3.5.5, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="sendgrid-ruby (v6.6.2, ruby-2.7.8-p225) [gem]" level="application" />
@@ -126,7 +125,6 @@
     <orderEntry type="library" scope="PROVIDED" name="turbolinks (v5.2.1, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="turbolinks-source (v5.2.0, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="tzinfo (v1.2.11, ruby-2.7.8-p225) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="tzinfo-data (v1.2023.3, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="uglifier (v4.2.0, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="unf (v0.1.4, ruby-2.7.8-p225) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="unf_ext (v0.0.8.2, ruby-2.7.8-p225) [gem]" level="application" />

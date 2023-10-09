@@ -50,3 +50,4 @@ public/user/1/publication/pdf/6/1903.10466-Link.pdf
 
 .pnp.*
 /node_modules/
+.DS_Store
