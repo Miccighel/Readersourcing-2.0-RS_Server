@@ -1,5 +1,5 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
-[![Maintainer]](https://img.shields.io/badge/maintainer-Miccighel-blue)
+![Maintainer](https://img.shields.io/badge/maintainer-Miccighel-blue)
 [![Github all releases](https://img.shields.io/github/downloads/Miccighel/Readersourcing-2.0-RS_Server/total.svg)](https://GitHub.com/Miccighel/Readersourcing-2.0-RS_Server/releases/)
 [![GitHub stars](https://badgen.net/github/stars/Miccighel/Readersourcing-2.0-RS_Server)](https://GitHub.com/Miccighel/Readersourcing-2.0-RS_Server/stargazers/)
 [![GitHub watchers](https://badgen.net/github/watchers/Miccighel/Readersourcing-2.0-RS_Server/)](https://GitHub.com/Miccighel/Readersourcing-2.0-RS_Server/watchers/)
