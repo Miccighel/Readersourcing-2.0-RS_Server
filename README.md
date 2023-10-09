@@ -11,10 +11,7 @@ issues](https://badgen.net/github/issues/Miccighel/Readersourcing-2.0-RS_Server/
 [![GitHub pull-requests closed](https://img.shields.io/github/issues-pr-closed/Miccighel/Readersourcing-2.0-RS_Server.svg)](https://GitHub.com/Miccighel/Readersourcing-2.0-RS_Server/pull/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-![GitHub Contributors Image](https://contrib.rocks/image?repo=Miccighel/Readersourcing-2.0-RS_Server)
-:star: Star me on GitHub — it motivates me a lot!
-
-## An independent, third-party, no-profit, academic project aimed at quality rating of scholarly literature and scholars.
+Readersourcing 2.0: _An independent, third-party, no-profit, academic project aimed at quality rating of scholarly literature and scholars._
 
 <h1>Info</h1>
 
