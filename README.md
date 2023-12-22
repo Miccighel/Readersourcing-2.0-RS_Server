@@ -20,7 +20,7 @@ whose components can be found by taking advantage of the links below.
 
 <h1>Useful Links</h1>
 
-- <a href="https://readersourcing.org">Readersourcing 2.0 (Web Interface)</a>
+- <a href="https://readersourcing.com">Readersourcing 2.0 (Web Interface)</a>
 - <a href="https://github.com/Miccighel/Readersourcing-2.0">Readersourcing 2.0 (GitHub)</a>
 - <a href="https://link.springer.com/chapter/10.1007/978-3-030-11226-4_21">Original Article (Springer Link)</a>
 - <a href="https://zenodo.org/record/1446468">Original Article (Zenodo)</a>
