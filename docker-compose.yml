@@ -1,7 +1,5 @@
 # ---------- SCENARIO 1: DEPLOY WITH REMOTE IMAGES ----------
 
-version: '3.8'
-
 services:
   rs_server_webapp:
     image: miccighel/rs_server:v1.0.15
@@ -31,8 +29,6 @@ volumes:
 
 # ---------- SCENARIO 2: DEPLOY WITH LOCAL BUILD ----------
 
-#version: '3.8'
-#
 #services:
 #  rs_server_webapp:
 #    build: .

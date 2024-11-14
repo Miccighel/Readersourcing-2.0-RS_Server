@@ -24,7 +24,11 @@ class AuthenticationController < ApplicationController
 
 	# POST /authenticate
 	def authenticate
-		command = Authenticator.call(params[:email], params[:password], request.remote_ip)
+		# Create an instance of Authenticator with the proper arguments
+		authenticator = Authenticator.new(params[:email], params[:password], request.remote_ip)
+
+		# Call the instance method 'call'
+		command = authenticator.call
 		if command.success?
 			# Unescaped auth token (a duplicate) is saved on server session (implemented through HTTP-ONLY COOKIES)
 			store_token command.result

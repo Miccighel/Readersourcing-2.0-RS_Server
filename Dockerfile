@@ -1,6 +1,6 @@
 # ---------- SCENARIO 2: DEPLOY WITH LOCAL BUILD ----------
 
-FROM ruby:2.7.8
+FROM ruby:2.6.10
 
 # Install apt based dependencies required to run Rails as
 # well as RubyGems. As the Ruby image itself is based on a
@@ -35,13 +35,15 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
     yarn set version $YARN_VERSION && yarn install
 
 # Install Bundler and RubyGems
-RUN gem install bundler && bundle install --jobs 20 --retry 5
+RUN gem update --system 3.2.3
+RUN gem install bundler -v 2.4.22 && bundle install --jobs 20 --retry 5
 
 # Expose port 3000 to the Docker host, so we can access it
 # from the outside.
 EXPOSE 3000
 
 # Set the entry point script
+RUN chmod +x entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
 
 # ---------- SCENARIO 2: DEPLOY WITH LOCAL BUILD ----------

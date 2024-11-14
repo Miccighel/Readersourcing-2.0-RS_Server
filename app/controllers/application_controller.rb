@@ -79,13 +79,19 @@ class ApplicationController < ActionController::API
 	private
 
 	def authorize_server_request
-		@current_user = Authorizer.call(fetch_token, request.remote_ip).result
+		# Instantiate Authorizer and call the instance method 'call'
+		authorizer = Authorizer.new(fetch_token, request.remote_ip)
+		@current_user = authorizer.call.result
 		render "login", status: :ok, locals: {message: I18n.t("information.messages.login")} unless @current_user
 	end
 
 	def authorize_api_request
 		auth_token = request.headers['Authorization'].split(' ').last
-		@current_user = Authorizer.call(auth_token, request.remote_ip).result
+
+		# Instantiate Authorizer and call the instance method 'call'
+		authorizer = Authorizer.new(auth_token, request.remote_ip)
+		@current_user = authorizer.call.result
+
 		@error_manager = ErrorManager.new
 		@error_manager.add_error(I18n.t("errors.messages.not_authorized"))
 		render "shared/errors", status: 401, locals: {errors: @error_manager.get_errors}, layout: false unless @current_user

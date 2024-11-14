@@ -55,14 +55,14 @@ puts "########## FAKE USERS SEEDING COMPLETED #########"
 
 puts "########## PUBLICATIONS SEEDING STARTED ##########"
 
-p1 = Publication.find_by(pdf_url: "https://arxiv.org/pdf/1608.07878.pdf")
+p1 = Publication.find_by(pdf_url: "http://arxiv.org/pdf/1608.07878")
 p2 = Publication.find_by(pdf_url: "https://zenodo.org/record/3245218/files/Documentation-v1.0.6-alpha.pdf?download=1")
 p3 = Publication.find_by(pdf_url: "https://zenodo.org/record/1446468/files/paper.pdf?download=1")
-p4 = Publication.find_by(pdf_url: "https://arxiv.org/pdf/1807.04317.pdf")
-p5 = Publication.find_by(pdf_url: "https://ceur-ws.org/Vol-1911/8.pdf")
+p4 = Publication.find_by(pdf_url: "https://arxiv.org/pdf/1807.04317")
+p5 = Publication.find_by(pdf_url: "https://ceur-ws.org/Vol-1911/8")
 
 if p1.blank?
-  p1 = Publication.new({ pdf_url: "https://arxiv.org/pdf/1608.07878.pdf" })
+  p1 = Publication.new({ pdf_url: "https://arxiv.org/pdf/1608.07878" })
 end
 if p2.blank?
   p2 = Publication.new({ pdf_url: "https://zenodo.org/record/3245218/files/Documentation-v1.0.6-alpha.pdf?download=1" })
@@ -71,10 +71,10 @@ if p3.blank?
   p3 = Publication.new({ pdf_url: "https://zenodo.org/record/1446468/files/paper.pdf?download=1" })
 end
 if p4.blank?
-  p4 = Publication.new({ pdf_url: "https://arxiv.org/pdf/1807.04317.pdf" })
+  p4 = Publication.new({ pdf_url: "https://arxiv.org/pdf/1807.04317" })
 end
 if p5.blank?
-  p5 = Publication.new({ pdf_url: "https://ceur-ws.org/Vol-1911/8.pdf" })
+  p5 = Publication.new({ pdf_url: "https://arxiv.org/pdf/2411.08113" })
 end
 
 auth_token = "3a7b11756ea2b8a983f918a63346bdfd695adbc39028218e0a0d49909af60595!!!!!l8B3IrSFRuXSc1ZvyTgNJsZ67+lXfBMVrQYYiefxWCNQ2TvQTT6zEScC/phjm/GnEomSwCp+wQCAilj902c3NBPFqaMTASjyJUkPFjHXohZWIe7AP1+L2dOuY766piLfETP1a1tKwCRt1VAprRO83S1rd53ncm0Pp5yZOvM+Gqm+YRKVKyz0mfwvXKu/14X7oMBj4yPZ2m6mmBRA65V4GH4PO3RyiA==--AL1d9u9ZBmZvN8ru--3QobO/8AB0Gf3DJ1VS7U9w=="
