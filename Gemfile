@@ -1,32 +1,37 @@
-source 'https://rubygems.org'
-git_source(:github) {|repo| "https://github.com/#{repo}.git"}
+source "https://rubygems.org"
 
-ruby '2.6.10'
+ruby "3.4.10"
 
-gem 'rails', '~> 5.2.0'
-gem 'puma', '~> 3.11'
-gem 'dotenv-rails'
-gem 'jbuilder', '~> 2.5'
-gem 'bcrypt', '~> 3.1.7'
-gem 'bootsnap', '>= 1.1.0', require: false
-gem 'rack-cors'
-gem 'pdf-reader'
-gem 'jwt'
-gem 'simple_command'
-gem 'nokogiri'
-gem 'uglifier'
-gem 'config'
-gem 'turbolinks'
-gem 'coffee-rails'
-gem 'pg'
-gem 'sendgrid-ruby'
+gem "rails", "~> 8.1.3"
+gem "pg", "~> 1.6"
+gem "puma", ">= 6.0"
+
+# Keep the existing asset graph during the framework migration. Moving the UI
+# to Propshaft/Hotwire is intentionally a separate, observable change.
+gem "sprockets", "~> 3.7"
+gem "sprockets-rails"
+gem "turbolinks"
+
+gem "bcrypt", "~> 3.1"
+gem "bootsnap", require: false
+gem "config"
+gem "dotenv-rails"
 gem "http"
-gem "lograge", "~> 0.13.0"
-gem 'sprockets', '~> 3.5'
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem "jbuilder"
+gem "jwt"
+gem "lograge"
+gem "pdf-reader"
+gem "rack-cors"
+gem "sendgrid-ruby"
+gem "simple_command"
+
+gem "tzinfo-data", platforms: %i[windows jruby]
 
 group :development, :test do
-	gem "letter_opener"
-	gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem "debug", platforms: %i[mri windows], require: "debug/prelude"
+end
+
+group :development do
+  gem "letter_opener"
 end
 

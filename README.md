@@ -66,9 +66,10 @@ This is the most demanding modality in terms of prerequisites since it assumes h
 
 <h3>Requirements</h3>
 
-- <a href="https://www.ruby-lang.org/en/downloads/">Ruby</a> == 2.7.8;
-- <a href="https://www.oracle.com/it/java/technologies/javase/jdk11-archive-downloads.html">JDK (Java Development Kit)</a> == 11.0.19;
-- <a href="https://www.postgresql.org/download/">PostgreSQL</a> >= 11.2.
+- <a href="https://www.ruby-lang.org/en/downloads/">Ruby</a> == 3.4.10;
+- a Java runtime >= 11, required by RS_PDF;
+- <a href="https://www.postgresql.org/download/">PostgreSQL</a> >= 17;
+- Node.js >= 18, used to install the existing browser assets.
 
 <h3>How To</h3>
 
@@ -76,29 +77,28 @@ Clone this repository and navigate to its main directory using a command line pr
 then type ```gem install bundler```. This gem (dependency) provides a consistent environment for Ruby projects, as RS_Server, by tracking and installing the exact gems (dependencies) and versions
 needed.
 
-To fetch all dependencies required by RS_Server, type ```bundle install``` and wait for the process to complete.
+To fetch all Ruby dependencies required by RS_Server, type ```bundle install``` and wait for the process to complete.
+Then type ```node .yarn/releases/yarn-3.6.3.cjs install --immutable``` to install the existing browser assets.
 
-The next two commands are necessary only before the first startup of RS_Server because they will create and set up the database.
-Ensure that the ```PostgreSQL``` service is started and ready to accept connections on port ```5432```. Type ```rails db:create``` to create the database
-and ```rails db:migrate``` to create the required tables. Now, create a ```.env``` file as explained later and set the required environment variables.
-Optionally, you can type ```rails db:seed``` to seed some sample data in the database. After these commands, everything is ready to launch RS_Server in _development_ or _production_ mode.
+Ensure that the ```PostgreSQL``` service is started and ready to accept connections on port ```5432```. Type ```bin/rails db:prepare```
+to create or migrate the database as needed. Now, create a ```.env``` file as explained later and set the required environment variables.
+Optionally, you can type ```bin/rails db:seed``` to seed some sample data in the database. After these commands, everything is ready to launch RS_Server in _development_ or _production_ mode.
 
-To do that, just type ```cd bin``` to move inside ```bin``` directory and then type ```rails server -b 127.0.0.1 -p 3000 -e development```
+To do that, type ```bin/rails server -b 127.0.0.1 -p 3000 -e development```
 with the proper values for ```-b```, ```-p``` and ```-e``` options. If the sample values are used, RS_Server will be started and bound
-on the ```127.0.0.1```IP address with port ```3000``` and ```development``` environment.
-Every HTPP request, therefore, must be sent to the ```http://127.0.0.1:3000``` address.
+on the ```127.0.0.1``` IP address with port ```3000``` and ```development``` environment.
+Every HTTP request, therefore, must be sent to the ```http://127.0.0.1:3000``` address.
 
 <h3>Quick Cheatsheet</h3>
 
 - ```cd``` to main directory;
 - ```gem install bundler```;
 - ```bundle install```;
-- ```rails db:create```;
-- ```rails db:migrate```;
-- ```rails db:seed``` (optional);
+- ```node .yarn/releases/yarn-3.6.3.cjs install --immutable```;
+- ```bin/rails db:prepare```;
+- ```bin/rails db:seed``` (optional);
 - create and populate the ```.env``` file;
-- ```cd bin```;
-- ```rails server -b <your_ip_address> -p <your_port> -e development``` or ```rails server -b <your_ip_address> -p <your_port> -e production```.
+- ```bin/rails server -b <your_ip_address> -p <your_port> -e development``` or ```bin/rails server -b <your_ip_address> -p <your_port> -e production```.
 
 <h2>Modality 2: Manual (using Docker)</h2>
 
@@ -122,68 +122,21 @@ Now, type ```ls``` or ```dir```; you should see a ```docker-compose.yml``` file 
 If you do not see them, please be sure to be in the main directory of the cloned repository.
 
 Before proceeding, _be sure that your Docker Engine is running_, otherwise the following commands will not work.
-At this point, two different scenarios can take place.
+The current Compose configuration builds RS_Server locally using Ruby 3.4 and starts PostgreSQL 17. Type
+```docker compose up --build``` and wait for the image build and database health check to complete. The container entrypoint runs
+```bin/rails db:prepare``` before starting the server.
 
-<h4>Scenario 1: Deploy With Remote Images</h4>
-
-If there is no need to edit the source code of RS_Server, the _Docker Engine_ can fetch the dependencies required in the ```docker-compose.yml``` file and initialize the application.
-The dependencies specified in the file are an image of PostgreSQL for the database and one of RS_Server itself, released on
-the <a href="https://cloud.docker.com/repository/docker/miccighel/rs_server">Docker Hub</a>.
-
-To do this, open the ```docker-compose.yml``` file and uncomment the following section and, additionally, comment out the remaining lines of code.
-
-```
------------ SCENARIO 1: DEPLOY WITH REMOTE IMAGES ----------
-...
------------ END OF SCENARIO 1: DEPLOY WITH REMOTE IMAGES ----------
-```
-
-Next, from the command line prompt, type ```docker-compose up``` and wait for the process to finish. Note that it may take several minutes.
-Once the Docker Engine completes the process, a container with a working instance of RS_Server will be started.
-
-Optionally, you can type ```docker-compose run rails db:seed``` to seed some sample data in the database. RS_Server will be started and bound
-to the ```0.0.0.0``` IP address with port ```3000``` and the ```production``` environment. Every HTTP request, therefore, must be sent to
-the ```http://0.0.0.0:3000``` address.
-
-As can be seen, there is no need to manually start the server by specifying its IP address, port, and environment, or to create and migrate
-the database. The Docker Engine will perform that automatically. If you want to set a custom IP address or port or switch
-to the _production_ environment, edit the ```command``` key inside the ```docker-compose.yml``` file.
-
-To stop the container, simply type ```docker-compose down```.
-
-<h4>Scenario 2: Deploy With Local Build</h4>
-
-If the source code of RS_Server has been edited, the application must be built from scratch by the Docker Engine according to the structure
-specified in the ```Dockerfile```. After the image build phase, the Docker Engine can fetch the required dependencies outlined in
-the ```docker-compose.yml``` file and initialize RS_Server, as in the previous scenario.
-
-To do this, open the ```docker-compose.yml``` file and uncomment the following section.
-Additionally, comment out the remaining lines of code in the file.
-
-```
------------  SCENARIO 2: DEPLOY WITH LOCAL BUILD ----------
-...
------------ END OF SCENARIO 2: DEPLOY WITH LOCAL BUILD -----------
-```
-
-Next, from the command line prompt, type ```docker-compose up``` and wait for the process to finish. Note that it may take several minutes.
-Once the Docker Engine completes the process, a container with a working instance of RS_Server will be started and bound to the ```0.0.0.0```
-IP address with port ```3000``` and the ```production``` environment. Therefore, every request must be sent to the ```http://0.0.0.0:3000```
-address.
-
-Similar to the previous scenario, there is no need to manually start the server by specifying its IP address, port, and environment or to
-create and migrate the database. If you want to set a custom IP address or port or switch to the _production_ environment,
-edit the ```command``` key inside the ```docker-compose.yml``` file.
-
-To stop the container, simply type ```docker-compose down```.
+RS_Server will be bound to port ```3000``` in the ```production``` environment. Every HTTP request must therefore be sent to
+```http://localhost:3000```. To seed sample data, type
+```docker compose run --rm rs_server_webapp bin/rails db:seed```. To stop the containers, type ```docker compose down```.
 
 <h4>Quick Cheatsheet</h4>
 
 - ```cd``` to main directory;
 - create and populate the ```.env``` file;
-- ```docker-compose up```;
-- ```docker-compose run rails db:seed``` (optionally);
-- ```docker-compose down``` (to stop and undeploy).
+- ```docker compose up --build```;
+- ```docker compose run --rm rs_server_webapp bin/rails db:seed``` (optionally);
+- ```docker compose down``` (to stop and undeploy).
 
 <h2>Modality 3: Deploy on Heroku</h2>
 

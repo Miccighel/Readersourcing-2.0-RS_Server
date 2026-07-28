@@ -1,63 +1,43 @@
-# ---------- SCENARIO 2: DEPLOY WITH LOCAL BUILD ----------
+# syntax=docker/dockerfile:1
 
-FROM ruby:2.6.10
+ARG RUBY_VERSION=3.4.10
 
-# Install apt based dependencies required to run Rails as
-# well as RubyGems. As the Ruby image itself is based on a
-# Debian image, we use apt-get to install those.
-RUN apt-get update && apt-get install -y build-essential nodejs default-jre logrotate && apt-get clean
+FROM ruby:${RUBY_VERSION}-slim AS base
 
-# Configure the main working directory. This is the base
-# directory used in any further RUN, COPY, and ENTRYPOINT
-# commands.
-RUN mkdir -p /rs_server
-WORKDIR ./rs_server
+WORKDIR /rs_server
 
-# Copy your logrotate configuration file into the image
-COPY logrotate.conf /etc/logrotate.conf
-# Copy the Gemfile as well as the Gemfile.lock and install
-# the RubyGems. This is a separate step so the dependencies
-# will be cached unless changes to one of those two files
-# are made.
+ENV RAILS_ENV="production" \
+    BUNDLE_DEPLOYMENT="1" \
+    BUNDLE_PATH="/usr/local/bundle" \
+    BUNDLE_WITHOUT="development:test"
+
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y default-jre-headless libpq5 && \
+    rm -rf /var/lib/apt/lists/*
+
+FROM base AS build
+
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential git libpq-dev nodejs && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY Gemfile Gemfile.lock ./
-# Copy the main application.
-COPY . ./
+RUN bundle install && \
+    rm -rf /root/.bundle "${BUNDLE_PATH}"/ruby/*/cache
 
-# Set environment variable for Yarn version
-ENV YARN_VERSION=3.6.3
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn ./.yarn
+RUN node .yarn/releases/yarn-3.6.3.cjs install --immutable
 
-# Install Yarn and project dependencies
-# Set the Yarn version to the latest
-# Run yarn install to install project dependencies
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-    apt-get update -y && apt-get install -y yarn && \
-    yarn set version $YARN_VERSION && yarn install
+COPY . .
+RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
 
-# Install Bundler and RubyGems
-RUN gem update --system 3.2.3
-RUN gem install bundler -v 2.4.22 && bundle install --jobs 20 --retry 5
+FROM base
 
-# Expose port 3000 to the Docker host, so we can access it
-# from the outside.
-EXPOSE 3000
+COPY --from=build /usr/local/bundle /usr/local/bundle
+COPY --from=build /rs_server /rs_server
 
-# Set the entry point script
-RUN chmod +x entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
 
-# ---------- SCENARIO 2: DEPLOY WITH LOCAL BUILD ----------
-
-# ---------- COMMANDS FOR A DOCKER DEPLOY ON HEROKU ----------
-
-# heroku login
-# heroku container:login
-# heroku container:push web --app rs-server
-# heroku container:release web --app rs-server
-# heroku open --app rs-server
-# heroku run rake db:create RAILS_ENV=production --app rs-server
-# heroku run rake db:migrate RAILS_ENV=production --app rs-server
-# heroku run rake db:seed RAILS_ENV=production --app rs-server
-# heroku logs --tail --app rs-server
-
-# ---------- END ----------
+EXPOSE 3000
+CMD ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000", "-e", "production"]

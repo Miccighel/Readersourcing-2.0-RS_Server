@@ -1,3 +1,3 @@
-class BigDecimal
-	include Extensions::BigDecimal
-end
+require Rails.root.join("lib/extensions/big_decimal")
+
+BigDecimal.include(Extensions::BigDecimal)

@@ -19,7 +19,7 @@ class PasswordsController < ApplicationController
 			if new_password == new_password_confirmation
 				current_user.password = new_password
 				if current_user.save
-					PasswordMailer.update(current_user).deliver
+					PasswordMailer.update(current_user).deliver_now
 					render json: {message: I18n.t("confirmations.messages.password_update_successful")}, status: :ok
 				else
 					current_user.errors.each {|error| @error_manager.add_error(error)}
@@ -51,7 +51,7 @@ class PasswordsController < ApplicationController
 				delete_token
 				user.generate_password_token!
 				reset_url = "#{request.protocol}#{request.host_with_port}#{reset_path(email: user.email, reset_token: user.reset_password_token)}"
-				PasswordMailer.forgot(user, reset_url).deliver
+				PasswordMailer.forgot(user, reset_url).deliver_now
 				render json: {message: I18n.t("confirmations.messages.reset_mail_sent")}, status: :ok
 			else
 				@error_manager.add_error(I18n.t("errors.messages.email_not_present"))
@@ -81,7 +81,7 @@ class PasswordsController < ApplicationController
 					new_password = SecureRandom.hex (rand(6..10))
 					if user.reset_password!(new_password)
 						delete_token
-						PasswordMailer.reset(user, new_password).deliver
+						PasswordMailer.reset(user, new_password).deliver_now
 						render "shared/success", locals: {message: I18n.t("confirmations.messages.reset_mail_sent")}, status: :ok, layout: false
 					else
 						render "shared/errors", status: :unprocessable_entity, locals: {errors: user.errors}, layout: false

@@ -55,7 +55,7 @@ class RatingsController < ApplicationController
 			@rating.publication = publication
 			if @rating.save
 				@rating.compute_scores
-				RatingMailer.confirm(current_user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(current_user.id)).deliver
+				RatingMailer.confirm(current_user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(current_user.id)).deliver_now
 				render :show, status: :created, location: @rating
 			else
 				render json: @rating.errors, status: :unprocessable_entity
@@ -90,7 +90,7 @@ class RatingsController < ApplicationController
 					@rating.user = requesting_user
 					if @rating.save
 						@rating.compute_scores
-						RatingMailer.confirm(@rating.user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(@rating.user.id)).deliver
+						RatingMailer.confirm(@rating.user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(@rating.user.id)).deliver_now
 						render "shared/success", locals: {
 							pubId: @rating.publication.id,
 							message: I18n.t("information.messages.mail_confirmation"),

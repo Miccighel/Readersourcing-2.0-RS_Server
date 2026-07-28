@@ -39,7 +39,7 @@ class Publication < ApplicationRecord
 	def is_fetchable
 		logger.info "Fetching file at url: #{pdf_url}"
 		begin
-			publication = open(pdf_url)
+			publication = URI.open(pdf_url)
 		rescue SystemCallError => exception
 			logger.info "Could not fetch file: #{exception.message}"
 			raise
@@ -66,7 +66,7 @@ class Publication < ApplicationRecord
 		# FILE FETCHING STARTS HERE
 
 		logger.info "Fetching file at url: #{pdf_url}"
-		publication = open(pdf_url)
+		publication = URI.open(pdf_url)
 		if publication.meta['content-disposition'] != nil
 			logger.info "Content disposition meta tag detected. Reading file name from there"
 			filename = publication.meta['content-disposition'].match(/filename=(\"?)(.+)\1/)[2]
@@ -249,7 +249,7 @@ class Publication < ApplicationRecord
 	end
 
 	def remove_files(user)
-		if File.exists? absolute_pdf_storage_path(user)
+		if File.exist? absolute_pdf_storage_path(user)
 			logger.info "Deleting storage folder at: #{absolute_pdf_storage_path(user)}"
 			FileUtils.rm_rf(absolute_pdf_storage_path(user))
 		else
@@ -258,7 +258,7 @@ class Publication < ApplicationRecord
 	end
 
 	def remove_annotated_file(user)
-		if File.exists? absolute_pdf_download_path_link(user)
+		if File.exist? absolute_pdf_download_path_link(user)
 			logger.info "Deleting old annotated version at: #{absolute_pdf_download_path_link(user)}"
 			File.delete(absolute_pdf_download_path_link(user))
 		else
