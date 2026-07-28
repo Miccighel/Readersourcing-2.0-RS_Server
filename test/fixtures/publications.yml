@@ -1,9 +1,19 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  doi: MyString
-  title: MyString
+  doi: 10.1000/readersourcing-one
+  title: Readersourcing One
+  pdf_url: https://example.test/readersourcing-one.pdf
+  pdf_storage_path: publication/pdf/one/
+  pdf_name: readersourcing-one.pdf
+  pdf_download_path: publication/pdf/one/readersourcing-one.pdf
+  pdf_name_link: readersourcing-one-Link.pdf
+  pdf_download_path_link: publication/pdf/one/readersourcing-one-Link.pdf
 
 two:
-  doi: MyString
-  title: MyString
+  doi: 10.1000/readersourcing-two
+  title: Readersourcing Two
+  pdf_url: https://example.test/readersourcing-two.pdf
+  pdf_storage_path: publication/pdf/two/
+  pdf_name: readersourcing-two.pdf
+  pdf_download_path: publication/pdf/two/readersourcing-two.pdf
+  pdf_name_link: readersourcing-two-Link.pdf
+  pdf_download_path_link: publication/pdf/two/readersourcing-two-Link.pdf

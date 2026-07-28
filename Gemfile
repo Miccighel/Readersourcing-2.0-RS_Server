@@ -27,11 +27,8 @@ gem "simple_command"
 
 gem "tzinfo-data", platforms: %i[windows jruby]
 
-group :development, :test do
-  gem "debug", platforms: %i[mri windows], require: "debug/prelude"
-end
-
 group :development do
+  gem "debug", platforms: %i[mri windows], require: "debug/prelude"
   gem "letter_opener"
 end
 

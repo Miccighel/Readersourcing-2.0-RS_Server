@@ -19,7 +19,11 @@ redesigning its Readersourcing domain model.
 - the root page renders successfully in the test environment;
 - JWT encoding/decoding and the existing encrypted session payload round-trip;
 - the RSM/TRM characterization suite passes with 67 assertions;
-- the Docker Compose file is syntactically valid.
+- the Docker image builds for Linux ARM and includes compiled production assets;
+- PostgreSQL 17 becomes healthy and the production container starts without
+  implicitly seeding data;
+- the production home page responds with HTTP 200;
+- the complete database-backed suite passes with 17 tests and 98 assertions.
 
 ## Deliberately unchanged
 
@@ -32,18 +36,34 @@ redesigning its Readersourcing domain model.
 See `domain-fidelity.md` for the protected behavior and known numerical
 differences between Ruby runtimes.
 
-## Remaining integration work
+## Docker compatibility decisions
 
-A PostgreSQL service was not available during this spike, and the local Docker
-daemon was not running. The complete database-backed test suite and the image
-build therefore still need to be exercised with:
+- Linux ARM and x86-64 are explicit Bundler lockfile platforms.
+- PostgreSQL is available only on the internal Compose network, avoiding a
+  conflict with an existing database on host port 5432.
+- The database service uses the RFC-valid hostname `database`; Ruby 3.4's URI
+  parser rejects the underscore in the former `rs_server_database` hostname.
+- The entrypoint uses `db:create` followed by `db:migrate`. Unlike
+  `db:prepare` on a new database, this preserves the old behavior in which
+  sample-data seeding is an explicit, optional action.
+
+The stack and test suite can be reproduced with:
 
 ```sh
 docker compose up --build
-docker compose exec rs_server_webapp bin/rails test
+docker compose run --rm --no-deps \
+  -e RAILS_ENV=test \
+  -v "$PWD:/rs_server" \
+  rs_server_webapp ./bin/rails db:create db:schema:load
+docker compose run --rm --no-deps \
+  -e RAILS_ENV=test \
+  -v "$PWD:/rs_server" \
+  rs_server_webapp ./bin/rails test
 ```
 
-After that, the next checkpoint is an end-to-end contract test from RS_Rate to
-the rating endpoint. Modernizing the frontend or changing the TRM formula must
-remain separate changes so that either can be assessed independently from the
+## Remaining integration work
+
+The next checkpoint is an end-to-end contract test from RS_Rate to the rating
+endpoint. Modernizing the frontend or changing the TRM formula must remain
+separate changes so that either can be assessed independently from the
 framework migration.

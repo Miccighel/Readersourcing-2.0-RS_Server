@@ -80,8 +80,8 @@ needed.
 To fetch all Ruby dependencies required by RS_Server, type ```bundle install``` and wait for the process to complete.
 Then type ```node .yarn/releases/yarn-3.6.3.cjs install --immutable``` to install the existing browser assets.
 
-Ensure that the ```PostgreSQL``` service is started and ready to accept connections on port ```5432```. Type ```bin/rails db:prepare```
-to create or migrate the database as needed. Now, create a ```.env``` file as explained later and set the required environment variables.
+Ensure that the ```PostgreSQL``` service is started and ready to accept connections on port ```5432```. Type ```bin/rails db:create```
+and then ```bin/rails db:migrate```. Now, create a ```.env``` file as explained later and set the required environment variables.
 Optionally, you can type ```bin/rails db:seed``` to seed some sample data in the database. After these commands, everything is ready to launch RS_Server in _development_ or _production_ mode.
 
 To do that, type ```bin/rails server -b 127.0.0.1 -p 3000 -e development```
@@ -95,7 +95,8 @@ Every HTTP request, therefore, must be sent to the ```http://127.0.0.1:3000``` a
 - ```gem install bundler```;
 - ```bundle install```;
 - ```node .yarn/releases/yarn-3.6.3.cjs install --immutable```;
-- ```bin/rails db:prepare```;
+- ```bin/rails db:create```;
+- ```bin/rails db:migrate```;
 - ```bin/rails db:seed``` (optional);
 - create and populate the ```.env``` file;
 - ```bin/rails server -b <your_ip_address> -p <your_port> -e development``` or ```bin/rails server -b <your_ip_address> -p <your_port> -e production```.
@@ -124,7 +125,7 @@ If you do not see them, please be sure to be in the main directory of the cloned
 Before proceeding, _be sure that your Docker Engine is running_, otherwise the following commands will not work.
 The current Compose configuration builds RS_Server locally using Ruby 3.4 and starts PostgreSQL 17. Type
 ```docker compose up --build``` and wait for the image build and database health check to complete. The container entrypoint runs
-```bin/rails db:prepare``` before starting the server.
+```bin/rails db:create``` and ```bin/rails db:migrate``` before starting the server. Seeding remains optional.
 
 RS_Server will be bound to port ```3000``` in the ```production``` environment. Every HTTP request must therefore be sent to
 ```http://localhost:3000```. To seed sample data, type

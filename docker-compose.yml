@@ -3,21 +3,19 @@ services:
     build: .
     env_file: .env
     environment:
-      POSTGRES_HOST: rs_server_database
+      POSTGRES_HOST: database
       RAILS_ENV: production
     ports:
       - "3000:3000"
     depends_on:
-      rs_server_database:
+      database:
         condition: service_healthy
 
-  rs_server_database:
+  database:
     image: postgres:17
     env_file: .env
-    ports:
-      - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-postgres} -d $$POSTGRES_DB"]
       interval: 5s
       timeout: 5s
       retries: 10
