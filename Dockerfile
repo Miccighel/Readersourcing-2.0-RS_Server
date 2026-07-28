@@ -12,7 +12,7 @@ ENV RAILS_ENV="production" \
     BUNDLE_WITHOUT="development:test"
 
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y default-jre-headless libpq5 && \
+    apt-get install --no-install-recommends -y openjdk-21-jre-headless libpq5 && \
     rm -rf /var/lib/apt/lists/*
 
 FROM base AS build

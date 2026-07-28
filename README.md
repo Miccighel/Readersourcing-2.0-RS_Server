@@ -67,7 +67,7 @@ This is the most demanding modality in terms of prerequisites since it assumes h
 <h3>Requirements</h3>
 
 - <a href="https://www.ruby-lang.org/en/downloads/">Ruby</a> == 3.4.10;
-- a Java runtime >= 11, required by RS_PDF;
+- a Java 21 runtime, required by RS_PDF;
 - <a href="https://www.postgresql.org/download/">PostgreSQL</a> >= 17;
 - Node.js >= 18, used to install the existing browser assets.
 
