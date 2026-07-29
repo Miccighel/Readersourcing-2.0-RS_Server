@@ -36,4 +36,25 @@ class RsPdfIntegrationTest < ActiveSupport::TestCase
       assert_not File.exist?(File.join(output_path, "Reader-QRCode.png"))
     end
   end
+
+  test "bundled RS_PDF exposes an unsuccessful process status" do
+    jar_path = @publication.send(:absolute_rs_pdf_path)
+    input_path = file_fixture("Reader.pdf")
+
+    Dir.mktmpdir("rs_pdf_server_failure_test") do |output_path|
+      runner = RsPdfRunner.new(jar_path: jar_path)
+      error = assert_raises(RsPdfRunner::ExecutionError) do
+        runner.call(
+          input_path: input_path,
+          output_path: output_path,
+          url: "file:///tmp/rate",
+          caption: "Express your rating",
+          expected_output: File.join(output_path, "Reader-Link.pdf")
+        )
+      end
+
+      assert_includes error.message, "exit status 2"
+      assert_not File.exist?(File.join(output_path, "Reader-Link.pdf"))
+    end
+  end
 end

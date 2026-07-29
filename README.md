@@ -210,7 +210,12 @@ along with an explanation of which deployment modality requires their usage.
 | ```SMTP_DOMAIN_ADDRESS``` | Full address of the SMTP mail server.                                                    | 1 - 2 - 3       | ```production```                    | ```.env``` file, Heroku app |
 | ```EMAIL_BUG_REPORT```    | Email address to receive bug reports.                                                    | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
 | ```EMAIL_ADMIN```         | Email address to receive general questions.                                              | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
-| ```RAILS_LOG_TO_STD```    | When set to ```true```, forces the application to write its logs to the standard output. | 1 - 2 - 3       | ```production```                    | ```.env``` file, Heroku app |
+| ```RAILS_LOG_TO_STDOUT``` | When present, forces the application to write its logs to the standard output.           | 1 - 2 - 3       | ```production```                    | ```.env``` file, Heroku app |
+| ```RS_PDF_MAX_DOWNLOAD_BYTES``` | Maximum accepted publication size in bytes. The default is 52428800 (50 MiB).     | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
+| ```RS_PDF_OPEN_TIMEOUT``` | Maximum number of seconds allowed to open a publication connection. The default is 5.    | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
+| ```RS_PDF_READ_TIMEOUT``` | Maximum number of seconds allowed while reading a publication response. The default is 20.| 1 - 2 - 3      | ```development```, ```production``` | ```.env``` file, Heroku app |
+| ```RS_PDF_PROCESS_TIMEOUT``` | Maximum RS_PDF execution time in seconds. The default is 60.                          | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
+| ```RS_PDF_ALLOW_PRIVATE_NETWORKS``` | Set to ```true``` only when publications must be fetched from a trusted private network. | 1 - 2 - 3 | ```development```, ```production``` | ```.env``` file, Heroku app |
 
 <h3>Setting Variables</h3>
 
@@ -268,5 +273,5 @@ This holds for both the _development_ and _production_ environments. Indeed, the
 
 An instance of RS_Server deployed in development writes its logs to the standard output as the default behavior.
 In a _production_ environment, on the other hand, the logs are written in the `logs/production.log` file. Thus,
-forcing Rails to write logs in the standard output using the `RAILS_LOG_TO_STD` variable can be useful for quick
+forcing Rails to write logs in the standard output using the `RAILS_LOG_TO_STDOUT` variable can be useful for quick
 debugging purposes when testing the _production_ environment.

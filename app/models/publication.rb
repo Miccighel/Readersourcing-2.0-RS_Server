@@ -1,4 +1,4 @@
-require 'open-uri'
+require "tmpdir"
 
 class Publication < ApplicationRecord
 
@@ -37,66 +37,41 @@ class Publication < ApplicationRecord
 	end
 
 	def is_fetchable
-		logger.info "Fetching file at URL: #{pdf_url}"
-		begin
-			publication = URI.open(pdf_url)
-		rescue SystemCallError => exception
-			logger.info "Could not fetch file: #{exception.message}"
-			raise
-		rescue SocketError => exception
-			logger.info "Could not fetch file: #{exception.message}"
-			raise
-		end
-		content_type = publication.meta['content-type']
-		logger.info "Content type found: #{content_type}"
-		bytes_expected = publication.meta['content-length'].to_i
-		logger.info "Bytes expected: #{bytes_expected}"
-		bytes_expected > 0 and content_type == "application/pdf"
+		logger.info "Checking whether the publication URL returns a bounded PDF"
+		download = pdf_fetcher.fetch
+		true
+	rescue PdfFetcher::Error => exception
+		logger.info "The publication is not fetchable: #{exception.message}"
+		false
+	ensure
+		download&.close
 	end
 
 	def fetch(request_data)
 
 		data = Hash.new
-		data[:authToken] = request_data.values[0]
-		data[:host] = request_data.values[1]
+		data[:authToken] = request_data.fetch(:authToken)
+		data[:host] = request_data.fetch(:host)
 		data[:pub_id] = self.id
-		data[:user] = request_data.values[2]
-		data[:rate_path] = "#{request_data.values[1]}#{Rails.application.routes.url_helpers.rate_paper_path(data[:pub_id], data[:authToken])}"
+		data[:user] = request_data.fetch(:user)
+		data[:rate_path] = "#{data[:host]}#{Rails.application.routes.url_helpers.rate_paper_path(data[:pub_id], data[:authToken])}"
 
 		# FILE FETCHING STARTS HERE
 
-		logger.info "Fetching file at URL: #{pdf_url}"
-		publication = URI.open(pdf_url)
-		if publication.meta['content-disposition'] != nil
-			logger.info "Content-Disposition metadata found; reading the file name"
-			filename = publication.meta['content-disposition'].match(/filename=(\"?)(.+)\1/)[2]
-		else
-			logger.info "Content-Disposition metadata not found; reading the file name from the URL"
-			filename = pdf_url.to_s.split('/')[-1]
-		end
-		if filename == nil
-			raise "The file name could not be determined"
-		end
+		logger.info "Downloading a bounded PDF from the configured publication host"
+		download = pdf_fetcher.fetch
+		filename = download.filename
 		load_pdf_paths(filename, data[:host])
 		logger.info "File name: #{filename}"
 
-		logger.info "Checking if there is an old annotated version to remove."
-		remove_annotated_file data[:user]
-
 		logger.info "Creating folder at #{absolute_pdf_storage_path(data[:user])}."
 		FileUtils::mkdir_p absolute_pdf_storage_path(data[:user])
-		bytes_expected = publication.meta['content-length'].to_i
-		logger.info "Copying file at #{absolute_pdf_download_path(data[:user])}"
-		bytes_copied = IO.copy_stream(publication, absolute_pdf_download_path(data[:user]))
-		if bytes_expected != bytes_copied
-			raise "Expected #{bytes_expected} bytes but got #{bytes_copied}"
-		end
-		logger.info "Bytes copied: #{bytes_copied} expected: #{bytes_expected} difference: #{bytes_expected - bytes_copied}"
+		logger.info "Downloaded bytes: #{download.content_length}"
 
 		# METADATA READING STARTS HERE
 
-		logger.info "Reading metadata from: #{absolute_pdf_download_path(data[:user])}"
-		reader = PDF::Reader.new(absolute_pdf_download_path(data[:user]))
+		logger.info "Reading metadata from the bounded temporary publication"
+		reader = PDF::Reader.new(download.io.path)
 		begin
 			if !reader.info[:doi].blank?
 				logger.info "DOI found"
@@ -189,30 +164,28 @@ class Publication < ApplicationRecord
 
 		# EDITING OF PDF FILE WITH RS_PDF STARTS HERE
 
-		logger.info "Checking again for file: #{absolute_pdf_download_path(data[:user])}"
-		if File.exist?(absolute_pdf_download_path(data[:user]))
-			logger.info "File exists"
-			logger.info "RS_PDF execution started"
-			logger.info "Path: #{absolute_rs_pdf_path}"
-			logger.info "Options:"
-			logger.info "-pIn: #{absolute_pdf_download_path(data[:user])}"
-			logger.info "-pOut: #{absolute_pdf_storage_path(data[:user])}"
-			logger.info "-u: #{data[:rate_path]}"
-			logger.info "-c: Click here"
-			logger.info "-pId: #{data[:pub_id]}"
-			logger.info "-a: #{data[:authToken]}"
-			logger.info "Complete command:"
-			logger.info "java -jar #{absolute_rs_pdf_path} -pIn #{absolute_pdf_download_path(data[:user])} -pOut #{absolute_pdf_storage_path(data[:user])} -u #{data[:rate_path]} -c \"Express your rating\""
-			output = %x( java -jar #{absolute_rs_pdf_path} -pIn #{absolute_pdf_download_path(data[:user])} -pOut #{absolute_pdf_storage_path(data[:user])} -u #{data[:rate_path]} -c "Express your rating")
-			logger.info output
-			logger.info "RS_PDF execution completed"
-			File.delete(absolute_pdf_download_path(data[:user]))
-			logger.info "Modified file"
-			logger.info "Name: #{pdf_name_link}"
-			logger.info "Download path: #{pdf_download_path_link}"
-		else
-			raise "File does not exist at #{absolute_pdf_download_path(data[:user])}"
+		logger.info "RS_PDF execution started"
+		storage_path = absolute_pdf_storage_path(data[:user])
+		Dir.mktmpdir("rs-pdf-", storage_path.to_s) do |staging_path|
+			temporary_name = File.basename(download.io.path, File.extname(download.io.path))
+			staged_output = File.join(staging_path, "#{temporary_name}#{Settings.rs_pdf_link_suffix}.pdf")
+			runner = rs_pdf_runner
+			result = runner.call(
+				input_path: download.io.path,
+				output_path: staging_path,
+				url: data[:rate_path],
+				caption: "Express your rating",
+				expected_output: staged_output
+			)
+			logger.info result.stdout unless result.stdout.blank?
+			FileUtils.mv(staged_output, absolute_pdf_download_path_link(data[:user]), force: true)
 		end
+		logger.info "RS_PDF execution completed"
+		logger.info "Modified file"
+		logger.info "Name: #{pdf_name_link}"
+		logger.info "Download path: #{pdf_download_path_link}"
+	ensure
+		download&.close
 	end
 
 	# Extracts the BaseUrl metadata from an uploaded PDF file.
@@ -295,11 +268,24 @@ class Publication < ApplicationRecord
 	private
 
 	def remove_extension_from_filename(filename)
-		filename.chomp(".pdf").gsub(/\s+/, '-')
+		safe_pdf_stem(filename)
 	end
 
 	def self.remove_extension_from_filename(filename)
-		filename.chomp(".pdf").gsub(/\s+/, '-')
+		safe_pdf_stem(filename)
+	end
+
+	def self.safe_pdf_stem(filename)
+		base_name = File.basename(filename.to_s.tr("\\", "/"))
+		stem = base_name.sub(/\.pdf\z/i, "")
+		stem = stem.encode("UTF-8", invalid: :replace, undef: :replace, replace: "")
+		stem = stem.delete("\0").gsub(/[[:cntrl:]]/, "")
+		stem = stem.gsub(/[^\p{Alnum}_.()\-]+/u, "-").sub(/\A[.\-]+/, "")
+		stem.blank? ? "publication" : stem
+	end
+
+	def safe_pdf_stem(filename)
+		self.class.safe_pdf_stem(filename)
 	end
 
 	def load_pdf_paths(pdf_name, host)
@@ -314,6 +300,14 @@ class Publication < ApplicationRecord
 
 	def absolute_rs_pdf_path
 		Rails.root.join("lib").join(Settings.rs_pdf_name)
+	end
+
+	def pdf_fetcher
+		PdfFetcher.new(pdf_url)
+	end
+
+	def rs_pdf_runner
+		RsPdfRunner.new(jar_path: absolute_rs_pdf_path)
 	end
 
 	def absolute_pdf_storage_path(user)
