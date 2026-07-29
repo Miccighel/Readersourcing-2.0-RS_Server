@@ -1,7 +1,7 @@
 class ReadersourcingStrategy
 
 	def compute_scores
-		raise 'This is like a Java abstract class. Use methods of subclasses.'
+		raise 'ReadersourcingStrategy defines the strategy interface; use a concrete subclass.'
 	end
 
 end

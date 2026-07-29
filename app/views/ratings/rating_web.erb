@@ -11,7 +11,7 @@
 			<div id="rating-sect" class="col-12">
 				<div class="heading text-center mb-1">
 					<h4>Rate a publication</h4>
-					<p id="rating-caption-first" class="lead mb-0">Insert an URL to a publication encoded in a .pdf file to rate it.</p>
+					<p id="rating-caption-first" class="lead mb-0">Enter the URL of a publication in PDF format to rate it.</p>
 					<p id="rating-caption-second" class="lead mb-0">Use the slider below to select a rating for the current publication.</p>
 					<p id="rating-caption-third" class="lead mb-0">A rating for the current publication is already present.</p>
 				</div>
@@ -19,7 +19,7 @@
 			<div id="loading-sect" class="col-12">
 				<div class="heading text-center">
 					<h4>Fetch a new publication</h4>
-					<p id="check-par" class="lead mb-0">Checking if there is a fetchable publication in PDF format...</p>
+					<p id="check-par" class="lead mb-0">Checking for a downloadable publication in PDF format...</p>
 				</div>
 				<div class="text-center mt-3">
 					<h1><i class="fas fa-sync-alt fa-spin"></i></h1>
@@ -28,7 +28,7 @@
 			<div id="undetected-publication-sect" class="col-12 text-center">
 				<div class="heading text-center">
 					<h4>Fetch a new publication</h4>
-					<p class="lead mb-0">The inserted URL does not contain a rateable publication, please check it
+					<p class="lead mb-0">The entered URL does not identify a publication that can be rated. Please check it
 						again.
 					</p>
 				</div>
@@ -156,14 +156,14 @@
 			<div class="col-12">
 				<div class="heading text-center mb-1">
 					<h4>Automatic extraction</h4>
-					<p id="extract-caption-first" class="lead mb-0">Upload here your link-annotated publication to extract the rating URL.</p>
+					<p id="extract-caption-first" class="lead mb-0">Upload your link-annotated publication here to extract its rating URL.</p>
 					<p id="extract-caption-second" class="lead mb-0">Click below to go to the rating page.</p>
 				</div>
 			</div>
 			<div class="col-12">
 				<form action="<%= extract_publications_path(format: :json) %>" id="annotated-publication-dropzone" class="dropzone border-primary">
 					<div class="dz-default dz-message text-center pt-1">
-						<br/><i class="fas fa-upload fa-2x"></i><br/>.pdf file
+						<br/><i class="fas fa-upload fa-2x"></i><br/>PDF file
 					</div>
 				</form>
 			</div>
@@ -190,7 +190,7 @@
 	<div role="document" class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 id="modal-options-label" class="modal-title color-dark">Rating Config</h4>
+				<h4 id="modal-options-label" class="modal-title color-dark">Rating Options</h4>
 				<button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
 					aria-hidden="true">X</span></button>
 			</div>
@@ -227,14 +227,14 @@
 			</div>
 			<div class="modal-body">
 				<div class="col-12 text-center color-dark">
-					<strong>Click Below To Refresh</strong>
+					<strong>Click below to refresh</strong>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<div class="row w-100 m-auto">
 					<div class="col-12 p-0 text-center">
 						<button type="button" id="modal-refresh-btn" class="btn btn-success w-35">
-							Okay!
+							OK
 						</button>
 					</div>
 				</div>
@@ -254,7 +254,7 @@
 			<div class="modal-body">
 				<div class="col-12 text-center">
 					<div role="alert" class="alert alert-danger">
-						Please, allow <strong>popups</strong> on this website for a smoother download experience.
+						Please allow <strong>popups</strong> on this website for a smoother download experience.
 						Otherwise, <strong>you can use the "Open" button to download your link-annotated publication.</strong>
 					</div>
 				</div>
@@ -263,7 +263,7 @@
 				<div class="row w-100 m-auto">
 					<div class="col-12 p-0 text-center">
 						<button type="button" id="modal-allow-btn" class="btn btn-primary w-35">
-							Okay!
+							OK
 						</button>
 					</div>
 				</div>

@@ -79,7 +79,7 @@ class ApplicationController < ActionController::API
 	private
 
 	def authorize_server_request
-		# Instantiate Authorizer and call the instance method 'call'
+		# Authorize the token stored by the server-rendered workflow.
 		authorizer = Authorizer.new(fetch_token, request.remote_ip)
 		@current_user = authorizer.call.result
 		render "login", status: :ok, locals: {message: I18n.t("information.messages.login")} unless @current_user
@@ -88,7 +88,7 @@ class ApplicationController < ActionController::API
 	def authorize_api_request
 		auth_token = request.headers['Authorization'].split(' ').last
 
-		# Instantiate Authorizer and call the instance method 'call'
+		# Authorize the bearer token supplied by an API client.
 		authorizer = Authorizer.new(auth_token, request.remote_ip)
 		@current_user = authorizer.call.result
 

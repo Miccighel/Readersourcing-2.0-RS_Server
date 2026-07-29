@@ -66,12 +66,12 @@ class PasswordsController < ApplicationController
 	def reset
 		email = params[:email]
 		reset_token = params[:reset_token]
-		# Has the user inserted an email?
+		# Has the user supplied an email address?
 		if email.blank?
 			@error_manager.add_error('Email not present')
 			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}, layout: false
 		else
-			# Is the reset token present?
+			# Has the user supplied a reset token?
 			if reset_token.blank?
 				@error_manager.add_error('Reset token not present')
 				render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}, layout: false
@@ -82,7 +82,7 @@ class PasswordsController < ApplicationController
 					if user.reset_password!(new_password)
 						delete_token
 						PasswordMailer.reset(user, new_password).deliver_now
-						render "shared/success", locals: {message: I18n.t("confirmations.messages.reset_mail_sent")}, status: :ok, layout: false
+						render "shared/success", locals: {message: I18n.t("confirmations.messages.new_password_mail_sent")}, status: :ok, layout: false
 					else
 						render "shared/errors", status: :unprocessable_entity, locals: {errors: user.errors}, layout: false
 					end

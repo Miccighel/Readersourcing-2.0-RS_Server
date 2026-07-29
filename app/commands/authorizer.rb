@@ -8,7 +8,7 @@ class  Authorizer
 	end
 
 	def call
-		# Code wrapped to private method to avoid public attributes
+		# Keep token validation private to the command.
 		authorize_user
 	end
 
@@ -24,7 +24,8 @@ class  Authorizer
 			errors.add(:token, I18n.t("errors.messages.missing_token"))
 		end
 		if decoded_auth_token
-			# If the user represented by the token exists and his IP address is equal to the one of the current request
+			# Accept the token only when its user exists and its IP address
+			# matches the current request.
 			if @user.nil?
 				same_ip_address = false
 				unexpired_token = false

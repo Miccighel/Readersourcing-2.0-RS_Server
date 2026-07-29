@@ -37,7 +37,7 @@ class Publication < ApplicationRecord
 	end
 
 	def is_fetchable
-		logger.info "Fetching file at url: #{pdf_url}"
+		logger.info "Fetching file at URL: #{pdf_url}"
 		begin
 			publication = URI.open(pdf_url)
 		rescue SystemCallError => exception
@@ -65,17 +65,17 @@ class Publication < ApplicationRecord
 
 		# FILE FETCHING STARTS HERE
 
-		logger.info "Fetching file at url: #{pdf_url}"
+		logger.info "Fetching file at URL: #{pdf_url}"
 		publication = URI.open(pdf_url)
 		if publication.meta['content-disposition'] != nil
-			logger.info "Content disposition meta tag detected. Reading file name from there"
+			logger.info "Content-Disposition metadata found; reading the file name"
 			filename = publication.meta['content-disposition'].match(/filename=(\"?)(.+)\1/)[2]
 		else
-			logger.info "Content disposition meta tag not detected. Reading file name from url"
+			logger.info "Content-Disposition metadata not found; reading the file name from the URL"
 			filename = pdf_url.to_s.split('/')[-1]
 		end
 		if filename == nil
-			raise "Filename is still null, something went wrong"
+			raise "The file name could not be determined"
 		end
 		load_pdf_paths(filename, data[:host])
 		logger.info "File name: #{filename}"
@@ -175,26 +175,26 @@ class Publication < ApplicationRecord
 			logger.info e.message
 		end
 
-		# CHECK TO SEE IF CURRENT USER TRIES TO FETCH A PUBLICATION ALREADY PRESENT ON RS_SERVER
+		# PREVENT A PUBLICATION ALREADY MANAGED BY RS_SERVER FROM BEING FETCHED AGAIN
 
 		begin
 			if reader.info.key?(:BaseUrl)
-				logger.info "This is a publication which is already present on RS_Server"
+				logger.info "This publication is already present on RS_Server"
 				raise I18n.t("errors.messages.publication_already_fetched")
 			end
 		rescue ArgumentError
-			logger.info "Error reading Base Url metadata"
-			logger.info "Probably this publication is not present on RS_Server"
+			logger.info "Error reading BaseUrl metadata"
+			logger.info "The publication is probably not present on RS_Server"
 		end
 
 		# EDITING OF PDF FILE WITH RS_PDF STARTS HERE
 
-		logger.info "Checking again existence of: #{absolute_pdf_download_path(data[:user])}"
+		logger.info "Checking again for file: #{absolute_pdf_download_path(data[:user])}"
 		if File.exist?(absolute_pdf_download_path(data[:user]))
 			logger.info "File exists"
 			logger.info "RS_PDF execution started"
 			logger.info "Path: #{absolute_rs_pdf_path}"
-			logger.info "with options:"
+			logger.info "Options:"
 			logger.info "-pIn: #{absolute_pdf_download_path(data[:user])}"
 			logger.info "-pOut: #{absolute_pdf_storage_path(data[:user])}"
 			logger.info "-u: #{data[:rate_path]}"
@@ -211,11 +211,11 @@ class Publication < ApplicationRecord
 			logger.info "Name: #{pdf_name_link}"
 			logger.info "Download path: #{pdf_download_path_link}"
 		else
-			raise "File does not exists at #{absolute_pdf_download_path(data[:user])}"
+			raise "File does not exist at #{absolute_pdf_download_path(data[:user])}"
 		end
 	end
 
-	# The following method extract the BaseUrl metadata from an uploaded PDF file.
+	# Extracts the BaseUrl metadata from an uploaded PDF file.
 	def self.extract_base_url(file, user, request_data)
 		current_host = request_data.values[1]
 		logger.info "Copying temporary file with original name: #{file.original_filename}"
@@ -232,15 +232,15 @@ class Publication < ApplicationRecord
 			reader = PDF::Reader.new(temp_path)
 			base_url = reader.info[:BaseUrl]
 			if !base_url.blank?
-				logger.info "Base Url found: #{base_url}"
-				logger.info "Comparing with Current Host: #{current_host}"
+				logger.info "BaseUrl found: #{base_url}"
+				logger.info "Comparing with current host: #{current_host}"
 				if base_url.include?(current_host)
 					return base_url
 				else
 					raise I18n.t("errors.messages.publication_fetched_somewhere_else")
 				end
 			else
-				logger.info "Base Url not found"
+				logger.info "BaseUrl not found"
 				raise I18n.t("errors.messages.base_url_not_found")
 			end
 		else

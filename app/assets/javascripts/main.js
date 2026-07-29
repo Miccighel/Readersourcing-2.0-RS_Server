@@ -638,7 +638,7 @@ $(document).on("turbolinks:load", () => {
 							pdf_url: currentUrl
 						}
 					};
-					// data ---> secondData because of visibility clash with "lookup" call.
+					// Use secondData to avoid a name collision with the lookup response.
 					let successCallback = (secondData, status, jqXHR) => {
 						// 1.2 Publication exists, so it may be rated by the user
 						let successCallback = (data, status, jqXHR) => {
@@ -719,13 +719,13 @@ $(document).on("turbolinks:load", () => {
 									downloadButton.prop("disabled", false);
 									downloadButton.show();
 								};
-								// 3.1 Does the rated publication has been already annotated?
+								// 3.1 Has the rated publication already been annotated?
 								let thirdPromise = emptyAjax("GET", `/publications/${data["id"]}/is_saved_for_later.json`, "application/json; charset=utf-8", "json", true, thirdSuccessCallback, thirdErrorCallback);
 							};
-							// 2.1 Does the publication has been rated by the logged user?
+							// 2.1 Has the publication been rated by the logged-in user?
 							let secondPromise = emptyAjax("GET", `/publications/${data["id"]}/is_rated.json`, "application/json; charset=utf-8", "json", true, secondSuccessCallback, secondErrorCallback);
 						};
-						// 1.3 Publication was never rated, so it does not exists on the database
+						// 1.3 The publication has never been rated, so it does not exist in the database.
 						let errorCallback = (jqXHR, status) => {
 							// RATING SECTION
 							loadingSection.hide();
@@ -755,7 +755,7 @@ $(document).on("turbolinks:load", () => {
 							refreshButton.hide();
 							refreshButton.prop("disabled", false);
 						};
-						// 1.1 Does the publication exists on the database?
+						// 1.1 Does the publication exist in the database?
 						let promise = ajax("POST", "/publications/lookup.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 					};
 					let errorCallback = (jqXHR, status) => {
@@ -817,7 +817,7 @@ $(document).on("turbolinks:load", () => {
 				};
 				downloadButton.find('span').text("Downloading...");
 				downloadButton.find(reloadIcons).toggle();
-				// 1.2 Publication fetched, hide save for later button and show the download one
+				// 1.2 The publication was fetched: hide Save for later and show Download.
 				let successCallback = (data, status, jqXHR) => {
 					saveForLaterCaptionFirst.hide();
 					saveForLaterCaptionSecond.show();
@@ -831,7 +831,7 @@ $(document).on("turbolinks:load", () => {
 					let pdfWindow = window.open(data["pdf_download_url_link"], '_blank');
 					if (pdfWindow) pdfWindow.focus(); else modalAllow.modal('show');
 				};
-				// 1.3 Error during publication fetching, hide save for later and download buttons
+				// 1.3 The fetch failed: hide the Save for later and Download buttons.
 				let errorCallback = (jqXHR, status) => {
 					saveForLaterCaptionFirst.show();
 					saveForLaterCaptionSecond.hide();
@@ -885,7 +885,7 @@ $(document).on("turbolinks:load", () => {
 		};
 		// 1.2 Publication exists, so it is safe to refresh it
 		let successCallback = (data, status, jqXHR) => {
-			// 2.2 Publication refreshed, so it it safe to show the download button
+			// 2.2 The publication was refreshed, so the Download button can be shown.
 			let secondSuccessCallback = (data, status, jqXHR) => {
 				loadSaveButton.hide();
 				openButton.show();
@@ -900,7 +900,7 @@ $(document).on("turbolinks:load", () => {
 					modalAllow.modal('show');
 				}
 			};
-			// 2.3 Error during publication refresh, it is not safe to show the download button
+			// 2.3 The refresh failed, so keep the Download button hidden.
 			let secondErrorCallback = (jqXHR, status) => {
 				loadSaveButton.hide();
 				let errorButton = openButton.parent().find(errorButtons);
@@ -915,7 +915,7 @@ $(document).on("turbolinks:load", () => {
 			// 2.1 Refresh the publication
 			let secondPromise = emptyAjax("GET", `/publications/${data["id"]}/refresh.json`, "application/json; charset=utf-8", "json", true, secondSuccessCallback, secondErrorCallback);
 		};
-		// 1.3 Publication was never rated, so it does not exists on the database
+		// 1.3 The publication has never been rated, so it does not exist in the database.
 		let errorCallback = function (jqXHR, status) {
 			loadSaveButton.hide();
 			let errorButton = openButton.parent().find(errorButtons);
@@ -927,7 +927,7 @@ $(document).on("turbolinks:load", () => {
 				loadSaveButton.parent().find(errorsSection).show();
 			});
 		};
-		// 1.1 Does the publication exists on the database?
+		// 1.1 Does the publication exist in the database?
 		let promise = ajax("POST", "/publications/lookup.json", "application/json; charset=utf-8", "json", true, data, successCallback, errorCallback);
 	});
 
@@ -1247,7 +1247,7 @@ $(document).on("turbolinks:load", () => {
 			'pdfHtml5'
 		],
 		language: {
-			zeroRecords: "It appears this publication you are looking for has never been rated. <a href=\"/rate\"> Rate it for the first time</a>"
+			zeroRecords: "The publication you are looking for has never been rated. <a href=\"/rate\">Rate it for the first time</a>"
 		},
 		responsive: true
 	});
@@ -1264,7 +1264,7 @@ $(document).on("turbolinks:load", () => {
 			let currentIdentifier = downloadButton.parent().find(publicationIdentifier).val();
 			downloadButton.find('span').text("");
 			downloadButton.find(reloadIcons).toggle();
-			// 1.2 Publication fetched, hide download and show the download one
+			// 1.2 The publication was fetched: hide Download and show Open.
 			let successCallback = (data, status, jqXHR) => {
 				downloadButton.find(reloadIcons).toggle();
 				downloadButton.hide();
@@ -1276,7 +1276,7 @@ $(document).on("turbolinks:load", () => {
 				let pdfWindow = window.open(data["pdf_download_url_link"], '_blank');
 				if (pdfWindow) pdfWindow.focus(); else modalAllow.modal('show');
 			};
-			// 1.3 Error during publication fetching, hide download ad open button
+			// 1.3 The fetch failed: hide the Download and Open buttons.
 			let errorCallback = (jqXHR, status) => {
 				downloadButton.find(reloadIcons).toggle();
 				downloadButton.hide();

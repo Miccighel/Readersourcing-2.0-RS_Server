@@ -11,7 +11,7 @@ class Authenticator
 	end
 
 	def call
-		# Code wrapped to private method to avoid public attributes
+		# Keep credential handling private to the command.
 		JsonWebToken.encode(user_id: user.id, ip_address: ip_address) if user
 	end
 
@@ -19,7 +19,7 @@ class Authenticator
 
 	attr_accessor :email, :password, :ip_address
 
-	# Fetches the user if the inserted login data are valid
+	# Returns the user when the supplied credentials are valid.
 	def user
 		user = User.find_by_email(email)
 		if user && user.authenticate(password) && user.email_confirmed
