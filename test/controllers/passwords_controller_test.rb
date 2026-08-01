@@ -45,6 +45,22 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     assert_equal User.password_token_digest(reset_token), @user.reset_password_token
   end
 
+  test "forgot uses the configured public origin instead of the request host" do
+    previous_value = ENV["PUBLIC_BASE_URL"]
+    ENV["PUBLIC_BASE_URL"] = "https://readersourcing.example"
+    host! "attacker.example"
+
+    post forgot_path(format: :json), params: {email: @user.email}
+
+    assert_response :success
+    assert_match(
+      %r{href="https://readersourcing\.example/password/reset\?},
+      ActionMailer::Base.deliveries.last.body.decoded
+    )
+  ensure
+    previous_value.nil? ? ENV.delete("PUBLIC_BASE_URL") : ENV["PUBLIC_BASE_URL"] = previous_value
+  end
+
   test "forgot does not disclose whether an email address is registered" do
     post forgot_path(format: :json), params: {email: "missing@example.test"}
 

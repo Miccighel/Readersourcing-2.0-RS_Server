@@ -47,11 +47,18 @@ class PasswordsController < ApplicationController
 				@error_manager.add_error(I18n.t("errors.messages.email_not_present"))
 				return render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
 			end
+			begin
+				public_base_url = PublicBaseUrl.for(request)
+			rescue PublicBaseUrl::ConfigurationError => error
+				Rails.logger.error("Password recovery unavailable: #{error.message}")
+				@error_manager.add_error(I18n.t("errors.messages.password_recovery_unavailable"))
+				return render json: {errors: @error_manager.get_errors}, status: :service_unavailable
+			end
 			user = User.find_by(email: email)
 			if user.present?
 				delete_token
 				reset_token = user.generate_password_token!
-				reset_url = "#{request.protocol}#{request.host_with_port}#{reset_path(email: user.email, reset_token: reset_token)}"
+				reset_url = public_base_url.join(reset_path(email: user.email, reset_token: reset_token))
 				PasswordMailer.forgot(user, reset_url).deliver_now
 			end
 			render json: {message: I18n.t("confirmations.messages.reset_mail_sent")}, status: :ok

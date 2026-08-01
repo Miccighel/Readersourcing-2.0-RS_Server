@@ -120,6 +120,7 @@ it:
       current_password_does_not_match: "La password corrente è errata. Per favore, riprova."
       email_not_present: "Indirizzo mail non individuato. Per favore, controllalo e riprova."
       invalid_link: "Collegamento non valido o scaduto. Prova a generarne un altro."
+      password_recovery_unavailable: "Il recupero della password non è temporaneamente disponibile. Contatta l'amministratore di Readersourcing."
       user_not_exists: "Questo utente non esiste oppure ha già confermato il suo indirizzo email. Utilizza il collegamento presente nella mail e riprova."
       unconfirmed_mail: "Questo indirizzo email non risulta confermato. Un nuovo link di conferma è stato inviato. Per favore, controlla la tua casella di posta e clicca su tale link."
       invalid_token: "Token d'autenticazione non valido."
