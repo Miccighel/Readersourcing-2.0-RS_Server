@@ -45,6 +45,15 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     assert_equal User.password_token_digest(reset_token), @user.reset_password_token
   end
 
+  test "forgot GET only renders the form" do
+    get forgot_path, params: {email: @user.email}
+
+    assert_response :success
+    assert_select "#password-forgot-form"
+    assert_empty ActionMailer::Base.deliveries
+    assert_nil @user.reload.reset_password_token
+  end
+
   test "forgot uses the configured public origin instead of the request host" do
     previous_value = ENV["PUBLIC_BASE_URL"]
     ENV["PUBLIC_BASE_URL"] = "https://readersourcing.example"

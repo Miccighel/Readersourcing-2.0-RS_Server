@@ -3,6 +3,9 @@ class ApplicationController < ActionController::API
 	include ActionController::Cookies
 	include ::ActionController::RequestForgeryProtection
 
+	self.allow_forgery_protection = ActionController::Base.allow_forgery_protection
+	protect_from_forgery with: :exception, unless: :api_json_request?
+
 	attr_reader :current_user
 
 	# GET /
@@ -73,7 +76,7 @@ class ApplicationController < ActionController::API
 
 	def delete_token
 		cookies.delete :authToken
-		session.delete(:auth_token)
+		reset_session
 	end
 
 	private
@@ -104,6 +107,14 @@ class ApplicationController < ActionController::API
 		parts = authorization.split(/\s+/)
 		return parts.first if parts.one?
 		return parts.last if parts.length == 2 && parts.first.casecmp?("Bearer")
+	end
+
+	def api_json_request?
+		return true if request.content_mime_type == Mime[:json]
+		return false unless request.format.json?
+		return true if request.get? || request.head?
+
+		authorization_token.present?
 	end
 
 end

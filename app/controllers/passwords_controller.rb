@@ -41,6 +41,8 @@ class PasswordsController < ApplicationController
 
 	# POST /password/forgot.json or GET /password/forgot
 	def forgot
+		return render :forgot if request.get?
+
 		if params.key?(:email)
 			email = params[:email]
 			if email.blank?
@@ -62,8 +64,6 @@ class PasswordsController < ApplicationController
 				PasswordMailer.forgot(user, reset_url).deliver_now
 			end
 			render json: {message: I18n.t("confirmations.messages.reset_mail_sent")}, status: :ok
-		else
-			render :forgot
 		end
 	end
 

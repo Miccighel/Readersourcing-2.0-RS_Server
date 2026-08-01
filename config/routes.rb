@@ -38,7 +38,7 @@ Rails.application.routes.draw do
 
 	get 'login', to: 'authentication#login', as: :login, constraints: {:format => 'html'}
 	post 'logout', to: 'authentication#logout', as: :logout, constraints: {:format => :json}
-	get 'logout', to: 'authentication#logout', constraints: {:format => :html}
+	post 'logout', to: 'authentication#logout', constraints: {:format => :html}
 	post 'authenticate', to: 'authentication#authenticate', as: :authenticate, constraints: {:format => :json}
 
 	get 'publications/list/', to: 'publications#list', as: :publications_list, constraints: {:format => 'html'}
@@ -55,7 +55,7 @@ Rails.application.routes.draw do
 
 	get 'password/edit/', to: 'passwords#edit', as: :edit, constraints: {:format => 'html'}
 	post 'password/update', to: 'passwords#update', constraints: {:format => /(html|json)/}
-	get 'password/forgot', to: 'passwords#forgot', as: :forgot, constraints: {:format => /(html|json)/}
+	get 'password/forgot', to: 'passwords#forgot', as: :forgot, constraints: {:format => :html}
 	post 'password/forgot', to: 'passwords#forgot', constraints: {:format => /(html|json)/}
 	get 'password/reset', to: 'passwords#reset', as: :reset, constraints: {:format => /(html|json)/}
 	post 'password/reset', to: 'passwords#reset', constraints: {:format => /(html|json)/}
