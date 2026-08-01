@@ -12,7 +12,18 @@ class Authenticator
 
 	def call
 		# Keep credential handling private to the command.
-		JsonWebToken.encode(user_id: user.id, ip_address: ip_address) if user
+		authenticated_user = user
+		return unless authenticated_user
+
+		authentication_token = AuthenticationToken.issue_for(authenticated_user)
+		JsonWebToken.encode(
+			{
+				user_id: authenticated_user.id,
+				ip_address: ip_address,
+				jti: authentication_token.jti
+			},
+			authentication_token.expires_at
+		)
 	end
 
 	private

@@ -3,6 +3,9 @@ require "digest"
 class User < ApplicationRecord
 
 	has_many :ratings, dependent: :destroy
+	has_many :authentication_tokens, dependent: :destroy
+
+	after_update :revoke_authentication_tokens_after_password_change, if: :saved_change_to_password_digest?
 
 	validates :email, presence: true, length: {maximum: 255}, format: {with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i}, uniqueness: {case_sensitive: false}
 	validates :orcid, length: {maximum: 19}, format: {with: /[0-9]{4}-[0-9]{4}-[0-9]{4}-([0-9]{3}X|[0-9]{4})/}, allow_blank: true, uniqueness: true
@@ -92,6 +95,10 @@ class User < ApplicationRecord
 	end
 
 	private
+
+	def revoke_authentication_tokens_after_password_change
+		authentication_tokens.delete_all
+	end
 
 	def password_token_matches?(token)
 		return false if token.blank? || reset_password_token.blank? || !password_token_valid?

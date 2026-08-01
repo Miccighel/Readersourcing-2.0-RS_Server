@@ -9,6 +9,8 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "update verifies the current password through has_secure_password" do
+    other_token = api_token_for(@user)
+
     assert_emails 1 do
       post password_update_path(format: :json), params: {
         current_password: "password",
@@ -19,9 +21,13 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert @user.reload.authenticate("Updated-password-1")
+    assert_empty @user.authentication_tokens.reload
+    assert_nil Authorizer.new(other_token, "127.0.0.1").call.result
   end
 
   test "update rejects an incorrect current password" do
+    current_jti = JsonWebToken.decode(@headers.fetch("Authorization").delete_prefix("Bearer "))[:jti]
+
     post password_update_path(format: :json), params: {
       current_password: "incorrect",
       new_password: "Updated-password-1",
@@ -30,6 +36,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
     assert @user.reload.authenticate("password")
+    assert AuthenticationToken.exists?(jti: current_jti)
     assert_empty ActionMailer::Base.deliveries
   end
 
@@ -79,6 +86,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "reset lets the reader choose a password and consumes the token" do
+    other_token = api_token_for(@user)
     reset_token = @user.generate_password_token!
 
     get reset_path(email: @user.email, reset_token: reset_token)
@@ -102,6 +110,8 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     assert @user.reload.authenticate(new_password)
     assert_nil @user.reset_password_token
     assert_nil @user.reset_password_sent_at
+    assert_empty @user.authentication_tokens.reload
+    assert_nil Authorizer.new(other_token, "127.0.0.1").call.result
     assert_not_includes ActionMailer::Base.deliveries.last.body.decoded, new_password
 
     post reset_path, params: {
@@ -115,6 +125,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "reset preserves a valid token when the passwords do not match" do
+    current_jti = JsonWebToken.decode(@headers.fetch("Authorization").delete_prefix("Bearer "))[:jti]
     reset_token = @user.generate_password_token!
 
     post reset_path, params: {
@@ -127,6 +138,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
     assert @user.reload.authenticate("password")
     assert_equal User.password_token_digest(reset_token), @user.reset_password_token
+    assert AuthenticationToken.exists?(jti: current_jti)
     assert_empty ActionMailer::Base.deliveries
   end
 

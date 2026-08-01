@@ -6,9 +6,21 @@ class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
+  def api_token_for(user, ip_address: "127.0.0.1")
+    authentication_token = AuthenticationToken.issue_for(user)
+    JsonWebToken.encode(
+      {
+        user_id: user.id,
+        ip_address: ip_address,
+        jti: authentication_token.jti
+      },
+      authentication_token.expires_at
+    )
+  end
+
   def api_headers_for(user)
     ip_address = "127.0.0.1"
-    token = JsonWebToken.encode(user_id: user.id, ip_address: ip_address)
+    token = api_token_for(user, ip_address: ip_address)
 
     {
       "Authorization" => "Bearer #{token}",

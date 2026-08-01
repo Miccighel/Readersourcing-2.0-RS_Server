@@ -39,9 +39,16 @@ class  Authorizer
 			return
 		end
 
-		@user = User.find_by(id: decoded_auth_token[:user_id])
-		errors.add(:token, I18n.t("errors.messages.invalid_token")) unless @user
-		@user
+		authentication_token = AuthenticationToken.find_by(
+			jti: decoded_auth_token[:jti],
+			user_id: decoded_auth_token[:user_id]
+		)
+		unless authentication_token&.active?
+			errors.add(:token, I18n.t("errors.messages.invalid_token"))
+			return
+		end
+
+		authentication_token.user
 	end
 
 end

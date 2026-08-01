@@ -10,6 +10,9 @@ class AuthenticationController < ApplicationController
 
 	# POST /logout or /logout.json
 	def logout
+		[authorization_token, fetch_token].compact.uniq.each do |auth_token|
+			AuthenticationTokenRevoker.new(auth_token).call
+		end
 		delete_token
 		respond_to do |format|
 			format.html do

@@ -20,6 +20,7 @@ class PasswordsController < ApplicationController
 				current_user.password = new_password
 				current_user.password_confirmation = new_password_confirmation
 				if current_user.save
+					delete_token
 					PasswordMailer.update(current_user).deliver_now
 					render json: {message: I18n.t("confirmations.messages.password_update_successful")}, status: :ok
 				else
