@@ -3,8 +3,7 @@ class RatingsController < ApplicationController
 	before_action :authorize_api_request, only: [:index, :show, :update, :create]
 	before_action :authorize_server_request, only: [:rate_web, :rate_paper, :load]
 
-	before_action :set_rating, only: [:show, :update]
-	before_action :set_rating, only: [:show, :update]
+	before_action :set_owned_rating, only: [:show, :update]
 
 	# GET /ratings.json
 	def index
@@ -39,21 +38,21 @@ class RatingsController < ApplicationController
 	# POST /ratings.json
 	def create
 		@rating = Rating.new
-		@rating.score = rating_params[:score]
-		@rating.original_score = rating_params[:score]
-		@rating.anonymous = rating_params[:anonymous]
+		@rating.score = create_rating_params[:score]
+		@rating.original_score = create_rating_params[:score]
+		@rating.anonymous = create_rating_params[:anonymous]
 		@rating.user = current_user
-		publication = Publication.find_by_pdf_url(rating_params[:pdf_url])
-		if rating_params[:pdf_url] == "https://arxiv.org/pdf/1812.05594.pdf"
+		publication = Publication.find_by_pdf_url(create_rating_params[:pdf_url])
+		if create_rating_params[:pdf_url] == "https://arxiv.org/pdf/1812.05594.pdf"
 			render json: {errors: [I18n.t("information.messages.test_url")]}, status: :ok
 		else
 			unless publication
 				publication = Publication.new
-				publication.pdf_url = rating_params[:pdf_url]
+				publication.pdf_url = create_rating_params[:pdf_url]
 				publication.save
 			end
 			@rating.publication = publication
-			if @rating.save
+			if save_rating
 				@rating.compute_scores
 				RatingMailer.confirm(current_user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(current_user.id)).deliver_now
 				render :show, status: :created, location: @rating
@@ -84,11 +83,11 @@ class RatingsController < ApplicationController
 						title: I18n.t("errors.messages.rating_already_given")
 					}, status: :ok
 				else
-					@rating = Rating.new rating_params
-					@rating.original_score = rating_params[:score]
+					@rating = Rating.new paper_rating_params
+					@rating.original_score = paper_rating_params[:score]
 					@rating.publication = publication
 					@rating.user = requesting_user
-					if @rating.save
+					if save_rating
 						@rating.compute_scores
 						RatingMailer.confirm(@rating.user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(@rating.user.id)).deliver_now
 						render "shared/success", locals: {
@@ -116,7 +115,7 @@ class RatingsController < ApplicationController
 
 	# PATCH/PUT /rating/1.json
 	def update
-		@rating.score = rating_params[:score]
+		@rating.score = update_rating_params[:score]
 		@rating.edited = true
 		if @rating.save
 			render :show, status: :ok, location: @rating
@@ -127,16 +126,28 @@ class RatingsController < ApplicationController
 
 	private
 
-	def set_rating
-		@rating = Rating.find(params[:id])
+	def set_owned_rating
+		@rating = current_user.ratings.find_by(id: params[:id])
+		head :not_found unless @rating
 	end
 
-	def set_publication
-		@rating = Publication.find(params[:publication_id])
+	def save_rating
+		@rating.save
+	rescue ActiveRecord::RecordNotUnique
+		@rating.errors.add(:publication_id, :taken)
+		false
 	end
 
-	def rating_params
-		params.require(:rating).permit(:score, :original_score, :anonymous, :user_id, :publication_id, :pdf_url)
+	def create_rating_params
+		params.require(:rating).permit(:score, :anonymous, :pdf_url)
+	end
+
+	def paper_rating_params
+		params.require(:rating).permit(:score, :anonymous)
+	end
+
+	def update_rating_params
+		params.require(:rating).permit(:score)
 	end
 
 end

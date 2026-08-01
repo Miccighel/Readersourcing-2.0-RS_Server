@@ -3,7 +3,8 @@ class UsersController < ApplicationController
 	before_action :authorize_api_request, only: [:index, :show, :info, :update, :unsubscribe, :destroy]
 	before_action :authorize_server_request, only: [:list, :edit]
 
-	before_action :set_user, only: [:show, :update, :unsubscribe, :destroy]
+	before_action :set_user, only: [:show]
+	before_action :set_owned_user, only: [:update, :unsubscribe, :destroy]
 	before_action :set_error_manager, only: [:confirm_email]
 
 	require "http"
@@ -25,7 +26,7 @@ class UsersController < ApplicationController
 
 	# POST /users/info.json
 	def info
-		render current_user
+		@user = current_user
 	end
 
 	# GET /sign_up
@@ -34,7 +35,7 @@ class UsersController < ApplicationController
 
 	# POST /users.json
 	def create
-		@user = User.new(user_params)
+		@user = User.new(registration_params)
 		@user.generate_confirm_token
 		if @user.save
 			UserMailer.registration_confirmation(@user, confirm_url(@user.id, @user.confirm_token)).deliver_now
@@ -63,7 +64,7 @@ class UsersController < ApplicationController
 
 	# PATCH/PUT /users/1.json
 	def update
-		if @user.update(user_params)
+		if @user.update(profile_params)
 			render json: {message: I18n.t("confirmations.messages.update_successful")}, status: :ok
 		else
 			render json: @user.errors, status: :unprocessable_entity
@@ -94,7 +95,16 @@ class UsersController < ApplicationController
 		@user = User.find(params[:id])
 	end
 
-	def user_params
+	def set_owned_user
+		@user = current_user if current_user.id.to_s == params[:id].to_s
+		head :not_found unless @user
+	end
+
+	def registration_params
 		params.require(:user).permit(:first_name, :last_name, :email, :orcid, :subscribe, :password, :password_confirmation)
+	end
+
+	def profile_params
+		params.require(:user).permit(:first_name, :last_name, :orcid, :subscribe)
 	end
 end

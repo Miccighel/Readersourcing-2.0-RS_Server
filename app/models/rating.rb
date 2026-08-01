@@ -3,6 +3,8 @@ class Rating < ApplicationRecord
 	belongs_to :user
 	belongs_to :publication
 
+	validates :publication_id, uniqueness: {scope: :user_id}
+
 	def normalize_score
 		self.score / 100.0
 	end
