@@ -211,6 +211,8 @@ along with an explanation of which deployment modality requires their usage.
 | ```EMAIL_BUG_REPORT```    | Email address to receive bug reports.                                                    | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
 | ```EMAIL_ADMIN```         | Email address to receive general questions.                                              | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
 | ```RAILS_LOG_TO_STDOUT``` | When present, forces the application to write its logs to the standard output.           | 1 - 2 - 3       | ```production```                    | ```.env``` file, Heroku app |
+| ```CORS_ALLOWED_ORIGINS``` | Comma-separated origins allowed to call the API. In production, cross-origin requests are disabled when this value is omitted. | 1 - 2 - 3 | ```production``` | ```.env``` file, Heroku app |
+| ```FORCE_SSL```           | Set to ```true``` when the public instance is served through HTTPS.                      | 1 - 2 - 3       | ```production```                    | ```.env``` file, Heroku app |
 | ```RS_PDF_MAX_DOWNLOAD_BYTES``` | Maximum accepted publication size in bytes. The default is 52428800 (50 MiB).     | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
 | ```RS_PDF_OPEN_TIMEOUT``` | Maximum number of seconds allowed to open a publication connection. The default is 5.    | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
 | ```RS_PDF_READ_TIMEOUT``` | Maximum number of seconds allowed while reading a publication response. The default is 20.| 1 - 2 - 3      | ```development```, ```production``` | ```.env``` file, Heroku app |
@@ -235,10 +237,16 @@ EMAIL_BUG_REPORT=your_bug_report_mail
 EMAIL_ADMIN=your_contact_mail
 ```
 
+For a public instance, set `FORCE_SSL=true` after HTTPS has been configured. Set `CORS_ALLOWED_ORIGINS` to the exact origins
+of the web or extension clients that may contact the API, separated by commas. Browser extension origins use the
+`chrome-extension://` or `moz-extension://` scheme and are shown by the browser for the installed extension. Supplying
+`CORS_ALLOWED_ORIGINS=*` retains an open cross-origin policy and should be reserved for deployments that deliberately need it.
+
 <h3>Sending Mails</h3>
 
 RS_Server supports any SMTP-based mail server to send emails for tasks such as confirming user registration, reporting bugs,
-or recovering forgotten passwords.
+or recovering forgotten passwords. Password recovery emails contain a four-hour, one-time link that lets the reader choose a
+new password; passwords themselves are never sent by email.
 
 Understanding the values used to populate the `SMTP_` environment variables can sometimes lead to ambiguity. Let's consider
 the case of the proposed add-on, [Twilio Sendgrid](https://sendgrid.com/), both when deploying RS_Server manually and on Heroku.

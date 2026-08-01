@@ -57,6 +57,9 @@ it:
     close_page: "Chiudi la pagina"
     delete_and_rate: "Elimina e riassegna"
     anonimyze: "Anonimizza"
+    new_password: "Nuova password"
+    new_password_confirmation: "Nuova password (conferma)"
+    reset_password: "Reimposta password"
   information:
     messages:
       rate: "Assegna un voto a questa pubblicazione"
@@ -67,6 +70,7 @@ it:
       validate_user: "Valida la tua utenza"
       test_url: "Questa è solo un'URL di test. Nulla verrà salvato."
       login: "Devi essere collegato per procedere. Inserisci i tuoi dati e riprova."
+      choose_new_password: "Scegli una nuova password per completare il recupero."
   confirmations:
     messages:
       registration_successful: "Benvenuto su Readersourcing! Il tuo indirizzo email è stato confermato con successo."
@@ -75,7 +79,7 @@ it:
       rating_successful: "Giudizio assegnato correttamente alla pubblicazione."
       password_update_successful: "La tua password è stata aggiornata con successo."
       reset_mail_sent: "Mail per il reset della password inviata correttamente. Controlla la tua casella di posta."
-      new_password_mail_sent: "Mail contenente nuova password inviata correttamente. Controlla la tua casella di posta."
+      password_reset_successful: "La tua password è stata reimpostata con successo."
       update_successful: "Il tuo profilo è stato aggiornato con successo."
       fetchable_publication: "Il file esiste, è scaricabile ed è codificato in formato PDF."
       authorization_completed: "Sei autorizzato a procedere"
@@ -144,7 +148,7 @@ it:
       dear: "Gentile"
       cheers: "Saluti,"
       team: "Il Team di Readersourcing"
-      new_password: "Ottieni una nuova password"
+      new_password: "Scegli una nuova password"
       view_publication: "Vai alla pubblicazione"
       registration_confirm: "Conferma registrazione"
     subject:
@@ -156,9 +160,8 @@ it:
       bug_report: "Bug Segnalato"
       contact_message: "Messaggio"
     password:
-      to_get_a_new_one: "Per ottenere una nuova password è sufficiente cliccare sul seguente link. Riceverai una mail contenente la password."
-      edit_first_access: "Per la tua sicurezza, modificala al primo accesso alla piattaforma."
-      reset_successful: "La tua password è stata resettata con successo. Quella nuova è:"
+      to_get_a_new_one: "Per scegliere una nuova password, segui il collegamento sottostante. Il collegamento è valido per quattro ore e può essere usato una sola volta."
+      reset_successful: "La tua password è stata reimpostata con successo. Se non hai eseguito tu questa operazione, contatta l'amministratore di Readersourcing."
       update_successful: "La tua password è stata aggiornata con successo."
     rating:
       given_rating_1: "Hai assegnato con successo un giudizio pari a"

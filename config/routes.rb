@@ -58,5 +58,6 @@ Rails.application.routes.draw do
 	get 'password/forgot', to: 'passwords#forgot', as: :forgot, constraints: {:format => /(html|json)/}
 	post 'password/forgot', to: 'passwords#forgot', constraints: {:format => /(html|json)/}
 	get 'password/reset', to: 'passwords#reset', as: :reset, constraints: {:format => /(html|json)/}
+	post 'password/reset', to: 'passwords#reset', constraints: {:format => /(html|json)/}
 
 end

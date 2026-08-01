@@ -11,6 +11,9 @@ en:
     close_page: "Close page"
     delete_and_rate: "Delete and rate again"
     anonimyze: "Anonymize"
+    new_password: "New password"
+    new_password_confirmation: "New password (confirmation)"
+    reset_password: "Reset password"
   confirmations:
     messages:
       registration_successful: "Welcome to Readersourcing! Your email address has been confirmed successfully."
@@ -19,7 +22,7 @@ en:
       rating_successful: "Your rating was submitted successfully."
       password_update_successful: "Your password has been updated successfully."
       reset_mail_sent: "A password reset email has been sent. Check your inbox."
-      new_password_mail_sent: "An email containing your new password has been sent. Check your inbox."
+      password_reset_successful: "Your password has been reset successfully."
       update_successful: "Your profile has been updated successfully."
       fetchable_publication: "The file exists, can be downloaded, and is encoded in PDF format."
       authorization_completed: "You are authorized to proceed."
@@ -37,6 +40,7 @@ en:
       validate_user: "Verify your identity"
       test_url: "This is just a test URL. Nothing will be saved."
       login: "You must be logged in to proceed. Enter your credentials and try again."
+      choose_new_password: "Choose a new password to complete the recovery."
   errors:
     messages:
       invalid_credentials: "Invalid credentials. Please try again."
@@ -77,7 +81,7 @@ en:
       dear: "Dear"
       cheers: "Cheers,"
       team: "The Readersourcing Team"
-      new_password: "Get a new password"
+      new_password: "Choose a new password"
       view_publication: "Go to the original publication"
       registration_confirm: "Confirm Registration"
     subject:
@@ -89,9 +93,8 @@ en:
       bug_report: "Bug Report"
       contact_message: "Contact Message"
     password:
-      to_get_a_new_one: "To get a new password, click the link below. You will receive it by email."
-      edit_first_access: "For your safety, change it after your first login."
-      reset_successful: "Your password has been successfully reset. The new password is:"
+      to_get_a_new_one: "To choose a new password, follow the link below. The link is valid for four hours and can be used only once."
+      reset_successful: "Your password has been reset successfully. If you did not perform this operation, contact the Readersourcing administrator."
       update_successful: "Your password has been updated successfully."
     rating:
       given_rating_1: "You gave a rating of"

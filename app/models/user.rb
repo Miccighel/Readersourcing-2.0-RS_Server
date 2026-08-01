@@ -1,3 +1,5 @@
+require "digest"
+
 class User < ApplicationRecord
 
 	has_many :ratings, dependent: :destroy
@@ -8,30 +10,40 @@ class User < ApplicationRecord
 	# PASSWORD HANDLING
 
 	has_secure_password
+	validates :password, length: {minimum: 6}, allow_nil: true
 
-	def password
-		@password ||= BCrypt::Password.new(password_digest)
+	def self.find_by_password_reset_token(token)
+		return if token.blank?
+
+		find_by(reset_password_token: password_token_digest(token))
 	end
 
-	def password=(new_password)
-		@password = BCrypt::Password.create(new_password)
-		self.password_digest = @password
+	def self.password_token_digest(token)
+		Digest::SHA256.hexdigest(token)
 	end
 
 	def generate_password_token!
-		self.reset_password_token = generate_token
+		token = generate_token
+		self.reset_password_token = self.class.password_token_digest(token)
 		self.reset_password_sent_at = Time.now.utc
 		save!
+		token
 	end
 
 	def password_token_valid?
-		(self.reset_password_sent_at + 4.hours) > Time.now.utc
+		reset_password_sent_at.present? && (reset_password_sent_at + 4.hours) > Time.now.utc
 	end
 
-	def reset_password!(password)
-		self.reset_password_token = nil
-		self.password = password
-		save!
+	def reset_password!(token, password, password_confirmation)
+		with_lock do
+			return false unless password_token_matches?(token)
+
+			self.reset_password_token = nil
+			self.reset_password_sent_at = nil
+			self.password = password
+			self.password_confirmation = password_confirmation
+			save
+		end
 	end
 
 	# EMAIL HANDLING
@@ -80,6 +92,13 @@ class User < ApplicationRecord
 	end
 
 	private
+
+	def password_token_matches?(token)
+		return false if token.blank? || reset_password_token.blank? || !password_token_valid?
+
+		supplied_digest = self.class.password_token_digest(token)
+		ActiveSupport::SecurityUtils.secure_compare(reset_password_token, supplied_digest)
+	end
 
 	def generate_token
 		SecureRandom.urlsafe_base64.to_s

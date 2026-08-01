@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<%= render partial: "shared/assets" %>
+<body>
+<div class="min-h-100 d-flex flex-column align-items-center justify-content-center">
+	<div class="w-100 mb-3">
+		<%= render partial: "shared/menu", locals: {active: "login", appearance: "dark"} %>
+	</div>
+	<div class="row w-100 m-auto">
+		<div class="col-12">
+			<div class="heading text-center">
+				<h4>Readersourcing</h4>
+				<p class="lead mb-0"><%= I18n.t("information.messages.choose_new_password") %></p>
+			</div>
+		</div>
+		<div class="col-lg-4 col-sm-10 col-xs-12 m-auto">
+			<%= form_with url: reset_path, method: :post, local: true, data: {parsley_validate: true} do %>
+				<%= hidden_field_tag :email, @email %>
+				<%= hidden_field_tag :reset_token, @reset_token %>
+				<div class="row">
+					<div class="col-12">
+						<div class="form-group">
+							<label for="new-password"><%= I18n.t("labels.new_password") %></label>
+							<input id="new-password" name="new_password" type="password" class="form-control" data-parsley-minlength="6" data-parsley-password required>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="form-group">
+							<label for="new-password-confirmation"><%= I18n.t("labels.new_password_confirmation") %></label>
+							<input id="new-password-confirmation" name="new_password_confirmation" type="password" class="form-control" data-parsley-minlength="6" data-parsley-password required>
+						</div>
+					</div>
+					<div class="col-12 text-center">
+						<% if @error_manager.get_errors.any? %>
+							<section class="text-left">
+								<div role="alert" class="alert alert-danger">
+									<% @error_manager.get_errors.each do |error| %>
+										<p class="mb-0"><%= error %></p>
+									<% end %>
+								</div>
+							</section>
+						<% end %>
+						<button type="submit" class="btn btn-success w-35">
+							<%= I18n.t("labels.reset_password") %>
+							<i class="fa fa-check"></i>
+						</button>
+					</div>
+				</div>
+			<% end %>
+		</div>
+	</div>
+	<div class="row w-100 mt-3">
+		<%= render partial: "shared/footer" %>
+	</div>
+</div>
+</body>
+</html>

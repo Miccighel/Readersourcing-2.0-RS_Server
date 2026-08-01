@@ -14,40 +14,34 @@ class  Authorizer
 
 	private
 
-	attr_reader :headers, :ip_address
+	attr_reader :ip_address
 
 	def authorize_user
-		decoded_auth_token = nil
-		if @auth_token.present?
-			decoded_auth_token = JsonWebToken.decode @auth_token
-		else
+		unless @auth_token.present?
 			errors.add(:token, I18n.t("errors.messages.missing_token"))
+			return
 		end
-		if decoded_auth_token
-			# Accept the token only when its user exists and its IP address
-			# matches the current request.
-			if @user.nil?
-				same_ip_address = false
-				unexpired_token = false
-				if decoded_auth_token[:ip_address] == ip_address
-					same_ip_address = true
-				else
-					errors.add(:token, I18n.t("errors.messages.ip_address_changed"))
-				end
-				if Time.now <= decoded_auth_token[:expiration_time]
-					unexpired_token = true
-				else
-					errors.add(:token, I18n.t("errors.messages.expired_login_token"))
-				end
-				if same_ip_address and unexpired_token
-					@user = User.find(decoded_auth_token[:user_id])
-					unless @user
-						errors.add(:token, I18n.t("errors.messages.invalid_token"))
-					end
-				end
-			end
+
+		decoded_auth_token = JsonWebToken.decode(@auth_token)
+		unless decoded_auth_token
+			errors.add(:token, I18n.t("errors.messages.invalid_token"))
+			return
 		end
-		@user || nil
+
+		unless decoded_auth_token[:ip_address] == ip_address
+			errors.add(:token, I18n.t("errors.messages.ip_address_changed"))
+			return
+		end
+
+		expiration_time = Integer(decoded_auth_token[:expiration_time], exception: false)
+		unless expiration_time && Time.current.to_i <= expiration_time
+			errors.add(:token, I18n.t("errors.messages.expired_login_token"))
+			return
+		end
+
+		@user = User.find_by(id: decoded_auth_token[:user_id])
+		errors.add(:token, I18n.t("errors.messages.invalid_token")) unless @user
+		@user
 	end
 
 end

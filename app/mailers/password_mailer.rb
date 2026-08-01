@@ -21,9 +21,8 @@ class PasswordMailer < ApplicationMailer
 		)
 	end
 
-	def reset(user, new_password)
+	def reset(user)
 		@user = user
-		@new_password = new_password
 		mail(
 			to: "#{@user.first_name} #{@user.last_name} <#{@user.email}>",
 			subject: "#{I18n.t("mails.labels.platform_name")} - #{I18n.t("mails.subject.password_reset")}",

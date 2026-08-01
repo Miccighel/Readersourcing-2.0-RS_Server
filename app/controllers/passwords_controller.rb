@@ -15,9 +15,10 @@ class PasswordsController < ApplicationController
 		current_password = params[:current_password]
 		new_password = params[:new_password]
 		new_password_confirmation = params[:new_password_confirmation]
-		if BCrypt::Password.new(current_user.password) == current_password
+		if current_user.authenticate(current_password)
 			if new_password == new_password_confirmation
 				current_user.password = new_password
+				current_user.password_confirmation = new_password_confirmation
 				if current_user.save
 					PasswordMailer.update(current_user).deliver_now
 					render json: {message: I18n.t("confirmations.messages.password_update_successful")}, status: :ok
@@ -44,53 +45,43 @@ class PasswordsController < ApplicationController
 			email = params[:email]
 			if email.blank?
 				@error_manager.add_error(I18n.t("errors.messages.email_not_present"))
-				render json: {errors: @error_manager.get_errors}, status: :not_found
+				return render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
 			end
 			user = User.find_by(email: email)
 			if user.present?
 				delete_token
-				user.generate_password_token!
-				reset_url = "#{request.protocol}#{request.host_with_port}#{reset_path(email: user.email, reset_token: user.reset_password_token)}"
+				reset_token = user.generate_password_token!
+				reset_url = "#{request.protocol}#{request.host_with_port}#{reset_path(email: user.email, reset_token: reset_token)}"
 				PasswordMailer.forgot(user, reset_url).deliver_now
-				render json: {message: I18n.t("confirmations.messages.reset_mail_sent")}, status: :ok
-			else
-				@error_manager.add_error(I18n.t("errors.messages.email_not_present"))
-				render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
 			end
+			render json: {message: I18n.t("confirmations.messages.reset_mail_sent")}, status: :ok
 		else
 			render :forgot
 		end
 	end
 
-	# GET /password/reset.json
+	# GET or POST /password/reset
 	def reset
-		email = params[:email]
-		reset_token = params[:reset_token]
-		# Has the user supplied an email address?
-		if email.blank?
-			@error_manager.add_error('Email not present')
-			render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}, layout: false
+		@email = params[:email]
+		@reset_token = params[:reset_token]
+		@user = User.find_by_password_reset_token(@reset_token)
+
+		unless valid_password_reset_link?
+			@error_manager.add_error(I18n.t("errors.messages.invalid_link"))
+			return render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}, layout: false
+		end
+
+		return render :reset if request.get?
+
+		new_password = params[:new_password]
+		new_password_confirmation = params[:new_password_confirmation]
+		if @user.reset_password!(@reset_token, new_password, new_password_confirmation)
+			delete_token
+			PasswordMailer.reset(@user).deliver_now
+			render "shared/success", locals: {message: I18n.t("confirmations.messages.password_reset_successful")}, status: :ok, layout: false
 		else
-			# Has the user supplied a reset token?
-			if reset_token.blank?
-				@error_manager.add_error('Reset token not present')
-				render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}, layout: false
-			else
-				user = User.find_by(reset_password_token: reset_token)
-				if user.present? && user.password_token_valid?
-					new_password = SecureRandom.hex (rand(6..10))
-					if user.reset_password!(new_password)
-						delete_token
-						PasswordMailer.reset(user, new_password).deliver_now
-						render "shared/success", locals: {message: I18n.t("confirmations.messages.new_password_mail_sent")}, status: :ok, layout: false
-					else
-						render "shared/errors", status: :unprocessable_entity, locals: {errors: user.errors}, layout: false
-					end
-				else
-					@error_manager.add_error(I18n.t("errors.messages.invalid_link"))
-					render "shared/errors", status: :not_found, locals: {errors: @error_manager.get_errors}, layout: false
-				end
-			end
+			@user.errors.each {|error| @error_manager.add_error(error)}
+			render :reset, status: :unprocessable_entity
 		end
 	end
 
@@ -98,6 +89,13 @@ class PasswordsController < ApplicationController
 
 	def set_error_manager
 		@error_manager = ErrorManager.new
+	end
+
+	def valid_password_reset_link?
+		@email.present? &&
+			@user.present? &&
+			@user.email.casecmp?(@email) &&
+			@user.password_token_valid?
 	end
 
 end

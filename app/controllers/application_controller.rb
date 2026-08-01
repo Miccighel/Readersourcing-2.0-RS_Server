@@ -86,15 +86,24 @@ class ApplicationController < ActionController::API
 	end
 
 	def authorize_api_request
-		auth_token = request.headers['Authorization'].split(' ').last
+		auth_token = authorization_token
 
-		# Authorize the bearer token supplied by an API client.
+		# Authorize the token supplied by an API client.
 		authorizer = Authorizer.new(auth_token, request.remote_ip)
 		@current_user = authorizer.call.result
 
 		@error_manager = ErrorManager.new
 		@error_manager.add_error(I18n.t("errors.messages.not_authorized"))
 		render "shared/errors", status: 401, locals: {errors: @error_manager.get_errors}, layout: false unless @current_user
+	end
+
+	def authorization_token
+		authorization = request.headers["Authorization"].to_s.strip
+		return if authorization.blank?
+
+		parts = authorization.split(/\s+/)
+		return parts.first if parts.one?
+		return parts.last if parts.length == 2 && parts.first.casecmp?("Bearer")
 	end
 
 end
