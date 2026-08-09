@@ -219,6 +219,11 @@ along with an explanation of which deployment modality requires their usage.
 | ```RS_PDF_READ_TIMEOUT``` | Maximum number of seconds allowed while reading a publication response. The default is 20.| 1 - 2 - 3      | ```development```, ```production``` | ```.env``` file, Heroku app |
 | ```RS_PDF_PROCESS_TIMEOUT``` | Maximum RS_PDF execution time in seconds. The default is 60.                          | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
 | ```RS_PDF_ALLOW_PRIVATE_NETWORKS``` | Set to ```true``` only when publications must be fetched from a trusted private network. | 1 - 2 - 3 | ```development```, ```production``` | ```.env``` file, Heroku app |
+| ```RS_AUTHENTICATION_RATE_LIMIT``` | Maximum authentication attempts from one IP address in three minutes. The default is 10. | 1 - 2 - 3 | ```development```, ```production``` | ```.env``` file, Heroku app |
+| ```RS_PASSWORD_RECOVERY_IP_RATE_LIMIT``` | Maximum password-recovery requests from one IP address in fifteen minutes. The default is 5. | 1 - 2 - 3 | ```development```, ```production``` | ```.env``` file, Heroku app |
+| ```RS_PASSWORD_RECOVERY_ACCOUNT_RATE_LIMIT``` | Maximum password-recovery requests for one normalized email address in thirty minutes. The default is 3. | 1 - 2 - 3 | ```development```, ```production``` | ```.env``` file, Heroku app |
+| ```RS_CONTACT_RATE_LIMIT``` | Maximum contact messages from one IP address in ten minutes. The default is 5. | 1 - 2 - 3 | ```development```, ```production``` | ```.env``` file, Heroku app |
+| ```RS_PDF_PROCESSING_RATE_LIMIT``` | Maximum combined publication download, inspection, extraction, and annotation requests for one reader in one hour. The default is 30. | 1 - 2 - 3 | ```development```, ```production``` | ```.env``` file, Heroku app |
 
 <h3>Setting Variables</h3>
 
@@ -245,6 +250,10 @@ Set `CORS_ALLOWED_ORIGINS` to the exact origins of web clients that may make cro
 commas. RS_Rate requests browser permission for the selected RS_Server origin and therefore does not depend on its
 generated extension origin being listed here. Supplying `CORS_ALLOWED_ORIGINS=*` retains an open cross-origin policy and
 should be reserved for deployments that deliberately need it.
+
+Rate-limit counters use the configured Rails cache store. The supplied Puma configuration runs one process and uses an
+in-memory store. A deployment with multiple server processes or replicas must use a shared Active Support cache store so
+that every instance contributes to the same counters.
 
 <h3>Sending Mails</h3>
 

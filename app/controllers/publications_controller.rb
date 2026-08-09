@@ -7,6 +7,14 @@ class PublicationsController < ApplicationController
 	before_action :set_publication, only: [:show, :update, :destroy, :refresh, :is_rated, :is_saved_for_later]
 	before_action :set_error_manager, only: [:lookup, :is_rated, :is_saved_for_later, :fetch, :is_fetchable, :extract, :refresh, :create, :update]
 
+	rate_limit(
+		**RequestRateLimit::PDF_PROCESSING.rails_options,
+		by: -> { RequestRateLimit.for_user(current_user) },
+		with: -> { render_rate_limited(RequestRateLimit::PDF_PROCESSING) },
+		scope: :publication_processing,
+		only: [:create, :is_fetchable, :extract, :fetch, :refresh, :update]
+	)
+
 	# GET /publications.json
 	def index
 		@publications = Publication.all

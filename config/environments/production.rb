@@ -58,8 +58,9 @@ Rails.application.configure do
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
 
-  # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+  # Keep rate-limit counters available in the default single-process deployment.
+  # Multi-process deployments should replace this with a shared Active Support cache store.
+  config.cache_store = :memory_store
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
   # config.active_job.queue_adapter     = :resque

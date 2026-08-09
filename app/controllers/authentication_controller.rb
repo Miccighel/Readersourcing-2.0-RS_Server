@@ -4,6 +4,13 @@ class AuthenticationController < ApplicationController
 
 	before_action :set_error_manager
 
+	rate_limit(
+		**RequestRateLimit::AUTHENTICATION.rails_options,
+		by: -> { RequestRateLimit.for_ip(request) },
+		with: -> { render_rate_limited(RequestRateLimit::AUTHENTICATION) },
+		only: :authenticate
+	)
+
 	# GET /login
 	def login
 	end

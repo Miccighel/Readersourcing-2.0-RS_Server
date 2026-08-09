@@ -8,6 +8,13 @@ class ApplicationController < ActionController::API
 
 	attr_reader :current_user
 
+	rate_limit(
+		**RequestRateLimit::CONTACT.rails_options,
+		by: -> { RequestRateLimit.for_ip(request) },
+		with: -> { render_rate_limited(RequestRateLimit::CONTACT) },
+		only: :message
+	)
+
 	# GET /
 	def home
 	end
@@ -47,6 +54,16 @@ class ApplicationController < ActionController::API
 	end
 
 	protected
+
+	def render_rate_limited(policy)
+		response.set_header("Retry-After", policy.period.to_i.to_s)
+		errors = [I18n.t("errors.messages.too_many_requests")]
+		if request.format.json? || request.post?
+			render json: {errors: errors}, status: :too_many_requests
+		else
+			render "shared/errors", status: :too_many_requests, locals: {errors: errors}, layout: false
+		end
+	end
 
 	def store_token(auth_token)
 		session[:auth_token] = auth_token

@@ -54,6 +54,7 @@ en:
       email_not_present: "Email address not found. Please check it and try again."
       invalid_link: "The link is invalid or has expired. Please generate a new link."
       invalid_paper_reference: "The publication reference is not valid. Please save the publication for later again."
+      too_many_requests: "Too many requests have been received. Please wait before trying again."
       password_recovery_unavailable: "Password recovery is temporarily unavailable. Please contact the Readersourcing administrator."
       user_not_exists: "This user does not exist or has already confirmed their email address. Use the confirmation link you received by email and try again."
       unconfirmed_mail: "This email address has not been confirmed. A new confirmation link has been sent. Please check your inbox and follow the link."

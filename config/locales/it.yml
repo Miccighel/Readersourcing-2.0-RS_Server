@@ -121,6 +121,7 @@ it:
       email_not_present: "Indirizzo mail non individuato. Per favore, controllalo e riprova."
       invalid_link: "Collegamento non valido o scaduto. Prova a generarne un altro."
       invalid_paper_reference: "Il riferimento alla pubblicazione non è valido. Salva nuovamente la pubblicazione per dopo."
+      too_many_requests: "Sono state ricevute troppe richieste. Attendi prima di riprovare."
       password_recovery_unavailable: "Il recupero della password non è temporaneamente disponibile. Contatta l'amministratore di Readersourcing."
       user_not_exists: "Questo utente non esiste oppure ha già confermato il suo indirizzo email. Utilizza il collegamento presente nella mail e riprova."
       unconfirmed_mail: "Questo indirizzo email non risulta confermato. Un nuovo link di conferma è stato inviato. Per favore, controlla la tua casella di posta e clicca su tale link."

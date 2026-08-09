@@ -5,6 +5,21 @@ class PasswordsController < ApplicationController
 
 	before_action :set_error_manager, only: [:update, :forgot, :reset]
 
+	rate_limit(
+		**RequestRateLimit::PASSWORD_RECOVERY_IP.rails_options,
+		by: -> { RequestRateLimit.for_ip(request) },
+		with: -> { render_rate_limited(RequestRateLimit::PASSWORD_RECOVERY_IP) },
+		only: :forgot,
+		if: -> { request.post? }
+	)
+	rate_limit(
+		**RequestRateLimit::PASSWORD_RECOVERY_ACCOUNT.rails_options,
+		by: -> { RequestRateLimit.for_account(params[:email]) },
+		with: -> { render_rate_limited(RequestRateLimit::PASSWORD_RECOVERY_ACCOUNT) },
+		only: :forgot,
+		if: -> { request.post? }
+	)
+
 	# GET /password/edit/
 	def edit
 		render :update
