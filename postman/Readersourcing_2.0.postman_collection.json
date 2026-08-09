@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "c26fc049-7021-4691-beb3-97cebfb60adb",
+    "_postman_id": "7a08a897-9075-42e1-be30-5cc01b85cb54",
     "name": "Readersourcing 2.0",
     "description": "<html><head></head><body><p>This is the official API collection of the <strong>Readersourcing 2.0 ecosystem</strong> presented during the <a href=\"https://ircdl2019.isti.cnr.it/\">IRCDL 2019</a> conference. The original article can be freely read on <a href=\"https://zenodo.org/record/1446468\">Zenodo</a>, while the code and the related documentation is available on <strong>GitHub</strong>. Take advantage of the badges below to exploit these resources.</p>\n<p><a href=\"https://ircdl2019.isti.cnr.it/\"><img src=\"https://img.shields.io/badge/IRCDL%202019-Conference-yellow.svg\"></a>\n<a href=\"https://doi.org/10.5281/zenodo.1446468\"><img src=\"https://img.shields.io/badge/Zenodo-Paper-blue.svg\"></a>\n<a href=\"https://github.com/Miccighel/Readersourcing-2.0\"><img src=\"https://img.shields.io/badge/GitHub-Code-lightgrey.svg\"></a></p>\n</body></html>",
     "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
