@@ -50,7 +50,7 @@ Rails.application.routes.draw do
 	get 'sign_up', to: 'users#sign_up', as: :sign_up, constraints: {:format => 'html'}
 
 	post 'load', to: 'ratings#load', as: :load, constraints: {:format => 'html'}
-	get 'rate/:pubId/:authToken/', to: 'ratings#rate_paper', as: :rate_paper, constraints: {:format => 'html'}
+	get 'rate/:pubId/:reference/', to: 'ratings#rate_paper', as: :rate_paper, constraints: {:format => 'html'}
 	get 'rate/', to: 'ratings#rate_web', as: :rate_web, constraints: {:format => 'html'}
 
 	get 'password/edit/', to: 'passwords#edit', as: :edit, constraints: {:format => 'html'}

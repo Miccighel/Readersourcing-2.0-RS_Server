@@ -89,4 +89,95 @@ class RatingsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
   end
+
+  test "opens a durable paper reference for its reader" do
+    publication = publications(:two)
+    reference = PaperRatingReference.issue(user: @user, publication: publication)
+    authenticate_as(@user)
+
+    get rate_paper_path(publication.id, reference), headers: {"REMOTE_ADDR" => "127.0.0.1"}
+
+    assert_response :success
+    assert_includes response.body, "Rate this publication"
+  end
+
+  test "logout does not invalidate a paper reference" do
+    publication = publications(:two)
+    reference = PaperRatingReference.issue(user: @user, publication: publication)
+    auth_token = authenticate_as(@user)
+    jti = JsonWebToken.decode(auth_token)[:jti]
+    post logout_path(format: :json),
+      headers: {"REMOTE_ADDR" => "127.0.0.1"},
+      as: :json
+    assert_not AuthenticationToken.exists?(jti: jti)
+
+    authenticate_as(@user)
+    get rate_paper_path(publication.id, reference), headers: {"REMOTE_ADDR" => "127.0.0.1"}
+
+    assert_response :success
+    assert_includes response.body, "Rate this publication"
+  end
+
+  test "rejects a paper reference opened by another reader" do
+    publication = publications(:two)
+    reference = PaperRatingReference.issue(user: @user, publication: publication)
+    authenticate_as(users(:two))
+
+    get rate_paper_path(publication.id, reference), headers: {"REMOTE_ADDR" => "127.0.0.1"}
+
+    assert_response :success
+    assert_includes response.body, I18n.t("errors.messages.not_the_same_user")
+  end
+
+  test "rejects an invalid paper reference without exposing an error" do
+    authenticate_as(@user)
+
+    get rate_paper_path(publications(:two).id, "invalid-reference"),
+      headers: {"REMOTE_ADDR" => "127.0.0.1"}
+
+    assert_response :success
+    assert_includes response.body, I18n.t("errors.messages.invalid_paper_reference")
+  end
+
+  test "creates a rating from a durable paper reference" do
+    publication = publications(:two)
+    reference = PaperRatingReference.issue(user: @user, publication: publication)
+    authenticate_as(@user)
+    get rate_paper_path(publication.id, reference), headers: {"REMOTE_ADDR" => "127.0.0.1"}
+
+    assert_difference("Rating.count") do
+      capture_io do
+        post load_path,
+          params: {
+            pubId: publication.id,
+            rating: {
+              score: 64,
+              anonymous: false
+            }
+          },
+          headers: {"REMOTE_ADDR" => "127.0.0.1"}
+      end
+    end
+
+    assert_response :success
+    rating = Rating.find_by!(user: @user, publication: publication)
+    assert_equal 64, rating.score
+  end
+
+  private
+
+  def authenticate_as(user)
+    post authenticate_path(format: :json),
+      params: {
+        email: user.email,
+        password: "password"
+      },
+      headers: {"REMOTE_ADDR" => "127.0.0.1"},
+      as: :json
+
+    assert_response :success
+
+    response.parsed_body.fetch("auth_token")
+  end
+
 end

@@ -31,7 +31,9 @@ class PublicationTest < ActiveSupport::TestCase
     end.new(download)
     runner = Object.new
     source_pdf = file_fixture("Reader.pdf")
-    runner.define_singleton_method(:call) do |expected_output:, **_arguments|
+    captured_url = nil
+    runner.define_singleton_method(:call) do |expected_output:, url:, **_arguments|
+      captured_url = url
       FileUtils.cp(source_pdf, expected_output)
       RsPdfRunner::Result.new(stdout: "converted", stderr: "", status: nil)
     end
@@ -39,7 +41,6 @@ class PublicationTest < ActiveSupport::TestCase
     publication.define_singleton_method(:rs_pdf_runner) { runner }
 
     request_data = {
-      authToken: "encrypted-token",
       host: "https://readersourcing.example",
       user: user
     }
@@ -50,6 +51,8 @@ class PublicationTest < ActiveSupport::TestCase
     assert_equal "Reader-Link.pdf", publication.pdf_name_link
     assert_path_exists publication.send(:absolute_pdf_download_path_link, user)
     assert_not File.exist?(publication.send(:absolute_pdf_download_path, user))
+    reference = Rack::Utils.unescape_path(URI.parse(captured_url).path.split("/").last)
+    assert_equal user, PaperRatingReference.resolve(reference, publication: publication)
   ensure
     publication&.remove_files(user) if user
     temporary_pdf&.close! unless temporary_pdf&.closed?

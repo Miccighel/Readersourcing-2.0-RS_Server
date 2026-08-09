@@ -220,7 +220,6 @@ class PublicationsController < ApplicationController
 
 	def set_request_data
 		@request_data = {}
-		@request_data[:authToken] = encrypt(request.headers["Authorization"])
 		@request_data[:host] = "#{request.protocol}#{request.host_with_port}"
 		@request_data[:user] = current_user
 	end

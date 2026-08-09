@@ -197,8 +197,8 @@ along with an explanation of which deployment modality requires their usage.
 
 | Environment Variable      | Description                                                                              | Deploy Modality | Environment                         | Where To Set                |
 |---------------------------|------------------------------------------------------------------------------------------|-----------------|-------------------------------------|-----------------------------|
-| ```SECRET_DEV_KEY```      | Private key used to encrypt strings in the ```development``` environment.                | 1 - 2           | ```development```                   | ```.env``` file             |
-| ```SECRET_PROD_KEY```     | Private key used to encrypt strings in the ```production``` environment.                 | 1 - 2 - 3       | ```production```                    | ```.env``` file, Heroku app |
+| ```SECRET_DEV_KEY```      | Rails secret used to sign and encrypt development data, including paper-rating references. | 1 - 2         | ```development```                   | ```.env``` file             |
+| ```SECRET_PROD_KEY```     | Rails secret used to sign and encrypt production data. Keep it stable while issued paper-rating references must remain usable. | 1 - 2 - 3 | ```production``` | ```.env``` file, Heroku app |
 | ```POSTGRES_USER```       | Username the admin user of the database.                                                 | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
 | ```POSTGRES_PASSWORD```   | Password of the admin user of the database.                                              | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
 | ```POSTGRES_DB```         | Name of the database.                                                                    | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |

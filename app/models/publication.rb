@@ -50,11 +50,11 @@ class Publication < ApplicationRecord
 	def fetch(request_data)
 
 		data = Hash.new
-		data[:authToken] = request_data.fetch(:authToken)
 		data[:host] = request_data.fetch(:host)
 		data[:pub_id] = self.id
 		data[:user] = request_data.fetch(:user)
-		data[:rate_path] = "#{data[:host]}#{Rails.application.routes.url_helpers.rate_paper_path(data[:pub_id], data[:authToken])}"
+		data[:paper_reference] = PaperRatingReference.issue(user: data[:user], publication: self)
+		data[:rate_path] = "#{data[:host]}#{Rails.application.routes.url_helpers.rate_paper_path(data[:pub_id], data[:paper_reference])}"
 
 		# FILE FETCHING STARTS HERE
 

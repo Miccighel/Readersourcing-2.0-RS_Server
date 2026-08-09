@@ -14,12 +14,17 @@ class RatingsController < ApplicationController
 	def show
 	end
 
-	# GET /rate/:pubId/:authToken
+	# GET /rate/:pubId/:reference
 	def rate_paper
-		session[:auth_token_paper] = decrypt params[:authToken]
+		publication = Publication.find_by(id: params[:pubId])
+		reference_user = PaperRatingReference.resolve(params[:reference], publication: publication) if publication
+		return render_invalid_paper_reference(params[:pubId]) unless reference_user
+		return render_reference_owner_mismatch(publication.id) unless reference_user == current_user
+
+		session[:paper_rating_reference] = params[:reference]
 		@rating = Rating.new
-		@pub_id = params[:pubId]
-		if Rating.exists?(user_id: @current_user.id, publication_id: @pub_id)
+		@pub_id = publication.id
+		if Rating.exists?(user_id: current_user.id, publication_id: @pub_id)
 			render "shared/halted", locals: {
 				pubId: @pub_id,
 				message: "",
@@ -64,18 +69,15 @@ class RatingsController < ApplicationController
 
 	# POST /load
 	def load
-		@auth_token_user = fetch_token
-		@auth_token_paper = session[:auth_token_paper]
-		session.delete(:auth_token_paper)
-		decoded_auth_token_user = JsonWebToken.decode(@auth_token_user)
-		decoded_auth_token_paper = JsonWebToken.decode(@auth_token_paper)
-		requesting_user = User.find(decoded_auth_token_paper[:user_id])
-		logged_user = User.find(decoded_auth_token_user[:user_id])
-		publication = Publication.find params[:pubId]
+		paper_reference = session.delete(:paper_rating_reference)
+		publication = Publication.find_by(id: params[:pubId])
+		requesting_user = PaperRatingReference.resolve(paper_reference, publication: publication) if publication
+		return render_invalid_paper_reference(params[:pubId]) unless requesting_user
+
 		if publication.pdf_url == "https://arxiv.org/pdf/1812.05594.pdf"
 			render "shared/success", status: :ok, locals: {errors: [I18n.t("information.messages.test_url")]}, layout: false
 		else
-			if requesting_user.id == logged_user.id
+			if requesting_user == current_user
 				if Rating.exists?(user_id: requesting_user.id, publication_id: publication.id)
 					render "shared/halted", locals: {
 						pubId: publication.id,
@@ -104,11 +106,7 @@ class RatingsController < ApplicationController
 					end
 				end
 			else
-				render "shared/halted", locals: {
-					pubId: publication.id,
-					message: I18n.t("information.messages.not_the_same_user"),
-					title: I18n.t("errors.messages.not_the_same_user")
-				}, status: :ok
+				render_reference_owner_mismatch(publication.id)
 			end
 		end
 	end
@@ -125,6 +123,22 @@ class RatingsController < ApplicationController
 	end
 
 	private
+
+	def render_invalid_paper_reference(publication_id)
+		render "shared/halted", locals: {
+			pubId: publication_id,
+			message: "",
+			title: I18n.t("errors.messages.invalid_paper_reference")
+		}, status: :ok
+	end
+
+	def render_reference_owner_mismatch(publication_id)
+		render "shared/halted", locals: {
+			pubId: publication_id,
+			message: I18n.t("information.messages.not_the_same_user"),
+			title: I18n.t("errors.messages.not_the_same_user")
+		}, status: :ok
+	end
 
 	def set_owned_rating
 		@rating = current_user.ratings.find_by(id: params[:id])
