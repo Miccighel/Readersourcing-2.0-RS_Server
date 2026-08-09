@@ -16,13 +16,6 @@ class ApplicationController < ActionController::API
 		only: :message
 	)
 
-	# The original pdfmake build used by the authenticated table views requires
-	# dynamic code evaluation. Keep that exception limited to their list action.
-	content_security_policy only: :list do |policy|
-		policy.script_src :self,
-			:unsafe_eval
-	end
-
 	# GET /
 	def home
 	end

@@ -23,13 +23,13 @@ class SecurityHeadersTest < ActionDispatch::IntegrationTest
     assert_security_headers
   end
 
-  test "the table export exception is limited to authenticated list pages" do
+  test "table export assets remain limited to authenticated list pages" do
     authenticate
 
     get publications_list_path
 
     assert_response :success
-    assert_security_headers(allow_dynamic_evaluation: true)
+    assert_security_headers
     assert_local_browser_dependencies
     assert_select "script[src*='table_export']", count: 1
 
@@ -39,7 +39,7 @@ class SecurityHeadersTest < ActionDispatch::IntegrationTest
 
   private
 
-  def assert_security_headers(allow_dynamic_evaluation: false)
+  def assert_security_headers
     policy = response.headers.fetch("Content-Security-Policy")
 
     assert_includes policy, "default-src 'self'"
@@ -50,12 +50,8 @@ class SecurityHeadersTest < ActionDispatch::IntegrationTest
     assert_includes policy, "frame-ancestors 'none'"
     assert_includes policy, "object-src 'none'"
     assert_includes policy, "style-src 'self' 'unsafe-inline'"
-    if allow_dynamic_evaluation
-      assert_includes policy, "script-src 'self' 'unsafe-eval'"
-    else
-      assert_includes policy, "script-src 'self'"
-      assert_not_includes policy, "'unsafe-eval'"
-    end
+    assert_includes policy, "script-src 'self'"
+    assert_not_includes policy, "'unsafe-eval'"
     assert_not_includes policy, "cdnjs.cloudflare.com"
     assert_not_includes policy, "cdn.datatables.net"
     assert_not_includes policy, "fonts.googleapis.com"

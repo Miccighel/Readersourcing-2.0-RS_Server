@@ -259,12 +259,13 @@ RS_Server sends a Content Security Policy with every response. Browser scripts, 
 Yarn and served by the Rails asset pipeline. Their direct versions remain declared in `package.json`, while `yarn.lock`
 records the complete dependency graph. The visual dependencies remain within the compatibility lines used by the original
 interface. DataTables, JSZip, and js-cookie use the first versions that address their known registry advisories while
-preserving the APIs used here. Tables, icons, typography, and exports consequently retain their behaviour.
+preserving the APIs used here. Pdfmake uses the 0.2 compatibility line, which preserves the API required by the original
+DataTables integration. Tables, icons, typography, and exports consequently retain their behaviour.
 
 The original views still contain a small number of style attributes, so styles declared directly in a page remain permitted
-while scripts declared in the page remain disabled. The historical pdfmake build requires dynamic code evaluation for table
-exports; it is loaded and granted that capability only on the authenticated publication and reader list pages. The policy
-also prevents framing, external form targets, and object content.
+while scripts declared in the page remain disabled. Pdfmake and its font data are loaded only on the authenticated
+publication and reader list pages, where they provide the original PDF export behaviour without allowing dynamic code
+evaluation. The policy also prevents framing, external form targets, and object content.
 Access to browser capabilities is disabled for the camera, screen capture, location, microphone, payment, and USB
 interfaces. Rails adds HSTS only when `FORCE_SSL=true`.
 
