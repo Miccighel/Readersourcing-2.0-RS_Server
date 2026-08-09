@@ -40,7 +40,7 @@ domain extension outside this contract.
 
 ## Numerical tolerance
 
-Database-like `BigDecimal` values are combined with the `Float` returned by
+`BigDecimal` values stored in the database are combined with the `Float` returned by
 `Rating#normalize_score`. The final decimal digits can therefore depend on the
 runtime's numeric conversions.
 

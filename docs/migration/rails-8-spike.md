@@ -17,14 +17,14 @@ Readersourcing domain model.
 - Zeitwerk eager loading succeeds;
 - the existing JavaScript and CSS asset graph compiles;
 - the root page renders successfully in the test environment;
-- HS256 JWT encoding, expiration, authorization, and encrypted session payloads round-trip;
-- password recovery uses a digested, single-use token and a trusted public origin;
+- HS256 JWTs and encrypted session payloads can be encoded and decoded correctly;
+- password recovery uses a digested token that can be used once and a trusted public origin;
 - the RSM/TRM characterization suite passes;
 - the Docker image builds for Linux ARM and includes compiled production assets;
 - PostgreSQL 17 becomes healthy and the production container starts without
   implicitly seeding data;
 - the production home page responds with HTTP 200;
-- the complete database-backed suite passes.
+- the complete suite passes against PostgreSQL.
 
 ## Domain invariants
 
@@ -41,8 +41,8 @@ See `domain-fidelity.md` for the protected behavior and numerical tolerances.
 - Linux ARM and x86-64 are explicit Bundler lockfile platforms.
 - PostgreSQL is available only on the internal Compose network, avoiding a
   conflict with an existing database on host port 5432.
-- The database service uses the RFC-valid hostname `database`.
-- The entrypoint uses `db:create` followed by `db:migrate`; sample-data
+- The database service uses the hostname `database`, which conforms to the relevant RFC requirements.
+- The entrypoint uses `db:create` followed by `db:migrate`; sample data
   seeding remains an explicit, optional action.
 
 The stack and test suite can be reproduced with:
@@ -61,6 +61,6 @@ docker compose run --rm --no-deps \
 
 ## Integration contract
 
-RS_Rate retains the route, JSON, authentication-header, and publication
+RS_Rate retains the route, JSON, authentication header, and publication
 extraction contracts exercised by the client tests. Changes to the frontend
 interaction model or to the TRM formula remain separate domain decisions.

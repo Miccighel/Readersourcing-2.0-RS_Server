@@ -197,8 +197,8 @@ along with an explanation of which deployment modality requires their usage.
 
 | Environment Variable      | Description                                                                              | Deploy Modality | Environment                         | Where To Set                |
 |---------------------------|------------------------------------------------------------------------------------------|-----------------|-------------------------------------|-----------------------------|
-| ```SECRET_DEV_KEY```      | Rails secret used to sign and encrypt development data, including paper-rating references. | 1 - 2         | ```development```                   | ```.env``` file             |
-| ```SECRET_PROD_KEY```     | Rails secret used to sign and encrypt production data. Keep it stable while issued paper-rating references must remain usable. | 1 - 2 - 3 | ```production``` | ```.env``` file, Heroku app |
+| ```SECRET_DEV_KEY```      | Rails secret used to sign and encrypt development data, including paper rating references. | 1 - 2         | ```development```                   | ```.env``` file             |
+| ```SECRET_PROD_KEY```     | Rails secret used to sign and encrypt production data. Keep it stable while issued paper rating references must remain usable. | 1 - 2 - 3 | ```production``` | ```.env``` file, Heroku app |
 | ```POSTGRES_USER```       | Username the admin user of the database.                                                 | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
 | ```POSTGRES_PASSWORD```   | Password of the admin user of the database.                                              | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
 | ```POSTGRES_DB```         | Name of the database.                                                                    | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
@@ -212,7 +212,7 @@ along with an explanation of which deployment modality requires their usage.
 | ```EMAIL_ADMIN```         | Email address to receive general questions.                                              | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
 | ```RAILS_LOG_TO_STDOUT``` | When present, forces the application to write its logs to the standard output.           | 1 - 2 - 3       | ```production```                    | ```.env``` file, Heroku app |
 | ```PUBLIC_BASE_URL```     | Public HTTP or HTTPS origin used to generate password recovery links. Required for password recovery in production. | 1 - 2 - 3 | ```production``` | ```.env``` file, Heroku app |
-| ```CORS_ALLOWED_ORIGINS``` | Comma-separated origins allowed to call the API. In production, cross-origin requests are disabled when this value is omitted. | 1 - 2 - 3 | ```production``` | ```.env``` file, Heroku app |
+| ```CORS_ALLOWED_ORIGINS``` | Origins allowed to call the API, separated by commas. In production, requests from other origins are disabled when this value is omitted. | 1 - 2 - 3 | ```production``` | ```.env``` file, Heroku app |
 | ```FORCE_SSL```           | Set to ```true``` when the public instance is served through HTTPS.                      | 1 - 2 - 3       | ```production```                    | ```.env``` file, Heroku app |
 | ```RS_PDF_MAX_DOWNLOAD_BYTES``` | Maximum accepted publication size in bytes. The default is 52428800 (50 MiB).     | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
 | ```RS_PDF_OPEN_TIMEOUT``` | Maximum number of seconds allowed to open a publication connection. The default is 5.    | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
@@ -220,8 +220,8 @@ along with an explanation of which deployment modality requires their usage.
 | ```RS_PDF_PROCESS_TIMEOUT``` | Maximum RS_PDF execution time in seconds. The default is 60.                          | 1 - 2 - 3       | ```development```, ```production``` | ```.env``` file, Heroku app |
 | ```RS_PDF_ALLOW_PRIVATE_NETWORKS``` | Set to ```true``` only when publications must be fetched from a trusted private network. | 1 - 2 - 3 | ```development```, ```production``` | ```.env``` file, Heroku app |
 | ```RS_AUTHENTICATION_RATE_LIMIT``` | Maximum authentication attempts from one IP address in three minutes. The default is 10. | 1 - 2 - 3 | ```development```, ```production``` | ```.env``` file, Heroku app |
-| ```RS_PASSWORD_RECOVERY_IP_RATE_LIMIT``` | Maximum password-recovery requests from one IP address in fifteen minutes. The default is 5. | 1 - 2 - 3 | ```development```, ```production``` | ```.env``` file, Heroku app |
-| ```RS_PASSWORD_RECOVERY_ACCOUNT_RATE_LIMIT``` | Maximum password-recovery requests for one normalized email address in thirty minutes. The default is 3. | 1 - 2 - 3 | ```development```, ```production``` | ```.env``` file, Heroku app |
+| ```RS_PASSWORD_RECOVERY_IP_RATE_LIMIT``` | Maximum password recovery requests from one IP address in fifteen minutes. The default is 5. | 1 - 2 - 3 | ```development```, ```production``` | ```.env``` file, Heroku app |
+| ```RS_PASSWORD_RECOVERY_ACCOUNT_RATE_LIMIT``` | Maximum password recovery requests for one normalized email address in thirty minutes. The default is 3. | 1 - 2 - 3 | ```development```, ```production``` | ```.env``` file, Heroku app |
 | ```RS_CONTACT_RATE_LIMIT``` | Maximum contact messages from one IP address in ten minutes. The default is 5. | 1 - 2 - 3 | ```development```, ```production``` | ```.env``` file, Heroku app |
 | ```RS_PDF_PROCESSING_RATE_LIMIT``` | Maximum combined publication download, inspection, extraction, and annotation requests for one reader in one hour. The default is 30. | 1 - 2 - 3 | ```development```, ```production``` | ```.env``` file, Heroku app |
 
@@ -246,20 +246,20 @@ PUBLIC_BASE_URL=https://your-readersourcing-domain.example
 
 `PUBLIC_BASE_URL` must contain only the public origin of RS_Server, including the scheme and optional port, without a path,
 query string, fragment, or credentials. For a public instance, set `FORCE_SSL=true` after HTTPS has been configured.
-Set `CORS_ALLOWED_ORIGINS` to the exact origins of web clients that may make cross-origin API requests, separated by
+Set `CORS_ALLOWED_ORIGINS` to the exact origins of web clients that may call the API, separated by
 commas. RS_Rate requests browser permission for the selected RS_Server origin and therefore does not depend on its
-generated extension origin being listed here. Supplying `CORS_ALLOWED_ORIGINS=*` retains an open cross-origin policy and
+generated extension origin being listed here. Supplying `CORS_ALLOWED_ORIGINS=*` permits requests from every origin and
 should be reserved for deployments that deliberately need it.
 
-Rate-limit counters use the configured Rails cache store. The supplied Puma configuration runs one process and uses an
-in-memory store. A deployment with multiple server processes or replicas must use a shared Active Support cache store so
+Rate limit counters use the configured Rails cache store. The supplied Puma configuration runs one process and uses a
+store in memory. A deployment with multiple server processes or replicas must use a shared Active Support cache store so
 that every instance contributes to the same counters.
 
 <h3>Sending Mails</h3>
 
-RS_Server supports any SMTP-based mail server to send emails for tasks such as confirming user registration, reporting bugs,
-or recovering forgotten passwords. Password recovery emails contain a four-hour, one-time link that lets the reader choose a
-new password; passwords themselves are never sent by email.
+RS_Server supports any mail server compatible with SMTP to send emails for tasks such as confirming user registration, reporting bugs,
+or recovering forgotten passwords. Password recovery emails contain a link that remains valid for four hours and can be used
+once to choose a new password; passwords themselves are never sent by email.
 
 Understanding the values used to populate the `SMTP_` environment variables can sometimes lead to ambiguity. Let's consider
 the case of the proposed add-on, [Twilio Sendgrid](https://sendgrid.com/), both when deploying RS_Server manually and on Heroku.
