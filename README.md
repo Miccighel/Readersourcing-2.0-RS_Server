@@ -255,12 +255,16 @@ Rate limit counters use the configured Rails cache store. The supplied Puma conf
 store in memory. A deployment with multiple server processes or replicas must use a shared Active Support cache store so
 that every instance contributes to the same counters.
 
-RS_Server sends a Content Security Policy with every response. Scripts may be loaded only from the application itself,
-cdnjs, and DataTables. Styles may also be loaded from Google Fonts and Font Awesome. The original views still contain a
-small number of style attributes, so styles declared directly in a page remain permitted while scripts declared in the page
-remain disabled. The historical pdfmake build requires dynamic code evaluation for table exports; it is loaded and granted
-that capability only on the authenticated publication and reader list pages. The policy also prevents framing, external form
-targets, and object content.
+RS_Server sends a Content Security Policy with every response. Browser scripts, styles, and fonts are installed through
+Yarn and served by the Rails asset pipeline. Their direct versions remain declared in `package.json`, while `yarn.lock`
+records the complete dependency graph. The visual dependencies remain within the compatibility lines used by the original
+interface. DataTables, JSZip, and js-cookie use the first versions that address their known registry advisories while
+preserving the APIs used here. Tables, icons, typography, and exports consequently retain their behaviour.
+
+The original views still contain a small number of style attributes, so styles declared directly in a page remain permitted
+while scripts declared in the page remain disabled. The historical pdfmake build requires dynamic code evaluation for table
+exports; it is loaded and granted that capability only on the authenticated publication and reader list pages. The policy
+also prevents framing, external form targets, and object content.
 Access to browser capabilities is disabled for the camera, screen capture, location, microphone, payment, and USB
 interfaces. Rails adds HSTS only when `FORCE_SSL=true`.
 

@@ -20,9 +20,7 @@ class ApplicationController < ActionController::API
 	# dynamic code evaluation. Keep that exception limited to their list action.
 	content_security_policy only: :list do |policy|
 		policy.script_src :self,
-			:unsafe_eval,
-			"https://cdnjs.cloudflare.com",
-			"https://cdn.datatables.net"
+			:unsafe_eval
 	end
 
 	# GET /

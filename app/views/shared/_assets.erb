@@ -6,16 +6,13 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="icon" type="image/png" href="<%= asset_path("logo-small.png") %>" />
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-colvis-1.5.4/b-flash-1.5.4/b-html5-1.5.4/b-print-1.5.4/cr-1.5.0/r-2.2.2/rr-1.2.4/datatables.min.css"/>
+	<%= stylesheet_link_tag "browser_dependencies" %>
 	<%= stylesheet_link_tag 'application' %>
 	<%= javascript_include_tag "application" %>
 	<% if action_name == "list" %>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+		<%= javascript_include_tag "table_export" %>
 	<% end %>
-	<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.4/b-colvis-1.5.4/b-flash-1.5.4/b-html5-1.5.4/b-print-1.5.4/cr-1.5.0/r-2.2.2/rr-1.2.4/datatables.min.js"></script>
+	<%= javascript_include_tag "browser_dependencies" %>
 	<%= javascript_include_tag "main" %>
 	<title>Readersourcing 2.0</title>
 </head>

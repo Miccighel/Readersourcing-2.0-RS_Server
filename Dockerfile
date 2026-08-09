@@ -30,7 +30,8 @@ COPY .yarn ./.yarn
 RUN node .yarn/releases/yarn-3.6.3.cjs install --immutable
 
 COPY . .
-RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
+RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile && \
+    rm -rf node_modules
 
 FROM base
 

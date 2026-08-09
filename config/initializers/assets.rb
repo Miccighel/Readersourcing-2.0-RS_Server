@@ -12,6 +12,9 @@ Rails.application.config.assets.paths  += %w( book.jpg )
 
 Rails.application.config.assets.precompile += %w( application.css )
 Rails.application.config.assets.precompile += %w( application.js )
+Rails.application.config.assets.precompile += %w( browser_dependencies.css )
+Rails.application.config.assets.precompile += %w( browser_dependencies.js )
 Rails.application.config.assets.precompile += %w( main.js )
+Rails.application.config.assets.precompile += %w( table_export.js )
 
 Rails.application.config.assets.precompile += %w( rating.css )

@@ -1,0 +1,80 @@
+/*
+ *= require @fortawesome/fontawesome-free/css/fontawesome.css
+ *= require datatables.net-bs4/css/dataTables.bootstrap4.css
+ *= require datatables.net-buttons-bs4/css/buttons.bootstrap4.css
+ *= require datatables.net-colreorder-bs4/css/colReorder.bootstrap4.css
+ *= require datatables.net-responsive-bs4/css/responsive.bootstrap4.css
+ *= require datatables.net-rowreorder-bs4/css/rowReorder.bootstrap4.css
+ */
+
+@font-face {
+	font-family: "Roboto";
+	font-style: normal;
+	font-weight: 300;
+	src: url("<%= asset_path "typeface-roboto/files/roboto-latin-300.woff2" %>") format("woff2"),
+		url("<%= asset_path "typeface-roboto/files/roboto-latin-300.woff" %>") format("woff");
+}
+
+@font-face {
+	font-family: "Roboto";
+	font-style: normal;
+	font-weight: 400;
+	src: url("<%= asset_path "typeface-roboto/files/roboto-latin-400.woff2" %>") format("woff2"),
+		url("<%= asset_path "typeface-roboto/files/roboto-latin-400.woff" %>") format("woff");
+}
+
+@font-face {
+	font-family: "Roboto";
+	font-style: normal;
+	font-weight: 700;
+	src: url("<%= asset_path "typeface-roboto/files/roboto-latin-700.woff2" %>") format("woff2"),
+		url("<%= asset_path "typeface-roboto/files/roboto-latin-700.woff" %>") format("woff");
+}
+
+@font-face {
+	font-family: "Font Awesome 5 Brands";
+	font-style: normal;
+	font-weight: normal;
+	src: url("<%= asset_path "@fortawesome/fontawesome-free/webfonts/fa-brands-400.eot" %>");
+	src: url("<%= asset_path "@fortawesome/fontawesome-free/webfonts/fa-brands-400.eot" %>?#iefix") format("embedded-opentype"),
+		url("<%= asset_path "@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2" %>") format("woff2"),
+		url("<%= asset_path "@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff" %>") format("woff"),
+		url("<%= asset_path "@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf" %>") format("truetype");
+}
+
+@font-face {
+	font-family: "Font Awesome 5 Free";
+	font-style: normal;
+	font-weight: 400;
+	src: url("<%= asset_path "@fortawesome/fontawesome-free/webfonts/fa-regular-400.eot" %>");
+	src: url("<%= asset_path "@fortawesome/fontawesome-free/webfonts/fa-regular-400.eot" %>?#iefix") format("embedded-opentype"),
+		url("<%= asset_path "@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2" %>") format("woff2"),
+		url("<%= asset_path "@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff" %>") format("woff"),
+		url("<%= asset_path "@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf" %>") format("truetype");
+}
+
+@font-face {
+	font-family: "Font Awesome 5 Free";
+	font-style: normal;
+	font-weight: 900;
+	src: url("<%= asset_path "@fortawesome/fontawesome-free/webfonts/fa-solid-900.eot" %>");
+	src: url("<%= asset_path "@fortawesome/fontawesome-free/webfonts/fa-solid-900.eot" %>?#iefix") format("embedded-opentype"),
+		url("<%= asset_path "@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2" %>") format("woff2"),
+		url("<%= asset_path "@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff" %>") format("woff"),
+		url("<%= asset_path "@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf" %>") format("truetype");
+}
+
+.fab {
+	font-family: "Font Awesome 5 Brands";
+}
+
+.far {
+	font-family: "Font Awesome 5 Free";
+	font-weight: 400;
+}
+
+.fa,
+.fas {
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
+}

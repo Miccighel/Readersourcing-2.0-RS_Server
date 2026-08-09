@@ -3,7 +3,7 @@
 //= require popper.js/dist/umd/popper.min.js
 //= require bootstrap/dist/js/bootstrap.bundle.min.js
 //= require jquery.cookie/jquery.cookie.js
-//= require js-cookie/src/js.cookie.js
+//= require js-cookie/dist/js.cookie.js
 //= require waypoints/lib/jquery.waypoints.min.js
 //= require jquery.counterup/jquery.counterup.min.js
 //= require owl.carousel/dist/owl.carousel.min.js
