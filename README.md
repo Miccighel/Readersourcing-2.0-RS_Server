@@ -260,6 +260,9 @@ Its JSON requests carry the Rails CSRF token and do not expose the JWT to browse
 still returns the JWT so that RS_Rate, RS_Py, and other API clients can send it through `Authorization`. Requests that use
 this header remain stateless.
 
+Publication records are shared among readers. The API therefore exposes their creation and retrieval, together with the
+dedicated fetching and refresh operations, but does not expose generic update or deletion routes.
+
 RS_Server sends a Content Security Policy with every response. Browser scripts, styles, and fonts are installed through
 Yarn and served by the Rails asset pipeline. Their direct versions remain declared in `package.json`, while `yarn.lock`
 records the complete dependency graph. The visual dependencies remain within the compatibility lines used by the original

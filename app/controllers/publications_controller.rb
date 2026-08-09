@@ -1,18 +1,18 @@
 class PublicationsController < ApplicationController
 
-	before_action :authorize_api_request, only: [:index, :show, :lookup, :random, :is_rated, :is_saved_for_later, :create, :is_fetchable, :extract, :fetch, :refresh, :update, :destroy]
+	before_action :authorize_api_request, only: [:index, :show, :lookup, :random, :is_rated, :is_saved_for_later, :create, :is_fetchable, :extract, :fetch, :refresh]
 	before_action :authorize_server_request, only: [:list]
 
 	before_action :set_user, :set_request_data
-	before_action :set_publication, only: [:show, :update, :destroy, :refresh, :is_rated, :is_saved_for_later]
-	before_action :set_error_manager, only: [:lookup, :is_rated, :is_saved_for_later, :fetch, :is_fetchable, :extract, :refresh, :create, :update]
+	before_action :set_publication, only: [:show, :refresh, :is_rated, :is_saved_for_later]
+	before_action :set_error_manager, only: [:lookup, :is_rated, :is_saved_for_later, :fetch, :is_fetchable, :extract, :refresh, :create]
 
 	rate_limit(
 		**RequestRateLimit::PDF_PROCESSING.rails_options,
 		by: -> { RequestRateLimit.for_user(current_user) },
 		with: -> { render_rate_limited(RequestRateLimit::PDF_PROCESSING) },
 		scope: :publication_processing,
-		only: [:create, :is_fetchable, :extract, :fetch, :refresh, :update]
+		only: [:create, :is_fetchable, :extract, :fetch, :refresh]
 	)
 
 	# GET /publications.json
@@ -194,34 +194,6 @@ class PublicationsController < ApplicationController
 			@error_manager.add_error(error.message)
 			render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
 		end
-	end
-
-	# PATCH/PUT /publications/1.json
-	def update
-		begin
-			@publication.transaction do
-				if @publication.update(publication_params)
-					@publication.remove_files(current_user)
-					begin
-						@publication.fetch @request_data
-						render :show, status: :ok, location: @publication
-					rescue RuntimeError => error
-						raise ActiveRecord::Rollback error.message
-					end
-				else
-					render json: @publication.errors, status: :unprocessable_entity
-				end
-			rescue ActiveRecord::Rollback => error
-				@error_manager.add_error(error.message)
-				render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
-			end
-		end
-	end
-
-	# DELETE /publications/1.json
-	def destroy
-		@publication.remove_files(current_user)
-		@publication.destroy
 	end
 
 	private

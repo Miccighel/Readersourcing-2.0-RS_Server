@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 	root to: 'application#home'
 
 	scope format: true, constraints: {format: :json} do
-		resources :publications do
+		resources :publications, only: [:index, :show, :create] do
 			collection do
 				get :random
 				post :lookup

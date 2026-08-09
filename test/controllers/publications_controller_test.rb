@@ -63,11 +63,31 @@ class PublicationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @publication.pdf_url, response.parsed_body.fetch("pdf_url")
   end
 
-  test "should destroy publication" do
-    assert_difference("Publication.count", -1) do
+  test "should not expose publication mutation routes" do
+    publication_count = Publication.count
+    rating_count = Rating.count
+    original_attributes = @publication.attributes
+
+    assert_raises(ActionController::RoutingError) do
+      patch publication_url(@publication, format: :json),
+        params: {publication: {title: "Changed"}},
+        headers: @headers,
+        as: :json
+    end
+
+    assert_raises(ActionController::RoutingError) do
+      put publication_url(@publication, format: :json),
+        params: {publication: {title: "Changed"}},
+        headers: @headers,
+        as: :json
+    end
+
+    assert_raises(ActionController::RoutingError) do
       delete publication_url(@publication, format: :json), headers: @headers
     end
 
-    assert_response :no_content
+    assert_equal publication_count, Publication.count
+    assert_equal rating_count, Rating.count
+    assert_equal original_attributes, @publication.reload.attributes
   end
 end
