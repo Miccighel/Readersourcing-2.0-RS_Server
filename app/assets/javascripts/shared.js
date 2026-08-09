@@ -8,20 +8,22 @@ function fetchCookie(name) {
 	return Cookies.get(name);
 }
 
-function storeToken(authToken) {
-	Cookies.set('authToken', authToken);
+function authenticatedSession() {
+	let authenticationState = document.querySelector("meta[name='rs-authenticated']");
+	return authenticationState !== null && authenticationState.content === "true";
 }
 
-function fetchToken() {
-	return Cookies.get('authToken');
+function csrfToken() {
+	let csrfMeta = document.querySelector("meta[name='csrf-token']");
+	return csrfMeta === null ? null : csrfMeta.content;
 }
 
-function deleteToken() {
-	Cookies.remove('authToken');
+function requestHeaders() {
+	let token = csrfToken();
+	return token === null ? {} : {"X-CSRF-Token": token};
 }
 
 async function ajax(type, url, contentType, dataType, crossDomain, data, success, error) {
-	let authToken = fetchToken();
 	$.ajax({
 		type: type,
 		url: `${url}`,
@@ -31,14 +33,11 @@ async function ajax(type, url, contentType, dataType, crossDomain, data, success
 		data: JSON.stringify(data),
 		success: success,
 		error: error,
-		headers: {
-			"Authorization": authToken
-		}
+		headers: requestHeaders()
 	})
 }
 
 async function emptyAjax(type, url, contentType, dataType, crossDomain, success, error) {
-	let authToken = fetchToken();
 	$.ajax({
 		type: type,
 		url: `${url}`,
@@ -47,9 +46,7 @@ async function emptyAjax(type, url, contentType, dataType, crossDomain, success,
 		crossDomain: crossDomain,
 		success: success,
 		error: error,
-		headers: {
-			"Authorization": authToken
-		},
+		headers: requestHeaders(),
 	})
 }
 

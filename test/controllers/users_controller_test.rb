@@ -55,6 +55,15 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_not response.parsed_body.key?("reset_password_token")
   end
 
+  test "the server session authorizes requests from the web interface" do
+    authenticate
+
+    post info_users_url(format: :json), as: :json
+
+    assert_response :success
+    assert_equal @user.id, response.parsed_body.fetch("id")
+  end
+
   test "should update user" do
     patch user_url(@user, format: :json),
       params: { user: { last_name: "Byron" } },
@@ -63,6 +72,21 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :ok
     assert_equal "Byron", @user.reload.last_name
+  end
+
+  test "web profile update ends and revokes the browser session" do
+    authenticate
+    auth_token = session[:auth_token]
+    jti = JsonWebToken.decode(auth_token)[:jti]
+
+    patch user_url(@user, format: :json),
+      params: { user: { last_name: "Byron" } },
+      as: :json
+
+    assert_response :ok
+    assert_nil session[:auth_token]
+    assert_not AuthenticationToken.exists?(jti: jti)
+    assert_nil Authorizer.new(auth_token, "127.0.0.1").call.result
   end
 
   test "should not update another user" do
@@ -116,5 +140,15 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :not_found
     assert User.exists?(other_user.id)
+  end
+
+  private
+
+  def authenticate
+    post authenticate_path, params: {
+      email: @user.email,
+      password: "password"
+    }, headers: {"REMOTE_ADDR" => "127.0.0.1"}, as: :json
+    assert_response :success
   end
 end

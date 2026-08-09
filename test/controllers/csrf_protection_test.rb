@@ -61,6 +61,37 @@ class CsrfProtectionTest < ActionDispatch::IntegrationTest
     assert_nil session[:auth_token]
   end
 
+  test "session-authenticated JSON requests reject a missing CSRF token" do
+    authenticate
+
+    assert_raises(ActionController::InvalidAuthenticityToken) do
+      post info_users_path(format: :json), as: :json
+    end
+  end
+
+  test "session-authenticated JSON requests accept the page CSRF token" do
+    authenticate
+    get root_path
+    authenticity_token = css_select("meta[name='csrf-token']").first["content"]
+
+    post info_users_path(format: :json),
+      headers: {"X-CSRF-Token" => authenticity_token},
+      as: :json
+
+    assert_response :success
+    assert_equal users(:one).id, response.parsed_body.fetch("id")
+  end
+
+  test "bearer-authenticated JSON requests remain stateless" do
+    authenticate
+    bearer_headers = api_headers_for(users(:one))
+
+    post info_users_path(format: :json), headers: bearer_headers, as: :json
+
+    assert_response :success
+    assert_equal users(:one).id, response.parsed_body.fetch("id")
+  end
+
   private
 
   def authenticate

@@ -255,6 +255,11 @@ Rate limit counters use the configured Rails cache store. The supplied Puma conf
 store in memory. A deployment with multiple server processes or replicas must use a shared Active Support cache store so
 that every instance contributes to the same counters.
 
+The web interface keeps its authentication token only in the encrypted Rails session, whose cookie is marked `HttpOnly`.
+Its JSON requests carry the Rails CSRF token and do not expose the JWT to browser scripts. The `authenticate` response
+still returns the JWT so that RS_Rate, RS_Py, and other API clients can send it through `Authorization`. Requests that use
+this header remain stateless.
+
 RS_Server sends a Content Security Policy with every response. Browser scripts, styles, and fonts are installed through
 Yarn and served by the Rails asset pipeline. Their direct versions remain declared in `package.json`, while `yarn.lock`
 records the complete dependency graph. The visual dependencies remain within the compatibility lines used by the original

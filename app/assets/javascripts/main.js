@@ -189,8 +189,6 @@ $(document).on("turbolinks:load", () => {
 
 	//let ratingText = $("#rating-text");
 
-	let authTokenUserField = $("#authTokenUser");
-
 	////////// USER INTERFACE - PASSWORD UPDATE  //////////
 
 	let passwordEditForm = $("#password-edit-form");
@@ -248,7 +246,7 @@ $(document).on("turbolinks:load", () => {
 
 	//######### GENERAL #########//
 
-	let authToken = fetchToken();
+	let userIsAuthenticated = authenticatedSession();
 	let message = localStorage.getItem('message');
 
 	reloadIcons.hide();
@@ -256,7 +254,7 @@ $(document).on("turbolinks:load", () => {
 	errorsSection.hide();
 	errorButtons.hide();
 
-	if (authToken != null) {
+	if (userIsAuthenticated) {
 		ratedItemsMenuItem.find('ul').addClass("logged");
 		aboutMenuItem.find('ul').addClass("logged");
 		userMenuItem.find('ul').addClass("logged");
@@ -271,7 +269,7 @@ $(document).on("turbolinks:load", () => {
 		userMenuItem.hide();
 	}
 
-	if (authToken != null) {
+	if (userIsAuthenticated) {
 		let successCallback = (data, status, jqXHR) => {
 			firstNameValue.text(data["first_name"]);
 			lastNameValue.text(data["last_name"]);
@@ -361,7 +359,7 @@ $(document).on("turbolinks:load", () => {
 
 		signUpForm.submit(event => event.preventDefault());
 
-		if (authToken != null) {
+		if (userIsAuthenticated) {
 			let thirdSuccessCallback = (data, status, jqXHR) => {
 				firstNameField.val(data["first_name"]);
 				firstNameField.show();
@@ -432,7 +430,6 @@ $(document).on("turbolinks:load", () => {
 
 	logoutButton.on("click", () => {
 		let successCallback = (data, status, jqXHR) => {
-			deleteToken();
 			window.location.href = "/"
 		};
 		let errorCallback = (jqXHR, status) => {
@@ -451,7 +448,6 @@ $(document).on("turbolinks:load", () => {
 			let successCallback = (data, status, jqXHR) => {
 				//doLoginButton.find(signInIcon).toggle();
 				//doLoginButton.find(reloadIcons).toggle();
-				storeToken(data["auth_token"]);
 				window.location.href = "/"
 			};
 			let errorCallback = (jqXHR, status) => {
@@ -501,7 +497,6 @@ $(document).on("turbolinks:load", () => {
 			};
 			let successCallback = (data, status, jqXHR) => {
 				//doSignUpButton.find(reloadIcons).toggle();
-				deleteToken();
 				localStorage.setItem("message", data["message"]);
 				window.location.href = "/login";
 			};
@@ -542,7 +537,6 @@ $(document).on("turbolinks:load", () => {
 			};
 			let successCallback = (data, status, jqXHR) => {
 				//passwordForgotButton.find(reloadIcons).toggle();
-				deleteToken();
 				localStorage.setItem("message", data["message"]);
 				window.location.href = "/login";
 			};
@@ -612,7 +606,7 @@ $(document).on("turbolinks:load", () => {
 
 	//#########  STATUS HANDLING (EXISTS ON THE DB, RATED BY THE LOGGED IN USER, SAVED FOR LATER...) #########//
 
-	if (authToken != null) {
+	if (userIsAuthenticated) {
 		publicationUrlField.change(() => {
 			let validationInstance = rateForm.parsley();
 			validationInstance.validate();
@@ -782,7 +776,7 @@ $(document).on("turbolinks:load", () => {
 
 	//########## RELOAD HANDLING #########//
 
-	if (authToken != null) {
+	if (userIsAuthenticated) {
 		reloadButton.on("click", () => {
 			undetectedPublicationSection.hide();
 			// RATING SECTION
@@ -805,7 +799,7 @@ $(document).on("turbolinks:load", () => {
 
 	//######### SAVE FOR LATER HANDLING #########//
 
-	if (authToken != null) {
+	if (userIsAuthenticated) {
 		downloadButton.on("click", () => {
 			validationInstance.validate();
 			if (validationInstance.isValid()) {
@@ -942,13 +936,10 @@ $(document).on("turbolinks:load", () => {
 			paramName: "file", // The name that will be used to transfer the file
 			acceptedFiles: "application/pdf",
 			maxFiles: 1,
-			headers: {
-				"Authorization": authToken
-			}
+			headers: requestHeaders()
 		};
 		annotatedPublicationDropzone = new Dropzone("#annotated-publication-dropzone");
-		if (authToken != null) {
-			annotatedPublicationDropzone.on("sending", (file, xhr, formData) => xhr.setRequestHeader("Authorization", authToken));
+		if (userIsAuthenticated) {
 			annotatedPublicationDropzone.on("success", (file, data) => {
 				extractCaptionFirst.hide();
 				extractCaptionSecond.show();
@@ -982,7 +973,7 @@ $(document).on("turbolinks:load", () => {
 
 	rateForm.submit(event => event.preventDefault());
 
-	if (authToken != null) {
+	if (userIsAuthenticated) {
 		doRateButton.on("click", () => {
 			validationInstance.validate();
 			if (validationInstance.isValid()) {
@@ -1064,7 +1055,7 @@ $(document).on("turbolinks:load", () => {
 
 	//######### EDIT HANDLING #########//
 
-	if (authToken != null) {
+	if (userIsAuthenticated) {
 		editRateButton.on("click", () => {
 			ratingSlider.slider({});
 			ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
@@ -1078,7 +1069,7 @@ $(document).on("turbolinks:load", () => {
 
 	//######### UPDATE HANDLING #########//
 
-	if (authToken != null) {
+	if (userIsAuthenticated) {
 		updateRateButton.on("click", () => {
 			validationInstance.validate();
 			if (validationInstance.isValid()) {
@@ -1144,7 +1135,6 @@ $(document).on("turbolinks:load", () => {
 			};
 			let successCallback = (data, status, jqXHR) => {
 				//doPasswordEditButton.find(reloadIcons).toggle();
-				deleteToken();
 				localStorage.setItem("message", data["message"]);
 				window.location.href = "/login";
 			};
@@ -1171,7 +1161,7 @@ $(document).on("turbolinks:load", () => {
 
 	////////// FUNCTIONALITIES - PROFILE UPDATE  //////////
 
-	if (authToken != null) {
+	if (userIsAuthenticated) {
 		updateButton.on("click", () => {
 			let validationInstance = signUpForm.parsley();
 			validationInstance.validate();
@@ -1191,7 +1181,6 @@ $(document).on("turbolinks:load", () => {
 						delete secondData.user.orcid;
 					let secondSuccessCallback = (data, status, jqXHR) => {
 						//updateButton.find(reloadIcons).toggle();
-						deleteToken();
 						localStorage.setItem("message", data["message"]);
 						window.location.href = "/login";
 					};
@@ -1254,7 +1243,7 @@ $(document).on("turbolinks:load", () => {
 
 	//#######  DOWNLOAD FROM TABLE HANDLING #########//
 
-	if (authToken != null) {
+	if (userIsAuthenticated) {
 		downloadListButtons.on("click", (event) => {
 			if ($(event.target).is('span')) {
 				downloadButton = $(event.target).parent();

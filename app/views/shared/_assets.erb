@@ -1,6 +1,7 @@
 <head>
 	<meta name="google-site-verification" content="H5GPug7jKVJnK4ITnbum8LulPnkePgiTf4Nh_sosggY"/>
 	<%= csrf_meta_tags %>
+	<meta name="rs-authenticated" content="<%= session[:auth_token].present? %>">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">

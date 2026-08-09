@@ -6,6 +6,7 @@ class ApplicationController < ActionController::API
 
 	self.allow_forgery_protection = ActionController::Base.allow_forgery_protection
 	protect_from_forgery with: :exception, unless: :api_json_request?
+	before_action :discard_legacy_authentication_cookie
 
 	attr_reader :current_user
 
@@ -75,8 +76,13 @@ class ApplicationController < ActionController::API
 	end
 
 	def delete_token
+		AuthenticationTokenRevoker.new(fetch_token).call if fetch_token.present?
 		cookies.delete :authToken
 		reset_session
+	end
+
+	def browser_session_request?
+		authorization_token.blank? && fetch_token.present?
 	end
 
 	private
@@ -89,9 +95,10 @@ class ApplicationController < ActionController::API
 	end
 
 	def authorize_api_request
-		auth_token = authorization_token
+		auth_token = authorization_token || fetch_token
 
-		# Authorize the token supplied by an API client.
+		# API clients supply the token explicitly. The web interface relies on the
+		# same token through its encrypted server session.
 		authorizer = Authorizer.new(auth_token, request.remote_ip)
 		@current_user = authorizer.call.result
 
@@ -110,11 +117,16 @@ class ApplicationController < ActionController::API
 	end
 
 	def api_json_request?
+		return false if browser_session_request?
 		return true if request.content_mime_type == Mime[:json]
 		return false unless request.format.json?
 		return true if request.get? || request.head?
 
 		authorization_token.present?
+	end
+
+	def discard_legacy_authentication_cookie
+		cookies.delete :authToken if cookies[:authToken].present?
 	end
 
 end

@@ -65,6 +65,7 @@ class UsersController < ApplicationController
 	# PATCH/PUT /users/1.json
 	def update
 		if @user.update(profile_params)
+			delete_token if browser_session_request?
 			render json: {message: I18n.t("confirmations.messages.update_successful")}, status: :ok
 		else
 			render json: @user.errors, status: :unprocessable_entity

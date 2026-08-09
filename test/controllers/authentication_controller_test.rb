@@ -18,6 +18,30 @@ class AuthenticationControllerTest < ActionDispatch::IntegrationTest
     assert AuthenticationToken.exists?(jti: decoded_token[:jti], user: users(:one))
     assert_not_equal initial_session_id, session.id
     assert_equal response.parsed_body.fetch("auth_token"), session[:auth_token]
+    assert_includes response.headers.fetch("Set-Cookie").downcase, "httponly"
+    assert_predicate cookies[:authToken], :blank?
+  end
+
+  test "server-rendered pages expose only the session authentication state" do
+    get login_path
+    assert_select "meta[name='rs-authenticated'][content='false']"
+
+    post authenticate_path, params: {
+      email: users(:one).email,
+      password: "password"
+    }, headers: {"REMOTE_ADDR" => "127.0.0.1"}, as: :json
+    get root_path
+
+    assert_select "meta[name='rs-authenticated'][content='true']"
+    assert_predicate cookies[:authToken], :blank?
+  end
+
+  test "legacy JavaScript authentication cookies are discarded" do
+    cookies[:authToken] = "legacy-token"
+
+    get root_path
+
+    assert_predicate cookies[:authToken], :blank?
   end
 
   test "authenticate rejects invalid credentials" do
