@@ -1,0 +1,1009 @@
+{
+  "info": {
+    "_postman_id": "c26fc049-7021-4691-beb3-97cebfb60adb",
+    "name": "Readersourcing 2.0",
+    "description": "<html><head></head><body><p>This is the official API collection of the <strong>Readersourcing 2.0 ecosystem</strong> presented during the <a href=\"https://ircdl2019.isti.cnr.it/\">IRCDL 2019</a> conference. The original article can be freely read on <a href=\"https://zenodo.org/record/1446468\">Zenodo</a>, while the code and the related documentation is available on <strong>GitHub</strong>. Take advantage of the badges below to exploit these resources.</p>\n<p><a href=\"https://ircdl2019.isti.cnr.it/\"><img src=\"https://img.shields.io/badge/IRCDL%202019-Conference-yellow.svg\"></a>\n<a href=\"https://doi.org/10.5281/zenodo.1446468\"><img src=\"https://img.shields.io/badge/Zenodo-Paper-blue.svg\"></a>\n<a href=\"https://github.com/Miccighel/Readersourcing-2.0\"><img src=\"https://img.shields.io/badge/GitHub-Code-lightgrey.svg\"></a></p>\n</body></html>",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication (Authenticate)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "38338bc1-abc3-4b19-84d5-f8e870653ea0",
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "  const response = pm.response.json();",
+              "  if (response.auth_token) {",
+              "    pm.collectionVariables.set(\"authToken\", response.auth_token);",
+              "  }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "id": "796f030b-ea08-4bad-a3a5-3c70ee6f15b8",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+        },
+        "url": "{{host}}/authenticate.json",
+        "description": "Authenticates an API client and returns a JWT. The request script stores the token in the authToken collection variable."
+      },
+      "response": [],
+      "_postman_id": "796f030b-ea08-4bad-a3a5-3c70ee6f15b8"
+    },
+    {
+      "name": "Authentication (Login)",
+      "id": "7f5d1b55-99d0-4ef4-98ac-157f6137e092",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}/login"
+      },
+      "response": [],
+      "_postman_id": "7f5d1b55-99d0-4ef4-98ac-157f6137e092"
+    },
+    {
+      "name": "Authentication (Logout)",
+      "id": "af59176f-cd04-484f-a082-42b6b1b6e13a",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{host}}/logout.json",
+        "description": "Revokes the JWT supplied through the Authorization header."
+      },
+      "response": [],
+      "_postman_id": "af59176f-cd04-484f-a082-42b6b1b6e13a",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "  pm.collectionVariables.unset(\"authToken\");",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Application (Home)",
+      "id": "c204ae82-04c3-49d6-8137-bb4da41060c9",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}/"
+      },
+      "response": [],
+      "_postman_id": "c204ae82-04c3-49d6-8137-bb4da41060c9"
+    },
+    {
+      "name": "Application (Resources)",
+      "id": "6d687d28-7895-4188-b29c-6d31a47a1945",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}/resources"
+      },
+      "response": [],
+      "_postman_id": "6d687d28-7895-4188-b29c-6d31a47a1945"
+    },
+    {
+      "name": "Application (Software)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}/software",
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "Application (Privacy)",
+      "id": "5662fd8c-f2cc-4f64-9461-157ac1420215",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}/privacy"
+      },
+      "response": [],
+      "_postman_id": "5662fd8c-f2cc-4f64-9461-157ac1420215"
+    },
+    {
+      "name": "Application (Contact)",
+      "id": "c61e69c4-ebe6-4fc4-b2c8-3382e121ec63",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}/contact"
+      },
+      "response": [],
+      "_postman_id": "c61e69c4-ebe6-4fc4-b2c8-3382e121ec63"
+    },
+    {
+      "name": "Application (Message)",
+      "id": "8c1fe6df-91fe-4538-be0e-3d0cbc57cc28",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{email}}\",\n  \"message\": \"This is a bug report message\",\n  \"bug_report\": true\n}"
+        },
+        "url": "{{host}}/message.json"
+      },
+      "response": [],
+      "_postman_id": "8c1fe6df-91fe-4538-be0e-3d0cbc57cc28"
+    },
+    {
+      "name": "Application (Unauthorized)",
+      "id": "608a7235-58ae-4501-a6d3-3c337f770c87",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}/unauthorized"
+      },
+      "response": [],
+      "_postman_id": "608a7235-58ae-4501-a6d3-3c337f770c87"
+    },
+    {
+      "name": "Publications (Index)",
+      "id": "ab2d9403-8f26-492c-8277-2c01e3c0d78b",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": "{{host}}/publications.json"
+      },
+      "response": [],
+      "_postman_id": "ab2d9403-8f26-492c-8277-2c01e3c0d78b"
+    },
+    {
+      "name": "Publications (List) ",
+      "id": "289ac8ad-af19-4ba0-9310-0e1a04cf0d12",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}/publications/list"
+      },
+      "response": [],
+      "_postman_id": "289ac8ad-af19-4ba0-9310-0e1a04cf0d12"
+    },
+    {
+      "name": "Publications (Show)",
+      "id": "4baffbc7-cd47-4adb-b4ce-a9134cd47726",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": "{{host}}/publications/{{publicationId}}.json"
+      },
+      "response": [],
+      "_postman_id": "4baffbc7-cd47-4adb-b4ce-a9134cd47726"
+    },
+    {
+      "name": "Publications (Lookup)",
+      "id": "62bbfaa9-5bcc-4ede-82b6-fbeb28cf2ecc",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"publication\": {\n\t\t\"pdf_url\": \"https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf\"\n\t}\n}"
+        },
+        "url": "{{host}}/publications/lookup.json"
+      },
+      "response": [],
+      "_postman_id": "62bbfaa9-5bcc-4ede-82b6-fbeb28cf2ecc"
+    },
+    {
+      "name": "Publications (Random)",
+      "id": "2018c580-a0a6-41ed-bf6b-924cf2896cc2",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": "{{host}}/publications/random.json",
+        "description": ""
+      },
+      "response": [],
+      "_postman_id": "2018c580-a0a6-41ed-bf6b-924cf2896cc2"
+    },
+    {
+      "name": "Publications (Is Rated)",
+      "id": "b2b50f79-8469-4c8a-94e3-6a30480f0c68",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "url": "{{host}}/publications/{{publicationId}}/is_rated.json"
+      },
+      "response": [],
+      "_postman_id": "b2b50f79-8469-4c8a-94e3-6a30480f0c68"
+    },
+    {
+      "name": "Publications (Is Saved For Later)",
+      "id": "0a23e139-094b-43f9-a035-9af78e9b8f3b",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          }
+        ],
+        "url": "{{host}}/publications/{{publicationId}}/is_saved_for_later.json"
+      },
+      "response": [],
+      "_postman_id": "0a23e139-094b-43f9-a035-9af78e9b8f3b"
+    },
+    {
+      "name": "Publications (Create)",
+      "id": "75d68e3f-40ed-450d-a43a-dc941559b634",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"publication\":\n\t{\n\t\t\"title\":\"Uncertainties in WIMP dark matter scattering revisited\",\n\t\t\"subject\":\"The European Physical Journal C, https://doi.org/10.1140/epjc/s10052-018-6047-y\",\n\t\t\"pdf_url\":\"https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf\"\n\t}\n}"
+        },
+        "url": "{{host}}/publications.json"
+      },
+      "response": [],
+      "_postman_id": "75d68e3f-40ed-450d-a43a-dc941559b634"
+    },
+    {
+      "name": "Publications (Is Fetchable)",
+      "id": "3c0627a7-680c-490f-88eb-f13607b3da07",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://arxiv.org/pdf/1811.03152.pdf\"\n\t}\n}"
+        },
+        "url": "{{host}}/publications/is_fetchable.json"
+      },
+      "response": [],
+      "_postman_id": "3c0627a7-680c-490f-88eb-f13607b3da07"
+    },
+    {
+      "name": "Publications (Extract)",
+      "id": "507ee554-02dd-4826-a651-84fab2cb0365",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "value": null
+            }
+          ]
+        },
+        "url": "{{host}}/publications/extract.json"
+      },
+      "response": [],
+      "_postman_id": "507ee554-02dd-4826-a651-84fab2cb0365"
+    },
+    {
+      "name": "Publications (Fetch)",
+      "id": "b6455e65-3f2e-41ce-aa9f-47ff3c2cf8e9",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf\"\n\t}\n}"
+        },
+        "url": "{{host}}/publications/fetch.json"
+      },
+      "response": [],
+      "_postman_id": "b6455e65-3f2e-41ce-aa9f-47ff3c2cf8e9"
+    },
+    {
+      "name": "Publications (Refresh)",
+      "id": "a7ebe874-0e51-4b6f-b588-e720d7cf06b4",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": "{{host}}/publications/{{publicationId}}/refresh.json"
+      },
+      "response": [],
+      "_postman_id": "a7ebe874-0e51-4b6f-b588-e720d7cf06b4"
+    },
+    {
+      "name": "Users (Index)",
+      "id": "30278b21-a75f-406d-bca4-fd33b822d5ce",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": "{{host}}/users.json"
+      },
+      "response": [],
+      "_postman_id": "30278b21-a75f-406d-bca4-fd33b822d5ce"
+    },
+    {
+      "name": "Users (List)",
+      "id": "468293b3-4994-41c6-9d46-541b8b2ca109",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}/readers/list"
+      },
+      "response": [],
+      "_postman_id": "468293b3-4994-41c6-9d46-541b8b2ca109"
+    },
+    {
+      "name": "Users (Show)",
+      "id": "1019ab1b-33b5-44ae-b96f-8958d62bf395",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": "{{host}}/users/{{userId}}.json"
+      },
+      "response": [],
+      "_postman_id": "1019ab1b-33b5-44ae-b96f-8958d62bf395"
+    },
+    {
+      "name": "Users (Info)",
+      "id": "d4391592-c7a2-4cc2-b5e9-9b63177d878f",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": "{{host}}/users/info.json"
+      },
+      "response": [],
+      "_postman_id": "d4391592-c7a2-4cc2-b5e9-9b63177d878f"
+    },
+    {
+      "name": "Users (Sign Up)",
+      "id": "05b3fec3-c684-4e75-bf1c-b76c1781d80f",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}/sign_up"
+      },
+      "response": [],
+      "_postman_id": "05b3fec3-c684-4e75-bf1c-b76c1781d80f"
+    },
+    {
+      "name": "Users (Create)",
+      "id": "026dbb35-5e24-46e0-88f9-94d593766d4a",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"user\": {\n    \"first_name\": \"Mario\",\n    \"last_name\": \"Rossi\",\n    \"email\": \"{{email}}\",\n    \"orcid\": \"0000-0002-1825-0097\",\n    \"password\": \"{{password}}\",\n    \"password_confirmation\": \"{{password}}\"\n  }\n}"
+        },
+        "url": "{{host}}/users.json"
+      },
+      "response": [],
+      "_postman_id": "026dbb35-5e24-46e0-88f9-94d593766d4a"
+    },
+    {
+      "name": "Users (Confirm)",
+      "id": "bdfc6b0d-976d-4a51-b229-c224b5046510",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}/confirm/{{userId}}/{{confirmationToken}}"
+      },
+      "response": [],
+      "_postman_id": "bdfc6b0d-976d-4a51-b229-c224b5046510"
+    },
+    {
+      "name": "Users (Edit)",
+      "id": "3fac9eb6-6038-4d68-addc-102505e727f9",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}/profile/edit"
+      },
+      "response": [],
+      "_postman_id": "3fac9eb6-6038-4d68-addc-102505e727f9"
+    },
+    {
+      "name": "Users (Update)",
+      "id": "e730710e-d2c4-42cc-8904-19e2f701b99a",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"user\": {\n\t\t\"first_name\": \"Marco\",\n\t\t\"last_name\": \"Verdi\",\n\t\t\"orcid\": \"0000-0002-1825-0000\"\n\t}\n}"
+        },
+        "url": "{{host}}/users/{{userId}}.json"
+      },
+      "response": [],
+      "_postman_id": "e730710e-d2c4-42cc-8904-19e2f701b99a"
+    },
+    {
+      "name": "Users (Unsubscribe)",
+      "id": "40e67cee-61a4-4097-ad94-cdb1cc2027e2",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          }
+        ],
+        "url": "{{host}}/unsubscribe/{{userId}}"
+      },
+      "response": [],
+      "_postman_id": "40e67cee-61a4-4097-ad94-cdb1cc2027e2"
+    },
+    {
+      "name": "Users (Delete)",
+      "id": "81ad79f7-12bb-4261-9dd4-d9446ca53f2c",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": "{{host}}/users/{{userId}}.json"
+      },
+      "response": [],
+      "_postman_id": "81ad79f7-12bb-4261-9dd4-d9446ca53f2c"
+    },
+    {
+      "name": "Password (Edit)",
+      "id": "cb1df97c-5473-4899-9cdb-4fd998e08e78",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}/password/edit"
+      },
+      "response": [],
+      "_postman_id": "cb1df97c-5473-4899-9cdb-4fd998e08e78"
+    },
+    {
+      "name": "Passwords (Update)",
+      "id": "54899930-6101-4d80-854b-8bf7d0201d68",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"current_password\": \"{{password}}\",\n  \"new_password\": \"{{newPassword}}\",\n  \"new_password_confirmation\": \"{{newPassword}}\"\n}"
+        },
+        "url": "{{host}}/password/update.json"
+      },
+      "response": [],
+      "_postman_id": "54899930-6101-4d80-854b-8bf7d0201d68"
+    },
+    {
+      "name": "Password (Forgot)",
+      "id": "ba8cf02e-7548-4626-89be-eeb0feeacf69",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}/password/forgot"
+      },
+      "response": [],
+      "_postman_id": "ba8cf02e-7548-4626-89be-eeb0feeacf69"
+    },
+    {
+      "name": "Passwords (Forgot)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "22fbaf7a-b9ac-4c6f-b853-df9fad8e1b33",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "id": "8896884a-f0ea-4145-9e60-13576ad0fd39",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{email}}\"\n}"
+        },
+        "url": "{{host}}/password/forgot.json"
+      },
+      "response": [],
+      "_postman_id": "8896884a-f0ea-4145-9e60-13576ad0fd39"
+    },
+    {
+      "name": "Password (Reset)",
+      "id": "d9b196ec-79a5-48ea-ad5f-303bec8d04b6",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}/password/reset?email={{email}}&reset_token={{resetToken}}"
+      },
+      "response": [],
+      "_postman_id": "d9b196ec-79a5-48ea-ad5f-303bec8d04b6"
+    },
+    {
+      "name": "Passwords (Reset)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "email",
+              "value": "{{email}}",
+              "type": "text"
+            },
+            {
+              "key": "reset_token",
+              "value": "{{resetToken}}",
+              "type": "text"
+            },
+            {
+              "key": "new_password",
+              "value": "{{newPassword}}",
+              "type": "text"
+            },
+            {
+              "key": "new_password_confirmation",
+              "value": "{{newPassword}}",
+              "type": "text"
+            }
+          ]
+        },
+        "url": "{{host}}/password/reset",
+        "description": "Completes password recovery with the single use token received by email."
+      },
+      "response": []
+    },
+    {
+      "name": "Ratings (Index)",
+      "id": "05263260-790c-4247-afe1-90f9545f19c9",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": "{{host}}/ratings.json"
+      },
+      "response": [],
+      "_postman_id": "05263260-790c-4247-afe1-90f9545f19c9"
+    },
+    {
+      "name": "Ratings (Show)",
+      "id": "45d97fef-c9a8-41bb-9776-e2b39cd089b6",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          }
+        ],
+        "url": "{{host}}/ratings/{{ratingId}}.json"
+      },
+      "response": [],
+      "_postman_id": "45d97fef-c9a8-41bb-9776-e2b39cd089b6"
+    },
+    {
+      "name": "Ratings (Rate Paper)",
+      "id": "af20af69-843f-4a1b-9173-57268dbb0d42",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}/rate/{{publicationId}}/{{paperReference}}",
+        "description": "Opens the rating page referenced by an annotated PDF. Authenticate first so that Postman retains the reader session."
+      },
+      "response": [],
+      "_postman_id": "af20af69-843f-4a1b-9173-57268dbb0d42"
+    },
+    {
+      "name": "Ratings (Rate Web)",
+      "id": "9503a0cb-ab29-4cf6-8964-5d8b24baad24",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}/rate"
+      },
+      "response": [],
+      "_postman_id": "9503a0cb-ab29-4cf6-8964-5d8b24baad24"
+    },
+    {
+      "name": "Ratings (Create)",
+      "id": "9d50c531-ca6b-4aac-b292-e6e0b0a11f46",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"rating\": {\n\t\t\"score\": 80,\n\t\t\"pdf_url\": \"https://link.springer.com/content/pdf/10.1007%2FJHEP07%282018%29172.pdf\"\n\t}\n}"
+        },
+        "url": "{{host}}/ratings.json"
+      },
+      "response": [],
+      "_postman_id": "9d50c531-ca6b-4aac-b292-e6e0b0a11f46"
+    },
+    {
+      "name": "Ratings (Load)",
+      "id": "5ded2a68-24e1-467f-95cc-788cda1b3337",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "pubId",
+              "value": "{{publicationId}}",
+              "type": "text"
+            },
+            {
+              "key": "rating[score]",
+              "value": "60",
+              "type": "text"
+            },
+            {
+              "key": "rating[anonymous]",
+              "value": "0",
+              "type": "text"
+            }
+          ]
+        },
+        "url": "{{host}}/load",
+        "description": "Submits the paper rating after Ratings (Rate Paper) has stored the durable paper reference in the same reader session."
+      },
+      "response": [],
+      "_postman_id": "5ded2a68-24e1-467f-95cc-788cda1b3337"
+    },
+    {
+      "name": "Ratings (Update)",
+      "id": "8d6e16f1-7148-4eb0-8c3d-468a35c8d8eb",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"rating\": {\n\t\t\"score\": 40\n\t}\n}"
+        },
+        "url": "{{host}}/ratings/{{ratingId}}.json"
+      },
+      "response": [],
+      "_postman_id": "8d6e16f1-7148-4eb0-8c3d-468a35c8d8eb"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "7b4da194-d670-4471-9af5-d9b6b1433122",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "7b86c13c-59c8-43f8-a032-d8f23af6221b",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "host",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "email",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "password",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "newPassword",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "publicationId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "ratingId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "confirmationToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "resetToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "paperReference",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

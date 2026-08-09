@@ -30,6 +30,10 @@ whose components can be found by taking advantage of the links below.
 - <a href="https://doi.org/10.5281/zenodo.1442630">Zenodo Record</a>
 - <a href="https://cloud.docker.com/repository/docker/miccighel/rs_server">Docker Hub</a>
 
+The source of the Postman collection is versioned in
+[`postman/Readersourcing_2.0.postman_collection.json`](postman/Readersourcing_2.0.postman_collection.json). It should be
+kept aligned with the Rails routes before the public RESTful API Interface is updated.
+
 <h1>Description</h1>
 
 **RS_Server** is the server-side component which has the task of collecting and aggregating the ratings given by readers and using the ```Readersourcing```-based models to compute quality scores for
