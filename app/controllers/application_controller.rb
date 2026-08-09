@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
 
 	include ActionController::Cookies
+	include ActionController::ContentSecurityPolicy
 	include ::ActionController::RequestForgeryProtection
 
 	self.allow_forgery_protection = ActionController::Base.allow_forgery_protection
@@ -14,6 +15,15 @@ class ApplicationController < ActionController::API
 		with: -> { render_rate_limited(RequestRateLimit::CONTACT) },
 		only: :message
 	)
+
+	# The original pdfmake build used by the authenticated table views requires
+	# dynamic code evaluation. Keep that exception limited to their list action.
+	content_security_policy only: :list do |policy|
+		policy.script_src :self,
+			:unsafe_eval,
+			"https://cdnjs.cloudflare.com",
+			"https://cdn.datatables.net"
+	end
 
 	# GET /
 	def home

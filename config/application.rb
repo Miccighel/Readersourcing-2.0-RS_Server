@@ -20,6 +20,14 @@ module Readersourcing2
 
     config.i18n.default_locale = :en
 
+    # Rails supplies the remaining default security headers. These explicit
+    # values tighten framing and prevent paper reference paths from being sent
+    # as referrers when a reader follows an external link.
+    config.action_dispatch.default_headers["X-Frame-Options"] = "DENY"
+    config.action_dispatch.default_headers["Referrer-Policy"] = "same-origin"
+    config.action_dispatch.default_headers["Permissions-Policy"] =
+      "camera=(), display-capture=(), geolocation=(), microphone=(), payment=(), usb=()"
+
     config.middleware.insert_before(ActionDispatch::Static, DefaultHostMiddleware)
   end
 end
