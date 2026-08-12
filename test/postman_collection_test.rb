@@ -74,4 +74,16 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     assert operations.key?(["POST", "{{host}}/password/reset"])
     refute operations.key?(["GET", "{{host}}/logout"])
   end
+
+  test "collection documents its origin and every request" do
+    description = @collection.dig("info", "description")
+    assert_includes description, "original release"
+    assert_includes description, "IRCDL 2019"
+    assert_includes description, "current implementation of RS_Server"
+    refute_includes description, "<html>"
+
+    @requests.each do |item|
+      assert_not_empty item.dig("request", "description"), "#{item.fetch("name")} has no description"
+    end
+  end
 end
