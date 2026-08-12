@@ -131,6 +131,7 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     assert operations.key?(["GET", "{{host}}/password/reset?email={{email}}&reset_token={{resetToken}}"])
     assert operations.key?(["POST", "{{host}}/password/reset"])
     assert operations.key?(["POST", "{{host}}/publications/{{publicationId}}/refresh.json"])
+    assert operations.key?(["POST", "{{host}}/publications/fetch_upload.json"])
     assert operations.key?(["GET", "{{host}}/unsubscribe/{{userId}}"])
     assert operations.key?(["POST", "{{host}}/unsubscribe/{{userId}}.json"])
     refute operations.key?(["GET", "{{host}}/publications/{{publicationId}}/refresh.json"])

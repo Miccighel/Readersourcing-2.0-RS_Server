@@ -650,7 +650,7 @@
           "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://arxiv.org/pdf/1811.03152.pdf\"\n\t}\n}"
         },
         "url": "{{host}}/publications/is_fetchable.json",
-        "description": "Checks whether the supplied URL identifies a bounded PDF that RS_Server can retrieve safely. If the publication is already known, its metadata and scores are returned instead."
+        "description": "Checks whether the supplied URL identifies a bounded file that RS_Server can retrieve and open as a PDF. The declared content type is treated as an indication; the file header and PDF structure are verified. The response contains an `available` status on success or a specific preparation status on failure. The web application and RS_Rate prepare the PDF only when the reader requests it, so this operation remains available mainly to API clients."
       },
       "response": [
 
@@ -710,12 +710,46 @@
           "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf\"\n\t}\n}"
         },
         "url": "{{host}}/publications/fetch.json",
-        "description": "Retrieves the PDF identified by `pdf_url` and generates an annotated copy for the authenticated reader. If the publication is not yet present, RS_Server creates its record and reads the available PDF metadata before returning it."
+        "description": "Retrieves the PDF identified by `pdf_url`, opens it as a PDF, and uses RS_PDF to add the rating page for the authenticated reader. Before publishing the result, RS_Server verifies the added page and the embedded rating URL. If the publication is not yet present, its record is created in the same operation. Failures return a stable preparation status such as `authentication_required`, `too_large`, `malformed_pdf`, `annotation_failed`, or `verification_failed`."
       },
       "response": [
 
       ],
       "_postman_id": "b6455e65-3f2e-41ce-aa9f-47ff3c2cf8e9"
+    },
+    {
+      "name": "Publications (Fetch Upload)",
+      "id": "eddb3647-e322-4c45-a91f-2dd58ebc6496",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "publication[pdf_url]",
+              "value": "https://example.org/publication.pdf",
+              "type": "text"
+            },
+            {
+              "key": "file",
+              "type": "file",
+              "value": null
+            }
+          ]
+        },
+        "url": "{{host}}/publications/fetch_upload.json",
+        "description": "Prepares an original PDF uploaded by the authenticated reader when RS_Server cannot retrieve it directly, for example because the publisher requires the reader's browser session. `publication[pdf_url]` remains the stable identifier of the publication. The uploaded file is bounded, opened as a PDF, annotated by RS_PDF, and verified through the same preparation flow used for remote publications. Select the original PDF through the `file` form field before sending the request."
+      },
+      "response": [
+
+      ],
+      "_postman_id": "eddb3647-e322-4c45-a91f-2dd58ebc6496"
     },
     {
       "name": "Publications (Refresh)",
@@ -735,7 +769,7 @@
           ]
         },
         "url": "{{host}}/publications/{{publicationId}}/refresh.json",
-        "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the annotated copy for the authenticated reader. The operation updates the stored publication and the files generated for that reader."
+        "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the prepared copy for the authenticated reader. The replacement is published only after its rating page and embedded URL have passed the final verification."
       },
       "response": [
 

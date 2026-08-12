@@ -1,18 +1,18 @@
 class PublicationsController < ApplicationController
 
-	before_action :authorize_api_request, only: [:index, :show, :lookup, :random, :is_rated, :is_saved_for_later, :create, :is_fetchable, :extract, :fetch, :refresh]
+	before_action :authorize_api_request, only: [:index, :show, :lookup, :random, :is_rated, :is_saved_for_later, :create, :is_fetchable, :extract, :fetch, :fetch_upload, :refresh]
 	before_action :authorize_server_request, only: [:list]
 
 	before_action :set_user, :set_request_data
 	before_action :set_publication, only: [:show, :refresh, :is_rated, :is_saved_for_later]
-	before_action :set_error_manager, only: [:lookup, :is_rated, :is_saved_for_later, :fetch, :is_fetchable, :extract, :refresh, :create]
+	before_action :set_error_manager, only: [:lookup, :is_rated, :is_saved_for_later, :fetch, :fetch_upload, :is_fetchable, :extract, :refresh, :create]
 
 	rate_limit(
 		**RequestRateLimit::PDF_PROCESSING.rails_options,
 		by: -> { RequestRateLimit.for_user(current_user) },
 		with: -> { render_rate_limited(RequestRateLimit::PDF_PROCESSING) },
 		scope: :publication_processing,
-		only: [:create, :is_fetchable, :extract, :fetch, :refresh]
+		only: [:create, :is_fetchable, :extract, :fetch, :fetch_upload, :refresh]
 	)
 
 	# GET /publications.json
@@ -80,47 +80,22 @@ class PublicationsController < ApplicationController
 	# POST /publications.json
 	def create
 		@publication = Publication.new(publication_params)
-		begin
-			@publication.transaction do
-				if @publication.save
-					begin
-						@publication.fetch @request_data
-						render :show, status: :created, location: @publication
-					rescue RuntimeError => error
-						raise ActiveRecord::Rollback error.message
-					end
-				else
-					render json: @publication.errors, status: :unprocessable_entity
-				end
-			rescue ActiveRecord::Rollback => error
-				@error_manager.add_error(error.message)
-				render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
-			end
-		end
+		prepare_and_render
 	end
 
 	# POST /publications/is_fetchable.json
 	def is_fetchable
-		if Publication.exists?(pdf_url: publication_params[:pdf_url])
-			@publication = Publication.find_by_pdf_url(publication_params[:pdf_url])
-			render "publications/show_without_paths", status: :ok, location: @publication
-		else
-			@publication = Publication.new(pdf_url: publication_params[:pdf_url])
-			begin
-				if @publication.is_fetchable
-					render json: {message: I18n.t("confirmations.messages.fetchable_publication")}, status: :ok
-				else
-					@error_manager.add_error(I18n.t("errors.messages.unfetchable_publication"))
-					render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
-				end
-			rescue SocketError
-				@error_manager.add_error(message: I18n.t("errors.messages.unfetchable_publication_host"))
-				render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
-			rescue SystemCallError => error
-				@error_manager.add_error(error.message)
-				render json: {errors: @error_manager.get_errors}, status: :internal_server_error
-			end
-		end
+		@publication = Publication.find_by_pdf_url(publication_params[:pdf_url])
+		@publication ||= Publication.new(pdf_url: publication_params[:pdf_url])
+		@publication.is_fetchable
+
+		render json: {
+			status: "available",
+			message: I18n.t("confirmations.messages.fetchable_publication"),
+			publication_id: @publication.id
+		}.compact, status: :ok
+	rescue PublicationPreparationError => error
+		render_preparation_error(error)
 	end
 
 	# POST /publications/extract.json
@@ -144,56 +119,27 @@ class PublicationsController < ApplicationController
 
 	# POST /publications/fetch.json
 	def fetch
-		if Publication.exists?(pdf_url: publication_params[:pdf_url])
-			@publication = Publication.find_by_pdf_url(publication_params[:pdf_url])
-			begin
-				@publication.transaction do
-					begin
-						@publication.fetch @request_data
-						render :show, status: :ok, location: @publication
-					rescue RuntimeError => error
-						raise ActiveRecord::Rollback error.message
-					end
-				rescue ActiveRecord::Rollback => error
-					@error_manager.add_error(error.message)
-					render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
-				end
-			end
-		else
-			@publication = Publication.new(pdf_url: publication_params[:pdf_url])
-			begin
-				@publication.transaction do
-					if @publication.save
-						begin
-							@publication.fetch @request_data
-							render :show, status: :created, location: @publication
-						rescue RuntimeError => error
-							raise ActiveRecord::Rollback error.message
-						end
-					else
-						render json: @publication.errors, status: :unprocessable_entity
-					end
-				rescue ActiveRecord::Rollback => error
-					@error_manager.add_error(error.message)
-					render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
-				end
-			end
-		end
+		@publication = Publication.find_or_initialize_by(pdf_url: publication_params[:pdf_url])
+		prepare_and_render
+	end
+
+	# POST /publications/fetch_upload.json
+	def fetch_upload
+		source = PdfUpload.new(params[:file]).fetch
+		@publication = Publication.find_or_initialize_by(pdf_url: publication_params[:pdf_url])
+		prepare_and_render(source: source)
+	rescue PdfUpload::Error => error
+		render_preparation_error(PublicationPreparationError.wrap(error))
+	ensure
+		source&.close
 	end
 
 	# POST /publications/1/refresh.json
 	def refresh
-		begin
-			@publication.transaction do
-				@publication.fetch @request_data
-				render :show, status: :ok, location: @publication
-			rescue RuntimeError => error
-				raise ActiveRecord::Rollback error.message
-			end
-		rescue ActiveRecord::Rollback => error
-			@error_manager.add_error(error.message)
-			render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
-		end
+		@publication.transaction { @publication.fetch @request_data }
+		render :show, status: :ok, location: @publication
+	rescue PublicationPreparationError => error
+		render_preparation_error(error)
 	end
 
 	private
@@ -218,6 +164,37 @@ class PublicationsController < ApplicationController
 
 	def publication_params
 		params.require(:publication).permit(:doi, :title, :subject, :creator, :author, :pdf_url)
+	end
+
+	def prepare_and_render(source: nil)
+		created = @publication.new_record?
+		saved = true
+
+		@publication.transaction do
+			saved = @publication.save if created
+			raise ActiveRecord::Rollback unless saved
+
+			@publication.fetch @request_data, source: source
+		end
+
+		if saved
+			render :show, status: created ? :created : :ok, location: @publication
+		else
+			render json: @publication.errors, status: :unprocessable_entity
+		end
+	rescue PublicationPreparationError => error
+		render_preparation_error(error)
+	ensure
+		source&.close
+	end
+
+	def render_preparation_error(error)
+		render json: {
+			status: error.code,
+			message: error.message,
+			errors: [error.message],
+			upload_supported: true
+		}, status: error.http_status
 	end
 
 end

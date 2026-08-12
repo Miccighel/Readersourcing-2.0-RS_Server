@@ -45,6 +45,13 @@ an instance of <a href="https://github.com/Miccighel/Readersourcing-2.0-RS_Rate"
 Thus, every interaction between human readers and the APIs exposed by RS_Server can be carried out through clients installed on readers' browsers or by using the standalone web
 interface provided. These clients handle the registration and authentication of readers, the rating action and the download action of annotated publications.
 
+When a reader asks to save a publication for later, RS_Server retrieves the source once, applies the configured size and
+network limits, and opens the received content as a PDF. The declared content type is treated as an indication rather than
+as proof. RS_PDF then adds the rating page, after which RS_Server verifies both the additional page and the embedded rating
+URL before publishing the prepared copy. The web interface reports the current preparation state throughout this operation.
+If the publication host requires access through the reader's browser session or cannot be reached, the original PDF can be
+uploaded through the same interface and follows the same validation, annotation, and verification procedure.
+
 <h1>Deploy</h1>
 
 There are two main modalities that can be used to deploy a working instance of RS_Server in the **development** or **production** environment.
@@ -219,6 +226,11 @@ this header remain stateless.
 
 Publication records are shared among readers. The API therefore exposes their creation and retrieval, together with the
 dedicated fetching and refresh operations, but does not expose generic update or deletion routes.
+
+The publication preparation API returns a stable `status` for recoverable failures, including unavailable sources,
+authentication requirements, size limits, malformed or encrypted PDFs, RS_PDF failures, and final verification failures.
+`POST /publications/fetch_upload.json` provides the local file alternative and retains `publication[pdf_url]` as the stable
+identifier of the publication. The source Postman collection documents both preparation methods.
 
 RS_Server sends a Content Security Policy with every response. Browser scripts, styles, and fonts are installed through
 Yarn and served by the Rails asset pipeline. Their direct versions are declared in `package.json`, while `yarn.lock`

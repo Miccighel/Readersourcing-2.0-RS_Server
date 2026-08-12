@@ -37,8 +37,11 @@ class PublicationTest < ActiveSupport::TestCase
       FileUtils.cp(source_pdf, expected_output)
       RsPdfRunner::Result.new(stdout: "converted", stderr: "", status: nil)
     end
+    verifier = Object.new
+    verifier.define_singleton_method(:call) { |*_, **_| true }
+    preparer = PdfPreparation.new(runner: runner, verifier: verifier)
     publication.define_singleton_method(:pdf_fetcher) { fetcher }
-    publication.define_singleton_method(:rs_pdf_runner) { runner }
+    publication.define_singleton_method(:pdf_preparer) { preparer }
 
     request_data = {
       host: "https://readersourcing.example",

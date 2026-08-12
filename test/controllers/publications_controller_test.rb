@@ -74,6 +74,36 @@ class PublicationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @publication.id.to_s, route.fetch(:id)
   end
 
+  test "should route publication upload preparation through post" do
+    route = Rails.application.routes.recognize_path(
+      fetch_upload_publications_path(format: :json),
+      method: :post
+    )
+
+    assert_equal "publications", route.fetch(:controller)
+    assert_equal "fetch_upload", route.fetch(:action)
+  end
+
+  test "should return a structured state for an invalid publication URL" do
+    post is_fetchable_publications_url(format: :json),
+      params: {publication: {pdf_url: "file:///tmp/Reader.pdf"}},
+      headers: @headers,
+      as: :json
+
+    assert_response :unprocessable_entity
+    assert_equal "invalid_url", response.parsed_body.fetch("status")
+    assert_equal true, response.parsed_body.fetch("upload_supported")
+  end
+
+  test "should return a structured state when an upload is missing" do
+    post fetch_upload_publications_url(format: :json),
+      params: {publication: {pdf_url: "https://example.test/Reader.pdf"}},
+      headers: @headers
+
+    assert_response :unprocessable_entity
+    assert_equal "upload_missing", response.parsed_body.fetch("status")
+  end
+
   test "should not refresh publication through get" do
     assert_raises(ActionController::RoutingError) do
       get refresh_publication_url(@publication, format: :json), headers: @headers

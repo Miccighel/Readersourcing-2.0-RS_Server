@@ -128,6 +128,27 @@ class PdfFetcherTest < ActiveSupport::TestCase
     assert_raises(PdfFetcher::InvalidResponse) { fetcher_for(response).fetch }
   end
 
+  test "accepts a valid PDF even when the server reports a generic content type" do
+    response = FakeResponse.new(
+      "200",
+      {"content-type" => "application/octet-stream", "content-length" => "8"},
+      ["%PDF-1.7"]
+    )
+
+    download = fetcher_for(response).fetch
+
+    assert_equal "application/octet-stream", download.content_type
+    assert_equal "%PDF-1.7", download.io.read
+  ensure
+    download&.close
+  end
+
+  test "reports when the publication requires an authenticated browser session" do
+    response = FakeResponse.new("403", {"content-type" => "text/html"}, [])
+
+    assert_raises(PdfFetcher::AuthenticationRequired) { fetcher_for(response).fetch }
+  end
+
   private
 
   def fetcher_for(response, max_bytes: 1024)

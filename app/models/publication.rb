@@ -1,5 +1,3 @@
-require "tmpdir"
-
 class Publication < ApplicationRecord
 
 	attr_accessor :absolute_pdf_storage_url, :absolute_pdf_download_url, :absolute_pdf_download_url_link
@@ -37,17 +35,18 @@ class Publication < ApplicationRecord
 	end
 
 	def is_fetchable
-		logger.info "Checking whether the publication URL returns a bounded PDF"
+		logger.info "Checking whether the publication URL returns a valid bounded PDF"
 		download = pdf_fetcher.fetch
+		PdfInspector.new.call(download.io.path)
 		true
-	rescue PdfFetcher::Error => exception
-		logger.info "The publication is not fetchable: #{exception.message}"
-		false
+	rescue PdfFetcher::Error, PdfInspector::Error => error
+		logger.info "The publication is not fetchable: #{error.message}"
+		raise PublicationPreparationError.wrap(error)
 	ensure
 		download&.close
 	end
 
-	def fetch(request_data)
+	def fetch(request_data, source: nil)
 
 		data = Hash.new
 		data[:host] = request_data.fetch(:host)
@@ -59,7 +58,7 @@ class Publication < ApplicationRecord
 		# FILE FETCHING STARTS HERE
 
 		logger.info "Downloading a bounded PDF from the configured publication host"
-		download = pdf_fetcher.fetch
+		download = source || pdf_fetcher.fetch
 		filename = download.filename
 		load_pdf_paths(filename, data[:host])
 		logger.info "File name: #{filename}"
@@ -68,122 +67,24 @@ class Publication < ApplicationRecord
 		FileUtils::mkdir_p absolute_pdf_storage_path(data[:user])
 		logger.info "Downloaded bytes: #{download.content_length}"
 
-		# METADATA READING STARTS HERE
-
-		logger.info "Reading metadata from the bounded temporary publication"
-		reader = PDF::Reader.new(download.io.path)
-		begin
-			if !reader.info[:doi].blank?
-				logger.info "DOI found"
-				update_attribute(:doi, reader.info[:doi].chomp("doi:"))
-			else
-				update_attribute(:doi, nil)
-			end
-		rescue ArgumentError => e
-			logger.info "Error reading doi metadata"
-			logger.info e.message
-		end
-		begin
-			if !reader.info[:Title].blank?
-				logger.info "Title found"
-				update_attribute(:title, reader.info[:Title])
-			else
-				update_attribute(:title, nil)
-			end
-		rescue ArgumentError => e
-			logger.info "Error reading Title metadata"
-			logger.info e.message
-		end
-		begin
-			if !reader.info[:Subject].blank?
-				logger.info "Subject found"
-				update_attribute(:subject, reader.info[:Subject])
-			else
-				update_attribute(:subject, nil)
-			end
-		rescue ArgumentError => e
-			logger.info "Error reading Subject metadata"
-			logger.info e.message
-		end
-		begin
-			if !reader.info[:Author].blank?
-				logger.info "Author found"
-				update_attribute(:author, reader.info[:Author])
-			else
-				update_attribute(:author, nil)
-			end
-		rescue ArgumentError => e
-			logger.info "Error reading Author metadata"
-			logger.info e.message
-		end
-		begin
-			if !reader.info[:Creator].blank?
-				logger.info "Creator found"
-				update_attribute(:creator, reader.info[:Creator])
-			else
-				update_attribute(:creator, nil)
-			end
-		rescue ArgumentError => e
-			logger.info "Error reading Creator metadata"
-			logger.info e.message
-		end
-		begin
-			if !reader.info[:Producer].blank?
-				logger.info "Producer found"
-				update_attribute(:producer, reader.info[:Producer])
-			else
-				update_attribute(:producer, nil)
-			end
-		rescue ArgumentError => e
-			logger.info "Error reading Producer metadata"
-			logger.info e.message
-		end
-		begin
-			if !reader.info[:Producer].blank?
-				logger.info "Producer found"
-				update_attribute(:producer, reader.info[:Producer])
-			else
-				update_attribute(:producer, nil)
-			end
-		rescue ArgumentError => e
-			logger.info "Error reading Producer metadata"
-			logger.info e.message
-		end
-
-		# PREVENT A PUBLICATION ALREADY MANAGED BY RS_SERVER FROM BEING FETCHED AGAIN
-
-		begin
-			if reader.info.key?(:BaseUrl)
-				logger.info "This publication is already present on RS_Server"
-				raise I18n.t("errors.messages.publication_already_fetched")
-			end
-		rescue ArgumentError
-			logger.info "Error reading BaseUrl metadata"
-			logger.info "The publication is probably not present on RS_Server"
-		end
-
-		# EDITING OF PDF FILE WITH RS_PDF STARTS HERE
+		# PDF VALIDATION AND EDITING START HERE
 
 		logger.info "RS_PDF execution started"
 		storage_path = absolute_pdf_storage_path(data[:user])
-		Dir.mktmpdir("rs-pdf-", storage_path.to_s) do |staging_path|
-			temporary_name = File.basename(download.io.path, File.extname(download.io.path))
-			staged_output = File.join(staging_path, "#{temporary_name}#{Settings.rs_pdf_link_suffix}.pdf")
-			runner = rs_pdf_runner
-			result = runner.call(
-				input_path: download.io.path,
-				output_path: staging_path,
-				url: data[:rate_path],
-				caption: "Express your rating",
-				expected_output: staged_output
-			)
-			logger.info result.stdout unless result.stdout.blank?
-			FileUtils.mv(staged_output, absolute_pdf_download_path_link(data[:user]), force: true)
-		end
+		result = pdf_preparer.call(
+			download: download,
+			storage_path: storage_path,
+			target_path: absolute_pdf_download_path_link(data[:user]),
+			rate_path: data[:rate_path]
+		) { |metadata| update_pdf_metadata(metadata) }
+		logger.info result.stdout unless result.stdout.blank?
 		logger.info "RS_PDF execution completed"
 		logger.info "Modified file"
 		logger.info "Name: #{pdf_name_link}"
 		logger.info "Download path: #{pdf_download_path_link}"
+	rescue PdfFetcher::Error, PdfUpload::Error, PdfInspector::Error,
+	       RsPdfRunner::ExecutionError, AnnotatedPdfVerifier::VerificationError => error
+		raise PublicationPreparationError.wrap(error)
 	ensure
 		download&.close
 	end
@@ -308,6 +209,29 @@ class Publication < ApplicationRecord
 
 	def rs_pdf_runner
 		RsPdfRunner.new(jar_path: absolute_rs_pdf_path)
+	end
+
+	def pdf_preparer
+		PdfPreparation.new(runner: rs_pdf_runner)
+	end
+
+	def update_pdf_metadata(metadata)
+		{
+			doi: :doi,
+			title: :Title,
+			subject: :Subject,
+			author: :Author,
+			creator: :Creator,
+			producer: :Producer
+		}.each do |attribute, metadata_key|
+			value = metadata[metadata_key]
+			value = value.sub(/\Adoi:/i, "") if attribute == :doi && value.respond_to?(:sub)
+			logger.info "#{metadata_key} found" unless value.blank?
+			update_attribute(attribute, value.presence)
+		rescue ArgumentError => error
+			logger.info "Error reading #{metadata_key} metadata"
+			logger.info error.message
+		end
 	end
 
 	def absolute_pdf_storage_path(user)

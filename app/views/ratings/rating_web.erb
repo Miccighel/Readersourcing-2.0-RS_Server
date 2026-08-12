@@ -122,8 +122,14 @@
 			<div class="col-12">
 				<div class="heading text-center mb-2">
 					<h4>Save For Later</h4>
-					<p id="save-for-later-caption-first" class="lead mb-0">Link-annotate a publication with a rating URL and store it on your devices.</p>
-					<p id="save-for-later-caption-second" class="lead mb-0">Click below to open your link-annotated publication or to refresh it.</p>
+					<p id="save-for-later-caption-first" class="lead mb-0">Prepare a publication with a rating URL and store it on your devices.</p>
+					<p id="save-for-later-caption-second" class="lead mb-0">Click below to open your prepared publication or to refresh it.</p>
+				</div>
+			</div>
+			<div class="col-12">
+				<div id="publication-preparation-status" class="alert alert-info text-left" role="status" aria-live="polite">
+					<strong id="publication-preparation-title">Waiting for a publication</strong>
+					<span id="publication-preparation-message" class="d-block">Enter a publication URL to continue.</span>
 				</div>
 			</div>
 			<div class="col-12 text-center">
@@ -148,6 +154,20 @@
 					<i class="fa fa-exclamation-triangle danger-icon"></i>
 					Error
 				</button>
+				<button type="button" id="show-source-upload-btn" class="btn btn-outline-light m-0">
+					<i class="fas fa-upload"></i>
+					Use a local PDF
+				</button>
+			</div>
+			<div id="source-upload-section" class="col-12 mt-3">
+				<p class="mb-2 text-center">If the publication server cannot be reached, upload the original PDF here.</p>
+				<form action="<%= fetch_upload_publications_path(format: :json) %>" id="source-publication-dropzone" class="dropzone border-primary">
+					<div class="dz-default dz-message text-center pt-1">
+						<br/><i class="fas fa-upload fa-2x"></i><br/>Original PDF file
+					</div>
+				</form>
+				<div role="alert" id="source-upload-success" class="alert alert-success mt-2"></div>
+				<div role="alert" id="source-upload-error" class="alert alert-danger color-red-dark mt-2 mb-0"></div>
 			</div>
 		</div>
 	</div>
@@ -156,7 +176,7 @@
 			<div class="col-12">
 				<div class="heading text-center mb-1">
 					<h4>Automatic extraction</h4>
-					<p id="extract-caption-first" class="lead mb-0">Upload your link-annotated publication here to extract its rating URL.</p>
+					<p id="extract-caption-first" class="lead mb-0">Upload a prepared publication here to extract its rating URL.</p>
 					<p id="extract-caption-second" class="lead mb-0">Click below to go to the rating page.</p>
 				</div>
 			</div>
@@ -255,7 +275,7 @@
 				<div class="col-12 text-center">
 					<div role="alert" class="alert alert-danger">
 						Please allow <strong>popups</strong> on this website for a smoother download experience.
-						Otherwise, <strong>you can use the "Open" button to download your link-annotated publication.</strong>
+						Otherwise, <strong>you can use the "Open" button to download the prepared publication.</strong>
 					</div>
 				</div>
 			</div>

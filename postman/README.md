@@ -29,6 +29,12 @@ Operations that regenerate an annotated publication or change the reader's subsc
 unsubscribe link included in rating emails opens a confirmation page; the preference changes only when the authenticated
 reader submits that form.
 
+`Publications (Fetch)` retrieves and prepares a remote PDF in one operation. If the publication host requires the reader's
+browser session or cannot be reached by RS_Server, `Publications (Fetch Upload)` accepts the original PDF together with its
+stable publication URL. Both operations open the source as a PDF, invoke RS_PDF, and verify the generated rating page and
+embedded URL before making the prepared copy available. Preparation failures include a stable `status` field intended for
+API clients and the two Readersourcing interfaces.
+
 ## Publishing an update
 
 The public collection is updated through the Postman API. Create an API key in your Postman account and keep it outside

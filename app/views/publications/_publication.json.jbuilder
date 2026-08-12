@@ -13,6 +13,7 @@ json.pdf_download_url publication.pdf_download_url(@request_data[:host], @user)
 json.pdf_name_link publication.pdf_name_link
 json.pdf_download_path_link "user/#{@user.id.to_s}/#{publication.pdf_download_path_link}"
 json.pdf_download_url_link publication.pdf_download_url_link(@request_data[:host], @user)
+json.preparation_status "complete"
 json.steadiness publication.steadiness
 json.score_rsm publication.score_rsm
 json.score_trm publication.score_trm

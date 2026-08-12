@@ -13,6 +13,9 @@ class PdfFetcher
   class InvalidUrl < Error; end
   class UnsafeAddress < Error; end
   class InvalidResponse < Error; end
+  class AuthenticationRequired < InvalidResponse; end
+  class DownloadUnavailable < InvalidResponse; end
+  class NotPdf < InvalidResponse; end
   class DownloadTooLarge < Error; end
 
   Download = Struct.new(
@@ -24,7 +27,7 @@ class PdfFetcher
     keyword_init: true
   ) do
     def close
-      io.close!
+      io.close! unless io.closed?
     end
   end
 
@@ -106,8 +109,12 @@ class PdfFetcher
         return fetch_uri(redirect_uri, redirects_remaining - 1)
       end
 
+      if [401, 403].include?(status)
+        raise AuthenticationRequired, "The publication server requires an authenticated browser session"
+      end
+
       unless status.between?(200, 299)
-        raise InvalidResponse, "The publication server returned HTTP #{status}"
+        raise DownloadUnavailable, "The publication server returned HTTP #{status}"
       end
 
       download = read_pdf_response(response, uri)
@@ -128,7 +135,7 @@ class PdfFetcher
 
   def resolve_public_address(uri)
     addresses = @resolver.call(uri.host).uniq
-    raise InvalidUrl, "The publication host could not be resolved" if addresses.empty?
+    raise DownloadUnavailable, "The publication host could not be resolved" if addresses.empty?
 
     parsed_addresses = addresses.map { |address| IPAddr.new(address) }
     if !@allow_private_networks && parsed_addresses.any? { |address| blocked_address?(address) }
@@ -137,7 +144,7 @@ class PdfFetcher
 
     addresses.first
   rescue Resolv::ResolvError, IPAddr::InvalidAddressError
-    raise InvalidUrl, "The publication host could not be resolved"
+    raise DownloadUnavailable, "The publication host could not be resolved"
   end
 
   def blocked_address?(address)
@@ -160,16 +167,13 @@ class PdfFetcher
       connection.request(request) { |response| yield response }
     end
   rescue Net::OpenTimeout, Net::ReadTimeout, Timeout::Error
-    raise InvalidResponse, "The publication server timed out"
+    raise DownloadUnavailable, "The publication server timed out"
   rescue SocketError, SystemCallError, IOError, OpenSSL::SSL::SSLError => error
-    raise InvalidResponse, "The publication could not be downloaded: #{error.message}"
+    raise DownloadUnavailable, "The publication could not be downloaded: #{error.message}"
   end
 
   def read_pdf_response(response, uri)
     content_type = response["content-type"].to_s.split(";").first.to_s.downcase
-    unless content_type == "application/pdf"
-      raise InvalidResponse, "The publication response is not a PDF"
-    end
 
     declared_length = response["content-length"].to_i
     if declared_length > @max_bytes
@@ -197,7 +201,7 @@ class PdfFetcher
       tempfile.flush
       tempfile.rewind
       unless tempfile.read(1024).include?("%PDF-")
-        raise InvalidResponse, "The publication response does not contain a PDF header"
+        raise NotPdf, "The publication response does not contain a PDF header"
       end
       tempfile.rewind
 
