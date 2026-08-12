@@ -41,4 +41,4 @@ COPY --from=build /rs_server /rs_server
 ENTRYPOINT ["./entrypoint.sh"]
 
 EXPOSE 3000
-CMD ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000", "-e", "production"]
+CMD ["./bin/rails", "server", "-b", "0.0.0.0", "-e", "production"]

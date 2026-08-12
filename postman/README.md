@@ -1,7 +1,7 @@
 # Postman collection
 
 `Readersourcing_2.0.postman_collection.json` is the versioned source of the public RS_Server collection.
-It preserves the organization of the original collection while keeping its requests aligned with the current Rails routes.
+It follows the organization of the original collection and documents the Rails routes exposed by RS_Server.
 The published documentation is available through the [Postman documenter](https://documenter.getpostman.com/view/4632696/2sBY4WpHKV).
 
 The collection uses variables for the server address, reader credentials, resource identifiers, confirmation and password
@@ -17,13 +17,13 @@ To use the collection:
 
 API requests send the token as `Bearer {{authToken}}`. Browser workflows instead use the encrypted Rails session retained
 by Postman's cookie jar. The paper rating workflow also requires `paperReference`, which is obtained from the link or QR
-code embedded in an annotated publication. Open `Ratings (Rate Paper)` before submitting `Ratings (Load)`, so the durable
+Code embedded in an annotated publication. Open `Ratings (Rate Paper)` before submitting `Ratings (Load)`, so the durable
 reference is stored in the same reader session.
 
-Historical response snapshots are not stored in the source file. They belonged to the original Rails stack and contained
-expired JWTs, session cookies, CSRF values, and generated HTML. The small set of current examples is instead composed of
-fictitious data and covers authentication, publication lookup, rating creation, validation, and request limits. Collection
-scripts report missing variables before a request is sent and check the essential form of these API responses.
+The source file contains a small set of fictitious examples covering authentication, publication lookup, rating creation,
+validation, and request limits. They contain no personal data, reusable credentials, session cookies, CSRF values, or
+generated HTML. Collection scripts report missing variables before a request is sent and check the essential form of these
+API responses.
 
 Operations that regenerate an annotated publication or change the reader's subscription preference use `POST`. The
 unsubscribe link included in rating emails opens a confirmation page; the preference changes only when the authenticated
@@ -31,8 +31,8 @@ reader submits that form.
 
 ## Publishing an update
 
-Update the existing Postman collection through the Postman API instead of importing another copy. Create an API key in
-your Postman account and keep it outside this repository. Then set `POSTMAN_API_KEY` and `POSTMAN_COLLECTION_UID` in your
+The public collection is updated through the Postman API. Create an API key in your Postman account and keep it outside
+this repository. Then set `POSTMAN_API_KEY` and `POSTMAN_COLLECTION_UID` in your
 local shell and run:
 
 ```console

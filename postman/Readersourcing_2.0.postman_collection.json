@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "fb2ca8e7-e295-43cd-9cfd-03d4f20ea65c",
     "name": "Readersourcing 2.0",
-    "description": "This is the official Postman collection of the **Readersourcing 2.0 ecosystem**. Readersourcing 2.0 is an independent, third party, nonprofit academic project aimed at assessing the quality of scholarly literature and scholars.\n\nThe original release was presented at the [IRCDL 2019](https://ircdl2019.isti.cnr.it/) conference and is described in the [original article](https://doi.org/10.1007/978-3-030-11226-4_21). This edition of the collection follows the current implementation of RS_Server while preserving the domain concepts and the organization of the original interface.\n\nRS_Server collects and aggregates the ratings expressed by readers and uses the Readersourcing models to compute quality scores for readers and publications. The collection documents both its JSON API and the server rendered workflows used by the web interface. Curated response examples illustrate the principal outcomes without containing credentials or personal data. Collection scripts check the variables required by each request and the essential structure of API responses.\n\nSet `host`, `email`, and `password` before starting. **Authentication (Authenticate)** returns a JWT, stores it in `authToken`, and establishes the encrypted server session retained by Postman's cookie jar. JSON API requests use `Bearer {{authToken}}`. The web workflows use the same reader session. Identifiers and the tokens used for confirmation, password recovery, and annotated PDF workflows are represented by collection variables whose sensitive values are intentionally empty.\n\nThe `paperReference` variable represents the durable reference included in the link and QR Code added by RS_PDF. It is not an authentication credential. Use **Ratings (Rate Paper)** before **Ratings (Load)** so that the reference is verified and stored in the same authenticated session.\n\n[![IRCDL 2019](https://img.shields.io/badge/IRCDL%202019-Conference-yellow.svg)](https://ircdl2019.isti.cnr.it/) [![Zenodo Paper](https://img.shields.io/badge/Zenodo-Paper-blue.svg)](https://doi.org/10.5281/zenodo.1446468) [![GitHub Code](https://img.shields.io/badge/GitHub-Code-lightgrey.svg)](https://github.com/Miccighel/Readersourcing-2.0)",
+    "description": "This is the official Postman collection of the **Readersourcing 2.0 ecosystem**. Readersourcing 2.0 is an independent, third party, nonprofit academic project aimed at assessing the quality of scholarly literature and scholars.\n\nThe original release was presented at the [IRCDL 2019](https://ircdl2019.isti.cnr.it/) conference and is described in the [original article](https://doi.org/10.1007/978-3-030-11226-4_21). The collection documents the RS_Server implementation while retaining the domain concepts and the organization of the original interface.\n\nRS_Server collects and aggregates the ratings expressed by readers and uses the Readersourcing models to compute quality scores for readers and publications. The collection documents both its JSON API and the server rendered workflows used by the web interface. Curated response examples illustrate the principal outcomes without containing credentials or personal data. Collection scripts check the variables required by each request and the essential structure of API responses.\n\nSet `host`, `email`, and `password` before starting. **Authentication (Authenticate)** returns a JWT, stores it in `authToken`, and establishes the encrypted server session retained by Postman's cookie jar. JSON API requests use `Bearer {{authToken}}`. The web workflows use the same reader session. Identifiers and the tokens used for confirmation, password recovery, and annotated PDF workflows are represented by collection variables whose sensitive values are intentionally empty.\n\nThe `paperReference` variable represents the durable reference included in the link and QR Code added by RS_PDF. It is not an authentication credential. Use **Ratings (Rate Paper)** before **Ratings (Load)** so that the reference is verified and stored in the same authenticated session.\n\n[![IRCDL 2019](https://img.shields.io/badge/IRCDL%202019-Conference-yellow.svg)](https://ircdl2019.isti.cnr.it/) [![Zenodo Paper](https://img.shields.io/badge/Zenodo-Paper-blue.svg)](https://doi.org/10.5281/zenodo.1446468) [![GitHub Code](https://img.shields.io/badge/GitHub-Code-lightgrey.svg)](https://github.com/Miccighel/Readersourcing-2.0)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -367,7 +367,7 @@
       "_postman_id": "ab2d9403-8f26-492c-8277-2c01e3c0d78b"
     },
     {
-      "name": "Publications (List) ",
+      "name": "Publications (List)",
       "id": "289ac8ad-af19-4ba0-9310-0e1a04cf0d12",
       "protocolProfileBehavior": {
         "disableBodyPruning": true
@@ -941,6 +941,25 @@
       "_postman_id": "e730710e-d2c4-42cc-8904-19e2f701b99a"
     },
     {
+      "name": "Users (Unsubscribe Confirmation)",
+      "id": "953136b5-683f-4b4e-845e-f91bc5907622",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+
+        ],
+        "url": "{{host}}/unsubscribe/{{userId}}",
+        "description": "Displays the confirmation page for disabling optional email subscriptions. The operation requires the reader session established by **Authentication (Authenticate)** and does not change the subscription preference; **Users (Unsubscribe)** records the reader's choice."
+      },
+      "response": [
+
+      ],
+      "_postman_id": "953136b5-683f-4b4e-845e-f91bc5907622"
+    },
+    {
       "name": "Users (Unsubscribe)",
       "id": "40e67cee-61a4-4097-ad94-cdb1cc2027e2",
       "request": {
@@ -1010,7 +1029,7 @@
       "_postman_id": "cb1df97c-5473-4899-9cdb-4fd998e08e78"
     },
     {
-      "name": "Passwords (Update)",
+      "name": "Password (Update)",
       "id": "54899930-6101-4d80-854b-8bf7d0201d68",
       "request": {
         "method": "POST",
@@ -1056,7 +1075,7 @@
       "_postman_id": "ba8cf02e-7548-4626-89be-eeb0feeacf69"
     },
     {
-      "name": "Passwords (Forgot)",
+      "name": "Password (Forgot Request)",
       "id": "8896884a-f0ea-4145-9e60-13576ad0fd39",
       "request": {
         "method": "POST",
@@ -1095,7 +1114,7 @@
       "_postman_id": "d9b196ec-79a5-48ea-ad5f-303bec8d04b6"
     },
     {
-      "name": "Passwords (Reset)",
+      "name": "Password (Reset Submission)",
       "request": {
         "method": "POST",
         "header": [

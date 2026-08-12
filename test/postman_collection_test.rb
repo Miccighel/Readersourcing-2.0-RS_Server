@@ -131,6 +131,7 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     assert operations.key?(["GET", "{{host}}/password/reset?email={{email}}&reset_token={{resetToken}}"])
     assert operations.key?(["POST", "{{host}}/password/reset"])
     assert operations.key?(["POST", "{{host}}/publications/{{publicationId}}/refresh.json"])
+    assert operations.key?(["GET", "{{host}}/unsubscribe/{{userId}}"])
     assert operations.key?(["POST", "{{host}}/unsubscribe/{{userId}}.json"])
     refute operations.key?(["GET", "{{host}}/publications/{{publicationId}}/refresh.json"])
     refute operations.key?(["GET", "{{host}}/unsubscribe/{{userId}}.json"])
@@ -141,7 +142,7 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     description = @collection.dig("info", "description")
     assert_includes description, "original release"
     assert_includes description, "IRCDL 2019"
-    assert_includes description, "current implementation of RS_Server"
+    assert_includes description, "RS_Server implementation"
     refute_includes description, "<html>"
 
     @requests.each do |item|
