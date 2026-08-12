@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/postman_api_client"
+require_relative "../lib/postman_collection_publisher"
+
+api_key = ENV["POSTMAN_API_KEY"]
+collection_uid = ENV["POSTMAN_COLLECTION_UID"]
+collection_path = File.expand_path(
+	"../postman/Readersourcing_2.0.postman_collection.json",
+	__dir__
+)
+
+begin
+	client = PostmanApiClient.new(api_key: api_key)
+	publisher = PostmanCollectionPublisher.new(
+		api_client: client,
+		collection_uid: collection_uid,
+		collection_path: collection_path
+	)
+	result = publisher.call
+	collection = result.fetch("collection", {})
+	puts "Updated Postman collection #{collection.fetch("uid", collection_uid)}."
+rescue ArgumentError, KeyError, PostmanApiClient::Error => error
+	warn error.message
+	exit 1
+end

@@ -61,7 +61,65 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     refute_match(/eyJ[a-zA-Z0-9_-]+[.%][a-zA-Z0-9_%=-]+/, serialized_collection)
     refute_includes serialized_collection, "_session_id="
     refute_includes serialized_collection, "authTokenPaper"
-    assert @requests.all? { |item| item.fetch("response").empty? }
+
+    responses = @requests.flat_map { |item| item.fetch("response") }
+    assert_equal 7, responses.length
+    responses.each do |response|
+      refute response.fetch("header").any? { |header| header.fetch("key").casecmp?("Set-Cookie") }
+    end
+  end
+
+  test "collection provides current and fictitious response examples" do
+    examples = @requests.to_h do |item|
+      [item.fetch("name"), item.fetch("response").to_h { |response| [response.fetch("name"), response] }]
+    end
+
+    assert_equal 200, examples.dig("Authentication (Authenticate)", "Successful authentication", "code")
+    assert_equal "<authentication-token>", JSON.parse(
+      examples.dig("Authentication (Authenticate)", "Successful authentication", "body")
+    ).fetch("auth_token")
+    assert_equal [I18n.t("errors.messages.invalid_credentials")], JSON.parse(
+      examples.dig("Authentication (Authenticate)", "Invalid credentials", "body")
+    ).fetch("errors")
+    assert_equal [I18n.t("errors.messages.too_many_requests")], JSON.parse(
+      examples.dig("Authentication (Authenticate)", "Authentication rate limit reached", "body")
+    ).fetch("errors")
+
+    publication = JSON.parse(examples.dig("Publications (Lookup)", "Publication found", "body"))
+    assert_equal %w[id pdf_url url], %w[id pdf_url url] & publication.keys
+    assert_equal [I18n.t("models.publications.errors.messages.lookup_error")], JSON.parse(
+      examples.dig("Publications (Lookup)", "Publication not found", "body")
+    ).fetch("errors")
+
+    rating = JSON.parse(examples.dig("Ratings (Create)", "Rating created", "body"))
+    assert_equal %w[id score original_score url], %w[id score original_score url] & rating.keys
+    duplicate = Rating.new(user: users(:one), publication: publications(:one), score: 80, original_score: 80)
+    assert_not duplicate.valid?
+    assert_equal duplicate.errors.as_json, JSON.parse(
+      examples.dig("Ratings (Create)", "Duplicate rating", "body")
+    )
+  end
+
+  test "collection checks variables and principal API responses" do
+    assert_equal "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      @collection.dig("info", "schema")
+
+    prerequest_script = @collection.fetch("event").find do |event|
+      event.fetch("listen") == "prerequest"
+    end.dig("script", "exec").join("\n")
+    assert_includes prerequest_script, "missingVariables"
+    assert_includes prerequest_script, "Set the following collection variables"
+
+    collection_test = @collection.fetch("event").find do |event|
+      event.fetch("listen") == "test"
+    end.dig("script", "exec").join("\n")
+    assert_includes collection_test, "Response is not a server error"
+    assert_includes collection_test, "Retry-After"
+
+    ["Authentication (Authenticate)", "Publications (Lookup)", "Ratings (Create)"].each do |name|
+      request = @requests.find { |item| item.fetch("name") == name }
+      assert_not_empty request.fetch("event"), "#{name} has no response checks"
+    end
   end
 
   test "collection includes the current recovery and software operations" do

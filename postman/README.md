@@ -21,5 +21,21 @@ code embedded in an annotated publication. Open `Ratings (Rate Paper)` before su
 reference is stored in the same reader session.
 
 Historical response snapshots are not stored in the source file. They belonged to the original Rails stack and contained
-expired JWTs, session cookies, CSRF values, and generated HTML. Current response examples can be recorded against the
-deployment selected through `host` after confirming that they contain no credentials or personal data.
+expired JWTs, session cookies, CSRF values, and generated HTML. The small set of current examples is instead composed of
+fictitious data and covers authentication, publication lookup, rating creation, validation, and request limits. Collection
+scripts report missing variables before a request is sent and check the essential form of these API responses.
+
+## Publishing an update
+
+Update the existing Postman collection through the Postman API instead of importing another copy. Create an API key in
+your Postman account and keep it outside this repository. Then set `POSTMAN_API_KEY` and `POSTMAN_COLLECTION_UID` in your
+local shell and run:
+
+```console
+bin/update_postman_collection
+```
+
+For the currently published collection, the UID is `4632696-fb2ca8e7-e295-43cd-9cfd-03d4f20ea65c`. The command first
+reads the remote collection and applies its identifiers to the versioned source before replacing its contents. This keeps
+the existing collection and its published documentation associated with the same Postman resource. The API key is read
+only from the process environment and is never written to the collection or to the repository.

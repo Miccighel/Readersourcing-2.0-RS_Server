@@ -2,8 +2,8 @@
   "info": {
     "_postman_id": "fb2ca8e7-e295-43cd-9cfd-03d4f20ea65c",
     "name": "Readersourcing 2.0",
-    "description": "This is the official Postman collection of the **Readersourcing 2.0 ecosystem**. Readersourcing 2.0 is an independent, third party, nonprofit academic project aimed at assessing the quality of scholarly literature and scholars.\n\nThe original release was presented at the [IRCDL 2019](https://ircdl2019.isti.cnr.it/) conference and is described in the [original article](https://doi.org/10.1007/978-3-030-11226-4_21). This edition of the collection follows the current implementation of RS_Server while preserving the domain concepts and the organization of the original interface.\n\nRS_Server collects and aggregates the ratings expressed by readers and uses the Readersourcing models to compute quality scores for readers and publications. The collection documents both its JSON API and the server rendered workflows used by the web interface.\n\nSet `host`, `email`, and `password` before starting. **Authentication (Authenticate)** returns a JWT, stores it in `authToken`, and establishes the encrypted server session retained by Postman's cookie jar. JSON API requests use `Bearer {{authToken}}`. The web workflows use the same reader session. Identifiers and the tokens used for confirmation, password recovery, and annotated PDF workflows are represented by collection variables whose sensitive values are intentionally empty.\n\nThe `paperReference` variable represents the durable reference included in the link and QR Code added by RS_PDF. It is not an authentication credential. Use **Ratings (Rate Paper)** before **Ratings (Load)** so that the reference is verified and stored in the same authenticated session.\n\n[![IRCDL 2019](https://img.shields.io/badge/IRCDL%202019-Conference-yellow.svg)](https://ircdl2019.isti.cnr.it/) [![Zenodo Paper](https://img.shields.io/badge/Zenodo-Paper-blue.svg)](https://doi.org/10.5281/zenodo.1446468) [![GitHub Code](https://img.shields.io/badge/GitHub-Code-lightgrey.svg)](https://github.com/Miccighel/Readersourcing-2.0)",
-    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+    "description": "This is the official Postman collection of the **Readersourcing 2.0 ecosystem**. Readersourcing 2.0 is an independent, third party, nonprofit academic project aimed at assessing the quality of scholarly literature and scholars.\n\nThe original release was presented at the [IRCDL 2019](https://ircdl2019.isti.cnr.it/) conference and is described in the [original article](https://doi.org/10.1007/978-3-030-11226-4_21). This edition of the collection follows the current implementation of RS_Server while preserving the domain concepts and the organization of the original interface.\n\nRS_Server collects and aggregates the ratings expressed by readers and uses the Readersourcing models to compute quality scores for readers and publications. The collection documents both its JSON API and the server rendered workflows used by the web interface. Curated response examples illustrate the principal outcomes without containing credentials or personal data. Collection scripts check the variables required by each request and the essential structure of API responses.\n\nSet `host`, `email`, and `password` before starting. **Authentication (Authenticate)** returns a JWT, stores it in `authToken`, and establishes the encrypted server session retained by Postman's cookie jar. JSON API requests use `Bearer {{authToken}}`. The web workflows use the same reader session. Identifiers and the tokens used for confirmation, password recovery, and annotated PDF workflows are represented by collection variables whose sensitive values are intentionally empty.\n\nThe `paperReference` variable represents the durable reference included in the link and QR Code added by RS_PDF. It is not an authentication credential. Use **Ratings (Rate Paper)** before **Ratings (Load)** so that the reference is verified and stored in the same authenticated session.\n\n[![IRCDL 2019](https://img.shields.io/badge/IRCDL%202019-Conference-yellow.svg)](https://ircdl2019.isti.cnr.it/) [![Zenodo Paper](https://img.shields.io/badge/Zenodo-Paper-blue.svg)](https://doi.org/10.5281/zenodo.1446468) [![GitHub Code](https://img.shields.io/badge/GitHub-Code-lightgrey.svg)](https://github.com/Miccighel/Readersourcing-2.0)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
@@ -12,16 +12,28 @@
         {
           "listen": "test",
           "script": {
-            "id": "38338bc1-abc3-4b19-84d5-f8e870653ea0",
+            "type": "text/javascript",
             "exec": [
+              "pm.test(\"Authentication returns an expected status\", function () {",
+              "  pm.expect([200, 401, 429]).to.include(pm.response.code);",
+              "});",
+              "pm.test(\"Authentication returns JSON\", function () {",
+              "  pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+              "});",
+              "",
+              "const response = pm.response.json();",
               "if (pm.response.code === 200) {",
-              "  const response = pm.response.json();",
-              "  if (response.auth_token) {",
-              "    pm.collectionVariables.set(\"authToken\", response.auth_token);",
-              "  }",
+              "  pm.test(\"Successful authentication returns a token\", function () {",
+              "    pm.expect(response.auth_token).to.be.a(\"string\").and.not.empty;",
+              "  });",
+              "  pm.collectionVariables.set(\"authToken\", response.auth_token);",
+              "} else {",
+              "  pm.test(\"Unsuccessful authentication describes its errors\", function () {",
+              "    pm.expect(response.errors).to.be.an(\"array\").and.not.empty;",
+              "  });",
               "}"
             ],
-            "type": "text/javascript"
+            "id": "38338bc1-abc3-4b19-84d5-f8e870653ea0"
           }
         }
       ],
@@ -41,7 +53,105 @@
         "url": "{{host}}/authenticate.json",
         "description": "Authenticates a reader using the supplied email address and password. A successful request returns a JWT, stores it in the `authToken` collection variable, and establishes the encrypted server session retained by Postman's cookie jar. The token is bound to the address from which the authentication request is made."
       },
-      "response": [],
+      "response": [
+        {
+          "name": "Successful authentication",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": "{{host}}/authenticate.json",
+            "description": "Authenticates a reader using the supplied email address and password. A successful request returns a JWT, stores it in the `authToken` collection variable, and establishes the encrypted server session retained by Postman's cookie jar. The token is bound to the address from which the authentication request is made."
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [
+
+          ],
+          "body": "{\n  \"auth_token\": \"<authentication-token>\"\n}"
+        },
+        {
+          "name": "Invalid credentials",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": "{{host}}/authenticate.json",
+            "description": "Authenticates a reader using the supplied email address and password. A successful request returns a JWT, stores it in the `authToken` collection variable, and establishes the encrypted server session retained by Postman's cookie jar. The token is bound to the address from which the authentication request is made."
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [
+
+          ],
+          "body": "{\n  \"errors\": [\n    \"Invalid credentials. Please try again.\"\n  ]\n}"
+        },
+        {
+          "name": "Authentication rate limit reached",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": "{{host}}/authenticate.json",
+            "description": "Authenticates a reader using the supplied email address and password. A successful request returns a JWT, stores it in the `authToken` collection variable, and establishes the encrypted server session retained by Postman's cookie jar. The token is bound to the address from which the authentication request is made."
+          },
+          "status": "Too Many Requests",
+          "code": 429,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Retry-After",
+              "value": "180"
+            }
+          ],
+          "cookie": [
+
+          ],
+          "body": "{\n  \"errors\": [\n    \"Too many requests have been received. Please wait before trying again.\"\n  ]\n}"
+        }
+      ],
       "_postman_id": "796f030b-ea08-4bad-a3a5-3c70ee6f15b8"
     },
     {
@@ -52,11 +162,15 @@
       },
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/login",
         "description": "Displays the server rendered login form. When using this collection, run **Authentication (Authenticate)** to populate `authToken` and establish the reader session required by the web workflows."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "7f5d1b55-99d0-4ef4-98ac-157f6137e092"
     },
     {
@@ -67,11 +181,15 @@
       },
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/logout.json",
         "description": "Logs out the current reader session and revokes the JWT stored by that session. After a successful response, the request script also removes `authToken` from the collection variables. Tokens associated with the reader's other sessions remain valid."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "af59176f-cd04-484f-a082-42b6b1b6e13a",
       "event": [
         {
@@ -95,11 +213,15 @@
       },
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/",
         "description": "Displays the public home page of Readersourcing 2.0. It introduces the rating workflow, access to existing ratings, annotated publications, and the RS_Rate browser extension."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "c204ae82-04c3-49d6-8137-bb4da41060c9"
     },
     {
@@ -110,22 +232,30 @@
       },
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/resources",
         "description": "Displays the public description of the Readersourcing 2.0 ecosystem, its quality models, interfaces, software resources, and scientific references."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "6d687d28-7895-4188-b29c-6d31a47a1945"
     },
     {
       "name": "Application (Software)",
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/software",
         "description": "Displays the public page dedicated to RS_Rate, the browser extension that allows readers to rate publications directly while browsing."
       },
-      "response": []
+      "response": [
+
+      ]
     },
     {
       "name": "Application (Privacy)",
@@ -135,11 +265,15 @@
       },
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/privacy",
         "description": "Displays the privacy policy associated with the Readersourcing 2.0 service."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "5662fd8c-f2cc-4f64-9461-157ac1420215"
     },
     {
@@ -150,11 +284,15 @@
       },
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/contact",
         "description": "Displays the public contact form used to send a general message or report a problem."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "c61e69c4-ebe6-4fc4-b2c8-3382e121ec63"
     },
     {
@@ -179,7 +317,9 @@
         "url": "{{host}}/message.json",
         "description": "Sends a general message or a bug report using the supplied email address and text. Set `bug_report` to `true` to address the message as a report. Repeated submissions are subject to the contact request rate policy."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "8c1fe6df-91fe-4538-be0e-3d0cbc57cc28"
     },
     {
@@ -190,11 +330,15 @@
       },
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/unauthorized",
         "description": "Displays the standard response used when a reader attempts to access a protected server workflow without a valid session. The operation returns HTTP status `401 Unauthorized`."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "608a7235-58ae-4501-a6d3-3c337f770c87"
     },
     {
@@ -210,12 +354,16 @@
         ],
         "body": {
           "mode": "formdata",
-          "formdata": []
+          "formdata": [
+
+          ]
         },
         "url": "{{host}}/publications.json",
         "description": "Returns the complete collection of publications as JSON, including their bibliographic metadata and current Readersourcing scores. Authentication is required through `Bearer {{authToken}}`."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "ab2d9403-8f26-492c-8277-2c01e3c0d78b"
     },
     {
@@ -226,11 +374,15 @@
       },
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/publications/list",
         "description": "Displays the server rendered table of publications. The operation belongs to the web interface and requires the reader session established by **Authentication (Authenticate)**."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "289ac8ad-af19-4ba0-9310-0e1a04cf0d12"
     },
     {
@@ -246,12 +398,16 @@
         ],
         "body": {
           "mode": "formdata",
-          "formdata": []
+          "formdata": [
+
+          ]
         },
         "url": "{{host}}/publications/{{publicationId}}.json",
         "description": "Returns the publication identified by `publicationId`. In addition to its metadata and scores, the response contains the download paths generated for the authenticated reader."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "4baffbc7-cd47-4adb-b4ce-a9134cd47726"
     },
     {
@@ -276,8 +432,106 @@
         "url": "{{host}}/publications/lookup.json",
         "description": "Looks for an existing publication using its PDF URL. If the publication is known, the operation returns its metadata and scores without generating reader specific download paths."
       },
-      "response": [],
-      "_postman_id": "62bbfaa9-5bcc-4ede-82b6-fbeb28cf2ecc"
+      "response": [
+        {
+          "name": "Publication found",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"publication\": {\n\t\t\"pdf_url\": \"https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf\"\n\t}\n}"
+            },
+            "url": "{{host}}/publications/lookup.json",
+            "description": "Looks for an existing publication using its PDF URL. If the publication is known, the operation returns its metadata and scores without generating reader specific download paths."
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [
+
+          ],
+          "body": "{\n  \"id\": 1,\n  \"doi\": \"10.1000/readersourcing-example\",\n  \"title\": \"An example publication\",\n  \"subject\": \"Readersourcing\",\n  \"author\": \"Example Author\",\n  \"creator\": \"Example PDF Creator\",\n  \"producer\": \"Example PDF Producer\",\n  \"pdf_url\": \"https://example.org/publication.pdf\",\n  \"steadiness\": 0.75,\n  \"score_rsm\": 0.8,\n  \"score_trm\": 0.78,\n  \"created_at\": \"2026-01-01T12:00:00.000Z\",\n  \"updated_at\": \"2026-01-01T12:00:00.000Z\",\n  \"url\": \"https://readersourcing.example/publications/1.json\"\n}"
+        },
+        {
+          "name": "Publication not found",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"publication\": {\n\t\t\"pdf_url\": \"https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf\"\n\t}\n}"
+            },
+            "url": "{{host}}/publications/lookup.json",
+            "description": "Looks for an existing publication using its PDF URL. If the publication is known, the operation returns its metadata and scores without generating reader specific download paths."
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [
+
+          ],
+          "body": "{\n  \"errors\": [\n    \"Publication not available for the given URL.\"\n  ]\n}"
+        }
+      ],
+      "_postman_id": "62bbfaa9-5bcc-4ede-82b6-fbeb28cf2ecc",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Publication lookup returns an expected status\", function () {",
+              "  pm.expect([200, 404]).to.include(pm.response.code);",
+              "});",
+              "pm.test(\"Publication lookup returns JSON\", function () {",
+              "  pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+              "});",
+              "",
+              "const response = pm.response.json();",
+              "if (pm.response.code === 200) {",
+              "  pm.test(\"A publication includes its identity and source URL\", function () {",
+              "    pm.expect(response).to.include.all.keys(\"id\", \"pdf_url\", \"url\");",
+              "  });",
+              "} else {",
+              "  pm.test(\"An unavailable publication describes its errors\", function () {",
+              "    pm.expect(response.errors).to.be.an(\"array\").and.not.empty;",
+              "  });",
+              "}"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "Publications (Random)",
@@ -292,12 +546,16 @@
         ],
         "body": {
           "mode": "formdata",
-          "formdata": []
+          "formdata": [
+
+          ]
         },
         "url": "{{host}}/publications/random.json",
         "description": "Returns one randomly selected publication, including its metadata and current scores. Reader specific download paths are not generated by this operation."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "2018c580-a0a6-41ed-bf6b-924cf2896cc2"
     },
     {
@@ -314,7 +572,9 @@
         "url": "{{host}}/publications/{{publicationId}}/is_rated.json",
         "description": "Checks whether the authenticated reader has already rated the publication identified by `publicationId`. The existing rating is returned when found; otherwise the operation returns a not found response."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "b2b50f79-8469-4c8a-94e3-6a30480f0c68"
     },
     {
@@ -332,7 +592,9 @@
         "url": "{{host}}/publications/{{publicationId}}/is_saved_for_later.json",
         "description": "Checks whether an annotated copy of the publication has already been generated for the authenticated reader. When available, the publication and its reader specific download paths are returned."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "0a23e139-094b-43f9-a035-9af78e9b8f3b"
     },
     {
@@ -357,7 +619,9 @@
         "url": "{{host}}/publications.json",
         "description": "Creates a publication from the supplied metadata and PDF URL. The server then retrieves the PDF, reads its metadata, and uses RS_PDF to generate an annotated copy containing the rating link and QR Code for the authenticated reader."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "75d68e3f-40ed-450d-a43a-dc941559b634"
     },
     {
@@ -388,7 +652,9 @@
         "url": "{{host}}/publications/is_fetchable.json",
         "description": "Checks whether the supplied URL identifies a bounded PDF that RS_Server can retrieve safely. If the publication is already known, its metadata and scores are returned instead."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "3c0627a7-680c-490f-88eb-f13607b3da07"
     },
     {
@@ -419,7 +685,9 @@
         "url": "{{host}}/publications/extract.json",
         "description": "Reads the `BaseUrl` metadata from an uploaded PDF previously annotated by RS_PDF. The embedded address is returned only when it belongs to the current RS_Server origin. Select the PDF through the `file` form field before sending the request."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "507ee554-02dd-4826-a651-84fab2cb0365"
     },
     {
@@ -444,7 +712,9 @@
         "url": "{{host}}/publications/fetch.json",
         "description": "Retrieves the PDF identified by `pdf_url` and generates an annotated copy for the authenticated reader. If the publication is not yet present, RS_Server creates its record and reads the available PDF metadata before returning it."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "b6455e65-3f2e-41ce-aa9f-47ff3c2cf8e9"
     },
     {
@@ -460,12 +730,16 @@
         ],
         "body": {
           "mode": "formdata",
-          "formdata": []
+          "formdata": [
+
+          ]
         },
         "url": "{{host}}/publications/{{publicationId}}/refresh.json",
         "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the annotated copy for the authenticated reader. This operation changes stored data even though it is exposed through `GET`."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "a7ebe874-0e51-4b6f-b588-e720d7cf06b4"
     },
     {
@@ -481,12 +755,16 @@
         ],
         "body": {
           "mode": "formdata",
-          "formdata": []
+          "formdata": [
+
+          ]
         },
         "url": "{{host}}/users.json",
         "description": "Returns the complete collection of readers using the public profile representation. Email addresses and subscription preferences are not included."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "30278b21-a75f-406d-bca4-fd33b822d5ce"
     },
     {
@@ -497,11 +775,15 @@
       },
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/readers/list",
         "description": "Displays the server rendered table of readers and their Readersourcing scores. The operation belongs to the web interface and requires an authenticated reader session."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "468293b3-4994-41c6-9d46-541b8b2ca109"
     },
     {
@@ -517,12 +799,16 @@
         ],
         "body": {
           "mode": "formdata",
-          "formdata": []
+          "formdata": [
+
+          ]
         },
         "url": "{{host}}/users/{{userId}}.json",
         "description": "Returns the public profile and Readersourcing scores of the reader identified by `userId`. Private account fields are omitted."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "1019ab1b-33b5-44ae-b96f-8958d62bf395"
     },
     {
@@ -538,12 +824,16 @@
         ],
         "body": {
           "mode": "formdata",
-          "formdata": []
+          "formdata": [
+
+          ]
         },
         "url": "{{host}}/users/info.json",
         "description": "Returns the private profile of the authenticated reader. The representation includes the email address and subscription preference in addition to the public profile fields and scores."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "d4391592-c7a2-4cc2-b5e9-9b63177d878f"
     },
     {
@@ -554,11 +844,15 @@
       },
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/sign_up",
         "description": "Displays the server rendered form used to register a new reader. Registration does not require an authenticated session."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "05b3fec3-c684-4e75-bf1c-b76c1781d80f"
     },
     {
@@ -579,7 +873,9 @@
         "url": "{{host}}/users.json",
         "description": "Registers a new reader using the supplied profile and credentials. After the account is created, RS_Server sends an email containing the address required to confirm and activate it."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "026dbb35-5e24-46e0-88f9-94d593766d4a"
     },
     {
@@ -587,11 +883,15 @@
       "id": "bdfc6b0d-976d-4a51-b229-c224b5046510",
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/confirm/{{userId}}/{{confirmationToken}}",
         "description": "Confirms the email address associated with a newly registered reader. A valid `confirmationToken` activates the account and is removed after use."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "bdfc6b0d-976d-4a51-b229-c224b5046510"
     },
     {
@@ -602,11 +902,15 @@
       },
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/profile/edit",
         "description": "Displays the server rendered form used by an authenticated reader to update the editable fields of the current profile."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "3fac9eb6-6038-4d68-addc-102505e727f9"
     },
     {
@@ -631,7 +935,9 @@
         "url": "{{host}}/users/{{userId}}.json",
         "description": "Updates the editable profile fields of the reader identified by `userId`. The identifier must belong to the reader authenticated by `authToken`; email address and password are managed through their dedicated workflows."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "e730710e-d2c4-42cc-8904-19e2f701b99a"
     },
     {
@@ -649,7 +955,9 @@
         "url": "{{host}}/unsubscribe/{{userId}}",
         "description": "Disables optional email subscriptions for the reader identified by `userId`. The identifier must belong to the authenticated reader."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "40e67cee-61a4-4097-ad94-cdb1cc2027e2"
     },
     {
@@ -665,12 +973,16 @@
         ],
         "body": {
           "mode": "formdata",
-          "formdata": []
+          "formdata": [
+
+          ]
         },
         "url": "{{host}}/users/{{userId}}.json",
         "description": "Permanently deletes the account identified by `userId`. The identifier must belong to the authenticated reader; associated ratings and active authentication tokens are removed with the account."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "81ad79f7-12bb-4261-9dd4-d9446ca53f2c"
     },
     {
@@ -681,11 +993,15 @@
       },
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/password/edit",
         "description": "Displays the server rendered form used by an authenticated reader to change the current password."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "cb1df97c-5473-4899-9cdb-4fd998e08e78"
     },
     {
@@ -710,7 +1026,9 @@
         "url": "{{host}}/password/update.json",
         "description": "Changes the password of the authenticated reader after verifying the current password and the confirmation of the new one. A successful change revokes every active JWT belonging to the reader and sends a confirmation email."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "54899930-6101-4d80-854b-8bf7d0201d68"
     },
     {
@@ -721,27 +1039,19 @@
       },
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/password/forgot",
         "description": "Displays the server rendered form used to request password recovery. Displaying the form does not consume the password recovery request budget."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "ba8cf02e-7548-4626-89be-eeb0feeacf69"
     },
     {
       "name": "Passwords (Forgot)",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "id": "22fbaf7a-b9ac-4c6f-b853-df9fad8e1b33",
-            "exec": [
-              ""
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
       "id": "8896884a-f0ea-4145-9e60-13576ad0fd39",
       "request": {
         "method": "POST",
@@ -758,7 +1068,9 @@
         "url": "{{host}}/password/forgot.json",
         "description": "Requests password recovery for the supplied email address. The response is identical for registered and unregistered addresses. For a registered reader, RS_Server sends a link containing a token that remains valid for four hours. Repeated requests are subject to the password recovery rate policies."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "8896884a-f0ea-4145-9e60-13576ad0fd39"
     },
     {
@@ -766,18 +1078,24 @@
       "id": "d9b196ec-79a5-48ea-ad5f-303bec8d04b6",
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/password/reset?email={{email}}&reset_token={{resetToken}}",
         "description": "Validates the email address and recovery token, then displays the form used to choose a new password. The token must be present, unused, and no more than four hours old."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "d9b196ec-79a5-48ea-ad5f-303bec8d04b6"
     },
     {
       "name": "Passwords (Reset)",
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+
+        ],
         "body": {
           "mode": "urlencoded",
           "urlencoded": [
@@ -806,7 +1124,9 @@
         "url": "{{host}}/password/reset",
         "description": "Completes password recovery using the email address, token, new password, and confirmation submitted by the form. A successful reset consumes the token, revokes every active JWT belonging to the reader, and sends a confirmation email."
       },
-      "response": []
+      "response": [
+
+      ]
     },
     {
       "name": "Ratings (Index)",
@@ -821,12 +1141,16 @@
         ],
         "body": {
           "mode": "formdata",
-          "formdata": []
+          "formdata": [
+
+          ]
         },
         "url": "{{host}}/ratings.json",
         "description": "Returns the complete collection of ratings and the values produced by the Readersourcing models. Authentication is required through `Bearer {{authToken}}`."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "05263260-790c-4247-afe1-90f9545f19c9"
     },
     {
@@ -844,7 +1168,9 @@
         "url": "{{host}}/ratings/{{ratingId}}.json",
         "description": "Returns the rating identified by `ratingId` when it belongs to the authenticated reader. A rating owned by another reader is not exposed."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "45d97fef-c9a8-41bb-9776-e2b39cd089b6"
     },
     {
@@ -855,11 +1181,15 @@
       },
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/rate/{{publicationId}}/{{paperReference}}",
         "description": "Opens the rating page referenced by an annotated PDF. RS_Server verifies that `paperReference` belongs to both the selected publication and the authenticated reader, then stores it in the current session for **Ratings (Load)**. Run **Authentication (Authenticate)** first so that Postman retains the same reader session."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "af20af69-843f-4a1b-9173-57268dbb0d42"
     },
     {
@@ -870,11 +1200,15 @@
       },
       "request": {
         "method": "GET",
-        "header": [],
+        "header": [
+
+        ],
         "url": "{{host}}/rate",
         "description": "Displays the server rendered form used to rate a publication by supplying the URL of its PDF. The operation requires the reader session established by **Authentication (Authenticate)**."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "9503a0cb-ab29-4cf6-8964-5d8b24baad24"
     },
     {
@@ -899,15 +1233,115 @@
         "url": "{{host}}/ratings.json",
         "description": "Creates a rating for the publication identified by its PDF URL. RS_Server creates a minimal publication record when the URL is not yet known, prevents duplicate ratings by the same reader, computes the Readersourcing scores, and sends a confirmation email."
       },
-      "response": [],
-      "_postman_id": "9d50c531-ca6b-4aac-b292-e6e0b0a11f46"
+      "response": [
+        {
+          "name": "Rating created",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"rating\": {\n\t\t\"score\": 80,\n\t\t\"pdf_url\": \"https://link.springer.com/content/pdf/10.1007%2FJHEP07%282018%29172.pdf\"\n\t}\n}"
+            },
+            "url": "{{host}}/ratings.json",
+            "description": "Creates a rating for the publication identified by its PDF URL. RS_Server creates a minimal publication record when the URL is not yet known, prevents duplicate ratings by the same reader, computes the Readersourcing scores, and sends a confirmation email."
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [
+
+          ],
+          "body": "{\n  \"id\": 1,\n  \"score\": 80,\n  \"original_score\": 80,\n  \"anonymous\": false,\n  \"edited\": false,\n  \"goodness\": null,\n  \"informativeness\": null,\n  \"accuracy_loss\": null,\n  \"bonus\": null,\n  \"created_at\": \"2026-01-01T12:00:00.000Z\",\n  \"updated_at\": \"2026-01-01T12:00:00.000Z\",\n  \"url\": \"https://readersourcing.example/ratings/1.json\"\n}"
+        },
+        {
+          "name": "Duplicate rating",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"rating\": {\n\t\t\"score\": 80,\n\t\t\"pdf_url\": \"https://link.springer.com/content/pdf/10.1007%2FJHEP07%282018%29172.pdf\"\n\t}\n}"
+            },
+            "url": "{{host}}/ratings.json",
+            "description": "Creates a rating for the publication identified by its PDF URL. RS_Server creates a minimal publication record when the URL is not yet known, prevents duplicate ratings by the same reader, computes the Readersourcing scores, and sends a confirmation email."
+          },
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [
+
+          ],
+          "body": "{\n  \"publication_id\": [\n    \"has already been taken\"\n  ]\n}"
+        }
+      ],
+      "_postman_id": "9d50c531-ca6b-4aac-b292-e6e0b0a11f46",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Rating creation returns an expected status\", function () {",
+              "  pm.expect([200, 201, 422]).to.include(pm.response.code);",
+              "});",
+              "pm.test(\"Rating creation returns JSON\", function () {",
+              "  pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+              "});",
+              "",
+              "const response = pm.response.json();",
+              "if (pm.response.code === 201) {",
+              "  pm.test(\"A created rating includes its score and identity\", function () {",
+              "    pm.expect(response).to.include.all.keys(\"id\", \"score\", \"original_score\", \"url\");",
+              "  });",
+              "} else {",
+              "  pm.test(\"A rating that was not created describes the outcome\", function () {",
+              "    pm.expect(response).to.be.an(\"object\").and.not.empty;",
+              "  });",
+              "}"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "Ratings (Load)",
       "id": "5ded2a68-24e1-467f-95cc-788cda1b3337",
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+
+        ],
         "body": {
           "mode": "urlencoded",
           "urlencoded": [
@@ -931,7 +1365,9 @@
         "url": "{{host}}/load",
         "description": "Submits the rating associated with an annotated PDF after **Ratings (Rate Paper)** has verified and stored its durable reference in the same reader session. The reference is removed from the session when this request starts. RS_Server verifies its reader and publication again, prevents duplicate ratings, computes the Readersourcing scores, and sends a confirmation email."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "5ded2a68-24e1-467f-95cc-788cda1b3337"
     },
     {
@@ -962,7 +1398,9 @@
         "url": "{{host}}/ratings/{{ratingId}}.json",
         "description": "Changes the score of the rating identified by `ratingId` and marks it as edited. The rating must belong to the reader authenticated by `authToken`."
       },
-      "response": [],
+      "response": [
+
+      ],
       "_postman_id": "8d6e16f1-7148-4eb0-8c3d-468a35c8d8eb"
     }
   ],
@@ -973,7 +1411,16 @@
         "id": "7b4da194-d670-4471-9af5-d9b6b1433122",
         "type": "text/javascript",
         "exec": [
-          ""
+          "const serializedRequest = JSON.stringify(pm.request.toJSON());",
+          "const variableNames = [...serializedRequest.matchAll(/\\{\\{([^}]+)\\}\\}/g)].map((match) => match[1]);",
+          "const missingVariables = [...new Set(variableNames)].filter((name) => {",
+          "  const value = pm.variables.get(name);",
+          "  return value === undefined || value === null || String(value).trim() === \"\";",
+          "});",
+          "",
+          "if (missingVariables.length > 0) {",
+          "  throw new Error(`Set the following collection variables before sending this request: ${missingVariables.join(\", \")}`);",
+          "}"
         ]
       }
     },
@@ -983,7 +1430,15 @@
         "id": "7b86c13c-59c8-43f8-a032-d8f23af6221b",
         "type": "text/javascript",
         "exec": [
-          ""
+          "pm.test(\"Response is not a server error\", function () {",
+          "  pm.expect(pm.response.code).to.be.below(500);",
+          "});",
+          "",
+          "if (pm.response.code === 429) {",
+          "  pm.test(\"Rate limited responses state when to retry\", function () {",
+          "    pm.expect(pm.response.headers.get(\"Retry-After\")).to.match(/^\\d+$/);",
+          "  });",
+          "}"
         ]
       }
     }
