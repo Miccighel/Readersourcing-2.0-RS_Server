@@ -2,7 +2,7 @@
 
 `Readersourcing_2.0.postman_collection.json` is the versioned source of the public RS_Server collection.
 It preserves the organization of the original collection while keeping its requests aligned with the current Rails routes.
-The published documentation is available through the [Postman documenter](https://documenter.getpostman.com/view/4632696/2sBY4VLy5Q).
+The published documentation is available through the [Postman documenter](https://documenter.getpostman.com/view/4632696/2sBY4WpHKV).
 
 The collection uses variables for the server address, reader credentials, resource identifiers, confirmation and password
 tokens, and the durable reference embedded in an annotated PDF. Their sensitive values are intentionally empty. Set them
