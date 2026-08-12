@@ -172,6 +172,8 @@ it:
     user:
       registration_confirm: "Grazie per esserti registrato! Per favore, clicca il collegamento sottostante per confermare la tua registrazione."
       unsubscribe: "Se non desideri più ricevere mail come questa, disiscriviti"
+      unsubscribe_confirmation: "Vuoi interrompere la ricezione delle email opzionali di Readersourcing?"
+      unsubscribe_action: "Disiscriviti"
       unsubscribe_successful: "Non sei più iscritto alle mail (eccetto quelle di sistema) provenienti da Readersourcing. Riceverai ancora quelle di sistema. Puoi iscriverti nuovamente in qualsiasi momento dalla sezione di modifica del profilo."
     report:
       user_report: "Un utente ha segnalato un bug con il messaggio sottostante."

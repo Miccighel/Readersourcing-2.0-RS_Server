@@ -181,7 +181,7 @@ class PublicationsController < ApplicationController
 		end
 	end
 
-	# GET /publications/1/refresh.json
+	# POST /publications/1/refresh.json
 	def refresh
 		begin
 			@publication.transaction do

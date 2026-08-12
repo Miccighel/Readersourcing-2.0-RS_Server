@@ -95,7 +95,7 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     assert_equal %w[id score original_score url], %w[id score original_score url] & rating.keys
     duplicate = Rating.new(user: users(:one), publication: publications(:one), score: 80, original_score: 80)
     assert_not duplicate.valid?
-    assert_equal duplicate.errors.as_json, JSON.parse(
+    assert_equal JSON.parse(JSON.generate(duplicate.errors.as_json)), JSON.parse(
       examples.dig("Ratings (Create)", "Duplicate rating", "body")
     )
   end
@@ -130,6 +130,10 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     assert operations.key?(["GET", "{{host}}/software"])
     assert operations.key?(["GET", "{{host}}/password/reset?email={{email}}&reset_token={{resetToken}}"])
     assert operations.key?(["POST", "{{host}}/password/reset"])
+    assert operations.key?(["POST", "{{host}}/publications/{{publicationId}}/refresh.json"])
+    assert operations.key?(["POST", "{{host}}/unsubscribe/{{userId}}.json"])
+    refute operations.key?(["GET", "{{host}}/publications/{{publicationId}}/refresh.json"])
+    refute operations.key?(["GET", "{{host}}/unsubscribe/{{userId}}.json"])
     refute operations.key?(["GET", "{{host}}/logout"])
   end
 

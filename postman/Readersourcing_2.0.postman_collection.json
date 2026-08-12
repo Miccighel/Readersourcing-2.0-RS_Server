@@ -721,7 +721,7 @@
       "name": "Publications (Refresh)",
       "id": "a7ebe874-0e51-4b6f-b588-e720d7cf06b4",
       "request": {
-        "method": "GET",
+        "method": "POST",
         "header": [
           {
             "key": "Authorization",
@@ -735,7 +735,7 @@
           ]
         },
         "url": "{{host}}/publications/{{publicationId}}/refresh.json",
-        "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the annotated copy for the authenticated reader. This operation changes stored data even though it is exposed through `GET`."
+        "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the annotated copy for the authenticated reader. The operation updates the stored publication and the files generated for that reader."
       },
       "response": [
 
@@ -944,16 +944,21 @@
       "name": "Users (Unsubscribe)",
       "id": "40e67cee-61a4-4097-ad94-cdb1cc2027e2",
       "request": {
-        "method": "GET",
+        "method": "POST",
         "header": [
           {
             "key": "Authorization",
             "value": "Bearer {{authToken}}",
             "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
           }
         ],
-        "url": "{{host}}/unsubscribe/{{userId}}",
-        "description": "Disables optional email subscriptions for the reader identified by `userId`. The identifier must belong to the authenticated reader."
+        "url": "{{host}}/unsubscribe/{{userId}}.json",
+        "description": "Disables optional email subscriptions for the reader identified by `userId`. The identifier must belong to the authenticated reader. The link included in rating emails opens a confirmation page, while this request records the reader's choice."
       },
       "response": [
 

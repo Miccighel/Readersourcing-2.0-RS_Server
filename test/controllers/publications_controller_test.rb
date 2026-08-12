@@ -63,6 +63,23 @@ class PublicationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @publication.pdf_url, response.parsed_body.fetch("pdf_url")
   end
 
+  test "should route publication refresh through post" do
+    route = Rails.application.routes.recognize_path(
+      refresh_publication_path(@publication, format: :json),
+      method: :post
+    )
+
+    assert_equal "publications", route.fetch(:controller)
+    assert_equal "refresh", route.fetch(:action)
+    assert_equal @publication.id.to_s, route.fetch(:id)
+  end
+
+  test "should not refresh publication through get" do
+    assert_raises(ActionController::RoutingError) do
+      get refresh_publication_url(@publication, format: :json), headers: @headers
+    end
+  end
+
   test "should not expose publication mutation routes" do
     publication_count = Publication.count
     rating_count = Rating.count

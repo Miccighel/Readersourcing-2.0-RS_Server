@@ -907,7 +907,7 @@ $(document).on("turbolinks:load", () => {
 				});
 			};
 			// 2.1 Refresh the publication
-			let secondPromise = emptyAjax("GET", `/publications/${data["id"]}/refresh.json`, "application/json; charset=utf-8", "json", true, secondSuccessCallback, secondErrorCallback);
+			let secondPromise = emptyAjax("POST", `/publications/${data["id"]}/refresh.json`, "application/json; charset=utf-8", "json", true, secondSuccessCallback, secondErrorCallback);
 		};
 		// 1.3 The publication has never been rated, so it does not exist in the database.
 		let errorCallback = function (jqXHR, status) {
@@ -1274,7 +1274,7 @@ $(document).on("turbolinks:load", () => {
 				errorButton.prop("disabled", true);
 			};
 			// 1.1 Fetch and annotate the publication
-			let promise = emptyAjax("GET", `/publications/${currentIdentifier}/refresh.json`, "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
+			let promise = emptyAjax("POST", `/publications/${currentIdentifier}/refresh.json`, "application/json; charset=utf-8", "json", true, successCallback, errorCallback);
 		});
 	}
 

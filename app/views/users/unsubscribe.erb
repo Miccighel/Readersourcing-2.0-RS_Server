@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<%= render partial: 'shared/assets' %>
+<body class="bg-gray-dark color-white">
+<div id="unsubscribe-page" class="min-h-100 d-flex flex-column align-items-center justify-content-center">
+	<div class="w-100 mb-3">
+		<%= render partial: 'shared/menu', locals: {active: "user", appearance: "light"} %>
+	</div>
+	<div class="row ml-auto mr-auto mt-auto mb-0 w-100">
+		<div class="col-lg-4 col-sm-10 col-xs-12 m-auto text-center">
+			<div class="heading text-center">
+				<h1><%= I18n.t("mails.user.unsubscribe_confirmation") %></h1>
+			</div>
+		</div>
+	</div>
+	<div class="row ml-auto mr-auto mb-auto mt-3 w-100">
+		<div class="col-lg-4 col-sm-10 col-xs-12 m-auto text-center">
+			<%= form_with url: unsubscribe_path(@user.id), method: :post, local: true, id: "unsubscribe-form" do %>
+				<button type="submit" id="unsubscribe-btn" class="btn btn-primary w-35">
+					<%= I18n.t("mails.user.unsubscribe_action") %>
+				</button>
+			<% end %>
+		</div>
+	</div>
+	<div class="row w-100 mt-3">
+		<%= render partial: "shared/footer" %>
+	</div>
+</div>
+</body>
+</html>

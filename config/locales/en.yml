@@ -105,6 +105,8 @@ en:
     user:
       registration_confirm: "Thanks for registering! To confirm your registration, follow the link below."
       unsubscribe: "If you no longer wish to receive emails like this one, unsubscribe here."
+      unsubscribe_confirmation: "Do you want to stop receiving optional emails from Readersourcing?"
+      unsubscribe_action: "Unsubscribe"
       unsubscribe_successful: "You are no longer subscribed to non-system emails from Readersourcing. You can subscribe again at any time from your profile."
     report:
       user_report: "A user reported a bug with the message below."

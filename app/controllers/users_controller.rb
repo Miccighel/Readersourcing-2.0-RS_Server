@@ -1,10 +1,10 @@
 class UsersController < ApplicationController
 
 	before_action :authorize_api_request, only: [:index, :show, :info, :update, :unsubscribe, :destroy]
-	before_action :authorize_server_request, only: [:list, :edit]
+	before_action :authorize_server_request, only: [:list, :edit, :unsubscribe_confirmation]
 
 	before_action :set_user, only: [:show]
-	before_action :set_owned_user, only: [:update, :unsubscribe, :destroy]
+	before_action :set_owned_user, only: [:update, :unsubscribe_confirmation, :unsubscribe, :destroy]
 	before_action :set_error_manager, only: [:confirm_email]
 
 	require "http"
@@ -75,10 +75,19 @@ class UsersController < ApplicationController
 	# POST /unsubscribe/:id
 	def unsubscribe
 		if @user.update(subscribe: false)
-			render "shared/success", locals: {message: I18n.t("mails.user.unsubscribe_successful")}, status: :ok
+			if request.format.json?
+				render json: {message: I18n.t("mails.user.unsubscribe_successful")}, status: :ok
+			else
+				render "shared/success", locals: {message: I18n.t("mails.user.unsubscribe_successful")}, status: :ok
+			end
 		else
 			render json: @user.errors, status: :unprocessable_entity
 		end
+	end
+
+	# GET /unsubscribe/:id
+	def unsubscribe_confirmation
+		render :unsubscribe
 	end
 
 	# DELETE /users/1.json

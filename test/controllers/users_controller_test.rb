@@ -121,6 +121,24 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal original_password_digest, @user.password_digest
   end
 
+  test "unsubscribe link asks for confirmation without changing the profile" do
+    authenticate
+
+    get unsubscribe_url(@user)
+
+    assert_response :success
+    assert_select "form#unsubscribe-form[action='#{unsubscribe_path(@user)}'][method='post']"
+    assert @user.reload.subscribe
+  end
+
+  test "unsubscribe submission changes the current reader profile" do
+    post unsubscribe_url(@user, format: :json), headers: @headers, as: :json
+
+    assert_response :success
+    assert_equal I18n.t("mails.user.unsubscribe_successful"), response.parsed_body.fetch("message")
+    assert_not @user.reload.subscribe
+  end
+
   test "should destroy user" do
     assert_difference("User.count", -1) do
       assert_difference("AuthenticationToken.count", -1) do

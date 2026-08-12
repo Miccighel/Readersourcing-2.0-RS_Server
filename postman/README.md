@@ -25,6 +25,10 @@ expired JWTs, session cookies, CSRF values, and generated HTML. The small set of
 fictitious data and covers authentication, publication lookup, rating creation, validation, and request limits. Collection
 scripts report missing variables before a request is sent and check the essential form of these API responses.
 
+Operations that regenerate an annotated publication or change the reader's subscription preference use `POST`. The
+unsubscribe link included in rating emails opens a confirmation page; the preference changes only when the authenticated
+reader submits that form.
+
 ## Publishing an update
 
 Update the existing Postman collection through the Postman API instead of importing another copy. Create an API key in

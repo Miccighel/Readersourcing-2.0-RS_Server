@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 				post :extract
 			end
 			member do
-				get :refresh
+				post :refresh
 				get :is_rated
 				get :is_saved_for_later
 			end
@@ -46,7 +46,8 @@ Rails.application.routes.draw do
 	get 'readers/list/', to: 'users#list', as: :users_list, constraints: {:format => 'html'}
 	get 'profile/edit/', to: 'users#edit', as: :profile, constraints: {:format => 'html'}
 	get 'confirm/:id/:confirmToken', to: 'users#confirm_email', as: :confirm, constraints: {:format => 'html'}
-	get 'unsubscribe/:id', to: 'users#unsubscribe', as: :unsubscribe, constraints: {:format => 'html'}
+	get 'unsubscribe/:id', to: 'users#unsubscribe_confirmation', as: :unsubscribe, constraints: {:format => 'html'}
+	post 'unsubscribe/:id', to: 'users#unsubscribe', constraints: {:format => /(html|json)/}
 	get 'sign_up', to: 'users#sign_up', as: :sign_up, constraints: {:format => 'html'}
 
 	post 'load', to: 'ratings#load', as: :load, constraints: {:format => 'html'}

@@ -61,6 +61,22 @@ class CsrfProtectionTest < ActionDispatch::IntegrationTest
     assert_nil session[:auth_token]
   end
 
+  test "unsubscribe confirmation protects the profile change" do
+    authenticate
+
+    assert_raises(ActionController::InvalidAuthenticityToken) do
+      post unsubscribe_path(users(:one))
+    end
+    assert users(:one).reload.subscribe
+
+    get unsubscribe_path(users(:one))
+    authenticity_token = css_select("input[name='authenticity_token']").first["value"]
+    post unsubscribe_path(users(:one)), params: {authenticity_token: authenticity_token}
+
+    assert_response :success
+    assert_not users(:one).reload.subscribe
+  end
+
   test "session-authenticated JSON requests reject a missing CSRF token" do
     authenticate
 
