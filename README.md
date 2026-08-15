@@ -63,7 +63,7 @@ The former environment must be used if there is the need to:
 
 In the following, both deployment modalities are described along with their requirements. The manual installation allows
 RS_Server to run directly on the local machine while its source code is edited. Docker Compose builds the application and
-starts it together with PostgreSQL in an environment ready for **production**.
+starts it together with PostgreSQL using the Rails **production** settings.
 
 Please, be sure to read the section dedicated to the **environment variables**, since RS_Server will not work properly without them.
 
@@ -89,7 +89,7 @@ needed.
 To fetch all Ruby dependencies required by RS_Server, type ```bundle install``` and wait for the process to complete.
 Then type ```node .yarn/releases/yarn-3.6.3.cjs install --immutable``` to install the existing browser assets.
 
-Create a ```.env``` file as explained later and set the required environment variables. Then ensure that the ```PostgreSQL``` service is started and ready to accept connections on port ```5432```. Type ```bin/rails db:create```
+Copy ```.env.example``` to ```.env```, then set the required environment variables as explained later. Ensure that the ```PostgreSQL``` service is started and ready to accept connections on port ```5432```. Type ```bin/rails db:create```
 and then ```bin/rails db:migrate```.
 Optionally, you can type ```bin/rails db:seed``` to seed some sample data in the database. After these commands, everything is ready to launch RS_Server in _development_ or _production_ mode.
 
@@ -104,7 +104,7 @@ Every HTTP request, therefore, must be sent to the ```http://127.0.0.1:3000``` a
 - ```gem install bundler```;
 - ```bundle install```;
 - ```node .yarn/releases/yarn-3.6.3.cjs install --immutable```;
-- create and populate the ```.env``` file;
+- copy ```.env.example``` to ```.env``` and populate it;
 - ```bin/rails db:create```;
 - ```bin/rails db:migrate```;
 - ```bin/rails db:seed``` (optional);
@@ -131,7 +131,7 @@ Clone this repository and move inside its main directory using a command line pr
 Now, type ```ls``` or ```dir```; you should see a ```docker-compose.yml``` file and a ```Dockerfile```.
 If you do not see them, please be sure to be in the main directory of the cloned repository.
 
-Before proceeding, _be sure that your Docker Engine is running_, otherwise the following commands will not work.
+Copy ```.env.example``` to ```.env``` and replace its placeholder values. Before proceeding, _be sure that your Docker Engine is running_, otherwise the following commands will not work.
 The current Compose configuration builds RS_Server locally using Ruby 3.4 and starts PostgreSQL 17. Type
 ```docker compose up --build``` and wait for the image build and database health check to complete. The container entrypoint runs
 ```bin/rails db:create``` and ```bin/rails db:migrate``` before starting the server. Seeding remains optional.
@@ -139,11 +139,12 @@ The current Compose configuration builds RS_Server locally using Ruby 3.4 and st
 RS_Server will be bound to port ```3000``` in the ```production``` environment. Every HTTP request must therefore be sent to
 ```http://localhost:3000```. To seed sample data, type
 ```docker compose run --rm rs_server_webapp bin/rails db:seed```. To stop the containers, type ```docker compose down```.
+The named volumes retain both the PostgreSQL data and the prepared publications when the containers are recreated.
 
 <h4>Quick Cheatsheet</h4>
 
 - ```cd``` to main directory;
-- create and populate the ```.env``` file;
+- copy ```.env.example``` to ```.env``` and populate it;
 - ```docker compose up --build```;
 - ```docker compose run --rm rs_server_webapp bin/rails db:seed``` (optionally);
 - ```docker compose down``` (to stop and undeploy).
@@ -189,7 +190,7 @@ along with an explanation of which deployment modality requires their usage.
 
 <h3>Setting Variables</h3>
 
-To set an environment variable in a local `.env` file, create it inside the main directory of RS_Server. Then, populate it in a `key=value` fashion.
+To set the environment variables, copy `.env.example` to `.env` inside the main directory of RS_Server. Then replace the example values using the `key=value` form.
 
 For a manual production installation connected through `DATABASE_URL`, the `.env` file can take the following form.
 

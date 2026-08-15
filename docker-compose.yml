@@ -10,6 +10,8 @@ services:
     depends_on:
       database:
         condition: service_healthy
+    volumes:
+      - rs_server_publications:/rs_server/public/user
 
   database:
     image: postgres:17
@@ -24,3 +26,4 @@ services:
 
 volumes:
   rs_server_pg_data:
+  rs_server_publications:
