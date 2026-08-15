@@ -653,7 +653,78 @@
         "description": "Checks whether the supplied URL identifies a bounded file that RS_Server can retrieve and open as a PDF. The declared content type is treated as an indication; the file header and PDF structure are verified. The response contains an `available` status on success or a specific preparation status on failure. The web application and RS_Rate prepare the PDF only when the reader requests it, so this operation remains available mainly to API clients."
       },
       "response": [
-
+        {
+          "name": "Publication available",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://arxiv.org/pdf/1811.03152.pdf\"\n\t}\n}"
+            },
+            "url": "{{host}}/publications/is_fetchable.json",
+            "description": "Checks whether the supplied URL identifies a bounded file that RS_Server can retrieve and open as a PDF. The declared content type is treated as an indication; the file header and PDF structure are verified. The response contains an `available` status on success or a specific preparation status on failure. The web application and RS_Rate prepare the PDF only when the reader requests it, so this operation remains available mainly to API clients."
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"status\": \"available\",\n  \"message\": \"The file exists, can be downloaded, and is encoded in PDF format.\"\n}"
+        },
+        {
+          "name": "Browser authentication required",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://arxiv.org/pdf/1811.03152.pdf\"\n\t}\n}"
+            },
+            "url": "{{host}}/publications/is_fetchable.json",
+            "description": "Checks whether the supplied URL identifies a bounded file that RS_Server can retrieve and open as a PDF. The declared content type is treated as an indication; the file header and PDF structure are verified. The response contains an `available` status on success or a specific preparation status on failure. The web application and RS_Rate prepare the PDF only when the reader requests it, so this operation remains available mainly to API clients."
+          },
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"status\": \"authentication_required\",\n  \"message\": \"The publication server requires access from your browser session. Upload the original PDF to continue.\",\n  \"errors\": [\n    \"The publication server requires access from your browser session. Upload the original PDF to continue.\"\n  ],\n  \"upload_supported\": true\n}"
+        }
       ],
       "_postman_id": "3c0627a7-680c-490f-88eb-f13607b3da07"
     },
@@ -713,7 +784,72 @@
         "description": "Retrieves the PDF identified by `pdf_url`, opens it as a PDF, and uses RS_PDF to add the rating page for the authenticated reader. Before publishing the result, RS_Server verifies the added page and the embedded rating URL. If the publication is not yet present, its record is created in the same operation. Failures return a stable preparation status such as `authentication_required`, `too_large`, `malformed_pdf`, `annotation_failed`, or `verification_failed`."
       },
       "response": [
-
+        {
+          "name": "Publication prepared",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf\"\n\t}\n}"
+            },
+            "url": "{{host}}/publications/fetch.json",
+            "description": "Retrieves the PDF identified by `pdf_url`, opens it as a PDF, and uses RS_PDF to add the rating page for the authenticated reader. Before publishing the result, RS_Server verifies the added page and the embedded rating URL. If the publication is not yet present, its record is created in the same operation. Failures return a stable preparation status such as `authentication_required`, `too_large`, `malformed_pdf`, `annotation_failed`, or `verification_failed`."
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"id\": 1,\n  \"doi\": \"10.1000/readersourcing-example\",\n  \"title\": \"An example publication\",\n  \"subject\": \"Readersourcing\",\n  \"author\": \"Example Author\",\n  \"creator\": \"Example PDF Creator\",\n  \"producer\": \"Example PDF Producer\",\n  \"pdf_url\": \"https://example.org/publication.pdf\",\n  \"pdf_storage_path\": \"user/1/publication/pdf/example/\",\n  \"pdf_name\": \"publication.pdf\",\n  \"pdf_download_path\": \"user/1/publication/pdf/example/publication.pdf\",\n  \"pdf_download_url\": \"https://readersourcing.example/user/1/publication/pdf/example/publication.pdf\",\n  \"pdf_name_link\": \"publication-Link.pdf\",\n  \"pdf_download_path_link\": \"user/1/publication/pdf/example/publication-Link.pdf\",\n  \"pdf_download_url_link\": \"https://readersourcing.example/user/1/publication/pdf/example/publication-Link.pdf\",\n  \"preparation_status\": \"complete\",\n  \"steadiness\": null,\n  \"score_rsm\": null,\n  \"score_trm\": null,\n  \"created_at\": \"2026-01-01T12:00:00.000Z\",\n  \"updated_at\": \"2026-01-01T12:00:00.000Z\",\n  \"url\": \"https://readersourcing.example/publications/1.json\"\n}"
+        },
+        {
+          "name": "Malformed PDF",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf\"\n\t}\n}"
+            },
+            "url": "{{host}}/publications/fetch.json",
+            "description": "Retrieves the PDF identified by `pdf_url`, opens it as a PDF, and uses RS_PDF to add the rating page for the authenticated reader. Before publishing the result, RS_Server verifies the added page and the embedded rating URL. If the publication is not yet present, its record is created in the same operation. Failures return a stable preparation status such as `authentication_required`, `too_large`, `malformed_pdf`, `annotation_failed`, or `verification_failed`."
+          },
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"status\": \"malformed_pdf\",\n  \"message\": \"The file contains a malformed PDF and cannot be prepared.\",\n  \"errors\": [\n    \"The file contains a malformed PDF and cannot be prepared.\"\n  ],\n  \"upload_supported\": true\n}"
+        }
       ],
       "_postman_id": "b6455e65-3f2e-41ce-aa9f-47ff3c2cf8e9"
     },
@@ -747,7 +883,86 @@
         "description": "Prepares an original PDF uploaded by the authenticated reader when RS_Server cannot retrieve it directly, for example because the publisher requires the reader's browser session. `publication[pdf_url]` remains the stable identifier of the publication. The uploaded file is bounded, opened as a PDF, annotated by RS_PDF, and verified through the same preparation flow used for remote publications. Select the original PDF through the `file` form field before sending the request."
       },
       "response": [
-
+        {
+          "name": "Uploaded publication prepared",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "publication[pdf_url]",
+                  "value": "https://example.org/publication.pdf",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "value": null
+                }
+              ]
+            },
+            "url": "{{host}}/publications/fetch_upload.json",
+            "description": "Prepares an original PDF uploaded by the authenticated reader when RS_Server cannot retrieve it directly, for example because the publisher requires the reader's browser session. `publication[pdf_url]` remains the stable identifier of the publication. The uploaded file is bounded, opened as a PDF, annotated by RS_PDF, and verified through the same preparation flow used for remote publications. Select the original PDF through the `file` form field before sending the request."
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"id\": 1,\n  \"doi\": \"10.1000/readersourcing-example\",\n  \"title\": \"An example publication\",\n  \"subject\": \"Readersourcing\",\n  \"author\": \"Example Author\",\n  \"creator\": \"Example PDF Creator\",\n  \"producer\": \"Example PDF Producer\",\n  \"pdf_url\": \"https://example.org/publication.pdf\",\n  \"pdf_storage_path\": \"user/1/publication/pdf/example/\",\n  \"pdf_name\": \"publication.pdf\",\n  \"pdf_download_path\": \"user/1/publication/pdf/example/publication.pdf\",\n  \"pdf_download_url\": \"https://readersourcing.example/user/1/publication/pdf/example/publication.pdf\",\n  \"pdf_name_link\": \"publication-Link.pdf\",\n  \"pdf_download_path_link\": \"user/1/publication/pdf/example/publication-Link.pdf\",\n  \"pdf_download_url_link\": \"https://readersourcing.example/user/1/publication/pdf/example/publication-Link.pdf\",\n  \"preparation_status\": \"complete\",\n  \"steadiness\": null,\n  \"score_rsm\": null,\n  \"score_trm\": null,\n  \"created_at\": \"2026-01-01T12:00:00.000Z\",\n  \"updated_at\": \"2026-01-01T12:00:00.000Z\",\n  \"url\": \"https://readersourcing.example/publications/1.json\"\n}"
+        },
+        {
+          "name": "PDF not selected",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "publication[pdf_url]",
+                  "value": "https://example.org/publication.pdf",
+                  "type": "text"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "value": null
+                }
+              ]
+            },
+            "url": "{{host}}/publications/fetch_upload.json",
+            "description": "Prepares an original PDF uploaded by the authenticated reader when RS_Server cannot retrieve it directly, for example because the publisher requires the reader's browser session. `publication[pdf_url]` remains the stable identifier of the publication. The uploaded file is bounded, opened as a PDF, annotated by RS_PDF, and verified through the same preparation flow used for remote publications. Select the original PDF through the `file` form field before sending the request."
+          },
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"status\": \"upload_missing\",\n  \"message\": \"No PDF file has been uploaded. Please try again.\",\n  \"errors\": [\n    \"No PDF file has been uploaded. Please try again.\"\n  ],\n  \"upload_supported\": true\n}"
+        }
       ],
       "_postman_id": "eddb3647-e322-4c45-a91f-2dd58ebc6496"
     },
@@ -772,7 +987,64 @@
         "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the prepared copy for the authenticated reader. The replacement is published only after its rating page and embedded URL have passed the final verification."
       },
       "response": [
-
+        {
+          "name": "Publication refreshed",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": "{{host}}/publications/{{publicationId}}/refresh.json",
+            "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the prepared copy for the authenticated reader. The replacement is published only after its rating page and embedded URL have passed the final verification."
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"id\": 1,\n  \"doi\": \"10.1000/readersourcing-example\",\n  \"title\": \"An example publication\",\n  \"subject\": \"Readersourcing\",\n  \"author\": \"Example Author\",\n  \"creator\": \"Example PDF Creator\",\n  \"producer\": \"Example PDF Producer\",\n  \"pdf_url\": \"https://example.org/publication.pdf\",\n  \"pdf_storage_path\": \"user/1/publication/pdf/example/\",\n  \"pdf_name\": \"publication.pdf\",\n  \"pdf_download_path\": \"user/1/publication/pdf/example/publication.pdf\",\n  \"pdf_download_url\": \"https://readersourcing.example/user/1/publication/pdf/example/publication.pdf\",\n  \"pdf_name_link\": \"publication-Link.pdf\",\n  \"pdf_download_path_link\": \"user/1/publication/pdf/example/publication-Link.pdf\",\n  \"pdf_download_url_link\": \"https://readersourcing.example/user/1/publication/pdf/example/publication-Link.pdf\",\n  \"preparation_status\": \"complete\",\n  \"steadiness\": null,\n  \"score_rsm\": null,\n  \"score_trm\": null,\n  \"created_at\": \"2026-01-01T12:00:00.000Z\",\n  \"updated_at\": \"2026-01-01T12:00:00.000Z\",\n  \"url\": \"https://readersourcing.example/publications/1.json\"\n}"
+        },
+        {
+          "name": "Verification failed",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": "{{host}}/publications/{{publicationId}}/refresh.json",
+            "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the prepared copy for the authenticated reader. The replacement is published only after its rating page and embedded URL have passed the final verification."
+          },
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"status\": \"verification_failed\",\n  \"message\": \"The prepared PDF did not pass the final verification and was not published.\",\n  \"errors\": [\n    \"The prepared PDF did not pass the final verification and was not published.\"\n  ],\n  \"upload_supported\": true\n}"
+        }
       ],
       "_postman_id": "a7ebe874-0e51-4b6f-b588-e720d7cf06b4"
     },

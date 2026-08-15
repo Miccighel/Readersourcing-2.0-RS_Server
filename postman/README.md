@@ -20,10 +20,10 @@ by Postman's cookie jar. The paper rating workflow also requires `paperReference
 Code embedded in an annotated publication. Open `Ratings (Rate Paper)` before submitting `Ratings (Load)`, so the durable
 reference is stored in the same reader session.
 
-The source file contains a small set of fictitious examples covering authentication, publication lookup, rating creation,
-validation, and request limits. They contain no personal data, reusable credentials, session cookies, CSRF values, or
-generated HTML. Collection scripts report missing variables before a request is sent and check the essential form of these
-API responses.
+The source file contains a small set of fictitious examples covering authentication, publication lookup, PDF preparation,
+rating creation, validation, and request limits. They contain no personal data, reusable credentials, session cookies,
+CSRF values, or generated HTML. Collection scripts report missing variables before a request is sent and check the
+essential form of these API responses.
 
 Operations that regenerate an annotated publication or change the reader's subscription preference use `POST`. The
 unsubscribe link included in rating emails opens a confirmation page; the preference changes only when the authenticated

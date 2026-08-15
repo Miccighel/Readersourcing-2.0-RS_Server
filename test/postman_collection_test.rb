@@ -63,7 +63,7 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     refute_includes serialized_collection, "authTokenPaper"
 
     responses = @requests.flat_map { |item| item.fetch("response") }
-    assert_equal 7, responses.length
+    assert_equal 15, responses.length
     responses.each do |response|
       refute response.fetch("header").any? { |header| header.fetch("key").casecmp?("Set-Cookie") }
     end
@@ -90,6 +90,47 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     assert_equal [I18n.t("models.publications.errors.messages.lookup_error")], JSON.parse(
       examples.dig("Publications (Lookup)", "Publication not found", "body")
     ).fetch("errors")
+
+    fetchable = JSON.parse(examples.dig("Publications (Is Fetchable)", "Publication available", "body"))
+    assert_equal "available", fetchable.fetch("status")
+    assert_equal I18n.t("confirmations.messages.fetchable_publication"), fetchable.fetch("message")
+
+    authentication_required = JSON.parse(
+      examples.dig("Publications (Is Fetchable)", "Browser authentication required", "body")
+    )
+    assert_equal "authentication_required", authentication_required.fetch("status")
+    assert_equal I18n.t("errors.messages.publication_authentication_required"),
+      authentication_required.fetch("message")
+    assert authentication_required.fetch("upload_supported")
+
+    prepared = JSON.parse(examples.dig("Publications (Fetch)", "Publication prepared", "body"))
+    assert_equal 201, examples.dig("Publications (Fetch)", "Publication prepared", "code")
+    assert_equal "complete", prepared.fetch("preparation_status")
+    assert prepared.fetch("pdf_download_url_link").end_with?("-Link.pdf")
+
+    malformed = JSON.parse(examples.dig("Publications (Fetch)", "Malformed PDF", "body"))
+    assert_equal "malformed_pdf", malformed.fetch("status")
+    assert_equal I18n.t("errors.messages.publication_malformed_pdf"), malformed.fetch("message")
+
+    uploaded = JSON.parse(
+      examples.dig("Publications (Fetch Upload)", "Uploaded publication prepared", "body")
+    )
+    assert_equal "complete", uploaded.fetch("preparation_status")
+
+    upload_missing = JSON.parse(examples.dig("Publications (Fetch Upload)", "PDF not selected", "body"))
+    assert_equal "upload_missing", upload_missing.fetch("status")
+    assert_equal I18n.t("errors.messages.pdf_not_uploaded"), upload_missing.fetch("message")
+
+    refreshed = JSON.parse(examples.dig("Publications (Refresh)", "Publication refreshed", "body"))
+    assert_equal 200, examples.dig("Publications (Refresh)", "Publication refreshed", "code")
+    assert_equal "complete", refreshed.fetch("preparation_status")
+
+    verification_failed = JSON.parse(
+      examples.dig("Publications (Refresh)", "Verification failed", "body")
+    )
+    assert_equal "verification_failed", verification_failed.fetch("status")
+    assert_equal I18n.t("errors.messages.publication_verification_failed"),
+      verification_failed.fetch("message")
 
     rating = JSON.parse(examples.dig("Ratings (Create)", "Rating created", "body"))
     assert_equal %w[id score original_score url], %w[id score original_score url] & rating.keys
