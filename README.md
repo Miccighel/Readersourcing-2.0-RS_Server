@@ -29,6 +29,7 @@ The current development line is version **2.0.0**.
 - <a href="https://zenodo.org/record/1452397">Technical Documentation (Zenodo)</a>
 - <a href="https://github.com/Miccighel/Readersourcing-2.0-TechnicalDocumentation"> Technical Documentation (GitHub)</a>
 - <a href="https://documenter.getpostman.com/view/4632696/2sBYArVYJn">RESTful API Interface</a>
+- <a href="https://hub.docker.com/r/miccighel/rs_server">Docker Hub</a>
 - <a href="https://doi.org/10.5281/zenodo.1442630">Zenodo Record</a>
 
 The source of the Postman collection is versioned in
@@ -64,8 +65,8 @@ The former environment must be used if there is the need to:
 - simply to test it in a safe way.
 
 In the following, both deployment modalities are described along with their requirements. The manual installation allows
-RS_Server to run directly on the local machine while its source code is edited. Docker Compose builds the application and
-starts it together with PostgreSQL using the Rails **production** settings.
+RS_Server to run directly on the local machine while its source code is edited. Docker Compose can use the published
+RS_Server image or build the application locally. It starts RS_Server together with PostgreSQL using the Rails **production** settings.
 
 Please, be sure to read the section dedicated to the **environment variables**, since RS_Server will not work properly without them.
 
@@ -134,9 +135,10 @@ Now, type ```ls``` or ```dir```; you should see a ```docker-compose.yml``` file 
 If you do not see them, please be sure to be in the main directory of the cloned repository.
 
 Copy ```.env.example``` to ```.env``` and replace its placeholder values. Before proceeding, _be sure that your Docker Engine is running_, otherwise the following commands will not work.
-The current Compose configuration builds RS_Server locally using Ruby 3.4 and starts PostgreSQL 17. Type
-```docker compose up --build``` and wait for the image build and database health check to complete. A dedicated setup
-service runs ```bin/rails db:prepare``` and must complete before the application starts. Seeding remains optional.
+The current Compose configuration uses the public ```miccighel/rs_server:v2.0.0``` image and starts PostgreSQL 17. Type
+```docker compose up``` and wait for the image download and database health check to complete. If the source code has been
+edited, use ```docker compose up --build``` to build the same image locally. A dedicated setup service runs
+```bin/rails db:migrate``` and must complete before the application starts. Seeding remains optional.
 
 RS_Server will be bound to port ```3000``` in the ```production``` environment. Every HTTP request must therefore be sent to
 ```http://localhost:3000```. To seed sample data, type
@@ -149,7 +151,8 @@ private publication volume are the only writable application locations.
 
 - ```cd``` to main directory;
 - copy ```.env.example``` to ```.env``` and populate it;
-- ```docker compose up --build```;
+- ```docker compose up```;
+- ```docker compose up --build``` (when the source code has been edited);
 - ```docker compose run --rm rs_server_webapp bin/rails db:seed``` (optionally);
 - ```docker compose down``` (to stop and undeploy).
 
@@ -248,8 +251,8 @@ running `bin/rails publications:migrate_private_storage`. The task stops if the 
 merge two storage trees implicitly. Files can instead be prepared again if the old copies are no longer required.
 
 The endpoint `GET /up` reports whether Rails can boot successfully and can be used for local or load balancer health
-checks. Database preparation is not part of the server entrypoint. On a container platform, run `bin/rails db:prepare`
-once as a separate deployment task before starting or replacing the application process.
+checks. Database migration is not part of the server entrypoint. On a container platform, run `bin/rails db:migrate`
+as a separate deployment task before starting or replacing the application process.
 
 The publication preparation API returns a stable `status` for recoverable failures, including unavailable sources,
 authentication requirements, size limits, malformed or encrypted PDFs, RS_PDF failures, and final verification failures.

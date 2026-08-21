@@ -1,25 +1,27 @@
 services:
   rs_server_setup:
+    image: miccighel/rs_server:v2.0.0
     build: .
     env_file: .env
     environment:
       POSTGRES_HOST: database
       RAILS_ENV: production
-    command: ["./bin/rails", "db:prepare"]
+    command: ["./bin/rails", "db:migrate"]
     depends_on:
       database:
         condition: service_healthy
     read_only: true
     tmpfs:
-      - /tmp
-      - /rs_server/tmp
-      - /rs_server/log
+      - /tmp:rw,noexec,nosuid,size=64m,mode=1777
+      - /rs_server/tmp:rw,noexec,nosuid,size=64m,uid=1000,gid=1000,mode=0755
+      - /rs_server/log:rw,noexec,nosuid,size=64m,uid=1000,gid=1000,mode=0755
     security_opt:
       - no-new-privileges:true
     cap_drop:
       - ALL
 
   rs_server_webapp:
+    image: miccighel/rs_server:v2.0.0
     build: .
     env_file: .env
     environment:
@@ -35,9 +37,9 @@ services:
     init: true
     read_only: true
     tmpfs:
-      - /tmp
-      - /rs_server/tmp
-      - /rs_server/log
+      - /tmp:rw,noexec,nosuid,size=64m,mode=1777
+      - /rs_server/tmp:rw,noexec,nosuid,size=64m,uid=1000,gid=1000,mode=0755
+      - /rs_server/log:rw,noexec,nosuid,size=64m,uid=1000,gid=1000,mode=0755
     security_opt:
       - no-new-privileges:true
     cap_drop:

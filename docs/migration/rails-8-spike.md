@@ -3,7 +3,7 @@
 ## Target
 
 - Ruby 3.4.10
-- Rails 8.1.3
+- Rails 8.1.3.1
 - PostgreSQL 17 in Docker Compose
 - the Sprockets and Turbolinks asset graph used by the application
 
@@ -42,21 +42,22 @@ See `domain-fidelity.md` for the protected behavior and numerical tolerances.
 - PostgreSQL is available only on the internal Compose network, avoiding a
   conflict with an existing database on host port 5432.
 - The database service uses the hostname `database`, which conforms to the relevant RFC requirements.
-- The entrypoint uses `db:create` followed by `db:migrate`; sample data
-  seeding remains an explicit, optional action.
+- PostgreSQL creates the configured application database and the dedicated
+  setup service runs `db:migrate`; the application entrypoint does not alter
+  the database and sample data seeding remains an explicit, optional action.
 
 The stack and test suite can be reproduced with:
 
 ```sh
-docker compose up --build
+docker compose up --build --wait
+curl --fail http://localhost:3000/up
+docker compose down
+docker compose up -d database
 docker compose run --rm --no-deps \
   -e RAILS_ENV=test \
-  -v "$PWD:/rs_server" \
-  rs_server_webapp ./bin/rails db:create db:schema:load
-docker compose run --rm --no-deps \
-  -e RAILS_ENV=test \
-  -v "$PWD:/rs_server" \
-  rs_server_webapp ./bin/rails test
+  -v "$PWD/test:/rs_server/test:ro" \
+  rs_server_webapp ./bin/rails db:create db:schema:load test
+docker compose down --volumes
 ```
 
 ## Integration contract
