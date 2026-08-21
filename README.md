@@ -28,7 +28,7 @@ The current development line is version **2.0.0**.
 - <a href="https://zenodo.org/record/1446468">Original Article (Zenodo)</a>
 - <a href="https://zenodo.org/record/1452397">Technical Documentation (Zenodo)</a>
 - <a href="https://github.com/Miccighel/Readersourcing-2.0-TechnicalDocumentation"> Technical Documentation (GitHub)</a>
-- <a href="https://documenter.getpostman.com/view/4632696/2sBYApzDQN">RESTful API Interface</a>
+- <a href="https://documenter.getpostman.com/view/4632696/2sBYArVYJn">RESTful API Interface</a>
 - <a href="https://doi.org/10.5281/zenodo.1442630">Zenodo Record</a>
 
 The source of the Postman collection is versioned in

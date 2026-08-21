@@ -70,7 +70,20 @@ class PostmanCollectionPublisherTest < ActiveSupport::TestCase
 	test "leaves new collection entries without invented identifiers" do
 		local_collection = {
 			"info" => {"name" => "Readersourcing 2.0"},
-			"item" => [{"name" => "New request", "request" => {"method" => "GET"}}]
+			"item" => [
+				{
+					"id" => "local-request",
+					"_postman_id" => "local-request",
+					"name" => "New request",
+					"event" => [
+						{
+							"listen" => "test",
+							"script" => {"id" => "local-script", "exec" => ["return;"]}
+						}
+					],
+					"request" => {"method" => "GET"}
+				}
+			]
 		}
 		remote_collection = {
 			"info" => {"_postman_id" => "remote-collection", "name" => "Readersourcing 2.0"},
@@ -90,6 +103,8 @@ class PostmanCollectionPublisherTest < ActiveSupport::TestCase
 
 			assert_equal "remote-collection", client.replacement.dig("info", "_postman_id")
 			assert_not client.replacement.dig("item", 0).key?("id")
+			assert_not client.replacement.dig("item", 0).key?("_postman_id")
+			assert_not client.replacement.dig("item", 0, "event", 0, "script").key?("id")
 		end
 	end
 

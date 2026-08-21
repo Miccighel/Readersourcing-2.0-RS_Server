@@ -23,22 +23,42 @@ class PostmanCollectionPublisher
 	def preserve_identifiers(local_value, remote_value)
 		case local_value
 		when Hash
-			return unless remote_value.is_a?(Hash)
+			unless remote_value.is_a?(Hash)
+				remove_identifiers(local_value)
+				return
+			end
 
 			IDENTIFIER_KEYS.each do |key|
-				local_value[key] = remote_value[key] if remote_value.key?(key)
+				if remote_value.key?(key)
+					local_value[key] = remote_value[key]
+				else
+					local_value.delete(key)
+				end
 			end
 			local_value.each do |key, value|
 				preserve_identifiers(value, remote_value[key]) unless IDENTIFIER_KEYS.include?(key)
 			end
 		when Array
-			return unless remote_value.is_a?(Array)
+			unless remote_value.is_a?(Array)
+				remove_identifiers(local_value)
+				return
+			end
 
 			local_value.each_with_index do |value, index|
 				remote_entry = matching_entry(value, remote_value)
 				remote_entry ||= remote_value[index] unless value.is_a?(Hash)
 				preserve_identifiers(value, remote_entry)
 			end
+		end
+	end
+
+	def remove_identifiers(value)
+		case value
+		when Hash
+			IDENTIFIER_KEYS.each { |key| value.delete(key) }
+			value.each_value { |entry| remove_identifiers(entry) }
+		when Array
+			value.each { |entry| remove_identifiers(entry) }
 		end
 	end
 
