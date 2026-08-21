@@ -31,6 +31,7 @@ class ApplicationController < ActionController::API
 
 	# GET /privacy
 	def privacy
+		@privacy_policy = PrivacyPolicy.new
 	end
 
 	# GET /contact

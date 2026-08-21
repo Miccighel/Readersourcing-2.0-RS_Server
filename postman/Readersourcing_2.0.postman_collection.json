@@ -225,6 +225,88 @@
       "_postman_id": "c204ae82-04c3-49d6-8137-bb4da41060c9"
     },
     {
+      "name": "Application (Readiness)",
+      "id": "78622ed5-bf55-428f-8981-68f418b3e312",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+
+        ],
+        "url": "{{host}}/ready",
+        "description": "Reports whether PostgreSQL is reachable and the private publication storage accepts a temporary file. Deployment systems can use this operation as the readiness check; `/up` remains the Rails liveness check."
+      },
+      "response": [
+        {
+          "name": "Application ready",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+
+            ],
+            "url": "{{host}}/ready",
+            "description": "Reports whether PostgreSQL is reachable and the private publication storage accepts a temporary file. Deployment systems can use this operation as the readiness check; `/up` remains the Rails liveness check."
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [
+
+          ],
+          "body": "{\n  \"status\": \"ready\"\n}"
+        },
+        {
+          "name": "Application not ready",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+
+            ],
+            "url": "{{host}}/ready",
+            "description": "Reports whether PostgreSQL is reachable and the private publication storage accepts a temporary file. Deployment systems can use this operation as the readiness check; `/up` remains the Rails liveness check."
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [
+
+          ],
+          "body": "{\n  \"status\": \"not_ready\"\n}"
+        }
+      ],
+      "_postman_id": "78622ed5-bf55-428f-8981-68f418b3e312",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Readiness returns an expected status\", function () {",
+              "  pm.expect([200, 503]).to.include(pm.response.code);",
+              "});",
+              "pm.test(\"Readiness returns a stable state\", function () {",
+              "  pm.expect(pm.response.json().status).to.be.oneOf([\"ready\", \"not_ready\"]);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
       "name": "Application (Resources)",
       "id": "6d687d28-7895-4188-b29c-6d31a47a1945",
       "protocolProfileBehavior": {

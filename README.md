@@ -146,6 +146,9 @@ RS_Server will be bound to port ```3000``` in the ```production``` environment. 
 The named volumes retain both the PostgreSQL data and the prepared publications when the containers are recreated.
 The application container runs as an unprivileged user with a read only root file system. Temporary directories and the
 private publication volume are the only writable application locations.
+The Compose file also supplies initial CPU, memory, process, and log limits and binds the application to the local host by
+default. The complete public deployment checklist is available in [`docs/production.md`](docs/production.md). Backup and
+restore instructions are available in [`docs/backups.md`](docs/backups.md).
 
 <h4>Quick Cheatsheet</h4>
 
@@ -177,14 +180,36 @@ along with an explanation of which deployment modality requires their usage.
 | ```SMTP_PASSWORD```       | Password of the SMTP mail server.                                                        | 1 - 2           | ```production```                    | ```.env``` file |
 | ```SMTP_DOMAIN_NAME```    | Domain of the SMTP mail server.                                                          | 1 - 2           | ```production```                    | ```.env``` file |
 | ```SMTP_DOMAIN_ADDRESS``` | Full address of the SMTP mail server.                                                    | 1 - 2           | ```production```                    | ```.env``` file |
+| ```SMTP_PORT```           | SMTP port. The default is 587.                                                           | 1 - 2           | ```production```                    | ```.env``` file |
+| ```SMTP_AUTHENTICATION``` | SMTP authentication method. The default is ```plain```.                                 | 1 - 2           | ```production```                    | ```.env``` file |
+| ```SMTP_OPEN_TIMEOUT```   | Maximum seconds allowed to open an SMTP connection. The default is 5.                   | 1 - 2           | ```production```                    | ```.env``` file |
+| ```SMTP_READ_TIMEOUT```   | Maximum seconds allowed while reading an SMTP response. The default is 10.              | 1 - 2           | ```production```                    | ```.env``` file |
 | ```EMAIL_BUG_REPORT```    | Email address to receive bug reports.                                                    | 1 - 2           | ```development```, ```production``` | ```.env``` file |
 | ```EMAIL_ADMIN```         | Email address to receive general questions.                                              | 1 - 2           | ```development```, ```production``` | ```.env``` file |
+| ```PRIVACY_CONTROLLER_NAME``` | Public name of the data controller shown in the privacy policy.                    | 1 - 2           | ```production```                    | ```.env``` file |
+| ```PRIVACY_HOSTING_PROVIDER``` | Public name of the hosting provider shown in the privacy policy.                   | 1 - 2           | ```production```                    | ```.env``` file |
+| ```PRIVACY_HOSTING_COUNTRY``` | Country or service region where the application data is processed.                  | 1 - 2           | ```production```                    | ```.env``` file |
+| ```PRIVACY_EMAIL_PROVIDER``` | Public name of the email provider shown in the privacy policy.                       | 1 - 2           | ```production```                    | ```.env``` file |
+| ```PRIVACY_EMAIL_PROVIDER_COUNTRY``` | Country or service region where email data is processed.                    | 1 - 2           | ```production```                    | ```.env``` file |
+| ```PRIVACY_LOG_RETENTION_DAYS``` | Maximum ordinary retention period for technical logs.                             | 1 - 2           | ```production```                    | ```.env``` file |
+| ```PRIVACY_BACKUP_RETENTION_DAYS``` | Maximum ordinary retention period for backup copies.                            | 1 - 2           | ```production```                    | ```.env``` file |
 | ```RAILS_LOG_TO_STDOUT``` | When present, forces the application to write its logs to the standard output.           | 1 - 2           | ```production```                    | ```.env``` file |
 | ```RAILS_MAX_THREADS```   | Maximum thread count and database connection pool size. The default is 5.                | 1 - 2           | all environments                    | ```.env``` file |
+| ```RS_SERVER_BIND_ADDRESS``` | Address published by Compose. The secure default is ```127.0.0.1```.                  | 2               | ```production```                    | ```.env``` file |
+| ```RS_SERVER_PORT```      | Host port published by Compose. The default is 3000.                                     | 2               | ```production```                    | ```.env``` file |
+| ```RS_SERVER_CPU_LIMIT``` | CPU limit applied to the setup and web containers. The default is 1.0.                   | 2               | ```production```                    | ```.env``` file |
+| ```RS_SERVER_MEMORY_LIMIT``` | Memory limit applied to the setup and web containers. The default is 1 GiB.          | 2               | ```production```                    | ```.env``` file |
+| ```RS_SERVER_PID_LIMIT``` | Process limit applied to the setup and web containers. The default is 256.               | 2               | ```production```                    | ```.env``` file |
+| ```RS_DATABASE_CPU_LIMIT``` | CPU limit applied to PostgreSQL. The default is 1.0.                                  | 2               | ```production```                    | ```.env``` file |
+| ```RS_DATABASE_MEMORY_LIMIT``` | Memory limit applied to PostgreSQL. The default is 512 MiB.                       | 2               | ```production```                    | ```.env``` file |
+| ```RS_DATABASE_PID_LIMIT``` | Process limit applied to PostgreSQL. The default is 128.                              | 2               | ```production```                    | ```.env``` file |
+| ```RS_LOG_MAX_SIZE```     | Maximum size of one Docker log segment. The default is 10 MiB.                           | 2               | ```production```                    | ```.env``` file |
+| ```RS_LOG_MAX_FILES```    | Number of Docker log segments retained for each service. The default is 5.               | 2               | ```production```                    | ```.env``` file |
 | ```PUBLIC_BASE_URL```     | Public HTTP or HTTPS origin used for external links and allowed host validation. Required in production. | 1 - 2 | ```production``` | ```.env``` file |
 | ```ADDITIONAL_ALLOWED_HOSTS``` | Additional accepted request hosts, separated by commas. Use only for trusted proxies or internal checks that cannot call ```/up```. | 1 - 2 | ```production``` | ```.env``` file |
 | ```CORS_ALLOWED_ORIGINS``` | Origins allowed to call the API, separated by commas. In production, an omitted value disables requests from other origins. | 1 - 2 | ```production``` | ```.env``` file |
 | ```FORCE_SSL```           | Set to ```true``` when the public instance is served through HTTPS.                      | 1 - 2           | ```production```                    | ```.env``` file |
+| ```ASSUME_SSL```          | Set to ```true``` only when every request reaches Rails through an HTTPS terminating proxy. | 1 - 2        | ```production```                    | ```.env``` file |
 | ```RS_PDF_MAX_DOWNLOAD_BYTES``` | Maximum accepted publication size in bytes. The default is 52428800 (50 MiB).     | 1 - 2           | ```development```, ```production``` | ```.env``` file |
 | ```RS_PDF_OPEN_TIMEOUT``` | Maximum number of seconds allowed to open a publication connection. The default is 5.    | 1 - 2           | ```development```, ```production``` | ```.env``` file |
 | ```RS_PDF_READ_TIMEOUT``` | Maximum number of seconds allowed while reading a publication response. The default is 20. | 1 - 2         | ```development```, ```production``` | ```.env``` file |
@@ -211,9 +236,18 @@ SMTP_USERNAME=your_smtp_username
 SMTP_PASSWORD=your_smtp_password
 SMTP_DOMAIN_NAME=your_smtp_domain_name
 SMTP_DOMAIN_ADDRESS=your_smtp_domain_address
+SMTP_PORT=587
 EMAIL_BUG_REPORT=your_bug_report_mail
 EMAIL_ADMIN=your_contact_mail
 PUBLIC_BASE_URL=https://your-readersourcing-domain.example
+FORCE_SSL=true
+PRIVACY_CONTROLLER_NAME=your_data_controller_name
+PRIVACY_HOSTING_PROVIDER=your_hosting_provider
+PRIVACY_HOSTING_COUNTRY=your_hosting_country
+PRIVACY_EMAIL_PROVIDER=your_email_provider
+PRIVACY_EMAIL_PROVIDER_COUNTRY=your_email_provider_country
+PRIVACY_LOG_RETENTION_DAYS=30
+PRIVACY_BACKUP_RETENTION_DAYS=30
 ```
 
 When using the supplied Compose configuration, replace `DATABASE_URL` with `POSTGRES_USER`, `POSTGRES_PASSWORD`, and
@@ -222,6 +256,7 @@ When using the supplied Compose configuration, replace `DATABASE_URL` with `POST
 `PUBLIC_BASE_URL` must contain only the public origin of RS_Server, including the scheme and optional port, without a path,
 query string, fragment, or credentials. Production refuses to start without this value and accepts that host by default.
 For a public instance, set `FORCE_SSL=true` after HTTPS has been configured.
+Set `ASSUME_SSL=true` only if HTTPS terminates at a trusted proxy and every application request arrives through that proxy.
 Set `CORS_ALLOWED_ORIGINS` to the exact origins of web clients that may call the API, separated by
 commas. RS_Rate requests browser permission for the selected RS_Server origin and therefore does not depend on its
 generated extension origin being listed here. Supplying `CORS_ALLOWED_ORIGINS=*` permits requests from every origin and
@@ -250,9 +285,14 @@ An installation that still keeps prepared files under `public/user` can move the
 running `bin/rails publications:migrate_private_storage`. The task stops if the destination already exists, so it does not
 merge two storage trees implicitly. Files can instead be prepared again if the old copies are no longer required.
 
-The endpoint `GET /up` reports whether Rails can boot successfully and can be used for local or load balancer health
-checks. Database migration is not part of the server entrypoint. On a container platform, run `bin/rails db:migrate`
-as a separate deployment task before starting or replacing the application process.
+The endpoint `GET /up` reports whether Rails can boot successfully. The endpoint `GET /ready` also checks PostgreSQL and
+private publication storage. Database migration is not part of the server entrypoint. On a container platform, run
+`bin/rails db:migrate` as a separate deployment task before starting or replacing the application process, then run
+`bin/rails deployment:check` to verify migrations, storage, database access, and SMTP access.
+
+The production privacy policy describes only the processing performed by the current application. Its controller,
+provider, location, and retention values come from the production environment. The operator must verify these values
+against the actual hosting and email arrangements before public access is enabled.
 
 The publication preparation API returns a stable `status` for recoverable failures, including unavailable sources,
 authentication requirements, size limits, malformed or encrypted PDFs, RS_PDF failures, and final verification failures.
@@ -273,11 +313,16 @@ evaluation. The policy also prevents framing, external form targets, and object 
 Access to browser capabilities is disabled for the camera, screen capture, location, microphone, payment, and USB
 interfaces. Rails adds HSTS only when `FORCE_SSL=true`.
 
+The current operating system package assessment for the published image is recorded in
+[`docs/security.md`](docs/security.md). It must be reviewed again whenever the image digest or inherited package graph
+changes.
+
 <h3>Sending Mails</h3>
 
 RS_Server supports any mail server compatible with SMTP to send emails for tasks such as confirming user registration, reporting bugs,
 or recovering forgotten passwords. Password recovery emails contain a link that remains valid for four hours and can be used
-once to choose a new password; passwords themselves are never sent by email.
+once to choose a new password; passwords themselves are never sent by email. Production SMTP connections require a
+successful STARTTLS upgrade before authentication credentials are sent.
 
 Understanding the values used to populate the `SMTP_` environment variables can sometimes lead to ambiguity. Let's consider
 the case of [Twilio Sendgrid](https://sendgrid.com/). After creating an account, you need to verify a single

@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
 	root to: 'application#home'
 	get 'up', to: 'rails/health#show', as: :rails_health_check
+	get 'ready', to: 'health#ready', as: :deployment_readiness
 
 	scope format: true, constraints: {format: :json} do
 		resources :publications, only: [:index, :show, :create] do

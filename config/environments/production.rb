@@ -52,6 +52,7 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # Keep local HTTP deployments available unless the operator explicitly enables this policy.
   config.force_ssl = ENV["FORCE_SSL"] == "true"
+  config.assume_ssl = ENV["ASSUME_SSL"] == "true"
 
   configured_public_origin = ENV["PUBLIC_BASE_URL"].presence
   raise "PUBLIC_BASE_URL is not configured" unless configured_public_origin
@@ -75,7 +76,7 @@ Rails.application.configure do
     config.hosts << normalized_host if normalized_host.present?
   end
   config.host_authorization = {
-    exclude: ->(request) { request.path == "/up" }
+    exclude: ->(request) { %w[/up /ready].include?(request.path) }
   }
 
   # Use the lowest log level to ensure availability of diagnostic information
@@ -93,17 +94,20 @@ Rails.application.configure do
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "RS_Server_#{Rails.env}"
 
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = true
+  mailer_url_options = {host: public_uri.host, protocol: public_uri.scheme}
+  mailer_url_options[:port] = public_uri.port unless [80, 443].include?(public_uri.port)
+  config.action_mailer.default_url_options = mailer_url_options
+  config.action_mailer.raise_delivery_errors = true
   ActionMailer::Base.smtp_settings = {
     :user_name => ENV['SMTP_USERNAME'],
     :password => ENV['SMTP_PASSWORD'],
     :domain => ENV['SMTP_DOMAIN_NAME'],
     :address => ENV['SMTP_DOMAIN_ADDRESS'],
-    :port => 587,
-    :authentication => :plain,
-    :enable_starttls_auto => true
+    :port => ENV.fetch('SMTP_PORT', 587).to_i,
+    :authentication => ENV.fetch('SMTP_AUTHENTICATION', 'plain').to_sym,
+    :enable_starttls => :always,
+    :open_timeout => ENV.fetch('SMTP_OPEN_TIMEOUT', 5).to_i,
+    :read_timeout => ENV.fetch('SMTP_READ_TIMEOUT', 10).to_i
   }
   config.action_mailer.perform_deliveries = true
   config.action_mailer.perform_caching = true

@@ -3,3 +3,6 @@ app/assets/javascripts/system/* linguist-vendored
 app/assets/stylesheets/system/* linguist-vendored
 *.scss linguist-detectable=false
 *.coffee linguist-detectable=false
+/entrypoint.sh text eol=lf
+/bin/* text eol=lf
+/Dockerfile text eol=lf

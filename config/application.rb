@@ -15,6 +15,7 @@ module Readersourcing2
     config.autoload_lib(ignore: %w[assets tasks])
 
     config.i18n.default_locale = :en
+    config.active_storage.variant_processor = :disabled
 
     # Rails supplies the remaining default security headers. These explicit
     # values tighten framing and prevent paper reference paths from being sent

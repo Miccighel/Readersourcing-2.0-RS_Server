@@ -1,0 +1,67 @@
+#!/bin/sh
+set -eu
+
+if [ "$#" -ne 2 ] || [ "$1" != "--confirm" ]; then
+	echo "Usage: bin/restore_backup --confirm BACKUP_DIRECTORY" >&2
+	echo "This operation replaces the current database and prepared publications." >&2
+	exit 64
+fi
+
+backup_directory=$2
+case "$backup_directory" in
+	""|"/")
+		echo "Refusing an empty or root backup directory." >&2
+		exit 64
+		;;
+esac
+
+backup_directory=$(cd "$backup_directory" && pwd -P)
+for required_file in database.dump publications.tar.gz SHA256SUMS; do
+	if [ ! -f "$backup_directory/$required_file" ]; then
+		echo "Missing backup file: $required_file" >&2
+		exit 66
+	fi
+done
+
+(
+	cd "$backup_directory"
+	if command -v sha256sum >/dev/null 2>&1; then
+		sha256sum -c SHA256SUMS
+	elif command -v shasum >/dev/null 2>&1; then
+		shasum -a 256 -c SHA256SUMS
+	else
+		echo "A SHA256 checksum command is required." >&2
+		exit 69
+	fi
+)
+
+archive_listing=$(mktemp "${TMPDIR:-/tmp}/rs_server_restore.XXXXXX")
+trap 'rm -f "$archive_listing"' EXIT HUP INT TERM
+tar -tzf "$backup_directory/publications.tar.gz" > "$archive_listing"
+
+if awk '/^\// || /(^|\/)\.\.($|\/)/ { invalid = 1 } END { exit invalid }' "$archive_listing"
+then
+	:
+else
+	echo "The publication archive contains an unsafe path." >&2
+	exit 65
+fi
+
+database_container=$(docker compose ps --status running --quiet database)
+if [ -z "$database_container" ]; then
+	echo "The database container must be running." >&2
+	exit 69
+fi
+
+docker compose stop rs_server_webapp
+
+docker compose exec -T database sh -c \
+	'exec pg_restore --clean --if-exists --no-owner --no-privileges --username="$POSTGRES_USER" --dbname="$POSTGRES_DB"' \
+	< "$backup_directory/database.dump"
+
+docker compose run --rm --no-deps --entrypoint /bin/sh rs_server_webapp -c \
+	'find /rs_server/storage/publications/user -mindepth 1 -maxdepth 1 -exec rm -rf -- {} + && tar -xzf - -C /rs_server/storage/publications/user' \
+	< "$backup_directory/publications.tar.gz"
+
+docker compose up -d rs_server_webapp
+echo "Restore completed. Wait for /ready to report a successful status."

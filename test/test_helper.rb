@@ -1,7 +1,15 @@
 ENV['RAILS_ENV'] ||= 'test'
+require 'tmpdir'
+require 'fileutils'
+TEST_PUBLICATION_STORAGE_ROOT = File.join(Dir.tmpdir, "rs_server_test_publications_#{Process.pid}")
+ENV['RS_PDF_STORAGE_ROOT'] = TEST_PUBLICATION_STORAGE_ROOT
 require_relative '../config/environment'
 require 'rails/test_help'
 require 'minitest/mock'
+
+Minitest.after_run do
+  FileUtils.rm_rf(TEST_PUBLICATION_STORAGE_ROOT)
+end
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.

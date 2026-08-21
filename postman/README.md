@@ -25,6 +25,9 @@ rating creation, validation, and request limits. They contain no personal data, 
 CSRF values, or generated HTML. Collection scripts report missing variables before a request is sent and check the
 essential form of these API responses.
 
+`Application (Readiness)` documents the public readiness response used by the Compose health check. It verifies database
+access and private publication storage. The separate `/up` route remains a liveness check for the Rails process.
+
 Operations that regenerate an annotated publication or change the reader's subscription preference use `POST`. The
 unsubscribe link included in rating emails opens a confirmation page; the preference changes only when the authenticated
 reader submits that form.

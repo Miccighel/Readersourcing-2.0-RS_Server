@@ -1,0 +1,31 @@
+name: Container scan
+
+on:
+  schedule:
+    - cron: "30 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  published-image:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+    steps:
+      - name: Explain missing Docker Hub credentials
+        if: env.DOCKERHUB_USERNAME == '' || env.DOCKERHUB_TOKEN == ''
+        run: echo "Configure DOCKERHUB_USERNAME and DOCKERHUB_TOKEN to enable the scheduled Docker Scout scan."
+      - name: Scan the published image
+        if: env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_TOKEN != ''
+        uses: docker/scout-action@v1
+        with:
+          command: cves,recommendations
+          image: miccighel/rs_server:v2.0.0
+          only-severities: critical,high
+          exit-code: false
+          dockerhub-user: ${{ secrets.DOCKERHUB_USERNAME }}
+          dockerhub-password: ${{ secrets.DOCKERHUB_TOKEN }}

@@ -63,7 +63,7 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     refute_includes serialized_collection, "authTokenPaper"
 
     responses = @requests.flat_map { |item| item.fetch("response") }
-    assert_equal 15, responses.length
+    assert_equal 17, responses.length
     responses.each do |response|
       refute response.fetch("header").any? { |header| header.fetch("key").casecmp?("Set-Cookie") }
     end
@@ -171,6 +171,7 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     end
 
     assert operations.key?(["GET", "{{host}}/software"])
+    assert operations.key?(["GET", "{{host}}/ready"])
     assert operations.key?(["GET", "{{host}}/password/reset?email={{email}}&reset_token={{resetToken}}"])
     assert operations.key?(["POST", "{{host}}/password/reset"])
     assert operations.key?(["POST", "{{host}}/publications/{{publicationId}}/refresh.json"])

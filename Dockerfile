@@ -9,6 +9,7 @@ WORKDIR /rs_server
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
+    BUNDLE_USER_HOME="/tmp/bundler" \
     BUNDLE_WITHOUT="development:test"
 
 RUN apt-get update -qq && \
@@ -38,8 +39,15 @@ FROM base
 COPY --from=build /usr/local/bundle /usr/local/bundle
 RUN groupadd --system --gid 1000 rails && \
     useradd --uid 1000 --gid rails --create-home --shell /bin/sh rails
-COPY --from=build /rs_server /rs_server
-RUN mkdir -p log tmp/pids storage/publications/user && \
+COPY --from=build /rs_server/Gemfile /rs_server/Gemfile.lock /rs_server/Rakefile /rs_server/config.ru /rs_server/entrypoint.sh ./
+COPY --from=build /rs_server/app ./app
+COPY --from=build /rs_server/bin/rails /rs_server/bin/rake ./bin/
+COPY --from=build /rs_server/config ./config
+COPY --from=build /rs_server/db ./db
+COPY --from=build /rs_server/lib ./lib
+COPY --from=build /rs_server/public ./public
+RUN chmod +x entrypoint.sh bin/rails bin/rake && \
+    mkdir -p log tmp/pids storage/publications/user && \
     chown -R rails:rails log tmp storage
 
 USER rails:rails

@@ -140,6 +140,10 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy user" do
+    user_storage = Publication.storage_root.join("user", @user.id.to_s)
+    FileUtils.mkdir_p(user_storage)
+    user_storage.join("prepared.pdf").write("prepared publication")
+
     assert_difference("User.count", -1) do
       assert_difference("AuthenticationToken.count", -1) do
         delete user_url(@user, format: :json), headers: @headers
@@ -147,6 +151,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :no_content
+    assert_not user_storage.exist?
   end
 
   test "should not destroy another user" do
