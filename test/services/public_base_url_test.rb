@@ -11,6 +11,7 @@ class PublicBaseUrlTest < ActiveSupport::TestCase
         "https://readersourcing.example/password/reset",
         public_url.join("/password/reset")
       )
+		assert_equal "https://readersourcing.example", public_url.to_s
     end
   end
 

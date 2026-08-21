@@ -25,6 +25,10 @@ class PublicBaseUrl
 		"#{@uri}#{path}"
 	end
 
+	def to_s
+		@uri.to_s
+	end
+
 	private
 
 	def validate!

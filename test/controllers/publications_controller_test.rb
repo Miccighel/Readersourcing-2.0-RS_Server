@@ -61,7 +61,24 @@ class PublicationsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_equal @publication.pdf_url, response.parsed_body.fetch("pdf_url")
+		download_url = response.parsed_body.fetch("pdf_download_url_link")
+		assert download_url.start_with?("http://www.example.com/publications/#{@publication.id}/download/annotated/")
+		assert download_url.end_with?("/#{@publication.pdf_name_link}")
   end
+
+	test "should use the configured public origin for publication links" do
+		previous_origin = ENV["PUBLIC_BASE_URL"]
+		ENV["PUBLIC_BASE_URL"] = "https://readersourcing.example"
+
+		get publication_url(@publication, format: :json, host: "attacker.example"), headers: @headers
+
+		assert_response :success
+		assert response.parsed_body.fetch("pdf_download_url_link").start_with?(
+			"https://readersourcing.example/publications/#{@publication.id}/download/annotated/"
+		)
+	ensure
+		previous_origin.nil? ? ENV.delete("PUBLIC_BASE_URL") : ENV["PUBLIC_BASE_URL"] = previous_origin
+	end
 
   test "should route publication refresh through post" do
     route = Rails.application.routes.recognize_path(

@@ -1,7 +1,19 @@
 require "test_helper"
 require "tempfile"
+require "tmpdir"
 
 class PublicationTest < ActiveSupport::TestCase
+
+	setup do
+		@storage_root = Dir.mktmpdir("rs-server-publications-")
+		@previous_storage_root = ENV["RS_PDF_STORAGE_ROOT"]
+		ENV["RS_PDF_STORAGE_ROOT"] = @storage_root
+	end
+
+	teardown do
+		@previous_storage_root.nil? ? ENV.delete("RS_PDF_STORAGE_ROOT") : ENV["RS_PDF_STORAGE_ROOT"] = @previous_storage_root
+		FileUtils.remove_entry(@storage_root) if File.exist?(@storage_root)
+	end
 
   test "normalizes a PDF name before constructing storage paths" do
     assert_equal "Reader", Publication.safe_pdf_stem("../../Reader.pdf")
@@ -53,6 +65,8 @@ class PublicationTest < ActiveSupport::TestCase
     assert_equal "Reader.pdf", publication.reload.pdf_name
     assert_equal "Reader-Link.pdf", publication.pdf_name_link
     assert_path_exists publication.send(:absolute_pdf_download_path_link, user)
+    assert publication.send(:absolute_pdf_download_path_link, user).to_s.start_with?(@storage_root)
+    refute publication.send(:absolute_pdf_download_path_link, user).to_s.start_with?(Rails.public_path.to_s)
     assert_not File.exist?(publication.send(:absolute_pdf_download_path, user))
     reference = Rack::Utils.unescape_path(URI.parse(captured_url).path.split("/").last)
     assert_equal user, PaperRatingReference.resolve(reference, publication: publication)

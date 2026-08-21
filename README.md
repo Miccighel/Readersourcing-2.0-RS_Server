@@ -135,13 +135,15 @@ If you do not see them, please be sure to be in the main directory of the cloned
 
 Copy ```.env.example``` to ```.env``` and replace its placeholder values. Before proceeding, _be sure that your Docker Engine is running_, otherwise the following commands will not work.
 The current Compose configuration builds RS_Server locally using Ruby 3.4 and starts PostgreSQL 17. Type
-```docker compose up --build``` and wait for the image build and database health check to complete. The container entrypoint runs
-```bin/rails db:create``` and ```bin/rails db:migrate``` before starting the server. Seeding remains optional.
+```docker compose up --build``` and wait for the image build and database health check to complete. A dedicated setup
+service runs ```bin/rails db:prepare``` and must complete before the application starts. Seeding remains optional.
 
 RS_Server will be bound to port ```3000``` in the ```production``` environment. Every HTTP request must therefore be sent to
 ```http://localhost:3000```. To seed sample data, type
 ```docker compose run --rm rs_server_webapp bin/rails db:seed```. To stop the containers, type ```docker compose down```.
 The named volumes retain both the PostgreSQL data and the prepared publications when the containers are recreated.
+The application container runs as an unprivileged user with a read only root file system. Temporary directories and the
+private publication volume are the only writable application locations.
 
 <h4>Quick Cheatsheet</h4>
 
@@ -176,7 +178,8 @@ along with an explanation of which deployment modality requires their usage.
 | ```EMAIL_ADMIN```         | Email address to receive general questions.                                              | 1 - 2           | ```development```, ```production``` | ```.env``` file |
 | ```RAILS_LOG_TO_STDOUT``` | When present, forces the application to write its logs to the standard output.           | 1 - 2           | ```production```                    | ```.env``` file |
 | ```RAILS_MAX_THREADS```   | Maximum thread count and database connection pool size. The default is 5.                | 1 - 2           | all environments                    | ```.env``` file |
-| ```PUBLIC_BASE_URL```     | Public HTTP or HTTPS origin used to generate password recovery links. Required for password recovery in production. | 1 - 2 | ```production``` | ```.env``` file |
+| ```PUBLIC_BASE_URL```     | Public HTTP or HTTPS origin used for external links and allowed host validation. Required in production. | 1 - 2 | ```production``` | ```.env``` file |
+| ```ADDITIONAL_ALLOWED_HOSTS``` | Additional accepted request hosts, separated by commas. Use only for trusted proxies or internal checks that cannot call ```/up```. | 1 - 2 | ```production``` | ```.env``` file |
 | ```CORS_ALLOWED_ORIGINS``` | Origins allowed to call the API, separated by commas. In production, an omitted value disables requests from other origins. | 1 - 2 | ```production``` | ```.env``` file |
 | ```FORCE_SSL```           | Set to ```true``` when the public instance is served through HTTPS.                      | 1 - 2           | ```production```                    | ```.env``` file |
 | ```RS_PDF_MAX_DOWNLOAD_BYTES``` | Maximum accepted publication size in bytes. The default is 52428800 (50 MiB).     | 1 - 2           | ```development```, ```production``` | ```.env``` file |
@@ -184,6 +187,8 @@ along with an explanation of which deployment modality requires their usage.
 | ```RS_PDF_READ_TIMEOUT``` | Maximum number of seconds allowed while reading a publication response. The default is 20. | 1 - 2         | ```development```, ```production``` | ```.env``` file |
 | ```RS_PDF_PROCESS_TIMEOUT``` | Maximum RS_PDF execution time in seconds. The default is 60.                          | 1 - 2           | ```development```, ```production``` | ```.env``` file |
 | ```RS_PDF_ALLOW_PRIVATE_NETWORKS``` | Set to ```true``` only when publications must be fetched from a trusted private network. | 1 - 2 | ```development```, ```production``` | ```.env``` file |
+| ```RS_PDF_STORAGE_ROOT``` | Private directory used for prepared publications. The default is ```storage/publications```. | 1 - 2 | ```development```, ```production``` | ```.env``` file |
+| ```RS_PDF_DOWNLOAD_URL_TTL``` | Lifetime in seconds of a signed publication download URL. The default is 300.       | 1 - 2           | ```development```, ```production``` | ```.env``` file |
 | ```RS_AUTHENTICATION_RATE_LIMIT``` | Maximum authentication attempts from one IP address in three minutes. The default is 10. | 1 - 2 | ```development```, ```production``` | ```.env``` file |
 | ```RS_PASSWORD_RECOVERY_IP_RATE_LIMIT``` | Maximum password recovery requests from one IP address in fifteen minutes. The default is 5. | 1 - 2 | ```development```, ```production``` | ```.env``` file |
 | ```RS_PASSWORD_RECOVERY_ACCOUNT_RATE_LIMIT``` | Maximum password recovery requests for one normalized email address in thirty minutes. The default is 3. | 1 - 2 | ```development```, ```production``` | ```.env``` file |
@@ -212,7 +217,8 @@ When using the supplied Compose configuration, replace `DATABASE_URL` with `POST
 `POSTGRES_DB`. Compose supplies `POSTGRES_HOST=database` to RS_Server so that it can reach the database container.
 
 `PUBLIC_BASE_URL` must contain only the public origin of RS_Server, including the scheme and optional port, without a path,
-query string, fragment, or credentials. For a public instance, set `FORCE_SSL=true` after HTTPS has been configured.
+query string, fragment, or credentials. Production refuses to start without this value and accepts that host by default.
+For a public instance, set `FORCE_SSL=true` after HTTPS has been configured.
 Set `CORS_ALLOWED_ORIGINS` to the exact origins of web clients that may call the API, separated by
 commas. RS_Rate requests browser permission for the selected RS_Server origin and therefore does not depend on its
 generated extension origin being listed here. Supplying `CORS_ALLOWED_ORIGINS=*` permits requests from every origin and
@@ -229,6 +235,21 @@ this header remain stateless.
 
 Publication records are shared among readers. The API therefore exposes their creation and retrieval, together with the
 dedicated fetching and refresh operations, but does not expose generic update or deletion routes.
+
+Prepared publications are stored outside the public asset directory. The `pdf_download_url` and
+`pdf_download_url_link` response fields contain signed URLs that are bound to one reader, publication, variant, and file
+name. They expire after five minutes by default and are returned with private, non cacheable response headers. This keeps
+the existing browser and RS_Rate workflow, which opens the annotated file in a new tab without adding an authorization
+header. Logging out does not revoke a URL that has already been issued; its remaining lifetime is deliberately short.
+The `pdf_storage_path` and `pdf_download_path` fields remain logical compatibility metadata and are not public file paths.
+
+An installation that still keeps prepared files under `public/user` can move them to the private directory once by
+running `bin/rails publications:migrate_private_storage`. The task stops if the destination already exists, so it does not
+merge two storage trees implicitly. Files can instead be prepared again if the old copies are no longer required.
+
+The endpoint `GET /up` reports whether Rails can boot successfully and can be used for local or load balancer health
+checks. Database preparation is not part of the server entrypoint. On a container platform, run `bin/rails db:prepare`
+once as a separate deployment task before starting or replacing the application process.
 
 The publication preparation API returns a stable `status` for recoverable failures, including unavailable sources,
 authentication requirements, size limits, malformed or encrypted PDFs, RS_PDF failures, and final verification failures.

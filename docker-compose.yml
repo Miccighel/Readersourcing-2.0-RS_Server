@@ -1,4 +1,24 @@
 services:
+  rs_server_setup:
+    build: .
+    env_file: .env
+    environment:
+      POSTGRES_HOST: database
+      RAILS_ENV: production
+    command: ["./bin/rails", "db:prepare"]
+    depends_on:
+      database:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /rs_server/tmp
+      - /rs_server/log
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
   rs_server_webapp:
     build: .
     env_file: .env
@@ -10,8 +30,25 @@ services:
     depends_on:
       database:
         condition: service_healthy
+      rs_server_setup:
+        condition: service_completed_successfully
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /rs_server/tmp
+      - /rs_server/log
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test: ["CMD", "ruby", "-rnet/http", "-e", "exit(Net::HTTP.get_response(URI('http://127.0.0.1:3000/up')).is_a?(Net::HTTPSuccess) ? 0 : 1)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
-      - rs_server_publications:/rs_server/public/user
+      - rs_server_publications:/rs_server/storage/publications/user
 
   database:
     image: postgres:17

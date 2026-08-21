@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
 	root to: 'application#home'
+	get 'up', to: 'rails/health#show', as: :rails_health_check
 
 	scope format: true, constraints: {format: :json} do
 		resources :publications, only: [:index, :show, :create] do
@@ -43,6 +44,10 @@ Rails.application.routes.draw do
 	post 'authenticate', to: 'authentication#authenticate', as: :authenticate, constraints: {:format => :json}
 
 	get 'publications/list/', to: 'publications#list', as: :publications_list, constraints: {:format => 'html'}
+	get 'publications/:id/download/:variant/:reference/:filename',
+		to: 'publication_downloads#show',
+		as: :publication_download,
+		constraints: {variant: /original|annotated/, filename: /[^\/]+\.pdf/i}
 
 	get 'readers/list/', to: 'users#list', as: :users_list, constraints: {:format => 'html'}
 	get 'profile/edit/', to: 'users#edit', as: :profile, constraints: {:format => 'html'}

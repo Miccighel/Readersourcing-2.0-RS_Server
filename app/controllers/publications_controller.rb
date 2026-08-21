@@ -146,7 +146,7 @@ class PublicationsController < ApplicationController
 
 	def set_request_data
 		@request_data = {}
-		@request_data[:host] = "#{request.protocol}#{request.host_with_port}"
+		@request_data[:host] = PublicBaseUrl.for(request).to_s
 		@request_data[:user] = current_user
 	end
 

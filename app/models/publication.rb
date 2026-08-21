@@ -91,7 +91,7 @@ class Publication < ApplicationRecord
 
 	# Extracts the BaseUrl metadata from an uploaded PDF file.
 	def self.extract_base_url(file, user, request_data)
-		current_host = request_data.values[1]
+		current_host = request_data.fetch(:host)
 		logger.info "Copying temporary file with original name: #{file.original_filename}"
 		FileUtils::mkdir_p absolute_pdf_storage_temp_path(user)
 		temp_file_name_without_ext = remove_extension_from_filename(file.original_filename)
@@ -156,14 +156,43 @@ class Publication < ApplicationRecord
 	end
 
 	def pdf_download_url(host, user)
-		pdf_name_without_ext = remove_extension_from_filename(pdf_name)
-		pdf_name = "#{pdf_name_without_ext}.pdf"
-		"#{host}/user/#{user.id}/#{pdf_storage_path}#{pdf_name}"
+		pdf_url_for(host, user, variant: "original")
 	end
 
 	def pdf_download_url_link(host, user)
-		pdf_name_without_ext = remove_extension_from_filename(pdf_name)
-		"#{host}/user/#{user.id}/#{pdf_storage_path}#{pdf_name_without_ext}#{Settings.rs_pdf_link_suffix}.pdf"
+		pdf_url_for(host, user, variant: "annotated")
+	end
+
+	def pdf_file_path(user, variant:)
+		case variant.to_s
+		when "original"
+			absolute_pdf_download_path(user)
+		when "annotated"
+			absolute_pdf_download_path_link(user)
+		else
+			raise ArgumentError, "Unsupported PDF variant"
+		end
+	end
+
+	def pdf_filename(variant:)
+		case variant.to_s
+		when "original"
+			"#{remove_extension_from_filename(pdf_name)}.pdf"
+		when "annotated"
+			"#{remove_extension_from_filename(pdf_name)}#{Settings.rs_pdf_link_suffix}.pdf"
+		else
+			raise ArgumentError, "Unsupported PDF variant"
+		end
+	end
+
+	def self.storage_root
+		configured_path = ENV["RS_PDF_STORAGE_ROOT"].presence
+		configured_path ||= Rails.root.join("storage", "publications").to_s
+		Pathname.new(configured_path).expand_path
+	end
+
+	def self.absolute_pdf_storage_temp_path(user)
+		storage_root.join("user", user.id.to_s, "tmp")
 	end
 
 	private
@@ -187,6 +216,23 @@ class Publication < ApplicationRecord
 
 	def safe_pdf_stem(filename)
 		self.class.safe_pdf_stem(filename)
+	end
+
+	def pdf_url_for(host, user, variant:)
+		filename = pdf_filename(variant: variant)
+		reference = PublicationDownloadReference.issue(
+			user: user,
+			publication: self,
+			variant: variant,
+			filename: filename
+		)
+		path = Rails.application.routes.url_helpers.publication_download_path(
+			id: id,
+			variant: variant,
+			reference: reference,
+			filename: filename
+		)
+		"#{host.to_s.delete_suffix("/")}#{path}"
 	end
 
 	def load_pdf_paths(pdf_name, host)
@@ -235,19 +281,15 @@ class Publication < ApplicationRecord
 	end
 
 	def absolute_pdf_storage_path(user)
-		Rails.public_path.join("user").join(user.id.to_s).join(pdf_storage_path)
+		self.class.storage_root.join("user", user.id.to_s, pdf_storage_path)
 	end
 
 	def absolute_pdf_download_path(user)
-		Rails.public_path.join("user").join(user.id.to_s).join(pdf_download_path)
+		self.class.storage_root.join("user", user.id.to_s, pdf_download_path)
 	end
 
 	def absolute_pdf_download_path_link(user)
-		Rails.public_path.join("user").join(user.id.to_s).join(pdf_download_path_link)
-	end
-
-	def self.absolute_pdf_storage_temp_path(user)
-		Rails.public_path.join("user").join(user.id.to_s).join("tmp")
+		self.class.storage_root.join("user", user.id.to_s, pdf_download_path_link)
 	end
 
 end

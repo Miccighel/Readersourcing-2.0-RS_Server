@@ -32,8 +32,9 @@ reader submits that form.
 `Publications (Fetch)` retrieves and prepares a remote PDF in one operation. If the publication host requires the reader's
 browser session or cannot be reached by RS_Server, `Publications (Fetch Upload)` accepts the original PDF together with its
 stable publication URL. Both operations open the source as a PDF, invoke RS_PDF, and verify the generated rating page and
-embedded URL before making the prepared copy available. Preparation failures include a stable `status` field intended for
-API clients and the two Readersourcing interfaces.
+embedded URL before making the prepared copy available. Prepared copies are kept in private storage. The returned
+`pdf_download_url` fields are signed, expire shortly, and can still be opened directly by RS_Rate or the web interface.
+Preparation failures include a stable `status` field intended for API clients and the two Readersourcing interfaces.
 
 ## Publishing an update
 

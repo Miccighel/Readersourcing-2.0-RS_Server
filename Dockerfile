@@ -30,13 +30,19 @@ COPY .yarn ./.yarn
 RUN node .yarn/releases/yarn-3.6.3.cjs install --immutable
 
 COPY . .
-RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile && \
+RUN PUBLIC_BASE_URL=http://localhost:3000 SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile && \
     rm -rf node_modules
 
 FROM base
 
 COPY --from=build /usr/local/bundle /usr/local/bundle
+RUN groupadd --system --gid 1000 rails && \
+    useradd --uid 1000 --gid rails --create-home --shell /bin/sh rails
 COPY --from=build /rs_server /rs_server
+RUN mkdir -p log tmp/pids storage/publications/user && \
+    chown -R rails:rails log tmp storage
+
+USER rails:rails
 
 ENTRYPOINT ["./entrypoint.sh"]
 

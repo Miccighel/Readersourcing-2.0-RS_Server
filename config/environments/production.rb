@@ -1,3 +1,5 @@
+require "uri"
+
 Rails.application.configure do
 
   #Rails.application.routes.default_url_options[:host] = request.host
@@ -50,6 +52,31 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # Keep local HTTP deployments available unless the operator explicitly enables this policy.
   config.force_ssl = ENV["FORCE_SSL"] == "true"
+
+  configured_public_origin = ENV["PUBLIC_BASE_URL"].presence
+  raise "PUBLIC_BASE_URL is not configured" unless configured_public_origin
+
+  begin
+    public_uri = URI.parse(configured_public_origin)
+    valid_origin = public_uri.is_a?(URI::HTTP) &&
+      public_uri.host.present? &&
+      public_uri.userinfo.nil? &&
+      public_uri.query.nil? &&
+      public_uri.fragment.nil? &&
+      (public_uri.path.blank? || public_uri.path == "/")
+    raise URI::InvalidURIError unless valid_origin
+  rescue URI::InvalidURIError
+    raise "PUBLIC_BASE_URL must be an HTTP or HTTPS origin"
+  end
+
+  config.hosts << public_uri.host
+  ENV.fetch("ADDITIONAL_ALLOWED_HOSTS", "").split(",").each do |host|
+    normalized_host = host.strip
+    config.hosts << normalized_host if normalized_host.present?
+  end
+  config.host_authorization = {
+    exclude: ->(request) { request.path == "/up" }
+  }
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.

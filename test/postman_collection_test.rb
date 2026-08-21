@@ -107,6 +107,8 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     assert_equal 201, examples.dig("Publications (Fetch)", "Publication prepared", "code")
     assert_equal "complete", prepared.fetch("preparation_status")
     assert prepared.fetch("pdf_download_url_link").end_with?("-Link.pdf")
+		assert_includes prepared.fetch("pdf_download_url_link"), "/download/annotated/signed-reference/"
+		refute_includes prepared.fetch("pdf_download_url_link"), "/user/"
 
     malformed = JSON.parse(examples.dig("Publications (Fetch)", "Malformed PDF", "body"))
     assert_equal "malformed_pdf", malformed.fetch("status")
