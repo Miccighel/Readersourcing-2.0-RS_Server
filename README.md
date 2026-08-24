@@ -28,7 +28,7 @@ The current development line is version **2.0.1**.
 - <a href="https://zenodo.org/record/1446468">Original Article (Zenodo)</a>
 - <a href="https://zenodo.org/record/1452397">Technical Documentation (Zenodo)</a>
 - <a href="https://github.com/Miccighel/Readersourcing-2.0-TechnicalDocumentation"> Technical Documentation (GitHub)</a>
-- <a href="https://documenter.getpostman.com/view/4632696/2sBYArVYJn">RESTful API Interface</a>
+- <a href="https://documenter.getpostman.com/view/4632696/2sBYAswWvk">RESTful API Interface</a>
 - <a href="https://hub.docker.com/r/miccighel/rs_server">Docker Hub</a>
 - <a href="https://doi.org/10.5281/zenodo.1442630">Zenodo Record</a>
 
