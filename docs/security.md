@@ -1,6 +1,6 @@
 # Container security assessment
 
-This record complements application dependency audits. It documents the review of the published `miccighel/rs_server:v2.0.0` image performed on August 21, 2026 for both `linux/amd64` and `linux/arm64`.
+This record complements application dependency audits. It documents the review of the published `miccighel/rs_server:v2.0.1` image performed on August 24, 2026 for both `linux/amd64` and `linux/arm64`. The multiarchitecture manifest has digest `sha256:de59229f1298338306124148f75f45ff371e74fbac5ac23d7e50d30928ec168e`; each platform includes SBOM and provenance attestations.
 
 Docker Scout reported two critical and two high findings in the Debian `perl-base` package inherited from `ruby:3.4.10-slim`:
 
@@ -11,7 +11,7 @@ Docker Scout reported two critical and two high findings in the Debian `perl-bas
 | [CVE-2026-48959](https://security-tracker.debian.org/tracker/CVE-2026-48959) | Named ZIP entry extraction through Perl `IO::Uncompress::Unzip` | PDF preparation does not use the affected Perl module |
 | [CVE-2026-48962](https://security-tracker.debian.org/tracker/CVE-2026-48962) | An output glob supplied to Perl `File::GlobMapper` | RS_Server does not invoke Perl or the affected module |
 
-The repository, bundled gems, entrypoint, and RS_PDF invocation contain no Perl execution path. The findings are therefore not known to be reachable through the current application requests. This conclusion is limited to version 2.0.0 and is not a general exception for future images. The vulnerable package remains present, so the findings must stay visible until a corrected Debian package is included.
+The repository, bundled gems, entrypoint, and RS_PDF invocation contain no Perl execution path. The findings are therefore not known to be reachable through the current application requests. This conclusion is limited to version 2.0.1 and is not a general exception for future images. The vulnerable package remains present, so the findings must stay visible until a corrected Debian package is included.
 
 Debian currently marks the Trixie package used by the image as vulnerable. Rebuilding from the same base does not remove these findings. Replacing the base with a distribution that uses another C library would change the runtime and must not be done without the complete Rails, PostgreSQL, Java, PDF, and browser workflow tests.
 

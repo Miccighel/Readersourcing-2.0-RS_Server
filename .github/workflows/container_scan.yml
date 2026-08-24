@@ -24,7 +24,7 @@ jobs:
         uses: docker/scout-action@v1
         with:
           command: cves,recommendations
-          image: miccighel/rs_server:v2.0.0
+          image: miccighel/rs_server:v2.0.1
           only-severities: critical,high
           exit-code: false
           dockerhub-user: ${{ secrets.DOCKERHUB_USERNAME }}

@@ -18,7 +18,7 @@ This is the official repository of **RS_Server**, which is part of the **Readers
 This repository is a [Git Submodule](https://git-scm.com/book/it/v2/Git-Tools-Submodules) of the main project, 
 whose components can be found by taking advantage of the links below.
 
-The current development line is version **2.0.0**.
+The current development line is version **2.0.1**.
 
 <h1>Useful Links</h1>
 
@@ -135,7 +135,7 @@ Now, type ```ls``` or ```dir```; you should see a ```docker-compose.yml``` file 
 If you do not see them, please be sure to be in the main directory of the cloned repository.
 
 Copy ```.env.example``` to ```.env``` and replace its placeholder values. Before proceeding, _be sure that your Docker Engine is running_, otherwise the following commands will not work.
-The current Compose configuration uses the public ```miccighel/rs_server:v2.0.0``` image and starts PostgreSQL 17. Type
+The current Compose configuration uses the public ```miccighel/rs_server:v2.0.1``` image and starts PostgreSQL 17. Type
 ```docker compose up``` and wait for the image download and database health check to complete. If the source code has been
 edited, use ```docker compose up --build``` to build the same image locally. A dedicated setup service runs
 ```bin/rails db:migrate``` and must complete before the application starts. Seeding remains optional.

@@ -6,7 +6,7 @@ x-logging: &default_logging
 
 services:
   rs_server_setup:
-    image: miccighel/rs_server:v2.0.0
+    image: miccighel/rs_server:v2.0.1
     build: .
     env_file: .env
     environment:
@@ -32,7 +32,7 @@ services:
     logging: *default_logging
 
   rs_server_webapp:
-    image: miccighel/rs_server:v2.0.0
+    image: miccighel/rs_server:v2.0.1
     build: .
     env_file: .env
     environment:
