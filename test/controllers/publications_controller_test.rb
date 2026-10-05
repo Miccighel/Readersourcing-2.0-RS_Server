@@ -1,10 +1,19 @@
 require "test_helper"
+require "tmpdir"
 
 class PublicationsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @publication = publications(:one)
     @user = users(:one)
     @headers = api_headers_for(@user)
+    @storage_root = Dir.mktmpdir("rs-publications-controller-")
+    @previous_storage_root = ENV["RS_PDF_STORAGE_ROOT"]
+    ENV["RS_PDF_STORAGE_ROOT"] = @storage_root
+  end
+
+  teardown do
+    @previous_storage_root.nil? ? ENV.delete("RS_PDF_STORAGE_ROOT") : ENV["RS_PDF_STORAGE_ROOT"] = @previous_storage_root
+    FileUtils.remove_entry_secure(@storage_root)
   end
 
   test "should get index" do
@@ -61,14 +70,17 @@ class PublicationsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_equal @publication.pdf_url, response.parsed_body.fetch("pdf_url")
-		download_url = response.parsed_body.fetch("pdf_download_url_link")
-		assert download_url.start_with?("http://www.example.com/publications/#{@publication.id}/download/annotated/")
-		assert download_url.end_with?("/#{@publication.pdf_name_link}")
+    assert_equal "not_prepared", response.parsed_body.fetch("preparation_status")
+    assert_nil response.parsed_body.fetch("pdf_download_url")
+    assert_nil response.parsed_body.fetch("pdf_download_url_link")
   end
 
-	test "should use the configured public origin for publication links" do
+  test "should use the configured public origin for publication links" do
 		previous_origin = ENV["PUBLIC_BASE_URL"]
-		ENV["PUBLIC_BASE_URL"] = "https://readersourcing.example"
+    ENV["PUBLIC_BASE_URL"] = "https://readersourcing.example"
+    copy = PublicationCopy.legacy(publication: @publication, user: @user)
+    FileUtils.mkdir_p(copy.directory)
+    FileUtils.cp(file_fixture("Reader.pdf"), copy.path("annotated"))
 
 		get publication_url(@publication, format: :json, host: "attacker.example"), headers: @headers
 

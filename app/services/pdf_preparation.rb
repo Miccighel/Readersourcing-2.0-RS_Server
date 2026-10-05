@@ -14,9 +14,8 @@ class PdfPreparation
     @verifier = verifier
   end
 
-  def call(download:, storage_path:, target_path:, rate_path:)
+  def call(download:, storage_path:, target_path:, original_path:, rate_path:)
     source = @inspector.call(download.io.path)
-    yield source.metadata if block_given?
 
     Dir.mktmpdir("rs-pdf-", storage_path.to_s) do |staging_path|
       temporary_name = File.basename(download.io.path, File.extname(download.io.path))
@@ -33,6 +32,8 @@ class PdfPreparation
         source_page_count: source.page_count,
         expected_url: rate_path
       )
+      yield source.metadata if block_given?
+      FileUtils.cp(download.io.path, original_path)
       FileUtils.mv(staged_output, target_path, force: true)
 
       return Result.new(

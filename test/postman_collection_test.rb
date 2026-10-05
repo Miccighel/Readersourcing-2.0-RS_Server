@@ -127,6 +127,14 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     assert_equal 200, examples.dig("Publications (Refresh)", "Publication refreshed", "code")
     assert_equal "complete", refreshed.fetch("preparation_status")
 
+    [prepared, uploaded, refreshed].each do |copy|
+      directory = copy.fetch("pdf_storage_path")
+      assert_match(/\Auser\/\d+\/publication\/pdf\/\d+\/generations\/[0-9a-f]{32}\/\z/, directory)
+      assert_equal "#{directory}#{copy.fetch("pdf_name")}", copy.fetch("pdf_download_path")
+      assert_equal "#{directory}#{copy.fetch("pdf_name_link")}", copy.fetch("pdf_download_path_link")
+      assert_includes copy.fetch("pdf_download_url"), "/download/original/signed-reference/"
+    end
+
     verification_failed = JSON.parse(
       examples.dig("Publications (Refresh)", "Verification failed", "body")
     )

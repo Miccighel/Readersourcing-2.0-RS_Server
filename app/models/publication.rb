@@ -27,11 +27,7 @@ class Publication < ApplicationRecord
 	end
 
 	def is_saved_for_later(user)
-		begin
-			File.file?(absolute_pdf_download_path_link(user))
-		rescue TypeError
-			false
-		end
+		copy_for(user)&.available?("annotated") || false
 	end
 
 	def is_fetchable
@@ -60,28 +56,30 @@ class Publication < ApplicationRecord
 		logger.info "Downloading a bounded PDF from the configured publication host"
 		download = source || pdf_fetcher.fetch
 		filename = download.filename
-		load_pdf_paths(filename, data[:host])
 		logger.info "File name: #{filename}"
-
-		logger.info "Creating folder at #{absolute_pdf_storage_path(data[:user])}."
-		FileUtils::mkdir_p absolute_pdf_storage_path(data[:user])
 		logger.info "Downloaded bytes: #{download.content_length}"
 
 		# PDF VALIDATION AND EDITING START HERE
 
 		logger.info "RS_PDF execution started"
-		storage_path = absolute_pdf_storage_path(data[:user])
-		result = pdf_preparer.call(
-			download: download,
-			storage_path: storage_path,
-			target_path: absolute_pdf_download_path_link(data[:user]),
-			rate_path: data[:rate_path]
-		) { |metadata| update_pdf_metadata(metadata) }
+		result = nil
+		transaction(requires_new: true) do |transaction|
+			store = PublicationCopyStore.new(PublicationCopy.root_for(self, data[:user]))
+			copy = store.prepare(publication: self, user: data[:user], filename: filename, transaction: transaction) do |staged|
+				result = pdf_preparer.call(
+					download: download,
+					storage_path: staged.directory,
+					target_path: staged.path("annotated"),
+					original_path: staged.path("original"),
+					rate_path: data[:rate_path]
+				) { |metadata| update_pdf_metadata(metadata) }
+			end
+			@publication_copies ||= {}
+			@publication_copies[data[:user].id] = copy
+			transaction.after_rollback { @publication_copies.delete(data[:user].id) }
+		end
 		logger.info result.stdout unless result.stdout.blank?
 		logger.info "RS_PDF execution completed"
-		logger.info "Modified file"
-		logger.info "Name: #{pdf_name_link}"
-		logger.info "Download path: #{pdf_download_path_link}"
 	rescue PdfFetcher::Error, PdfUpload::Error, PdfInspector::Error,
 	       RsPdfRunner::ExecutionError, AnnotatedPdfVerifier::VerificationError => error
 		raise PublicationPreparationError.wrap(error)
@@ -95,12 +93,11 @@ class Publication < ApplicationRecord
 	end
 
 	def remove_files(user)
-		if File.exist? absolute_pdf_storage_path(user)
-			logger.info "Deleting storage folder at: #{absolute_pdf_storage_path(user)}"
-			FileUtils.rm_rf(absolute_pdf_storage_path(user))
-		else
-			logger.info "Storage folder not detected."
+		paths = [PublicationCopy.root_for(self, user), PublicationCopy.legacy(publication: self, user: user).directory].uniq
+		paths.each do |path|
+			FileUtils.remove_entry_secure(path) if path.directory?
 		end
+		@publication_copies&.delete(user.id)
 	end
 
 	def remove_annotated_file(user)
@@ -127,26 +124,26 @@ class Publication < ApplicationRecord
 		Rating.where(publication_id: self.id).order(created_at: :asc).all
 	end
 
-	def pdf_download_url(host, user)
-		pdf_url_for(host, user, variant: "original")
+	def pdf_download_url(host, user, copy: copy_for(user))
+		pdf_url_for(host, user, variant: "original", copy: copy)
 	end
 
-	def pdf_download_url_link(host, user)
-		pdf_url_for(host, user, variant: "annotated")
+	def pdf_download_url_link(host, user, copy: copy_for(user))
+		pdf_url_for(host, user, variant: "annotated", copy: copy)
+	end
+
+	def copy_for(user)
+		@publication_copies&.fetch(user.id, nil) || PublicationCopy.current(publication: self, user: user)
 	end
 
 	def pdf_file_path(user, variant:)
-		case variant.to_s
-		when "original"
-			absolute_pdf_download_path(user)
-		when "annotated"
-			absolute_pdf_download_path_link(user)
-		else
-			raise ArgumentError, "Unsupported PDF variant"
-		end
+		copy = copy_for(user) || PublicationCopy.legacy(publication: self, user: user)
+		copy.path(variant)
 	end
 
-	def pdf_filename(variant:)
+	def pdf_filename(variant:, user: nil)
+		return copy_for(user)&.name(variant) if user
+
 		case variant.to_s
 		when "original"
 			"#{remove_extension_from_filename(pdf_name)}.pdf"
@@ -190,13 +187,16 @@ class Publication < ApplicationRecord
 		self.class.safe_pdf_stem(filename)
 	end
 
-	def pdf_url_for(host, user, variant:)
-		filename = pdf_filename(variant: variant)
+	def pdf_url_for(host, user, variant:, copy:)
+		return unless copy&.available?(variant)
+
+		filename = copy.name(variant)
 		reference = PublicationDownloadReference.issue(
 			user: user,
 			publication: self,
 			variant: variant,
-			filename: filename
+			filename: filename,
+			generation: copy.generation
 		)
 		path = Rails.application.routes.url_helpers.publication_download_path(
 			id: id,
@@ -205,16 +205,6 @@ class Publication < ApplicationRecord
 			filename: filename
 		)
 		"#{host.to_s.delete_suffix("/")}#{path}"
-	end
-
-	def load_pdf_paths(pdf_name, host)
-		pdf_name_without_ext = remove_extension_from_filename(pdf_name)
-		pdf_name = "#{pdf_name_without_ext}.pdf"
-		update_attribute(:pdf_storage_path, "publication/pdf/#{id}/")
-		update_attribute(:pdf_download_path, "#{pdf_storage_path}#{pdf_name}")
-		update_attribute(:pdf_name, pdf_name)
-		update_attribute(:pdf_download_path_link, "#{pdf_storage_path}#{pdf_name_without_ext}#{Settings.rs_pdf_link_suffix}.pdf")
-		update_attribute(:pdf_name_link, "#{pdf_name_without_ext}#{Settings.rs_pdf_link_suffix}.pdf")
 	end
 
 	def absolute_rs_pdf_path
@@ -253,15 +243,15 @@ class Publication < ApplicationRecord
 	end
 
 	def absolute_pdf_storage_path(user)
-		self.class.storage_root.join("user", user.id.to_s, pdf_storage_path)
+		PublicationCopy.root_for(self, user)
 	end
 
 	def absolute_pdf_download_path(user)
-		self.class.storage_root.join("user", user.id.to_s, pdf_download_path)
+		pdf_file_path(user, variant: "original")
 	end
 
 	def absolute_pdf_download_path_link(user)
-		self.class.storage_root.join("user", user.id.to_s, pdf_download_path_link)
+		pdf_file_path(user, variant: "annotated")
 	end
 
 end

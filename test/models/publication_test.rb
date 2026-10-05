@@ -59,15 +59,19 @@ class PublicationTest < ActiveSupport::TestCase
       host: "https://readersourcing.example",
       user: user
     }
+    previous_paths = publication.attributes.slice("pdf_name", "pdf_name_link", "pdf_storage_path", "pdf_download_path", "pdf_download_path_link")
 
     publication.fetch(request_data)
 
-    assert_equal "Reader.pdf", publication.reload.pdf_name
-    assert_equal "Reader-Link.pdf", publication.pdf_name_link
+    copy = PublicationCopy.current(publication: publication, user: user)
+    assert_equal "Reader.pdf", copy.name("original")
+    assert_equal "Reader-Link.pdf", copy.name("annotated")
+    assert_equal previous_paths, publication.reload.attributes.slice(*previous_paths.keys)
     assert_path_exists publication.send(:absolute_pdf_download_path_link, user)
     assert publication.send(:absolute_pdf_download_path_link, user).to_s.start_with?(@storage_root)
     refute publication.send(:absolute_pdf_download_path_link, user).to_s.start_with?(Rails.public_path.to_s)
-    assert_not File.exist?(publication.send(:absolute_pdf_download_path, user))
+    assert_path_exists publication.send(:absolute_pdf_download_path, user)
+    assert_equal File.binread(source_pdf), File.binread(copy.path("original"))
     reference = Rack::Utils.unescape_path(URI.parse(captured_url).path.split("/").last)
     assert_equal user, PaperRatingReference.resolve(reference, publication: publication)
   ensure

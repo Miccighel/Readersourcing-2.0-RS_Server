@@ -485,7 +485,7 @@
           ]
         },
         "url": "{{host}}/publications/{{publicationId}}.json",
-        "description": "Returns the publication identified by `publicationId`. In addition to its metadata and scores, the response contains the download paths generated for the authenticated reader."
+        "description": "Returns the publication identified by `publicationId`, including its metadata and scores. PDF filenames, logical paths, and signed download URLs describe the authenticated reader's own copy. Fields for an unavailable file are null; a publication without an annotated copy for that reader reports `preparation_status: \"not_prepared\"`."
       },
       "response": [
 
@@ -672,7 +672,7 @@
           }
         ],
         "url": "{{host}}/publications/{{publicationId}}/is_saved_for_later.json",
-        "description": "Checks whether an annotated copy of the publication has already been generated for the authenticated reader. When available, the publication and a signed download URL with a short lifetime are returned."
+        "description": "Checks whether an annotated copy of the publication is available for the authenticated reader. When available, the publication and signed download URLs with a short lifetime are returned, with filenames and paths specific to that reader. An existing annotated copy may have no retained original; in that case the original download fields are null."
       },
       "response": [
 
@@ -699,7 +699,7 @@
           "raw": "{\n\t\"publication\":\n\t{\n\t\t\"title\":\"Uncertainties in WIMP dark matter scattering revisited\",\n\t\t\"subject\":\"The European Physical Journal C, https://doi.org/10.1140/epjc/s10052-018-6047-y\",\n\t\t\"pdf_url\":\"https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf\"\n\t}\n}"
         },
         "url": "{{host}}/publications.json",
-        "description": "Creates a publication from the supplied metadata and PDF URL. The server then retrieves the PDF, reads its metadata, and uses RS_PDF to generate an annotated copy containing the rating link and QR Code for the authenticated reader."
+        "description": "Creates a publication from the supplied metadata and PDF URL. The server then retrieves the PDF, reads its metadata, and uses RS_PDF to generate an annotated copy containing the rating link and QR Code for the authenticated reader. The exact original and verified annotated PDF are retained together in private storage, with filenames specific to the reader's copy and separate signed download URLs. The publication is created only if preparation succeeds."
       },
       "response": [
 
@@ -863,7 +863,7 @@
           "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf\"\n\t}\n}"
         },
         "url": "{{host}}/publications/fetch.json",
-        "description": "Retrieves the PDF identified by `pdf_url`, opens it as a PDF, and uses RS_PDF to add the rating page for the authenticated reader. Before publishing the result, RS_Server verifies the added page and the embedded rating URL. If the publication is not yet present, its record is created in the same operation. The prepared copy is kept in private storage and returned through a signed download URL with a short lifetime. Failures return a stable preparation status such as `authentication_required`, `too_large`, `malformed_pdf`, `annotation_failed`, or `verification_failed`."
+        "description": "Retrieves the PDF identified by `pdf_url`, opens it as a PDF, and uses RS_PDF to add the rating page for the authenticated reader. Before publishing the result, RS_Server verifies the added page and the embedded rating URL. If the publication is not yet present, its record is created in the same operation. The prepared copy is kept in private storage and returned through a signed download URL with a short lifetime. Failures return a stable preparation status such as `authentication_required`, `too_large`, `malformed_pdf`, `annotation_failed`, or `verification_failed`. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
       },
       "response": [
         {
@@ -885,7 +885,7 @@
               "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf\"\n\t}\n}"
             },
             "url": "{{host}}/publications/fetch.json",
-            "description": "Retrieves the PDF identified by `pdf_url`, opens it as a PDF, and uses RS_PDF to add the rating page for the authenticated reader. Before publishing the result, RS_Server verifies the added page and the embedded rating URL. If the publication is not yet present, its record is created in the same operation. Failures return a stable preparation status such as `authentication_required`, `too_large`, `malformed_pdf`, `annotation_failed`, or `verification_failed`."
+            "description": "Retrieves the PDF identified by `pdf_url`, opens it as a PDF, and uses RS_PDF to add the rating page for the authenticated reader. Before publishing the result, RS_Server verifies the added page and the embedded rating URL. If the publication is not yet present, its record is created in the same operation. Failures return a stable preparation status such as `authentication_required`, `too_large`, `malformed_pdf`, `annotation_failed`, or `verification_failed`. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
           },
           "status": "Created",
           "code": 201,
@@ -897,7 +897,7 @@
             }
           ],
           "cookie": [],
-          "body": "{\n  \"id\": 1,\n  \"doi\": \"10.1000/readersourcing-example\",\n  \"title\": \"An example publication\",\n  \"subject\": \"Readersourcing\",\n  \"author\": \"Example Author\",\n  \"creator\": \"Example PDF Creator\",\n  \"producer\": \"Example PDF Producer\",\n  \"pdf_url\": \"https://example.org/publication.pdf\",\n  \"pdf_storage_path\": \"user/1/publication/pdf/example/\",\n  \"pdf_name\": \"publication.pdf\",\n  \"pdf_download_path\": \"user/1/publication/pdf/example/publication.pdf\",\n  \"pdf_download_url\": \"https://readersourcing.example/publications/1/download/original/signed-reference/publication.pdf\",\n  \"pdf_name_link\": \"publication-Link.pdf\",\n  \"pdf_download_path_link\": \"user/1/publication/pdf/example/publication-Link.pdf\",\n  \"pdf_download_url_link\": \"https://readersourcing.example/publications/1/download/annotated/signed-reference/publication-Link.pdf\",\n  \"preparation_status\": \"complete\",\n  \"steadiness\": null,\n  \"score_rsm\": null,\n  \"score_trm\": null,\n  \"created_at\": \"2026-01-01T12:00:00.000Z\",\n  \"updated_at\": \"2026-01-01T12:00:00.000Z\",\n  \"url\": \"https://readersourcing.example/publications/1.json\"\n}"
+          "body": "{\n  \"id\": 1,\n  \"doi\": \"10.1000/readersourcing-example\",\n  \"title\": \"An example publication\",\n  \"subject\": \"Readersourcing\",\n  \"author\": \"Example Author\",\n  \"creator\": \"Example PDF Creator\",\n  \"producer\": \"Example PDF Producer\",\n  \"pdf_url\": \"https://example.org/publication.pdf\",\n  \"pdf_storage_path\": \"user/1/publication/pdf/1/generations/00000000000000000000000000000001/\",\n  \"pdf_name\": \"publication.pdf\",\n  \"pdf_download_path\": \"user/1/publication/pdf/1/generations/00000000000000000000000000000001/publication.pdf\",\n  \"pdf_download_url\": \"https://readersourcing.example/publications/1/download/original/signed-reference/publication.pdf\",\n  \"pdf_name_link\": \"publication-Link.pdf\",\n  \"pdf_download_path_link\": \"user/1/publication/pdf/1/generations/00000000000000000000000000000001/publication-Link.pdf\",\n  \"pdf_download_url_link\": \"https://readersourcing.example/publications/1/download/annotated/signed-reference/publication-Link.pdf\",\n  \"preparation_status\": \"complete\",\n  \"steadiness\": null,\n  \"score_rsm\": null,\n  \"score_trm\": null,\n  \"created_at\": \"2026-01-01T12:00:00.000Z\",\n  \"updated_at\": \"2026-01-01T12:00:00.000Z\",\n  \"url\": \"https://readersourcing.example/publications/1.json\"\n}"
         },
         {
           "name": "Malformed PDF",
@@ -918,7 +918,7 @@
               "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf\"\n\t}\n}"
             },
             "url": "{{host}}/publications/fetch.json",
-            "description": "Retrieves the PDF identified by `pdf_url`, opens it as a PDF, and uses RS_PDF to add the rating page for the authenticated reader. Before publishing the result, RS_Server verifies the added page and the embedded rating URL. If the publication is not yet present, its record is created in the same operation. Failures return a stable preparation status such as `authentication_required`, `too_large`, `malformed_pdf`, `annotation_failed`, or `verification_failed`."
+            "description": "Retrieves the PDF identified by `pdf_url`, opens it as a PDF, and uses RS_PDF to add the rating page for the authenticated reader. Before publishing the result, RS_Server verifies the added page and the embedded rating URL. If the publication is not yet present, its record is created in the same operation. Failures return a stable preparation status such as `authentication_required`, `too_large`, `malformed_pdf`, `annotation_failed`, or `verification_failed`. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
           },
           "status": "Unprocessable Entity",
           "code": 422,
@@ -962,7 +962,7 @@
           ]
         },
         "url": "{{host}}/publications/fetch_upload.json",
-        "description": "Prepares an original PDF uploaded by the authenticated reader when RS_Server cannot retrieve it directly, for example because the publisher requires the reader's browser session. `publication[pdf_url]` remains the stable identifier of the publication. The uploaded file is bounded, opened as a PDF, annotated by RS_PDF, and verified through the same preparation flow used for remote publications. The prepared copy is kept in private storage and returned through a signed download URL with a short lifetime. Select the original PDF through the `file` form field before sending the request."
+        "description": "Prepares an original PDF uploaded by the authenticated reader when RS_Server cannot retrieve it directly, for example because the publisher requires the reader's browser session. `publication[pdf_url]` remains the stable identifier of the publication. The uploaded file is bounded, opened as a PDF, annotated by RS_PDF, and verified through the same preparation flow used for remote publications. The prepared copy is kept in private storage and returned through a signed download URL with a short lifetime. Select the original PDF through the `file` form field before sending the request. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
       },
       "response": [
         {
@@ -991,7 +991,7 @@
               ]
             },
             "url": "{{host}}/publications/fetch_upload.json",
-            "description": "Prepares an original PDF uploaded by the authenticated reader when RS_Server cannot retrieve it directly, for example because the publisher requires the reader's browser session. `publication[pdf_url]` remains the stable identifier of the publication. The uploaded file is bounded, opened as a PDF, annotated by RS_PDF, and verified through the same preparation flow used for remote publications. Select the original PDF through the `file` form field before sending the request."
+            "description": "Prepares an original PDF uploaded by the authenticated reader when RS_Server cannot retrieve it directly, for example because the publisher requires the reader's browser session. `publication[pdf_url]` remains the stable identifier of the publication. The uploaded file is bounded, opened as a PDF, annotated by RS_PDF, and verified through the same preparation flow used for remote publications. Select the original PDF through the `file` form field before sending the request. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
           },
           "status": "Created",
           "code": 201,
@@ -1003,7 +1003,7 @@
             }
           ],
           "cookie": [],
-          "body": "{\n  \"id\": 1,\n  \"doi\": \"10.1000/readersourcing-example\",\n  \"title\": \"An example publication\",\n  \"subject\": \"Readersourcing\",\n  \"author\": \"Example Author\",\n  \"creator\": \"Example PDF Creator\",\n  \"producer\": \"Example PDF Producer\",\n  \"pdf_url\": \"https://example.org/publication.pdf\",\n  \"pdf_storage_path\": \"user/1/publication/pdf/example/\",\n  \"pdf_name\": \"publication.pdf\",\n  \"pdf_download_path\": \"user/1/publication/pdf/example/publication.pdf\",\n  \"pdf_download_url\": \"https://readersourcing.example/publications/1/download/original/signed-reference/publication.pdf\",\n  \"pdf_name_link\": \"publication-Link.pdf\",\n  \"pdf_download_path_link\": \"user/1/publication/pdf/example/publication-Link.pdf\",\n  \"pdf_download_url_link\": \"https://readersourcing.example/publications/1/download/annotated/signed-reference/publication-Link.pdf\",\n  \"preparation_status\": \"complete\",\n  \"steadiness\": null,\n  \"score_rsm\": null,\n  \"score_trm\": null,\n  \"created_at\": \"2026-01-01T12:00:00.000Z\",\n  \"updated_at\": \"2026-01-01T12:00:00.000Z\",\n  \"url\": \"https://readersourcing.example/publications/1.json\"\n}"
+          "body": "{\n  \"id\": 1,\n  \"doi\": \"10.1000/readersourcing-example\",\n  \"title\": \"An example publication\",\n  \"subject\": \"Readersourcing\",\n  \"author\": \"Example Author\",\n  \"creator\": \"Example PDF Creator\",\n  \"producer\": \"Example PDF Producer\",\n  \"pdf_url\": \"https://example.org/publication.pdf\",\n  \"pdf_storage_path\": \"user/1/publication/pdf/1/generations/00000000000000000000000000000001/\",\n  \"pdf_name\": \"publication.pdf\",\n  \"pdf_download_path\": \"user/1/publication/pdf/1/generations/00000000000000000000000000000001/publication.pdf\",\n  \"pdf_download_url\": \"https://readersourcing.example/publications/1/download/original/signed-reference/publication.pdf\",\n  \"pdf_name_link\": \"publication-Link.pdf\",\n  \"pdf_download_path_link\": \"user/1/publication/pdf/1/generations/00000000000000000000000000000001/publication-Link.pdf\",\n  \"pdf_download_url_link\": \"https://readersourcing.example/publications/1/download/annotated/signed-reference/publication-Link.pdf\",\n  \"preparation_status\": \"complete\",\n  \"steadiness\": null,\n  \"score_rsm\": null,\n  \"score_trm\": null,\n  \"created_at\": \"2026-01-01T12:00:00.000Z\",\n  \"updated_at\": \"2026-01-01T12:00:00.000Z\",\n  \"url\": \"https://readersourcing.example/publications/1.json\"\n}"
         },
         {
           "name": "PDF not selected",
@@ -1031,7 +1031,7 @@
               ]
             },
             "url": "{{host}}/publications/fetch_upload.json",
-            "description": "Prepares an original PDF uploaded by the authenticated reader when RS_Server cannot retrieve it directly, for example because the publisher requires the reader's browser session. `publication[pdf_url]` remains the stable identifier of the publication. The uploaded file is bounded, opened as a PDF, annotated by RS_PDF, and verified through the same preparation flow used for remote publications. Select the original PDF through the `file` form field before sending the request."
+            "description": "Prepares an original PDF uploaded by the authenticated reader when RS_Server cannot retrieve it directly, for example because the publisher requires the reader's browser session. `publication[pdf_url]` remains the stable identifier of the publication. The uploaded file is bounded, opened as a PDF, annotated by RS_PDF, and verified through the same preparation flow used for remote publications. Select the original PDF through the `file` form field before sending the request. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
           },
           "status": "Unprocessable Entity",
           "code": 422,
@@ -1066,7 +1066,7 @@
           ]
         },
         "url": "{{host}}/publications/{{publicationId}}/refresh.json",
-        "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the prepared copy for the authenticated reader. The replacement is made available through a signed download URL only after its rating page and embedded URL have passed the final verification."
+        "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the prepared copy for the authenticated reader. The replacement is made available through a signed download URL only after its rating page and embedded URL have passed the final verification. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
       },
       "response": [
         {
@@ -1084,7 +1084,7 @@
               "formdata": []
             },
             "url": "{{host}}/publications/{{publicationId}}/refresh.json",
-            "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the prepared copy for the authenticated reader. The replacement is published only after its rating page and embedded URL have passed the final verification."
+            "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the prepared copy for the authenticated reader. The replacement is published only after its rating page and embedded URL have passed the final verification. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
           },
           "status": "OK",
           "code": 200,
@@ -1096,7 +1096,7 @@
             }
           ],
           "cookie": [],
-          "body": "{\n  \"id\": 1,\n  \"doi\": \"10.1000/readersourcing-example\",\n  \"title\": \"An example publication\",\n  \"subject\": \"Readersourcing\",\n  \"author\": \"Example Author\",\n  \"creator\": \"Example PDF Creator\",\n  \"producer\": \"Example PDF Producer\",\n  \"pdf_url\": \"https://example.org/publication.pdf\",\n  \"pdf_storage_path\": \"user/1/publication/pdf/example/\",\n  \"pdf_name\": \"publication.pdf\",\n  \"pdf_download_path\": \"user/1/publication/pdf/example/publication.pdf\",\n  \"pdf_download_url\": \"https://readersourcing.example/publications/1/download/original/signed-reference/publication.pdf\",\n  \"pdf_name_link\": \"publication-Link.pdf\",\n  \"pdf_download_path_link\": \"user/1/publication/pdf/example/publication-Link.pdf\",\n  \"pdf_download_url_link\": \"https://readersourcing.example/publications/1/download/annotated/signed-reference/publication-Link.pdf\",\n  \"preparation_status\": \"complete\",\n  \"steadiness\": null,\n  \"score_rsm\": null,\n  \"score_trm\": null,\n  \"created_at\": \"2026-01-01T12:00:00.000Z\",\n  \"updated_at\": \"2026-01-01T12:00:00.000Z\",\n  \"url\": \"https://readersourcing.example/publications/1.json\"\n}"
+          "body": "{\n  \"id\": 1,\n  \"doi\": \"10.1000/readersourcing-example\",\n  \"title\": \"An example publication\",\n  \"subject\": \"Readersourcing\",\n  \"author\": \"Example Author\",\n  \"creator\": \"Example PDF Creator\",\n  \"producer\": \"Example PDF Producer\",\n  \"pdf_url\": \"https://example.org/publication.pdf\",\n  \"pdf_storage_path\": \"user/1/publication/pdf/1/generations/00000000000000000000000000000001/\",\n  \"pdf_name\": \"publication.pdf\",\n  \"pdf_download_path\": \"user/1/publication/pdf/1/generations/00000000000000000000000000000001/publication.pdf\",\n  \"pdf_download_url\": \"https://readersourcing.example/publications/1/download/original/signed-reference/publication.pdf\",\n  \"pdf_name_link\": \"publication-Link.pdf\",\n  \"pdf_download_path_link\": \"user/1/publication/pdf/1/generations/00000000000000000000000000000001/publication-Link.pdf\",\n  \"pdf_download_url_link\": \"https://readersourcing.example/publications/1/download/annotated/signed-reference/publication-Link.pdf\",\n  \"preparation_status\": \"complete\",\n  \"steadiness\": null,\n  \"score_rsm\": null,\n  \"score_trm\": null,\n  \"created_at\": \"2026-01-01T12:00:00.000Z\",\n  \"updated_at\": \"2026-01-01T12:00:00.000Z\",\n  \"url\": \"https://readersourcing.example/publications/1.json\"\n}"
         },
         {
           "name": "Verification failed",
@@ -1113,7 +1113,7 @@
               "formdata": []
             },
             "url": "{{host}}/publications/{{publicationId}}/refresh.json",
-            "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the prepared copy for the authenticated reader. The replacement is published only after its rating page and embedded URL have passed the final verification."
+            "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the prepared copy for the authenticated reader. The replacement is published only after its rating page and embedded URL have passed the final verification. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
           },
           "status": "Unprocessable Entity",
           "code": 422,

@@ -51,7 +51,8 @@ interface provided. These clients handle the registration and authentication of 
 When a reader asks to save a publication for later, RS_Server retrieves the source once, applies the configured size and
 network limits, and opens the received content as a PDF. The declared content type is treated as an indication rather than
 as proof. RS_PDF then adds the rating page, after which RS_Server verifies both the additional page and the embedded rating
-URL before publishing the prepared copy. The web interface reports the current preparation state throughout this operation.
+URL before publishing the prepared copy. The original PDF and its annotated version are retained together in private
+storage for that reader and publication. The web interface reports the current preparation state throughout this operation.
 If the publication host requires access through the reader's browser session or cannot be reached, the original PDF can be
 uploaded through the same interface and follows the same validation, annotation, and verification procedure.
 
@@ -292,11 +293,23 @@ rating has been committed, when the reader is subscribed. An unavailable mail se
 a successful API response into a failure; the paper rating page reports that the rating was saved without its email.
 
 Prepared publications are stored outside the public asset directory. The `pdf_download_url` and
-`pdf_download_url_link` response fields contain signed URLs that are bound to one reader, publication, variant, and file
-name. They expire after five minutes by default and are returned with private, non cacheable response headers. This keeps
+`pdf_download_url_link` response fields contain signed URLs that are bound to one reader, publication, copy generation,
+variant, and file name. They expire after five minutes by default and are returned with private, non cacheable response
+headers. This keeps
 the existing browser and RS_Rate workflow, which opens the annotated file in a new tab without adding an authorization
 header. Logging out does not revoke a URL that has already been issued; its remaining lifetime is deliberately short.
-The `pdf_storage_path` and `pdf_download_path` fields remain logical compatibility metadata and are not public file paths.
+The publication path and filename fields describe the current reader's copy and are not public file paths. Each preparation
+retains the exact original bytes and the verified annotated PDF in a separate generation. Its names and paths do not alter
+those of another reader. The pair becomes current after the database transaction commits; failed preparation or rollback
+leaves the previous copy available. Issued URLs keep selecting the same generation across a refresh, including when the
+filename is reused. Subsequent preparations remove older retired generations only after their issued references and a
+short retention margin have expired. Account removal deletes all copies belonging to that reader.
+Server processes serving the same copies must share this storage on a filesystem that supports atomic renaming and file locks.
+
+Download fields are null when their file is unavailable. A publication without an annotated copy for the current reader
+reports `preparation_status: "not_prepared"`. Existing annotated files remain accessible through their signed links; when
+no original was retained, its download fields are null until the reader prepares the source again. An existing copy with
+a different filename is recovered from the reader's own directory when that selection is unambiguous.
 
 An installation that still keeps prepared files under `public/user` can move them to the private directory once by
 running `bin/rails publications:migrate_private_storage`. The task stops if the destination already exists, so it does not

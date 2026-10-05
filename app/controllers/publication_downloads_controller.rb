@@ -3,15 +3,15 @@ class PublicationDownloadsController < ApplicationController
 	def show
 		publication = Publication.find(params[:id])
 		filename = params[:filename].to_s
-		user = PublicationDownloadReference.resolve(
+		copy = PublicationDownloadReference.resolve_copy(
 			params[:reference],
 			publication: publication,
 			variant: params[:variant],
 			filename: filename
 		)
-		return head :not_found unless user
+		return head :not_found unless copy
 
-		path = publication.pdf_file_path(user, variant: params[:variant])
+		path = copy.path(params[:variant])
 		return head :not_found unless File.file?(path)
 
 		response.set_header("Cache-Control", "private, no-store")
