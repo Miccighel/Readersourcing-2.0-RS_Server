@@ -91,35 +91,7 @@ class Publication < ApplicationRecord
 
 	# Extracts the BaseUrl metadata from an uploaded PDF file.
 	def self.extract_base_url(file, user, request_data)
-		current_host = request_data.fetch(:host)
-		logger.info "Copying temporary file with original name: #{file.original_filename}"
-		FileUtils::mkdir_p absolute_pdf_storage_temp_path(user)
-		temp_file_name_without_ext = remove_extension_from_filename(file.original_filename)
-		temp_path = absolute_pdf_storage_temp_path(user).join("#{temp_file_name_without_ext}-Tmp.pdf")
-		logger.info "Temporary path generated: #{temp_path}"
-		temp_file_content_type = file.content_type
-		logger.info "Temporary file content type: #{temp_file_content_type}"
-		if temp_file_content_type == "application/pdf"
-			FileUtils.cp(file.tempfile, temp_path)
-			logger.info "Temporary file successfully copied"
-			logger.info "Reading metadata from: #{temp_path}"
-			reader = PDF::Reader.new(temp_path)
-			base_url = reader.info[:BaseUrl]
-			if !base_url.blank?
-				logger.info "BaseUrl found: #{base_url}"
-				logger.info "Comparing with current host: #{current_host}"
-				if base_url.include?(current_host)
-					return base_url
-				else
-					raise I18n.t("errors.messages.publication_fetched_somewhere_else")
-				end
-			else
-				logger.info "BaseUrl not found"
-				raise I18n.t("errors.messages.base_url_not_found")
-			end
-		else
-			raise I18n.t("errors.messages.content_type_not_application_pdf")
-		end
+		PdfRatingUrlExtractor.new.call(file, user: user, host: request_data.fetch(:host))
 	end
 
 	def remove_files(user)

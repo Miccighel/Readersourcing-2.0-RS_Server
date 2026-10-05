@@ -154,4 +154,50 @@ class PublicationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal rating_count, Rating.count
     assert_equal original_attributes, @publication.reload.attributes
   end
+
+  test "extracts a valid rating URL without retaining an uploaded copy" do
+    reference = PaperRatingReference.issue(user: @user, publication: @publication)
+    url = "http://www.example.com" + rate_paper_path(@publication.id, reference)
+    reader = Struct.new(:info, :page_count).new({BaseUrl: url}, 8)
+
+    PDF::Reader.stub(:new, reader) do
+      post extract_publications_url(format: :json),
+        params: {file: fixture_file_upload("Reader.pdf", "application/pdf")},
+        headers: @headers
+    end
+
+    assert_response :success
+    assert_equal url, response.parsed_body.fetch("baseUrl")
+    assert_not File.exist?(Publication.absolute_pdf_storage_temp_path(@user))
+  end
+
+  test "does not extract a URL containing the server origin only as a substring" do
+    reader = Struct.new(:info, :page_count).new(
+      {BaseUrl: "https://untrusted.example/?next=http://www.example.com/rate/1/reference"}, 8
+    )
+
+    PDF::Reader.stub(:new, reader) do
+      post extract_publications_url(format: :json),
+        params: {file: fixture_file_upload("Reader.pdf", "application/pdf")},
+        headers: @headers
+    end
+
+    assert_response :unprocessable_entity
+    assert response.parsed_body.key?("errors")
+    assert_not response.parsed_body.key?("baseUrl")
+  end
+
+  test "rejects an extraction upload that exceeds the shared PDF size limit" do
+    previous_limit = ENV["RS_PDF_MAX_DOWNLOAD_BYTES"]
+    ENV["RS_PDF_MAX_DOWNLOAD_BYTES"] = "7"
+
+    post extract_publications_url(format: :json),
+      params: {file: fixture_file_upload("Reader.pdf", "application/pdf")},
+      headers: @headers
+
+    assert_response :unprocessable_entity
+    assert_not response.parsed_body.key?("baseUrl")
+  ensure
+    previous_limit.nil? ? ENV.delete("RS_PDF_MAX_DOWNLOAD_BYTES") : ENV["RS_PDF_MAX_DOWNLOAD_BYTES"] = previous_limit
+  end
 end

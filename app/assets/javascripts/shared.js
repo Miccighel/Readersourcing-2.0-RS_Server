@@ -23,6 +23,16 @@ function requestHeaders() {
 	return token === null ? {} : {"X-CSRF-Token": token};
 }
 
+function paperRatingUrl(host, value) {
+	const server = new URL(host);
+	const url = new URL(value);
+	if (url.origin !== server.origin || url.username || url.password || url.search || url.hash ||
+		!/^\/rate\/[1-9]\d*\/[^/]+$/.test(url.pathname)) {
+		throw new TypeError("The PDF does not contain a rating URL for this RS_Server instance.");
+	}
+	return url.toString();
+}
+
 async function ajax(type, url, contentType, dataType, crossDomain, data, success, error) {
 	$.ajax({
 		type: type,

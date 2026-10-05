@@ -55,6 +55,11 @@ URL before publishing the prepared copy. The web interface reports the current p
 If the publication host requires access through the reader's browser session or cannot be reached, the original PDF can be
 uploaded through the same interface and follows the same validation, annotation, and verification procedure.
 
+A reader can also upload an annotated publication to recover its rating link. RS_Server applies the same upload size limit
+and opens the actual content as a PDF before reading its `BaseUrl` metadata. The link must use the server's public origin
+and rating route, and contain a valid reference for an existing publication and the authenticated reader. The temporary
+copy used for extraction is removed when the request finishes, including when validation fails.
+
 <h1>Deploy</h1>
 
 There are two main modalities that can be used to deploy a working instance of RS_Server in the **development** or **production** environment.

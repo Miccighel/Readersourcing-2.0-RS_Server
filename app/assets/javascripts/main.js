@@ -995,13 +995,23 @@ $(document).on("turbolinks:load", () => {
 			annotatedPublicationDropzone = new Dropzone("#annotated-publication-dropzone");
 			if (userIsAuthenticated) {
 			annotatedPublicationDropzone.on("success", (file, data) => {
+				let ratingUrl;
+				try {
+					ratingUrl = paperRatingUrl(window.location.origin, data["baseUrl"]);
+				} catch (error) {
+					goToRatingButton.hide();
+					annotatedPublicationDropzoneSuccess.hide();
+					annotatedPublicationDropzoneError.text(error.message).show();
+					return;
+				}
+				annotatedPublicationDropzoneError.hide();
 				extractCaptionFirst.hide();
 				extractCaptionSecond.show();
 				annotatedPublicationDropzoneSuccess.show();
 				annotatedPublicationDropzoneSuccess.text(data["message"]);
 				goToRatingButton.show();
-				goToRatingButton.prop("href", data["baseUrl"]);
-				let ratingPageWindow = window.open(data["baseUrl"], '_blank');
+				goToRatingButton.prop("href", ratingUrl);
+				let ratingPageWindow = window.open(ratingUrl, '_blank');
 				if (ratingPageWindow) {
 					ratingPageWindow.focus();
 				} else {
@@ -1009,6 +1019,8 @@ $(document).on("turbolinks:load", () => {
 				}
 			});
 			annotatedPublicationDropzone.on('error', (file, response, xhr) => {
+				goToRatingButton.hide();
+				annotatedPublicationDropzoneSuccess.hide();
 				if (response.hasOwnProperty('errors')) annotatedPublicationDropzoneError.text(response["errors"][0]); else annotatedPublicationDropzoneError.text(response)
 				annotatedPublicationDropzoneError.show();
 				});

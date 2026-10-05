@@ -836,7 +836,7 @@
           ]
         },
         "url": "{{host}}/publications/extract.json",
-        "description": "Reads the `BaseUrl` metadata from an uploaded PDF previously annotated by RS_PDF. The embedded address is returned only when it belongs to the current RS_Server origin. Select the PDF through the `file` form field before sending the request."
+        "description": "Reads the `BaseUrl` metadata from a PDF annotated by RS_PDF. The upload follows the configured size limit and is opened as a PDF before its metadata is read. The embedded address is returned only when it uses the current RS_Server public origin and rating route, with a valid reference for an existing publication and the authenticated reader. Invalid files or references return HTTP 422. The temporary copy is removed when the request finishes. Select the PDF through the `file` form field before sending the request."
       },
       "response": [
 

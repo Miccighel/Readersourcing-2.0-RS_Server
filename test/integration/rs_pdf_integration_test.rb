@@ -11,7 +11,9 @@ class RsPdfIntegrationTest < ActiveSupport::TestCase
     jar_path = @publication.send(:absolute_rs_pdf_path)
     input_path = file_fixture("Reader.pdf")
     source_reader = PDF::Reader.new(input_path)
-    rating_url = "https://example.test/rate/1/token"
+    user = users(:one)
+    reference = PaperRatingReference.issue(user: user, publication: @publication)
+    rating_url = "https://example.test" + Rails.application.routes.url_helpers.rate_paper_path(@publication.id, reference)
 
     assert_equal Rails.root.join("lib", "RS_PDF-v2.0.0-shaded.jar"), jar_path
     assert_predicate jar_path, :file?
@@ -34,6 +36,11 @@ class RsPdfIntegrationTest < ActiveSupport::TestCase
       assert_equal source_reader.page_count + 1, annotated_reader.page_count
       assert_equal rating_url, annotated_reader.info[:BaseUrl]
       assert_not File.exist?(File.join(output_path, "Reader-QRCode.png"))
+
+      File.open(annotated_path, "rb") do |file|
+        upload = Struct.new(:tempfile, :original_filename, :content_type).new(file, "Reader-Link.pdf", "application/pdf")
+        assert_equal rating_url, Publication.extract_base_url(upload, user, host: "https://example.test")
+      end
     end
   end
 
