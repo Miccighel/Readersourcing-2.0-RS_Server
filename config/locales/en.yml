@@ -36,6 +36,7 @@ en:
       try_again: "Do you want to try again?"
       rate_again: "Do you want to give a new rating?"
       mail_confirmation: "You will receive a confirmation email."
+      rating_saved_without_confirmation: "Your rating was saved, but the confirmation email could not be sent."
       not_the_same_user: "Please save this publication for later to generate a new link."
       validate_user: "Verify your identity"
       test_url: "This is just a test URL. Nothing will be saved."

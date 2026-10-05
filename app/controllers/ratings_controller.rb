@@ -56,9 +56,7 @@ class RatingsController < ApplicationController
 				publication.pdf_url = create_rating_params[:pdf_url]
 			end
 			@rating.publication = publication
-			if save_rating
-				@rating.compute_scores
-				RatingMailer.confirm(current_user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(current_user.id)).deliver_now
+			if save_rating { send_rating_confirmation }
 				render :show, status: :created, location: @rating
 			else
 				render json: @rating.errors, status: :unprocessable_entity
@@ -88,12 +86,10 @@ class RatingsController < ApplicationController
 					@rating.original_score = paper_rating_params[:score]
 					@rating.publication = publication
 					@rating.user = requesting_user
-					if save_rating
-						@rating.compute_scores
-						RatingMailer.confirm(@rating.user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(@rating.user.id)).deliver_now
+					if save_rating { send_rating_confirmation }
 						render "shared/success", locals: {
 							pubId: @rating.publication.id,
-							message: I18n.t("information.messages.mail_confirmation"),
+							message: I18n.t(@rating_submission.confirmation_failed ? "information.messages.rating_saved_without_confirmation" : "information.messages.mail_confirmation"),
 							title: I18n.t("confirmations.messages.rating_successful")
 						}, status: :ok
 					else
@@ -112,9 +108,7 @@ class RatingsController < ApplicationController
 
 	# PATCH/PUT /rating/1.json
 	def update
-		@rating.score = update_rating_params[:score]
-		@rating.edited = true
-		if @rating.save
+		if save_rating(attributes: {score: update_rating_params[:score], edited: true})
 			render :show, status: :ok, location: @rating
 		else
 			render json: @rating.errors, status: :unprocessable_entity
@@ -144,11 +138,13 @@ class RatingsController < ApplicationController
 		head :not_found unless @rating
 	end
 
-	def save_rating
-		@rating.save
-	rescue ActiveRecord::RecordNotUnique
-		@rating.errors.add(:publication_id, :taken)
-		false
+	def save_rating(attributes: {}, &confirmation)
+		@rating_submission = RatingSubmission.new(@rating)
+		@rating_submission.call(attributes: attributes, &confirmation)
+	end
+
+	def send_rating_confirmation
+		RatingMailer.confirm(@rating.user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(@rating.user.id)).deliver_now
 	end
 
 	def create_rating_params

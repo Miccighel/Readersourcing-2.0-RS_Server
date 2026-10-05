@@ -284,6 +284,13 @@ rating through the API or an annotated PDF, and when they edit an existing ratin
 submitted value. Missing, malformed, and out of range values are rejected without changing the stored scores or sending
 a confirmation email. JSON requests return HTTP 422 with validation messages for the affected fields.
 
+A new rating and its RSM and TRM calculations are saved in one database transaction. Submissions and edits share a
+database lock because reader scores participate in the ratings of different publications. Each operation reads the
+current domain state after acquiring the lock; a failed calculation rolls back the rating and every associated score
+change. Editing retains the original score without recomputing the models. Confirmation mail is attempted after a new
+rating has been committed, when the reader is subscribed. An unavailable mail service does not undo the rating or turn
+a successful API response into a failure; the paper rating page reports that the rating was saved without its email.
+
 Prepared publications are stored outside the public asset directory. The `pdf_download_url` and
 `pdf_download_url_link` response fields contain signed URLs that are bound to one reader, publication, variant, and file
 name. They expire after five minutes by default and are returned with private, non cacheable response headers. This keeps

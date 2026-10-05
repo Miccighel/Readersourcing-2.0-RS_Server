@@ -26,7 +26,7 @@ class CharacterizationUser
     ratings
   end
 
-  def save
+  def save!
     true
   end
 end
@@ -53,7 +53,7 @@ class CharacterizationPublication
     ratings.sort_by(&:created_at)
   end
 
-  def save
+  def save!
     true
   end
 end
@@ -80,7 +80,7 @@ class CharacterizationRating
     score / 100.0
   end
 
-  def save
+  def save!
     true
   end
 end

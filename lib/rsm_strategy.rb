@@ -42,9 +42,9 @@ class RsmStrategy < ReadersourcingStrategy
 		@rating.goodness = @rating.goodness.round(32)
 		@user.score = @user.score.round(32)
 
-		@publication.save
-		@user.save
-		@rating.save
+		@publication.save!
+		@user.save!
+		@rating.save!
 
 		previous_users = @publication.other_users(@user)
 
@@ -79,8 +79,8 @@ class RsmStrategy < ReadersourcingStrategy
 			old_previous_rating.goodness = old_previous_rating.goodness.round(32)
 			previous_user.score = previous_user.score.round(32)
 
-			old_previous_rating.save
-			previous_user.save
+			old_previous_rating.save!
+			previous_user.save!
 
 		end
 

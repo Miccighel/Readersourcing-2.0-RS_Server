@@ -105,6 +105,93 @@ class RatingsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "a failed calculation rejects the API submission without partial domain changes or mail" do
+    before = domain_state
+    factory = RsmStrategy.method(:new)
+    failing_strategy = ->(rating) { rating.user.email = nil; factory.call(rating) }
+
+    assert_no_difference("ActionMailer::Base.deliveries.size") do
+      RsmStrategy.stub(:new, failing_strategy) do
+        capture_io do
+          post ratings_url(format: :json),
+            params: {rating: {score: 72, pdf_url: "https://example.test/calculation-failure.pdf"}},
+            headers: @headers,
+            as: :json
+        end
+      end
+    end
+
+    assert_response :unprocessable_entity
+    assert_includes response.parsed_body.fetch("base"), I18n.t("errors.messages.rating_unsuccessful")
+    assert_equal before, domain_state
+  end
+
+  test "a confirmation failure does not turn a saved API rating into a failed submission" do
+    failing_confirmation = ->(*) { raise IOError, "Mail delivery failed" }
+
+    assert_difference("Rating.count") do
+      RatingMailer.stub(:confirm, failing_confirmation) do
+        capture_io do
+          post ratings_url(format: :json),
+            params: {rating: {score: 72, pdf_url: publications(:two).pdf_url}},
+            headers: @headers,
+            as: :json
+        end
+      end
+    end
+
+    assert_response :created
+    assert_equal 72, response.parsed_body.fetch("score")
+    assert_equal BigDecimal("0.54"), publications(:two).reload.score_trm
+  end
+
+  test "a failed calculation reports an unsuccessful paper rating without partial changes or mail" do
+    publication = publications(:two)
+    reference = PaperRatingReference.issue(user: @user, publication: publication)
+    authenticate_as(@user)
+    get rate_paper_path(publication.id, reference), headers: {"REMOTE_ADDR" => "127.0.0.1"}
+    before = domain_state
+    factory = RsmStrategy.method(:new)
+    failing_strategy = ->(rating) { rating.user.email = nil; factory.call(rating) }
+
+    assert_no_difference("ActionMailer::Base.deliveries.size") do
+      RsmStrategy.stub(:new, failing_strategy) do
+        capture_io do
+          post load_path,
+            params: {pubId: publication.id, rating: {score: 72}},
+            headers: {"REMOTE_ADDR" => "127.0.0.1"}
+        end
+      end
+    end
+
+    assert_response :success
+    assert_includes response.body, I18n.t("errors.messages.rating_unsuccessful")
+    assert_equal before, domain_state
+  end
+
+  test "the paper interface distinguishes a saved rating from an unavailable confirmation email" do
+    publication = publications(:two)
+    reference = PaperRatingReference.issue(user: @user, publication: publication)
+    authenticate_as(@user)
+    get rate_paper_path(publication.id, reference), headers: {"REMOTE_ADDR" => "127.0.0.1"}
+    failing_confirmation = ->(*) { raise IOError, "Mail delivery failed" }
+
+    assert_difference("Rating.count") do
+      RatingMailer.stub(:confirm, failing_confirmation) do
+        capture_io do
+          post load_path,
+            params: {pubId: publication.id, rating: {score: 72}},
+            headers: {"REMOTE_ADDR" => "127.0.0.1"}
+        end
+      end
+    end
+
+    assert_response :success
+    assert_includes response.body, I18n.t("confirmations.messages.operation_completed")
+    assert_includes response.body, I18n.t("information.messages.rating_saved_without_confirmation")
+    assert_equal BigDecimal("0.54"), publication.reload.score_trm
+  end
+
   test "invalid edits retain the current and original rating and its edited flag" do
     before = domain_state
     invalid_scores.each do |score|
