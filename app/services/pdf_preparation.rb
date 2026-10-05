@@ -14,8 +14,8 @@ class PdfPreparation
     @verifier = verifier
   end
 
-  def call(download:, storage_path:, target_path:, original_path:, rate_path:)
-    source = @inspector.call(download.io.path)
+  def call(download:, storage_path:, target_path:, original_path:, rate_path:, deadline: PdfOperationDeadline.new)
+    source = @inspector.call(download.io.path, deadline: deadline)
 
     Dir.mktmpdir("rs-pdf-", storage_path.to_s) do |staging_path|
       temporary_name = File.basename(download.io.path, File.extname(download.io.path))
@@ -25,16 +25,21 @@ class PdfPreparation
         output_path: staging_path,
         url: rate_path,
         caption: "Express your rating",
-        expected_output: staged_output
+        expected_output: staged_output,
+        deadline: deadline
       )
       @verifier.call(
         staged_output,
         source_page_count: source.page_count,
-        expected_url: rate_path
+        expected_url: rate_path,
+        deadline: deadline
       )
+      deadline.check!
       yield source.metadata if block_given?
+      deadline.check!
       FileUtils.cp(download.io.path, original_path)
       FileUtils.mv(staged_output, target_path, force: true)
+      deadline.check!
 
       return Result.new(
         metadata: source.metadata,

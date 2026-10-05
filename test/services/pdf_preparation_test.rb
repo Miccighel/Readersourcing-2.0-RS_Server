@@ -9,7 +9,7 @@ class PdfPreparationTest < ActiveSupport::TestCase
     @annotated = File.join(@storage, "annotated.pdf")
     @download = Struct.new(:io).new(Struct.new(:path).new(file_fixture("Reader.pdf").to_s))
     @inspector = Object.new
-    @inspector.define_singleton_method(:call) { |_| PdfInspector::Document.new(metadata: {Title: "Reader"}, page_count: 8) }
+    @inspector.define_singleton_method(:call) { |_, **_| PdfInspector::Document.new(metadata: {Title: "Reader"}, page_count: 8) }
     @runner = Object.new
     @runner.define_singleton_method(:call) do |expected_output:, **_arguments|
       File.write(expected_output, "verified annotated PDF")
@@ -48,12 +48,44 @@ class PdfPreparationTest < ActiveSupport::TestCase
     assert_empty Dir.glob(File.join(@storage, "rs-pdf-*"))
   end
 
+  test "successive phases consume the same deadline without promoting an expired pair" do
+    now = 0.0
+    deadline = PdfOperationDeadline.new(timeout: 10, clock: -> { now })
+    @inspector.define_singleton_method(:call) do |_, deadline:|
+      now += 4
+      deadline.check!
+      PdfInspector::Document.new(metadata: {Title: "Reader"}, page_count: 8)
+    end
+    @runner.define_singleton_method(:call) do |expected_output:, deadline:, **_|
+      now += 4
+      deadline.check!
+      File.write(expected_output, "annotated PDF")
+      RsPdfRunner::Result.new(stdout: "converted")
+    end
+    @verifier.define_singleton_method(:call) do |_, deadline:, **_|
+      now += 4
+      deadline.check!
+    end
+    metadata = []
+    File.write(@original, "previous original")
+    File.write(@annotated, "previous annotated")
+
+    assert_raises(PdfOperationDeadline::Exceeded) do
+      prepare(deadline: deadline) { |value| metadata << value }
+    end
+
+    assert_empty metadata
+    assert_equal "previous original", File.read(@original)
+    assert_equal "previous annotated", File.read(@annotated)
+    assert_empty Dir.glob(File.join(@storage, "rs-pdf-*"))
+  end
+
   private
 
-  def prepare(&block)
+  def prepare(deadline: PdfOperationDeadline.new, &block)
     PdfPreparation.new(runner: @runner, inspector: @inspector, verifier: @verifier).call(
       download: @download, storage_path: @storage, original_path: @original,
-      target_path: @annotated, rate_path: "https://example.test/rate/1/reference", &block
+      target_path: @annotated, rate_path: "https://example.test/rate/1/reference", deadline: deadline, &block
     )
   end
 

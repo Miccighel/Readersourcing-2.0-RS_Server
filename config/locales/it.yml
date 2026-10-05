@@ -141,6 +141,7 @@ it:
       unsafe_publication_url: "L'URL della pubblicazione punta a una rete privata o riservata e non può essere recuperato."
       publication_authentication_required: "Il server della pubblicazione richiede l'accesso dalla sessione del browser. Carica il PDF originale per continuare."
       publication_download_failed: "Non è stato possibile recuperare la pubblicazione dal suo server. Puoi riprovare oppure caricare il PDF originale."
+      publication_processing_timeout: "L'operazione sul PDF ha superato il tempo consentito ed è stata interrotta. Puoi riprovare. L'eventuale copia già preparata rimane disponibile."
       publication_too_large: "La pubblicazione supera il limite di dimensione configurato."
       publication_not_pdf: "Il file ricevuto non è un PDF. Controlla l'URL oppure carica il PDF originale."
       publication_malformed_pdf: "Il file contiene un PDF malformato e non può essere preparato."

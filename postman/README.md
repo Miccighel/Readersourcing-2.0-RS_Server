@@ -38,6 +38,9 @@ stable publication URL. Both operations open the source as a PDF, invoke RS_PDF,
 embedded URL before making the prepared copy available. Prepared copies are kept in private storage. The returned
 `pdf_download_url` fields are signed, expire shortly, and can still be opened directly by RS_Rate or the web interface.
 Preparation failures include a stable `status` field intended for API clients and the two Readersourcing interfaces.
+Retrieval, PDF inspection, annotation, and verification share a time budget. A phase or total timeout returns HTTP `422`
+with `status: "processing_timeout"` and leaves any previous prepared copy available. The collection includes this response
+among the preparation examples.
 
 ## Publishing an update
 

@@ -19,6 +19,9 @@ class PublicationPreparationError < RuntimeError
 
   def self.details_for(error)
     case error
+    when PdfOperationDeadline::Exceeded, PdfFetcher::DownloadTimeout,
+         PdfInspector::InspectionTimeout, RsPdfRunner::ExecutionTimeout
+      [:processing_timeout, :publication_processing_timeout, :unprocessable_entity]
     when PdfFetcher::InvalidUrl
       [:invalid_url, :invalid_publication_url, :unprocessable_entity]
     when PdfFetcher::UnsafeAddress

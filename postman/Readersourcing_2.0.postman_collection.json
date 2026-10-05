@@ -699,7 +699,7 @@
           "raw": "{\n\t\"publication\":\n\t{\n\t\t\"title\":\"Uncertainties in WIMP dark matter scattering revisited\",\n\t\t\"subject\":\"The European Physical Journal C, https://doi.org/10.1140/epjc/s10052-018-6047-y\",\n\t\t\"pdf_url\":\"https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf\"\n\t}\n}"
         },
         "url": "{{host}}/publications.json",
-        "description": "Creates a publication from the supplied metadata and PDF URL. The server then retrieves the PDF, reads its metadata, and uses RS_PDF to generate an annotated copy containing the rating link and QR Code for the authenticated reader. The exact original and verified annotated PDF are retained together in private storage, with filenames specific to the reader's copy and separate signed download URLs. The publication is created only if preparation succeeds."
+        "description": "Creates a publication from the supplied metadata and PDF URL. The server then retrieves the PDF, reads its metadata, and uses RS_PDF to generate an annotated copy containing the rating link and QR Code for the authenticated reader. The exact original and verified annotated PDF are retained together in private storage, with filenames specific to the reader's copy and separate signed download URLs. The publication is created only if preparation succeeds. Retrieval, inspection, annotation, and verification share one time budget. Exceeding a phase or total limit returns `processing_timeout` and leaves any previous prepared copy available."
       },
       "response": [
 
@@ -732,7 +732,7 @@
           "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://arxiv.org/pdf/1811.03152.pdf\"\n\t}\n}"
         },
         "url": "{{host}}/publications/is_fetchable.json",
-        "description": "Checks whether the supplied URL identifies a bounded file that RS_Server can retrieve and open as a PDF. The declared content type is treated as an indication; the file header and PDF structure are verified. The response contains an `available` status on success or a specific preparation status on failure. The web application and RS_Rate prepare the PDF only when the reader requests it, so this operation remains available mainly to API clients."
+        "description": "Checks whether the supplied URL identifies a bounded file that RS_Server can retrieve and open as a PDF. The declared content type is treated as an indication; the file header and PDF structure are verified. The response contains an `available` status on success or a specific preparation status on failure. The web application and RS_Rate prepare the PDF only when the reader requests it, so this operation remains available mainly to API clients. Retrieval and inspection share one time budget. Exceeding a phase or total limit returns `processing_timeout`."
       },
       "response": [
         {
@@ -757,7 +757,7 @@
               "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://arxiv.org/pdf/1811.03152.pdf\"\n\t}\n}"
             },
             "url": "{{host}}/publications/is_fetchable.json",
-            "description": "Checks whether the supplied URL identifies a bounded file that RS_Server can retrieve and open as a PDF. The declared content type is treated as an indication; the file header and PDF structure are verified. The response contains an `available` status on success or a specific preparation status on failure. The web application and RS_Rate prepare the PDF only when the reader requests it, so this operation remains available mainly to API clients."
+            "description": "Checks whether the supplied URL identifies a bounded file that RS_Server can retrieve and open as a PDF. The declared content type is treated as an indication; the file header and PDF structure are verified. The response contains an `available` status on success or a specific preparation status on failure. The web application and RS_Rate prepare the PDF only when the reader requests it, so this operation remains available mainly to API clients. Retrieval and inspection share one time budget. Exceeding a phase or total limit returns `processing_timeout`."
           },
           "status": "OK",
           "code": 200,
@@ -793,7 +793,7 @@
               "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://arxiv.org/pdf/1811.03152.pdf\"\n\t}\n}"
             },
             "url": "{{host}}/publications/is_fetchable.json",
-            "description": "Checks whether the supplied URL identifies a bounded file that RS_Server can retrieve and open as a PDF. The declared content type is treated as an indication; the file header and PDF structure are verified. The response contains an `available` status on success or a specific preparation status on failure. The web application and RS_Rate prepare the PDF only when the reader requests it, so this operation remains available mainly to API clients."
+            "description": "Checks whether the supplied URL identifies a bounded file that RS_Server can retrieve and open as a PDF. The declared content type is treated as an indication; the file header and PDF structure are verified. The response contains an `available` status on success or a specific preparation status on failure. The web application and RS_Rate prepare the PDF only when the reader requests it, so this operation remains available mainly to API clients. Retrieval and inspection share one time budget. Exceeding a phase or total limit returns `processing_timeout`."
           },
           "status": "Unprocessable Entity",
           "code": 422,
@@ -836,7 +836,7 @@
           ]
         },
         "url": "{{host}}/publications/extract.json",
-        "description": "Reads the `BaseUrl` metadata from a PDF annotated by RS_PDF. The upload follows the configured size limit and is opened as a PDF before its metadata is read. The embedded address is returned only when it uses the current RS_Server public origin and rating route, with a valid reference for an existing publication and the authenticated reader. Invalid files or references return HTTP 422. The temporary copy is removed when the request finishes. Select the PDF through the `file` form field before sending the request."
+        "description": "Reads the `BaseUrl` metadata from a PDF annotated by RS_PDF. The upload follows the configured size limit and is opened as a PDF before its metadata is read. The embedded address is returned only when it uses the current RS_Server public origin and rating route, with a valid reference for an existing publication and the authenticated reader. Invalid files or references return HTTP 422. The temporary copy is removed when the request finishes. Select the PDF through the `file` form field before sending the request. Copying and inspecting the uploaded PDF share one time budget. Exceeding a phase or total limit returns HTTP 422 with `status: \"processing_timeout\"`, and the temporary copy is removed."
       },
       "response": [
 
@@ -863,7 +863,7 @@
           "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf\"\n\t}\n}"
         },
         "url": "{{host}}/publications/fetch.json",
-        "description": "Retrieves the PDF identified by `pdf_url`, opens it as a PDF, and uses RS_PDF to add the rating page for the authenticated reader. Before publishing the result, RS_Server verifies the added page and the embedded rating URL. If the publication is not yet present, its record is created in the same operation. The prepared copy is kept in private storage and returned through a signed download URL with a short lifetime. Failures return a stable preparation status such as `authentication_required`, `too_large`, `malformed_pdf`, `annotation_failed`, or `verification_failed`. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
+        "description": "Retrieves the PDF identified by `pdf_url`, opens it as a PDF, and uses RS_PDF to add the rating page for the authenticated reader. Before publishing the result, RS_Server verifies the added page and the embedded rating URL. If the publication is not yet present, its record is created in the same operation. The prepared copy is kept in private storage and returned through a signed download URL with a short lifetime. Failures return a stable preparation status such as `authentication_required`, `too_large`, `malformed_pdf`, `annotation_failed`, or `verification_failed`. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available. Retrieval, inspection, annotation, and verification share one time budget. Exceeding a phase or total limit returns `processing_timeout` and leaves any previous prepared copy available."
       },
       "response": [
         {
@@ -885,7 +885,7 @@
               "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf\"\n\t}\n}"
             },
             "url": "{{host}}/publications/fetch.json",
-            "description": "Retrieves the PDF identified by `pdf_url`, opens it as a PDF, and uses RS_PDF to add the rating page for the authenticated reader. Before publishing the result, RS_Server verifies the added page and the embedded rating URL. If the publication is not yet present, its record is created in the same operation. Failures return a stable preparation status such as `authentication_required`, `too_large`, `malformed_pdf`, `annotation_failed`, or `verification_failed`. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
+            "description": "Retrieves the PDF identified by `pdf_url`, opens it as a PDF, and uses RS_PDF to add the rating page for the authenticated reader. Before publishing the result, RS_Server verifies the added page and the embedded rating URL. If the publication is not yet present, its record is created in the same operation. Failures return a stable preparation status such as `authentication_required`, `too_large`, `malformed_pdf`, `annotation_failed`, or `verification_failed`. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available. Retrieval, inspection, annotation, and verification share one time budget. Exceeding a phase or total limit returns `processing_timeout` and leaves any previous prepared copy available."
           },
           "status": "Created",
           "code": 201,
@@ -918,7 +918,7 @@
               "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf\"\n\t}\n}"
             },
             "url": "{{host}}/publications/fetch.json",
-            "description": "Retrieves the PDF identified by `pdf_url`, opens it as a PDF, and uses RS_PDF to add the rating page for the authenticated reader. Before publishing the result, RS_Server verifies the added page and the embedded rating URL. If the publication is not yet present, its record is created in the same operation. Failures return a stable preparation status such as `authentication_required`, `too_large`, `malformed_pdf`, `annotation_failed`, or `verification_failed`. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
+            "description": "Retrieves the PDF identified by `pdf_url`, opens it as a PDF, and uses RS_PDF to add the rating page for the authenticated reader. Before publishing the result, RS_Server verifies the added page and the embedded rating URL. If the publication is not yet present, its record is created in the same operation. Failures return a stable preparation status such as `authentication_required`, `too_large`, `malformed_pdf`, `annotation_failed`, or `verification_failed`. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available. Retrieval, inspection, annotation, and verification share one time budget. Exceeding a phase or total limit returns `processing_timeout` and leaves any previous prepared copy available."
           },
           "status": "Unprocessable Entity",
           "code": 422,
@@ -931,6 +931,39 @@
           ],
           "cookie": [],
           "body": "{\n  \"status\": \"malformed_pdf\",\n  \"message\": \"The file contains a malformed PDF and cannot be prepared.\",\n  \"errors\": [\n    \"The file contains a malformed PDF and cannot be prepared.\"\n  ],\n  \"upload_supported\": true\n}"
+        },
+        {
+          "name": "PDF operation timed out",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"publication\":{\n\t\t\"pdf_url\":\"https://link.springer.com/content/pdf/10.1140%2Fepjc%2Fs10052-018-6047-y.pdf\"\n\t}\n}"
+            },
+            "url": "{{host}}/publications/fetch.json",
+            "description": "Retrieves the PDF identified by `pdf_url`, opens it as a PDF, and uses RS_PDF to add the rating page for the authenticated reader. Before publishing the result, RS_Server verifies the added page and the embedded rating URL. If the publication is not yet present, its record is created in the same operation. The prepared copy is kept in private storage and returned through a signed download URL with a short lifetime. Failures return a stable preparation status such as `authentication_required`, `too_large`, `malformed_pdf`, `annotation_failed`, or `verification_failed`. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available. Retrieval, inspection, annotation, and verification share one time budget. Exceeding a phase or total limit returns `processing_timeout` and leaves any previous prepared copy available."
+          },
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"status\": \"processing_timeout\",\n  \"message\": \"The PDF operation exceeded its time limit and was stopped. Please try again. Any previous prepared copy remains available.\",\n  \"errors\": [\n    \"The PDF operation exceeded its time limit and was stopped. Please try again. Any previous prepared copy remains available.\"\n  ],\n  \"upload_supported\": true\n}"
         }
       ],
       "_postman_id": "b6455e65-3f2e-41ce-aa9f-47ff3c2cf8e9"
@@ -962,7 +995,7 @@
           ]
         },
         "url": "{{host}}/publications/fetch_upload.json",
-        "description": "Prepares an original PDF uploaded by the authenticated reader when RS_Server cannot retrieve it directly, for example because the publisher requires the reader's browser session. `publication[pdf_url]` remains the stable identifier of the publication. The uploaded file is bounded, opened as a PDF, annotated by RS_PDF, and verified through the same preparation flow used for remote publications. The prepared copy is kept in private storage and returned through a signed download URL with a short lifetime. Select the original PDF through the `file` form field before sending the request. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
+        "description": "Prepares an original PDF uploaded by the authenticated reader when RS_Server cannot retrieve it directly, for example because the publisher requires the reader's browser session. `publication[pdf_url]` remains the stable identifier of the publication. The uploaded file is bounded, opened as a PDF, annotated by RS_PDF, and verified through the same preparation flow used for remote publications. The prepared copy is kept in private storage and returned through a signed download URL with a short lifetime. Select the original PDF through the `file` form field before sending the request. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available. Retrieval, inspection, annotation, and verification share one time budget. Exceeding a phase or total limit returns `processing_timeout` and leaves any previous prepared copy available."
       },
       "response": [
         {
@@ -991,7 +1024,7 @@
               ]
             },
             "url": "{{host}}/publications/fetch_upload.json",
-            "description": "Prepares an original PDF uploaded by the authenticated reader when RS_Server cannot retrieve it directly, for example because the publisher requires the reader's browser session. `publication[pdf_url]` remains the stable identifier of the publication. The uploaded file is bounded, opened as a PDF, annotated by RS_PDF, and verified through the same preparation flow used for remote publications. Select the original PDF through the `file` form field before sending the request. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
+            "description": "Prepares an original PDF uploaded by the authenticated reader when RS_Server cannot retrieve it directly, for example because the publisher requires the reader's browser session. `publication[pdf_url]` remains the stable identifier of the publication. The uploaded file is bounded, opened as a PDF, annotated by RS_PDF, and verified through the same preparation flow used for remote publications. Select the original PDF through the `file` form field before sending the request. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available. Retrieval, inspection, annotation, and verification share one time budget. Exceeding a phase or total limit returns `processing_timeout` and leaves any previous prepared copy available."
           },
           "status": "Created",
           "code": 201,
@@ -1031,7 +1064,7 @@
               ]
             },
             "url": "{{host}}/publications/fetch_upload.json",
-            "description": "Prepares an original PDF uploaded by the authenticated reader when RS_Server cannot retrieve it directly, for example because the publisher requires the reader's browser session. `publication[pdf_url]` remains the stable identifier of the publication. The uploaded file is bounded, opened as a PDF, annotated by RS_PDF, and verified through the same preparation flow used for remote publications. Select the original PDF through the `file` form field before sending the request. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
+            "description": "Prepares an original PDF uploaded by the authenticated reader when RS_Server cannot retrieve it directly, for example because the publisher requires the reader's browser session. `publication[pdf_url]` remains the stable identifier of the publication. The uploaded file is bounded, opened as a PDF, annotated by RS_PDF, and verified through the same preparation flow used for remote publications. Select the original PDF through the `file` form field before sending the request. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available. Retrieval, inspection, annotation, and verification share one time budget. Exceeding a phase or total limit returns `processing_timeout` and leaves any previous prepared copy available."
           },
           "status": "Unprocessable Entity",
           "code": 422,
@@ -1066,7 +1099,7 @@
           ]
         },
         "url": "{{host}}/publications/{{publicationId}}/refresh.json",
-        "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the prepared copy for the authenticated reader. The replacement is made available through a signed download URL only after its rating page and embedded URL have passed the final verification. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
+        "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the prepared copy for the authenticated reader. The replacement is made available through a signed download URL only after its rating page and embedded URL have passed the final verification. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available. Retrieval, inspection, annotation, and verification share one time budget. Exceeding a phase or total limit returns `processing_timeout` and leaves any previous prepared copy available."
       },
       "response": [
         {
@@ -1084,7 +1117,7 @@
               "formdata": []
             },
             "url": "{{host}}/publications/{{publicationId}}/refresh.json",
-            "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the prepared copy for the authenticated reader. The replacement is published only after its rating page and embedded URL have passed the final verification. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
+            "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the prepared copy for the authenticated reader. The replacement is published only after its rating page and embedded URL have passed the final verification. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available. Retrieval, inspection, annotation, and verification share one time budget. Exceeding a phase or total limit returns `processing_timeout` and leaves any previous prepared copy available."
           },
           "status": "OK",
           "code": 200,
@@ -1113,7 +1146,7 @@
               "formdata": []
             },
             "url": "{{host}}/publications/{{publicationId}}/refresh.json",
-            "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the prepared copy for the authenticated reader. The replacement is published only after its rating page and embedded URL have passed the final verification. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available."
+            "description": "Retrieves the PDF of an existing publication again, refreshes its available metadata, and regenerates the prepared copy for the authenticated reader. The replacement is published only after its rating page and embedded URL have passed the final verification. The exact original and the verified annotated PDF are retained together with filenames specific to the reader's copy. Both download URLs bind their file to that copy generation, so an issued URL keeps selecting the same bytes after a refresh. A failed preparation leaves the previous pair available. Retrieval, inspection, annotation, and verification share one time budget. Exceeding a phase or total limit returns `processing_timeout` and leaves any previous prepared copy available."
           },
           "status": "Unprocessable Entity",
           "code": 422,

@@ -31,12 +31,14 @@ location / {
 
     client_max_body_size 55m;
     proxy_connect_timeout 10s;
-    proxy_send_timeout 75s;
-    proxy_read_timeout 75s;
+    proxy_send_timeout 135s;
+    proxy_read_timeout 135s;
 }
 ```
 
-`client_max_body_size` must remain slightly larger than `RS_PDF_MAX_DOWNLOAD_BYTES` so multipart form data can be received, while the application still applies its exact PDF limit. Proxy timeouts must remain longer than `RS_PDF_PROCESS_TIMEOUT`. If these application values change, update the proxy values in the same release.
+`client_max_body_size` must remain slightly larger than `RS_PDF_MAX_DOWNLOAD_BYTES` so multipart form data can be received, while the application still applies its exact PDF limit. Proxy response timeouts must remain longer than `RS_PDF_TOTAL_TIMEOUT`, with room for the process termination grace of up to two seconds and ordinary request overhead. The default PDF budget is 120 seconds. If these application values change, update the proxy values in the same release.
+
+The server applies the shared PDF budget after Rails starts the operation. An uploaded file has already been received at that point, so configure the proxy or hosting ingress to bound the incoming request size and transfer duration as well. Connection and read timeouts describe individual waits rather than the complete incoming transfer.
 
 ## Starting the service
 

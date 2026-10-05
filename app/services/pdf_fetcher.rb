@@ -15,6 +15,7 @@ class PdfFetcher
   class InvalidResponse < Error; end
   class AuthenticationRequired < InvalidResponse; end
   class DownloadUnavailable < InvalidResponse; end
+  class DownloadTimeout < DownloadUnavailable; end
   class NotPdf < InvalidResponse; end
   class DownloadTooLarge < Error; end
 
@@ -34,6 +35,7 @@ class PdfFetcher
   DEFAULT_MAX_BYTES = 50 * 1024 * 1024
   DEFAULT_OPEN_TIMEOUT = 5
   DEFAULT_READ_TIMEOUT = 20
+  DEFAULT_DOWNLOAD_TIMEOUT = 30
   DEFAULT_REDIRECT_LIMIT = 3
 
   BLOCKED_NETWORKS = %w[
@@ -65,6 +67,7 @@ class PdfFetcher
     max_bytes: Integer(ENV.fetch("RS_PDF_MAX_DOWNLOAD_BYTES", DEFAULT_MAX_BYTES)),
     open_timeout: Integer(ENV.fetch("RS_PDF_OPEN_TIMEOUT", DEFAULT_OPEN_TIMEOUT)),
     read_timeout: Integer(ENV.fetch("RS_PDF_READ_TIMEOUT", DEFAULT_READ_TIMEOUT)),
+    timeout: ENV.fetch("RS_PDF_DOWNLOAD_TIMEOUT", DEFAULT_DOWNLOAD_TIMEOUT),
     redirect_limit: DEFAULT_REDIRECT_LIMIT,
     allow_private_networks: ENV["RS_PDF_ALLOW_PRIVATE_NETWORKS"] == "true",
     resolver: Resolv.method(:getaddresses),
@@ -74,25 +77,38 @@ class PdfFetcher
     @max_bytes = max_bytes
     @open_timeout = open_timeout
     @read_timeout = read_timeout
+    @timeout = timeout
     @redirect_limit = redirect_limit
     @allow_private_networks = allow_private_networks
     @resolver = resolver
-    @requester = requester || method(:perform_request)
+    @requester = requester
   end
 
-  def fetch
-    fetch_uri(parse_uri(@url), @redirect_limit)
+  def fetch(deadline: PdfOperationDeadline.new)
+    temporary_files = []
+    completed = false
+    download = deadline.limit(@timeout).during do |network_deadline|
+      fetch_uri(parse_uri(@url), @redirect_limit, network_deadline, temporary_files)
+    end
+    completed = true
+    download
   rescue URI::InvalidURIError => error
     raise InvalidUrl, "The publication URL is invalid: #{error.message}"
+  rescue PdfOperationDeadline::Exceeded => error
+    raise DownloadTimeout, error.message
+  ensure
+    temporary_files&.each(&:close!) unless completed
   end
 
   private
 
-  def fetch_uri(uri, redirects_remaining)
+  def fetch_uri(uri, redirects_remaining, deadline, temporary_files)
+    deadline.check!
     address = resolve_public_address(uri)
     download = nil
 
-    @requester.call(uri, address) do |response|
+    handler = proc do |response|
+      deadline.check!
       status = response.code.to_i
 
       if status.between?(300, 399)
@@ -106,7 +122,7 @@ class PdfFetcher
           raise InvalidResponse, "The publication server attempted an insecure redirect"
         end
 
-        return fetch_uri(redirect_uri, redirects_remaining - 1)
+        return fetch_uri(redirect_uri, redirects_remaining - 1, deadline, temporary_files)
       end
 
       if [401, 403].include?(status)
@@ -117,7 +133,13 @@ class PdfFetcher
         raise DownloadUnavailable, "The publication server returned HTTP #{status}"
       end
 
-      download = read_pdf_response(response, uri)
+      download = read_pdf_response(response, uri, deadline, temporary_files)
+    end
+
+    if @requester
+      @requester.call(uri, address, &handler)
+    else
+      perform_request(uri, address, deadline, &handler)
     end
 
     download || raise(InvalidResponse, "The publication server returned no response")
@@ -151,13 +173,13 @@ class PdfFetcher
     BLOCKED_NETWORKS.any? { |network| network.include?(address) }
   end
 
-  def perform_request(uri, address)
+  def perform_request(uri, address, deadline)
     http = Net::HTTP.new(uri.host, uri.port, nil)
     http.ipaddr = address
     http.use_ssl = uri.scheme == "https"
-    http.open_timeout = @open_timeout
-    http.read_timeout = @read_timeout
-    http.write_timeout = @open_timeout
+    http.open_timeout = [@open_timeout, deadline.remaining].min
+    http.read_timeout = [@read_timeout, deadline.remaining].min
+    http.write_timeout = [@open_timeout, deadline.remaining].min
 
     request = Net::HTTP::Get.new(uri.request_uri)
     request["Accept"] = "application/pdf"
@@ -167,12 +189,12 @@ class PdfFetcher
       connection.request(request) { |response| yield response }
     end
   rescue Net::OpenTimeout, Net::ReadTimeout, Timeout::Error
-    raise DownloadUnavailable, "The publication server timed out"
+    raise DownloadTimeout, "The publication server timed out"
   rescue SocketError, SystemCallError, IOError, OpenSSL::SSL::SSLError => error
     raise DownloadUnavailable, "The publication could not be downloaded: #{error.message}"
   end
 
-  def read_pdf_response(response, uri)
+  def read_pdf_response(response, uri, deadline, temporary_files)
     content_type = response["content-type"].to_s.split(";").first.to_s.downcase
 
     declared_length = response["content-length"].to_i
@@ -180,12 +202,15 @@ class PdfFetcher
       raise DownloadTooLarge, "The publication exceeds the configured download limit"
     end
 
-    tempfile = Tempfile.new(["rs-server-publication-", ".pdf"])
+    tempfile = Thread.handle_interrupt(PdfOperationDeadline::Exceeded => :never) do
+      Tempfile.new(["rs-server-publication-", ".pdf"]).tap { |file| temporary_files << file }
+    end
     tempfile.binmode
     bytes_written = 0
 
     begin
       response.read_body do |chunk|
+        deadline.check!
         bytes_written += chunk.bytesize
         if bytes_written > @max_bytes
           raise DownloadTooLarge, "The publication exceeds the configured download limit"
@@ -199,6 +224,7 @@ class PdfFetcher
       end
 
       tempfile.flush
+      deadline.check!
       tempfile.rewind
       unless tempfile.read(1024).include?("%PDF-")
         raise NotPdf, "The publication response does not contain a PDF header"

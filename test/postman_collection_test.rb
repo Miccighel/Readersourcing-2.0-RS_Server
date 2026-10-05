@@ -63,7 +63,7 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     refute_includes serialized_collection, "authTokenPaper"
 
     responses = @requests.flat_map { |item| item.fetch("response") }
-    assert_equal 18, responses.length
+    assert_equal 19, responses.length
     responses.each do |response|
       refute response.fetch("header").any? { |header| header.fetch("key").casecmp?("Set-Cookie") }
     end
@@ -113,6 +113,13 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     malformed = JSON.parse(examples.dig("Publications (Fetch)", "Malformed PDF", "body"))
     assert_equal "malformed_pdf", malformed.fetch("status")
     assert_equal I18n.t("errors.messages.publication_malformed_pdf"), malformed.fetch("message")
+
+    timeout_example = examples.dig("Publications (Fetch)", "PDF operation timed out")
+    assert_equal 422, timeout_example.fetch("code")
+    timeout_body = JSON.parse(timeout_example.fetch("body"))
+    assert_equal "processing_timeout", timeout_body.fetch("status")
+    assert_equal I18n.t("errors.messages.publication_processing_timeout"), timeout_body.fetch("message")
+    assert_equal [timeout_body.fetch("message")], timeout_body.fetch("errors")
 
     uploaded = JSON.parse(
       examples.dig("Publications (Fetch Upload)", "Uploaded publication prepared", "body")

@@ -170,9 +170,10 @@ class PublicationsControllerTest < ActionDispatch::IntegrationTest
   test "extracts a valid rating URL without retaining an uploaded copy" do
     reference = PaperRatingReference.issue(user: @user, publication: @publication)
     url = "http://www.example.com" + rate_paper_path(@publication.id, reference)
-    reader = Struct.new(:info, :page_count).new({BaseUrl: url}, 8)
+    inspector = Object.new
+    inspector.define_singleton_method(:call) { |*_, **_| PdfInspector::Document.new(metadata: {BaseUrl: url}, page_count: 8) }
 
-    PDF::Reader.stub(:new, reader) do
+    PdfInspector.stub(:new, ->(*) { inspector }) do
       post extract_publications_url(format: :json),
         params: {file: fixture_file_upload("Reader.pdf", "application/pdf")},
         headers: @headers
@@ -184,11 +185,12 @@ class PublicationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "does not extract a URL containing the server origin only as a substring" do
-    reader = Struct.new(:info, :page_count).new(
-      {BaseUrl: "https://untrusted.example/?next=http://www.example.com/rate/1/reference"}, 8
-    )
+    inspector = Object.new
+    inspector.define_singleton_method(:call) do |*_, **_|
+      PdfInspector::Document.new(metadata: {BaseUrl: "https://untrusted.example/?next=http://www.example.com/rate/1/reference"}, page_count: 8)
+    end
 
-    PDF::Reader.stub(:new, reader) do
+    PdfInspector.stub(:new, ->(*) { inspector }) do
       post extract_publications_url(format: :json),
         params: {file: fixture_file_upload("Reader.pdf", "application/pdf")},
         headers: @headers
@@ -211,5 +213,47 @@ class PublicationsControllerTest < ActionDispatch::IntegrationTest
     assert_not response.parsed_body.key?("baseUrl")
   ensure
     previous_limit.nil? ? ENV.delete("RS_PDF_MAX_DOWNLOAD_BYTES") : ENV["RS_PDF_MAX_DOWNLOAD_BYTES"] = previous_limit
+  end
+
+  test "reports a timeout when publication inspection cannot finish" do
+    fetcher = Object.new
+    fetcher.define_singleton_method(:fetch) { |**_| raise PdfFetcher::DownloadTimeout, "internal detail" }
+    PdfFetcher.stub(:new, ->(*) { fetcher }) do
+      post is_fetchable_publications_path(format: :json), params: {publication: {pdf_url: @publication.pdf_url}}, headers: @headers, as: :json
+    end
+
+    assert_response :unprocessable_entity
+    assert_equal "processing_timeout", response.parsed_body.fetch("status")
+    assert_equal I18n.t("errors.messages.publication_processing_timeout"), response.parsed_body.fetch("message")
+  end
+
+  test "extraction reports an inspection timeout and removes its temporary upload" do
+    previous_timeout = ENV["RS_PDF_TOTAL_TIMEOUT"]
+    ENV["RS_PDF_TOTAL_TIMEOUT"] = "0.02"
+    before = Dir.glob(File.join(Dir.tmpdir, "rs-server-upload-*.pdf"))
+
+    post extract_publications_path(format: :json), params: {file: fixture_file_upload("Reader.pdf", "application/pdf")}, headers: @headers
+
+    assert_response :unprocessable_entity
+    assert_equal "processing_timeout", response.parsed_body.fetch("status")
+    assert_not response.parsed_body.key?("baseUrl")
+    assert_equal before, Dir.glob(File.join(Dir.tmpdir, "rs-server-upload-*.pdf"))
+  ensure
+    previous_timeout.nil? ? ENV.delete("RS_PDF_TOTAL_TIMEOUT") : ENV["RS_PDF_TOTAL_TIMEOUT"] = previous_timeout
+  end
+
+  test "a timed out preparation rolls back the creation of a publication" do
+    previous_timeout = ENV["RS_PDF_TOTAL_TIMEOUT"]
+    ENV["RS_PDF_TOTAL_TIMEOUT"] = "0.02"
+    assert_no_difference("Publication.count") do
+      post fetch_upload_publications_path(format: :json),
+        params: {publication: {pdf_url: "https://example.test/new.pdf"}, file: fixture_file_upload("Reader.pdf", "application/pdf")}, headers: @headers
+    end
+
+    assert_response :unprocessable_entity
+    assert_equal "processing_timeout", response.parsed_body.fetch("status")
+    assert_empty Dir.glob(File.join(@storage_root, "user", "*", "publication", "pdf", "*", "generations", "*"))
+  ensure
+    previous_timeout.nil? ? ENV.delete("RS_PDF_TOTAL_TIMEOUT") : ENV["RS_PDF_TOTAL_TIMEOUT"] = previous_timeout
   end
 end

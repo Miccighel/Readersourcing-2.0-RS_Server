@@ -74,7 +74,7 @@ class PublicationCopiesTest < ActionDispatch::IntegrationTest
     verifier = Object.new
     verifier.define_singleton_method(:call) { |*_, **_| raise error }
 
-    AnnotatedPdfVerifier.stub(:new, verifier) do
+    AnnotatedPdfVerifier.stub(:new, ->(*) { verifier }) do
       post fetch_upload_publications_path(format: :json),
         params: {publication: {pdf_url: @publication.pdf_url}, file: uploaded_file("Failed.pdf", @source)},
         headers: @headers
@@ -104,6 +104,29 @@ class PublicationCopiesTest < ActionDispatch::IntegrationTest
     assert_nil response.parsed_body.fetch("pdf_download_path")
     get_download(response.parsed_body.fetch("pdf_download_url_link"))
     assert_equal @source, response.body
+  end
+
+  test "a timed out refresh retains both current files, metadata, and already issued downloads" do
+    first = upload("Reader.pdf", @source, @headers)
+    before = @publication.reload.attributes
+    current = PublicationCopy.current(publication: @publication, user: @user)
+    previous_timeout = ENV["RS_PDF_TOTAL_TIMEOUT"]
+    ENV["RS_PDF_TOTAL_TIMEOUT"] = "0.02"
+
+    post fetch_upload_publications_path(format: :json),
+      params: {publication: {pdf_url: @publication.pdf_url}, file: uploaded_file("Failed.pdf", @source)}, headers: @headers
+
+    assert_response :unprocessable_entity
+    assert_equal "processing_timeout", response.parsed_body.fetch("status")
+    assert_equal before, @publication.reload.attributes
+    assert_equal current.generation, PublicationCopy.current(publication: @publication, user: @user).generation
+    assert_equal [current.generation], current.root.join("generations").children.map { |path| path.basename.to_s }
+    assert_empty current.root.glob("rs-copy-*")
+    get_download(first.fetch("pdf_download_url"))
+    assert_equal @source, response.body
+    get_download(first.fetch("pdf_download_url_link"))
+  ensure
+    previous_timeout.nil? ? ENV.delete("RS_PDF_TOTAL_TIMEOUT") : ENV["RS_PDF_TOTAL_TIMEOUT"] = previous_timeout
   end
 
   test "publication response fields and both references use one copy snapshot" do

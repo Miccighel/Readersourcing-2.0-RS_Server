@@ -33,4 +33,13 @@ class AnnotatedPdfVerifierTest < ActiveSupport::TestCase
     end
   end
 
+  test "preserves an inspection timeout instead of reporting a failed verification" do
+    inspector = Object.new
+    inspector.define_singleton_method(:call) { |*_, **_| raise PdfInspector::InspectionTimeout, "time expired" }
+
+    assert_raises(PdfInspector::InspectionTimeout) do
+      AnnotatedPdfVerifier.new(inspector: inspector).call("Reader-Link.pdf", source_page_count: 7, expected_url: "https://example.test/rate")
+    end
+  end
+
 end

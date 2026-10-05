@@ -1,4 +1,5 @@
 require "test_helper"
+require "socket"
 
 class PdfFetcherTest < ActiveSupport::TestCase
 
@@ -147,6 +148,63 @@ class PdfFetcherTest < ActiveSupport::TestCase
     response = FakeResponse.new("403", {"content-type" => "text/html"}, [])
 
     assert_raises(PdfFetcher::AuthenticationRequired) { fetcher_for(response).fetch }
+  end
+
+  test "a continuous slow response cannot renew the download deadline" do
+    server = TCPServer.new("127.0.0.1", 0)
+    connection = nil
+    sent_chunks = Queue.new
+    worker = Thread.new do
+      connection = server.accept
+      loop { break if connection.gets == "\r\n" }
+      connection.write("HTTP/1.1 200 OK\r\nContent-Type: application/pdf\r\nTransfer-Encoding: chunked\r\n\r\n")
+      loop do
+        connection.write("6\r\n%PDF-1\r\n")
+        sent_chunks << true
+        sleep 0.05
+      end
+    rescue IOError, SystemCallError
+      nil
+    end
+    before = Dir.glob(File.join(Dir.tmpdir, "rs-server-publication-*.pdf"))
+    started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    fetcher = PdfFetcher.new(
+      "http://127.0.0.1:#{server.addr[1]}/Reader.pdf", allow_private_networks: true,
+      read_timeout: 1, timeout: 0.3
+    )
+
+    assert_raises(PdfFetcher::DownloadTimeout) { fetcher.fetch }
+    assert_operator sent_chunks.size, :>=, 2
+    assert_operator Process.clock_gettime(Process::CLOCK_MONOTONIC) - started, :<, 2
+    assert_equal before, Dir.glob(File.join(Dir.tmpdir, "rs-server-publication-*.pdf"))
+  ensure
+    connection&.close
+    server&.close
+    worker&.kill
+    worker&.join
+  end
+
+  test "redirects and response streaming share one monotonic budget" do
+    now = 10.0
+    deadline = PdfOperationDeadline.new(timeout: 1, clock: -> { now })
+    requests = 0
+    response = FakeResponse.new("302", {"location" => "/Next.pdf"}, [])
+    fetcher = PdfFetcher.new(
+      "https://example.test/Reader.pdf", resolver: ->(_) { ["93.184.216.34"] },
+      requester: ->(_uri, _address, &block) { requests += 1; now += 0.6; block.call(response) }
+    )
+
+    assert_raises(PdfFetcher::DownloadTimeout) { fetcher.fetch(deadline: deadline) }
+    assert_equal 2, requests
+  end
+
+  test "bounds host resolution before opening a connection" do
+    fetcher = PdfFetcher.new(
+      "https://example.test/Reader.pdf", timeout: 0.1,
+      resolver: ->(_) { sleep 20 }, requester: ->(*) { flunk "No request must be opened" }
+    )
+
+    assert_raises(PdfFetcher::DownloadTimeout) { fetcher.fetch }
   end
 
   private

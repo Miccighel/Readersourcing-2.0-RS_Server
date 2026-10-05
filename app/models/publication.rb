@@ -30,19 +30,19 @@ class Publication < ApplicationRecord
 		copy_for(user)&.available?("annotated") || false
 	end
 
-	def is_fetchable
+	def is_fetchable(deadline: PdfOperationDeadline.new)
 		logger.info "Checking whether the publication URL returns a valid bounded PDF"
-		download = pdf_fetcher.fetch
-		PdfInspector.new.call(download.io.path)
+		download = pdf_fetcher.fetch(deadline: deadline)
+		PdfInspector.new.call(download.io.path, deadline: deadline)
 		true
-	rescue PdfFetcher::Error, PdfInspector::Error => error
+	rescue PdfFetcher::Error, PdfInspector::Error, PdfOperationDeadline::Exceeded => error
 		logger.info "The publication is not fetchable: #{error.message}"
 		raise PublicationPreparationError.wrap(error)
 	ensure
 		download&.close
 	end
 
-	def fetch(request_data, source: nil)
+	def fetch(request_data, source: nil, deadline: PdfOperationDeadline.new)
 
 		data = Hash.new
 		data[:host] = request_data.fetch(:host)
@@ -54,7 +54,8 @@ class Publication < ApplicationRecord
 		# FILE FETCHING STARTS HERE
 
 		logger.info "Downloading a bounded PDF from the configured publication host"
-		download = source || pdf_fetcher.fetch
+		download = source || pdf_fetcher.fetch(deadline: deadline)
+		deadline.check!
 		filename = download.filename
 		logger.info "File name: #{filename}"
 		logger.info "Downloaded bytes: #{download.content_length}"
@@ -71,9 +72,11 @@ class Publication < ApplicationRecord
 					storage_path: staged.directory,
 					target_path: staged.path("annotated"),
 					original_path: staged.path("original"),
-					rate_path: data[:rate_path]
+					rate_path: data[:rate_path],
+					deadline: deadline
 				) { |metadata| update_pdf_metadata(metadata) }
 			end
+			deadline.check!
 			@publication_copies ||= {}
 			@publication_copies[data[:user].id] = copy
 			transaction.after_rollback { @publication_copies.delete(data[:user].id) }
@@ -81,7 +84,8 @@ class Publication < ApplicationRecord
 		logger.info result.stdout unless result.stdout.blank?
 		logger.info "RS_PDF execution completed"
 	rescue PdfFetcher::Error, PdfUpload::Error, PdfInspector::Error,
-	       RsPdfRunner::ExecutionError, AnnotatedPdfVerifier::VerificationError => error
+	       RsPdfRunner::ExecutionError, AnnotatedPdfVerifier::VerificationError,
+	       PdfOperationDeadline::Exceeded => error
 		raise PublicationPreparationError.wrap(error)
 	ensure
 		download&.close

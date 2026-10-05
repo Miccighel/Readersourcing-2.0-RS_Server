@@ -219,6 +219,9 @@ along with an explanation of which deployment modality requires their usage.
 | ```RS_PDF_MAX_DOWNLOAD_BYTES``` | Maximum accepted publication size in bytes. The default is 52428800 (50 MiB).     | 1 - 2           | ```development```, ```production``` | ```.env``` file |
 | ```RS_PDF_OPEN_TIMEOUT``` | Maximum number of seconds allowed to open a publication connection. The default is 5.    | 1 - 2           | ```development```, ```production``` | ```.env``` file |
 | ```RS_PDF_READ_TIMEOUT``` | Maximum number of seconds allowed while reading a publication response. The default is 20. | 1 - 2         | ```development```, ```production``` | ```.env``` file |
+| ```RS_PDF_DOWNLOAD_TIMEOUT``` | Maximum total time for publication retrieval, including DNS, redirects, and response streaming. The default is 30 seconds. | 1 - 2 | ```development```, ```production``` | ```.env``` file |
+| ```RS_PDF_INSPECTION_TIMEOUT``` | Maximum time for each PDF inspection process. The default is 15 seconds. | 1 - 2 | ```development```, ```production``` | ```.env``` file |
+| ```RS_PDF_TOTAL_TIMEOUT``` | Shared PDF operation time budget. The default is 120 seconds. | 1 - 2 | ```development```, ```production``` | ```.env``` file |
 | ```RS_PDF_PROCESS_TIMEOUT``` | Maximum RS_PDF execution time in seconds. The default is 60.                          | 1 - 2           | ```development```, ```production``` | ```.env``` file |
 | ```RS_PDF_ALLOW_PRIVATE_NETWORKS``` | Set to ```true``` only when publications must be fetched from a trusted private network. | 1 - 2 | ```development```, ```production``` | ```.env``` file |
 | ```RS_PDF_STORAGE_ROOT``` | Private directory used for prepared publications. The default is ```storage/publications```. | 1 - 2 | ```development```, ```production``` | ```.env``` file |
@@ -330,6 +333,16 @@ against the actual hosting and email arrangements before public access is enable
 
 The publication preparation API returns a stable `status` for recoverable failures, including unavailable sources,
 authentication requirements, size limits, malformed or encrypted PDFs, RS_PDF failures, and final verification failures.
+Retrieval, inspection, annotation, and verification share one time budget measured with a monotonic clock. Phase limits
+can shorten the remaining time but do not renew it. The download limit includes DNS resolution, redirects, and continuous
+response streaming, in addition to the existing connection and read limits. PDF inspection runs in a separate Ruby
+process using the locked `pdf-reader` dependency; metadata bytes and encodings are preserved when its result is returned.
+The server stops and reaps an inspection or annotation process when its time expires. On Unix it also stops descendants
+in the same process group. Termination allows at most two additional seconds before a forced stop. Process output is
+bounded to 1 MiB per stream. A timeout returns HTTP `422` with `status: "processing_timeout"`, removes temporary files,
+and leaves any previous prepared pair available. The web interface and RS_Rate explain the stopped operation and offer
+a retry or an original PDF upload. Uploaded files use the budget after Rails has received the multipart request; the
+HTTP proxy must separately limit the incoming request size and transfer duration.
 `POST /publications/fetch_upload.json` provides the local file alternative and retains `publication[pdf_url]` as the stable
 identifier of the publication. The source Postman collection documents both preparation methods.
 

@@ -17,4 +17,14 @@ class PublicationPreparationErrorTest < ActiveSupport::TestCase
     assert_not_includes authentication_error.message, "remote detail"
   end
 
+  test "reports the same timeout state regardless of the phase that exhausted its budget" do
+    [PdfOperationDeadline::Exceeded, PdfFetcher::DownloadTimeout, PdfInspector::InspectionTimeout, RsPdfRunner::ExecutionTimeout].each do |type|
+      error = PublicationPreparationError.wrap(type.new("internal detail"))
+      assert_equal :processing_timeout, error.code
+      assert_equal :unprocessable_entity, error.http_status
+      assert_equal I18n.t("errors.messages.publication_processing_timeout"), error.message
+      assert_not_includes error.message, "internal detail"
+    end
+  end
+
 end

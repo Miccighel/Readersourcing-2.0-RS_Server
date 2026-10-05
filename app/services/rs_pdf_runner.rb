@@ -1,9 +1,7 @@
-require "tempfile"
-require "timeout"
-
 class RsPdfRunner
 
   class ExecutionError < RuntimeError; end
+  class ExecutionTimeout < ExecutionError; end
 
   Result = Struct.new(:stdout, :stderr, :status, keyword_init: true)
 
@@ -12,14 +10,16 @@ class RsPdfRunner
   def initialize(
     jar_path:,
     timeout: Integer(ENV.fetch("RS_PDF_PROCESS_TIMEOUT", DEFAULT_TIMEOUT)),
-    command_prefix: nil
+    command_prefix: nil,
+    process: PdfProcess.new
   )
     @jar_path = jar_path.to_s
     @timeout = timeout
     @command_prefix = command_prefix || ["java", "-jar", @jar_path]
+    @process = process
   end
 
-  def call(input_path:, output_path:, url:, caption:, expected_output:)
+  def call(input_path:, output_path:, url:, caption:, expected_output:, deadline: PdfOperationDeadline.new)
     command = @command_prefix + [
       "-pIn", input_path.to_s,
       "-pOut", output_path.to_s,
@@ -27,7 +27,8 @@ class RsPdfRunner
       "-c", caption.to_s
     ]
 
-    stdout, stderr, status = execute(command)
+    result = @process.call(command, deadline: deadline.limit(@timeout))
+    stdout, stderr, status = result.stdout, result.stderr, result.status
 
     unless status.success?
       raise ExecutionError, "RS_PDF failed with exit status #{status.exitstatus}: #{safe_error(stderr)}"
@@ -39,42 +40,13 @@ class RsPdfRunner
     Result.new(stdout: stdout, stderr: stderr, status: status)
   rescue Errno::ENOENT => error
     raise ExecutionError, "RS_PDF could not be started: #{error.message}"
+  rescue PdfOperationDeadline::Exceeded
+    raise ExecutionTimeout, "RS_PDF exceeded its configured timeout or the remaining PDF operation time"
+  rescue PdfProcess::OutputTooLarge => error
+    raise ExecutionError, error.message
   end
 
   private
-
-  def execute(command)
-    Tempfile.create("rs-pdf-stdout") do |stdout_file|
-      Tempfile.create("rs-pdf-stderr") do |stderr_file|
-        process_id = Process.spawn(*command, out: stdout_file, err: stderr_file)
-        status = wait_for(process_id)
-
-        stdout_file.rewind
-        stderr_file.rewind
-        return [stdout_file.read, stderr_file.read, status]
-      end
-    end
-  end
-
-  def wait_for(process_id)
-    Timeout.timeout(@timeout) do
-      _, status = Process.wait2(process_id)
-      status
-    end
-  rescue Timeout::Error
-    terminate(process_id)
-    raise ExecutionError, "RS_PDF exceeded the configured #{@timeout}-second timeout"
-  end
-
-  def terminate(process_id)
-    Process.kill("TERM", process_id)
-    Timeout.timeout(2) { Process.wait(process_id) }
-  rescue Timeout::Error
-    Process.kill("KILL", process_id)
-    Process.wait(process_id)
-  rescue Errno::ESRCH, Errno::ECHILD
-    nil
-  end
 
   def safe_error(stderr)
     message = stderr.to_s.lines.last.to_s.strip

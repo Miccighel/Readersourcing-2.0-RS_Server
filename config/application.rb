@@ -12,7 +12,7 @@ module Readersourcing2
     config.load_defaults 8.1
 
     # Keep the domain strategies and support objects in lib.
-    config.autoload_lib(ignore: %w[assets tasks])
+    config.autoload_lib(ignore: %w[assets tasks pdf_inspection_worker.rb])
 
     config.i18n.default_locale = :en
     config.active_storage.variant_processor = :disabled

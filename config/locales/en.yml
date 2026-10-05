@@ -75,6 +75,7 @@ en:
       unsafe_publication_url: "The publication URL points to a private or reserved network and cannot be retrieved."
       publication_authentication_required: "The publication server requires access from your browser session. Upload the original PDF to continue."
       publication_download_failed: "The publication could not be retrieved from its server. You can try again or upload the original PDF."
+      publication_processing_timeout: "The PDF operation exceeded its time limit and was stopped. Please try again. Any previous prepared copy remains available."
       publication_too_large: "The publication exceeds the configured size limit."
       publication_not_pdf: "The received file is not a PDF. Check the URL or upload the original PDF."
       publication_malformed_pdf: "The file contains a malformed PDF and cannot be prepared."

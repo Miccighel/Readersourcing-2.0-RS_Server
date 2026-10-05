@@ -82,6 +82,14 @@ class ProductionConfigurationTest < ActiveSupport::TestCase
 		assert_includes errors, "RS_PDF_PROCESS_TIMEOUT must contain a positive integer"
 	end
 
+	test "requires positive integer budgets for every PDF time limit" do
+		%w[RS_PDF_DOWNLOAD_TIMEOUT RS_PDF_INSPECTION_TIMEOUT RS_PDF_TOTAL_TIMEOUT].each do |name|
+			@environment[name] = "0"
+			assert_includes ProductionConfiguration.new(@environment).errors, "#{name} must contain a positive integer"
+			@environment.delete(name)
+		end
+	end
+
 	test "rejects invalid Boolean, CORS, and SMTP settings" do
 		@environment["ASSUME_SSL"] = "true"
 		@environment["FORCE_SSL"] = "false"

@@ -15,12 +15,13 @@ class PdfUpload
     @max_bytes = max_bytes
   end
 
-  def fetch
+  def fetch(deadline: PdfOperationDeadline.new)
+    deadline.check!
     raise MissingFile, "No publication file was uploaded" if @file.blank?
 
     tempfile = Tempfile.new(["rs-server-upload-", ".pdf"])
     tempfile.binmode
-    bytes_written = copy_to(tempfile)
+    bytes_written = copy_to(tempfile, deadline)
 
     raise NotPdf, "The uploaded file is empty" if bytes_written.zero?
 
@@ -31,6 +32,7 @@ class PdfUpload
     end
     tempfile.rewind
 
+    deadline.check!
     PdfFetcher::Download.new(
       io: tempfile,
       content_type: @file.content_type.to_s,
@@ -45,13 +47,14 @@ class PdfUpload
 
   private
 
-  def copy_to(tempfile)
+  def copy_to(tempfile, deadline)
     source = @file.tempfile
     source.binmode
     source.rewind
     bytes_written = 0
 
     while (chunk = source.read(BUFFER_SIZE))
+      deadline.check!
       bytes_written += chunk.bytesize
       if bytes_written > @max_bytes
         raise UploadTooLarge, "The uploaded publication exceeds the configured size limit"

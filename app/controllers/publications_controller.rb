@@ -104,6 +104,8 @@ class PublicationsController < ApplicationController
 			begin
 				base_url = Publication.extract_base_url(params[:file], current_user, @request_data)
 				render json: {message: I18n.t("confirmations.messages.base_url_found"), baseUrl: base_url}, status: :ok
+			rescue PdfOperationDeadline::Exceeded, PdfInspector::InspectionTimeout => error
+				render_preparation_error(PublicationPreparationError.wrap(error))
 			rescue RuntimeError => error
 				@error_manager.add_error(error.message)
 				render json: {errors: @error_manager.get_errors}, status: :unprocessable_entity
@@ -125,10 +127,11 @@ class PublicationsController < ApplicationController
 
 	# POST /publications/fetch_upload.json
 	def fetch_upload
-		source = PdfUpload.new(params[:file]).fetch
+		deadline = PdfOperationDeadline.new
+		source = PdfUpload.new(params[:file]).fetch(deadline: deadline)
 		@publication = Publication.find_or_initialize_by(pdf_url: publication_params[:pdf_url])
-		prepare_and_render(source: source)
-	rescue PdfUpload::Error => error
+		prepare_and_render(source: source, deadline: deadline)
+	rescue PdfUpload::Error, PdfOperationDeadline::Exceeded => error
 		render_preparation_error(PublicationPreparationError.wrap(error))
 	ensure
 		source&.close
@@ -166,7 +169,7 @@ class PublicationsController < ApplicationController
 		params.require(:publication).permit(:doi, :title, :subject, :creator, :author, :pdf_url)
 	end
 
-	def prepare_and_render(source: nil)
+	def prepare_and_render(source: nil, deadline: PdfOperationDeadline.new)
 		created = @publication.new_record?
 		saved = true
 
@@ -174,7 +177,7 @@ class PublicationsController < ApplicationController
 			saved = @publication.save if created
 			raise ActiveRecord::Rollback unless saved
 
-			@publication.fetch @request_data, source: source
+			@publication.fetch @request_data, source: source, deadline: deadline
 		end
 
 		if saved

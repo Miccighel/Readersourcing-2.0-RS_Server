@@ -10,13 +10,15 @@ class PdfRatingUrlExtractor
     @inspector = inspector
   end
 
-  def call(file, user:, host:)
-    download = PdfUpload.new(file).fetch
-    document = @inspector.call(download.io.path, allow_annotated: true)
+  def call(file, user:, host:, deadline: PdfOperationDeadline.new)
+    download = PdfUpload.new(file).fetch(deadline: deadline)
+    document = @inspector.call(download.io.path, allow_annotated: true, deadline: deadline)
     base_url = document.metadata[:BaseUrl]
     raise Error, I18n.t("errors.messages.base_url_not_found") if base_url.blank?
 
-    validate_rating_url(base_url, user: user, host: host)
+    result = validate_rating_url(base_url, user: user, host: host)
+    deadline.check!
+    result
   ensure
     download&.close
   end

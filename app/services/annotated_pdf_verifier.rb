@@ -6,8 +6,8 @@ class AnnotatedPdfVerifier
     @inspector = inspector
   end
 
-  def call(path, source_page_count:, expected_url:)
-    document = @inspector.call(path, allow_annotated: true)
+  def call(path, source_page_count:, expected_url:, deadline: PdfOperationDeadline.new)
+    document = @inspector.call(path, allow_annotated: true, deadline: deadline)
     unless document.page_count == source_page_count + 1
       raise VerificationError, "The annotated publication does not contain the expected rating page"
     end
@@ -16,6 +16,8 @@ class AnnotatedPdfVerifier
     end
 
     true
+  rescue PdfInspector::InspectionTimeout
+    raise
   rescue PdfInspector::Error => error
     raise VerificationError, "The annotated publication is not a valid PDF: #{error.message}"
   end

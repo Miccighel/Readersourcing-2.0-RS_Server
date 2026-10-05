@@ -37,7 +37,7 @@ class PublicationTest < ActiveSupport::TestCase
       source_url: publication.pdf_url
     )
     fetcher = Struct.new(:download) do
-      def fetch
+      def fetch(**_options)
         download
       end
     end.new(download)

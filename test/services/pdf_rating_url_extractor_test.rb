@@ -142,7 +142,7 @@ class PdfRatingUrlExtractorTest < ActiveSupport::TestCase
 
   def extract(url)
     inspector = Object.new
-    inspector.define_singleton_method(:call) do |path, allow_annotated:|
+    inspector.define_singleton_method(:call) do |path, allow_annotated:, **_options|
       raise "Expected annotation inspection" unless allow_annotated
       @path = path
       PdfInspector::Document.new(metadata: {BaseUrl: url}, page_count: 8)
