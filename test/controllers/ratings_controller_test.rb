@@ -55,7 +55,92 @@ class RatingsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :ok
     assert_equal 77, @rating.reload.score
+    assert_equal 51, @rating.original_score
     assert @rating.edited
+  end
+
+  test "accepts the lower boundary and saves an unknown publication with its valid rating" do
+    assert_difference(["Rating.count", "Publication.count"]) do
+      capture_io do
+        post ratings_url(format: :json),
+          params: {rating: {score: 0, pdf_url: "https://example.test/new-publication.pdf"}},
+          headers: @headers,
+          as: :json
+      end
+    end
+
+    assert_response :created
+    assert_equal 0, response.parsed_body.fetch("score")
+    assert_equal 0, response.parsed_body.fetch("original_score")
+  end
+
+  test "accepts the upper boundary through the JSON API" do
+    assert_difference("Rating.count") do
+      capture_io do
+        post ratings_url(format: :json),
+          params: {rating: {score: 100, pdf_url: publications(:two).pdf_url}},
+          headers: @headers,
+          as: :json
+      end
+    end
+
+    assert_response :created
+    assert_equal 100, response.parsed_body.fetch("score")
+    assert_equal 100, response.parsed_body.fetch("original_score")
+  end
+
+  test "invalid API ratings neither create publications nor change domain scores or send mail" do
+    before = domain_state
+    invalid_scores.each do |score|
+      assert_no_difference("ActionMailer::Base.deliveries.size") do
+        post ratings_url(format: :json),
+          params: {rating: {score: score, pdf_url: "https://example.test/invalid-score.pdf"}},
+          headers: @headers,
+          as: :json
+      end
+
+      assert_response :unprocessable_entity
+      assert response.parsed_body.fetch("score").present?
+      assert_equal before, domain_state
+    end
+  end
+
+  test "invalid edits retain the current and original rating and its edited flag" do
+    before = domain_state
+    invalid_scores.each do |score|
+      assert_no_difference("ActionMailer::Base.deliveries.size") do
+        patch rating_url(@rating, format: :json),
+          params: {rating: {score: score}},
+          headers: @headers,
+          as: :json
+      end
+
+      assert_response :unprocessable_entity
+      assert response.parsed_body.fetch("score").present?
+      assert_equal before, domain_state
+    end
+  end
+
+  test "rejects an invalid score from an annotated PDF without domain changes or confirmation mail" do
+    publication = publications(:two)
+    reference = PaperRatingReference.issue(user: @user, publication: publication)
+    authenticate_as(@user)
+    before = domain_state
+
+    invalid_scores.each do |score|
+      get rate_paper_path(publication.id, reference), headers: {"REMOTE_ADDR" => "127.0.0.1"}
+      assert_response :success
+
+      assert_no_difference("ActionMailer::Base.deliveries.size") do
+        post load_path,
+          params: {pubId: publication.id, rating: {score: score, anonymous: false}},
+          headers: {"REMOTE_ADDR" => "127.0.0.1"}
+      end
+
+      assert_response :success
+      assert_includes response.body, I18n.t("errors.messages.rating_unsuccessful")
+      assert_equal before, domain_state
+    end
   end
 
   test "should not update another user's rating" do
@@ -165,6 +250,14 @@ class RatingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   private
+
+  def invalid_scores
+    [nil, "", -1, 101, 40.5, 40.0, "40suffix", "abc", true, false]
+  end
+
+  def domain_state
+    [User, Publication, Rating].map { |model| model.order(:id).map(&:attributes) }
+  end
 
   def authenticate_as(user)
     post authenticate_path(format: :json),

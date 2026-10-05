@@ -54,7 +54,6 @@ class RatingsController < ApplicationController
 			unless publication
 				publication = Publication.new
 				publication.pdf_url = create_rating_params[:pdf_url]
-				publication.save
 			end
 			@rating.publication = publication
 			if save_rating

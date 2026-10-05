@@ -279,6 +279,11 @@ this header remain stateless.
 Publication records are shared among readers. The API therefore exposes their creation and retrieval, together with the
 dedicated fetching and refresh operations, but does not expose generic update or deletion routes.
 
+Ratings use whole numbers from 0 to 100, including both endpoints. The same validation applies when a reader submits a
+rating through the API or an annotated PDF, and when they edit an existing rating. The `original_score` retains the first
+submitted value. Missing, malformed, and out of range values are rejected without changing the stored scores or sending
+a confirmation email. JSON requests return HTTP 422 with validation messages for the affected fields.
+
 Prepared publications are stored outside the public asset directory. The `pdf_download_url` and
 `pdf_download_url_link` response fields contain signed URLs that are bound to one reader, publication, variant, and file
 name. They expire after five minutes by default and are returned with private, non cacheable response headers. This keeps
@@ -294,6 +299,10 @@ The endpoint `GET /up` reports whether Rails can boot successfully. The endpoint
 private publication storage. Database migration is not part of the server entrypoint. On a container platform, run
 `bin/rails db:migrate` as a separate deployment task before starting or replacing the application process, then run
 `bin/rails deployment:check` to verify migrations, storage, database access, and SMTP access.
+
+The database requires both `score` and `original_score` to be present and within the rating scale. Before installing these
+constraints, the migration checks the existing ratings. If it finds missing or out of range scores, it reports their count
+and stops without altering those records. Review the affected values before running the migration again.
 
 The production privacy policy describes only the processing performed by the current application. Its controller,
 provider, location, and retention values come from the production environment. The operator must verify these values

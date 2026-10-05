@@ -1643,7 +1643,7 @@
           "raw": "{\n\t\"rating\": {\n\t\t\"score\": 80,\n\t\t\"pdf_url\": \"https://link.springer.com/content/pdf/10.1007%2FJHEP07%282018%29172.pdf\"\n\t}\n}"
         },
         "url": "{{host}}/ratings.json",
-        "description": "Creates a rating for the publication identified by its PDF URL. RS_Server creates a minimal publication record when the URL is not yet known, prevents duplicate ratings by the same reader, computes the Readersourcing scores, and sends a confirmation email."
+        "description": "Creates a rating for the publication identified by its PDF URL. The score must be an integer from 0 to 100, including both endpoints. Missing, malformed, and out of range values return HTTP 422 with field validation messages, without creating a publication or rating, changing domain scores, or sending a confirmation email. For a valid rating, RS_Server creates a minimal publication record when the URL is not yet known, prevents duplicate ratings by the same reader, computes the Readersourcing scores, and sends a confirmation email."
       },
       "response": [
         {
@@ -1665,7 +1665,7 @@
               "raw": "{\n\t\"rating\": {\n\t\t\"score\": 80,\n\t\t\"pdf_url\": \"https://link.springer.com/content/pdf/10.1007%2FJHEP07%282018%29172.pdf\"\n\t}\n}"
             },
             "url": "{{host}}/ratings.json",
-            "description": "Creates a rating for the publication identified by its PDF URL. RS_Server creates a minimal publication record when the URL is not yet known, prevents duplicate ratings by the same reader, computes the Readersourcing scores, and sends a confirmation email."
+            "description": "Creates a rating for the publication identified by its PDF URL. The score must be an integer from 0 to 100, including both endpoints. Missing, malformed, and out of range values return HTTP 422 with field validation messages, without creating a publication or rating, changing domain scores, or sending a confirmation email. For a valid rating, RS_Server creates a minimal publication record when the URL is not yet known, prevents duplicate ratings by the same reader, computes the Readersourcing scores, and sends a confirmation email."
           },
           "status": "Created",
           "code": 201,
@@ -1700,7 +1700,7 @@
               "raw": "{\n\t\"rating\": {\n\t\t\"score\": 80,\n\t\t\"pdf_url\": \"https://link.springer.com/content/pdf/10.1007%2FJHEP07%282018%29172.pdf\"\n\t}\n}"
             },
             "url": "{{host}}/ratings.json",
-            "description": "Creates a rating for the publication identified by its PDF URL. RS_Server creates a minimal publication record when the URL is not yet known, prevents duplicate ratings by the same reader, computes the Readersourcing scores, and sends a confirmation email."
+            "description": "Creates a rating for the publication identified by its PDF URL. The score must be an integer from 0 to 100, including both endpoints. Missing, malformed, and out of range values return HTTP 422 with field validation messages, without creating a publication or rating, changing domain scores, or sending a confirmation email. For a valid rating, RS_Server creates a minimal publication record when the URL is not yet known, prevents duplicate ratings by the same reader, computes the Readersourcing scores, and sends a confirmation email."
           },
           "status": "Unprocessable Entity",
           "code": 422,
@@ -1715,6 +1715,39 @@
 
           ],
           "body": "{\n  \"publication_id\": [\n    \"has already been taken\"\n  ]\n}"
+        },
+        {
+          "name": "Invalid rating score",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": {\n    \"score\": 101,\n    \"pdf_url\": \"https://example.org/publication.pdf\"\n  }\n}"
+            },
+            "url": "{{host}}/ratings.json",
+            "description": "Submits a score outside the rating scale. RS_Server refuses it without saving a publication or rating, changing domain scores, or sending a confirmation email."
+          },
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"score\": [\n    \"must be less than or equal to 100\"\n  ],\n  \"original_score\": [\n    \"must be less than or equal to 100\"\n  ]\n}"
         }
       ],
       "_postman_id": "9d50c531-ca6b-4aac-b292-e6e0b0a11f46",
@@ -1775,7 +1808,7 @@
           ]
         },
         "url": "{{host}}/load",
-        "description": "Submits the rating associated with an annotated PDF after **Ratings (Rate Paper)** has verified and stored its durable reference in the same reader session. The reference is removed from the session when this request starts. RS_Server verifies its reader and publication again, prevents duplicate ratings, computes the Readersourcing scores, and sends a confirmation email."
+        "description": "Submits the rating associated with an annotated PDF after **Ratings (Rate Paper)** has verified and stored its durable reference in the same reader session. The score must be an integer from 0 to 100, including both endpoints. The reference is removed from the session when this request starts. RS_Server verifies its reader and publication again, prevents duplicate ratings, computes the Readersourcing scores, and sends a confirmation email. An invalid score displays the halted page without saving a rating, changing domain scores, or sending a confirmation email."
       },
       "response": [
 
@@ -1808,7 +1841,7 @@
           "raw": "{\n\t\"rating\": {\n\t\t\"score\": 40\n\t}\n}"
         },
         "url": "{{host}}/ratings/{{ratingId}}.json",
-        "description": "Changes the score of the rating identified by `ratingId` and marks it as edited. The rating must belong to the reader authenticated by `authToken`."
+        "description": "Changes the score of the rating identified by `ratingId` and marks it as edited, while retaining its `original_score`. The score must be an integer from 0 to 100, including both endpoints, and the rating must belong to the reader authenticated by `authToken`. Missing, malformed, and out of range values return HTTP 422 with field validation messages and leave the stored rating unchanged."
       },
       "response": [
 

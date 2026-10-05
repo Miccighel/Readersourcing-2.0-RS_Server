@@ -63,7 +63,7 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     refute_includes serialized_collection, "authTokenPaper"
 
     responses = @requests.flat_map { |item| item.fetch("response") }
-    assert_equal 17, responses.length
+    assert_equal 18, responses.length
     responses.each do |response|
       refute response.fetch("header").any? { |header| header.fetch("key").casecmp?("Set-Cookie") }
     end
@@ -141,6 +141,13 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     assert_equal JSON.parse(JSON.generate(duplicate.errors.as_json)), JSON.parse(
       examples.dig("Ratings (Create)", "Duplicate rating", "body")
     )
+
+    invalid_rating = Rating.new(user: users(:one), publication: publications(:two), score: 101, original_score: 101)
+    assert_not invalid_rating.valid?
+    invalid_example = examples.dig("Ratings (Create)", "Invalid rating score")
+    assert_equal 422, invalid_example.fetch("code")
+    assert_equal JSON.parse(JSON.generate(invalid_rating.errors.as_json)), JSON.parse(invalid_example.fetch("body"))
+    assert_equal 101, JSON.parse(invalid_example.dig("originalRequest", "body", "raw")).dig("rating", "score")
   end
 
   test "collection checks variables and principal API responses" do
