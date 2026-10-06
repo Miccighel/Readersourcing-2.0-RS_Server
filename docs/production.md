@@ -64,6 +64,8 @@ After every deployment, exercise the following paths with a dedicated test reade
 6. annotated PDF download and QR Code rating;
 7. account deletion and removal of the reader's private PDF directory.
 
+The completed local checks and the remaining browser validation are recorded in [integration.md](integration.md). A local result does not replace verification of the production host and its external services.
+
 ## Capacity and process model
 
 The Compose file supplies initial CPU, memory, process, temporary file, and log limits. They are conservative starting values rather than capacity guarantees. Observe Java and Rails memory while preparing PDFs near the configured size limit, then adjust the `RS_SERVER_` limits if the chosen host requires it.
