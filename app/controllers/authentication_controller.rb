@@ -32,7 +32,10 @@ class AuthenticationController < ApplicationController
 	# POST /authenticate
 	def authenticate
 		# Validate the supplied credentials and bind the token to this request's IP address.
-		authenticator = Authenticator.new(params[:email], params[:password], request.remote_ip)
+		authenticator = Authenticator.new(
+			params[:email], params[:password], request.remote_ip,
+			confirmation_url: ->(user) { PublicBaseUrl.for(request).join(confirm_path(user.id, user.confirm_token)) }
+		)
 
 		command = authenticator.call
 		if command.success?
@@ -41,6 +44,11 @@ class AuthenticationController < ApplicationController
 			reset_session
 			store_token command.result
 			render json: {auth_token: command.result}
+		elsif command.confirmation_failed
+			render json: {
+				status: "confirmation_delivery_failed",
+				errors: command.errors[:user_authentication]
+			}, status: :service_unavailable
 		else
 			render json: {errors: command.errors[:user_authentication]}, status: :unauthorized
 		end

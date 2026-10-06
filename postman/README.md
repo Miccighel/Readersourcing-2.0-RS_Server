@@ -42,6 +42,12 @@ Retrieval, PDF inspection, annotation, and verification share a time budget. A p
 with `status: "processing_timeout"` and leaves any previous prepared copy available. The collection includes this response
 among the preparation examples.
 
+`Users (Create)` returns HTTP `201` when the account is created. If the confirmation email cannot be sent, the account
+remains unconfirmed and the response includes `status: "confirmation_pending"`. Use `Authentication (Authenticate)`
+with the same credentials to request the email again. Correct credentials for an unconfirmed account return HTTP `401`
+after sending the confirmation, or HTTP `503` with `status: "confirmation_delivery_failed"` if delivery fails. The
+collection includes these outcomes and the HTTP `429` response used when the registration request limit is reached.
+
 ## Publishing an update
 
 The public collection is updated through the Postman API. Create an API key in your Postman account and keep it outside

@@ -62,6 +62,18 @@ class RequestRateLimit
 		period: 3.minutes
 	)
 
+	REGISTRATION_IP = new(
+		name: "registration-ip",
+		requests: configured_requests("RS_REGISTRATION_IP_RATE_LIMIT", 5),
+		period: 15.minutes
+	)
+
+	REGISTRATION_ACCOUNT = new(
+		name: "registration-account",
+		requests: configured_requests("RS_REGISTRATION_ACCOUNT_RATE_LIMIT", 3),
+		period: 30.minutes
+	)
+
 	PASSWORD_RECOVERY_IP = new(
 		name: "password-recovery-ip",
 		requests: configured_requests("RS_PASSWORD_RECOVERY_IP_RATE_LIMIT", 5),

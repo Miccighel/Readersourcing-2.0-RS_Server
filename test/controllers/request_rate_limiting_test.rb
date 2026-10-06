@@ -87,6 +87,96 @@ class RequestRateLimitingTest < ActionDispatch::IntegrationTest
     assert_rate_limited(policy)
   end
 
+  test "limits registration by IP before creating an account or sending mail" do
+    policy = RequestRateLimit::REGISTRATION_IP
+    exhaust(policy, scope: "users", identity: RequestRateLimit.for_ip(request_from(@ip_address)))
+
+    assert_no_difference("User.count") do
+      assert_no_emails do
+        post users_url(format: :json),
+          params: {user: {email: "new-reader@example.test", password: "password", password_confirmation: "password"}},
+          headers: {"REMOTE_ADDR" => @ip_address},
+          as: :json
+      end
+    end
+
+    assert_rate_limited(policy)
+  end
+
+  test "limits registration by normalized address across IP addresses" do
+    policy = RequestRateLimit::REGISTRATION_ACCOUNT
+    exhaust(policy, scope: "users", identity: RequestRateLimit.for_account("reader@example.test"))
+
+    assert_no_difference("User.count") do
+      assert_no_emails do
+        post users_url(format: :json),
+          params: {user: {email: " Reader@Example.Test ", password: "password", password_confirmation: "password"}},
+          headers: {"REMOTE_ADDR" => "192.0.2.25"},
+          as: :json
+      end
+    end
+
+    assert_rate_limited(policy)
+  end
+
+  test "does not count signup forms or confirmation links as registration attempts" do
+    reader = users(:one)
+    reader.update!(email_confirmed: false, confirm_token: "pending-confirmation-token")
+    exhaust(RequestRateLimit::REGISTRATION_IP, scope: "users", identity: RequestRateLimit.for_ip(request_from(@ip_address)))
+    exhaust(RequestRateLimit::REGISTRATION_ACCOUNT, scope: "users", identity: RequestRateLimit.for_account(reader.email))
+
+    get sign_up_path, headers: {"REMOTE_ADDR" => @ip_address}
+    assert_response :success
+    assert_select "#sign-up-form"
+
+    get confirm_path(reader.id, reader.confirm_token), headers: {"REMOTE_ADDR" => @ip_address}
+    assert_response :created
+    assert reader.reload.email_confirmed
+  end
+
+  test "stops pending confirmation resends when the authentication budget is exhausted" do
+    reader = users(:one)
+    reader.update!(email_confirmed: false, confirm_token: "pending-confirmation-token")
+    policy = RequestRateLimit::AUTHENTICATION
+    exhaust(policy, scope: "authentication", identity: RequestRateLimit.for_ip(request_from(@ip_address)))
+
+    assert_no_difference("AuthenticationToken.count") do
+      assert_no_emails do
+        post authenticate_path,
+          params: {email: reader.email, password: "password"},
+          headers: {"REMOTE_ADDR" => @ip_address},
+          as: :json
+      end
+    end
+
+    assert_rate_limited(policy)
+    assert_equal "pending-confirmation-token", reader.reload.confirm_token
+    assert_not reader.email_confirmed
+  end
+
+  test "counts actual registration attempts and accepts them again after expiration" do
+    policy = RequestRateLimit::REGISTRATION_ACCOUNT
+    reader = users(:one)
+
+    assert_no_emails do
+      policy.requests.times do
+        post users_url(format: :json),
+          params: {user: {email: reader.email, password: "password", password_confirmation: "password"}},
+          as: :json
+        assert_response :unprocessable_entity
+      end
+      post users_url(format: :json), params: {user: {email: reader.email}}, as: :json
+      assert_rate_limited(policy)
+
+      travel policy.period + 1.second do
+        post users_url(format: :json),
+          params: {user: {email: reader.email, password: "password", password_confirmation: "password"}},
+          as: :json
+        assert_response :unprocessable_entity
+      end
+    end
+  end
+
   private
 
   def assert_rate_limited(policy)

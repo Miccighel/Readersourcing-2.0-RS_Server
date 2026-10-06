@@ -7,6 +7,19 @@ class UsersController < ApplicationController
 	before_action :set_owned_user, only: [:update, :unsubscribe_confirmation, :unsubscribe, :destroy]
 	before_action :set_error_manager, only: [:confirm_email]
 
+	rate_limit(
+		**RequestRateLimit::REGISTRATION_IP.rails_options,
+		by: -> { RequestRateLimit.for_ip(request) },
+		with: -> { render_rate_limited(RequestRateLimit::REGISTRATION_IP) },
+		only: :create
+	)
+	rate_limit(
+		**RequestRateLimit::REGISTRATION_ACCOUNT.rails_options,
+		by: -> { RequestRateLimit.for_account(registration_params[:email]) },
+		with: -> { render_rate_limited(RequestRateLimit::REGISTRATION_ACCOUNT) },
+		only: :create
+	)
+
 	require "http"
 
 	# GET /users.json
@@ -38,8 +51,17 @@ class UsersController < ApplicationController
 		@user = User.new(registration_params)
 		@user.generate_confirm_token
 		if @user.save
-			UserMailer.registration_confirmation(@user, confirm_url(@user.id, @user.confirm_token)).deliver_now
-			render json: {message: I18n.t("confirmations.messages.please_confirm")}, status: :created
+			confirmation = RegistrationConfirmation.new(@user, link: -> {
+				PublicBaseUrl.for(request).join(confirm_path(@user.id, @user.confirm_token))
+			})
+			if confirmation.call
+				render json: {message: I18n.t("confirmations.messages.please_confirm")}, status: :created
+			else
+				render json: {
+					status: "confirmation_pending",
+					message: I18n.t("information.messages.registration_saved_without_confirmation")
+				}, status: :created
+			end
 		else
 			render json: @user.errors, status: :unprocessable_entity
 		end

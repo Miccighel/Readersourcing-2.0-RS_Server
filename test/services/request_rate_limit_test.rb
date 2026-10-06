@@ -14,6 +14,8 @@ class RequestRateLimitTest < ActiveSupport::TestCase
   test "provides bounded positive policies to Rails" do
     policies = [
       RequestRateLimit::AUTHENTICATION,
+      RequestRateLimit::REGISTRATION_IP,
+      RequestRateLimit::REGISTRATION_ACCOUNT,
       RequestRateLimit::PASSWORD_RECOVERY_IP,
       RequestRateLimit::PASSWORD_RECOVERY_ACCOUNT,
       RequestRateLimit::CONTACT,

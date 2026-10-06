@@ -19,19 +19,149 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create user" do
-    assert_difference("User.count") do
-      post users_url(format: :json), params: {
-        user: {
-          email: "grace@example.test",
-          first_name: "Grace",
-          last_name: "Hopper",
-          password: "a-secure-password",
-          password_confirmation: "a-secure-password"
-        }
-      }, as: :json
+    assert_emails 1 do
+      assert_difference("User.count") do
+        post users_url(format: :json), params: {user: registration_attributes}, as: :json
+      end
     end
 
     assert_response :created
+    assert_equal({"message" => I18n.t("confirmations.messages.please_confirm")}, response.parsed_body)
+    reader = User.find_by!(email: registration_attributes.fetch(:email))
+    assert_not reader.email_confirmed
+    assert_predicate reader.confirm_token, :present?
+  end
+
+  test "keeps a pending account after delivery failure and recovers through login and confirmation" do
+    delivery = Object.new
+    delivery.define_singleton_method(:deliver_now) { raise IOError, "Private SMTP details" }
+
+    assert_difference("User.count") do
+      assert_no_difference("AuthenticationToken.count") do
+        UserMailer.stub(:registration_confirmation, ->(*) { delivery }) do
+          assert_no_emails do
+            post users_url(format: :json), params: {user: registration_attributes}, as: :json
+          end
+        end
+      end
+    end
+
+    assert_response :created
+    assert_equal "confirmation_pending", response.parsed_body.fetch("status")
+    assert_equal I18n.t("information.messages.registration_saved_without_confirmation"), response.parsed_body.fetch("message")
+    refute_includes response.body, "Private SMTP details"
+    refute_includes response.body, "a-secure-password"
+    reader = User.find_by!(email: registration_attributes.fetch(:email))
+    confirmation_token = reader.confirm_token
+    assert_not reader.email_confirmed
+    assert_predicate confirmation_token, :present?
+
+    assert_no_difference("User.count") do
+      assert_no_difference("AuthenticationToken.count") do
+        assert_emails 1 do
+          post authenticate_path, params: {email: reader.email, password: registration_attributes.fetch(:password)}, as: :json
+        end
+      end
+    end
+    assert_response :unauthorized
+    assert_equal [I18n.t("errors.messages.unconfirmed_mail")], response.parsed_body.fetch("errors")
+    assert_equal confirmation_token, reader.reload.confirm_token
+    assert_not reader.email_confirmed
+
+    get confirm_path(reader.id, confirmation_token)
+    assert_response :created
+    assert reader.reload.email_confirmed
+    assert_nil reader.confirm_token
+
+    assert_difference("AuthenticationToken.count") do
+      post authenticate_path, params: {email: reader.email, password: registration_attributes.fetch(:password)}, as: :json
+    end
+    assert_response :success
+    assert response.parsed_body.fetch("auth_token").present?
+  end
+
+  test "does not replace a pending account when registration is submitted again" do
+    reader = User.create!(registration_attributes)
+    reader.generate_confirm_token
+    reader.save!
+    original_attributes = reader.attributes
+
+    assert_no_difference("User.count") do
+      assert_no_emails do
+        post users_url(format: :json), params: {user: registration_attributes.merge(first_name: "Changed", password: "another-password", password_confirmation: "another-password")}, as: :json
+      end
+    end
+
+    assert_response :unprocessable_entity
+    assert_equal original_attributes, reader.reload.attributes
+  end
+
+  test "rejects invalid registration without creating an account or sending mail" do
+    assert_no_difference("User.count") do
+      assert_no_emails do
+        post users_url(format: :json), params: {user: registration_attributes.merge(password_confirmation: "mismatch")}, as: :json
+      end
+    end
+
+    assert_response :unprocessable_entity
+    assert response.parsed_body.key?("password_confirmation")
+  end
+
+  test "confirmation links use the configured public origin rather than the request host" do
+    previous_origin = ENV["PUBLIC_BASE_URL"]
+    ENV["PUBLIC_BASE_URL"] = "https://readersourcing.example"
+    host! "untrusted.example"
+
+    assert_emails 1 do
+      post users_url(format: :json), params: {user: registration_attributes}, as: :json
+    end
+    assert_response :created
+    reader = User.find_by!(email: registration_attributes.fetch(:email))
+    link = "https://readersourcing.example#{confirm_path(reader.id, reader.confirm_token)}"
+    assert_includes ActionMailer::Base.deliveries.last.body.decoded, link
+    refute_includes ActionMailer::Base.deliveries.last.body.decoded, "untrusted.example"
+
+    assert_emails 1 do
+      post authenticate_path, params: {email: reader.email, password: registration_attributes.fetch(:password)}, as: :json
+    end
+    assert_response :unauthorized
+    assert_includes ActionMailer::Base.deliveries.last.body.decoded, link
+    refute_includes ActionMailer::Base.deliveries.last.body.decoded, "untrusted.example"
+  ensure
+    previous_origin.nil? ? ENV.delete("PUBLIC_BASE_URL") : ENV["PUBLIC_BASE_URL"] = previous_origin
+  end
+
+  test "reports pending registration and delivery failures in the selected language" do
+    delivery = Object.new
+    delivery.define_singleton_method(:deliver_now) { raise IOError, "Private SMTP details" }
+
+    I18n.with_locale(:it) do
+      UserMailer.stub(:registration_confirmation, ->(*) { delivery }) do
+        post users_url(format: :json), params: {user: registration_attributes}, as: :json
+        assert_response :created
+        assert_equal I18n.t("information.messages.registration_saved_without_confirmation"), response.parsed_body.fetch("message")
+        refute_includes response.body, "translation missing"
+
+        post authenticate_path,
+          params: {email: registration_attributes.fetch(:email), password: registration_attributes.fetch(:password)},
+          as: :json
+        assert_response :service_unavailable
+        assert_equal [I18n.t("errors.messages.confirmation_delivery_unavailable")], response.parsed_body.fetch("errors")
+        refute_includes response.body, "translation missing"
+      end
+    end
+  end
+
+  test "registration does not accept activation or score attributes" do
+    post users_url(format: :json),
+      params: {user: registration_attributes.merge(email_confirmed: true, confirm_token: "supplied-token", score: 99)},
+      as: :json
+
+    assert_response :created
+    reader = User.find_by!(email: registration_attributes.fetch(:email))
+    assert_not reader.email_confirmed
+    assert_not_equal "supplied-token", reader.confirm_token
+    assert_equal User.column_defaults.fetch("score").to_d, reader.score
   end
 
   test "should show user" do
@@ -166,6 +296,16 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   private
+
+  def registration_attributes
+    {
+      email: "grace@example.test",
+      first_name: "Grace",
+      last_name: "Hopper",
+      password: "a-secure-password",
+      password_confirmation: "a-secure-password"
+    }
+  end
 
   def authenticate
     post authenticate_path, params: {

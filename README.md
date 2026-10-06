@@ -227,6 +227,8 @@ along with an explanation of which deployment modality requires their usage.
 | ```RS_PDF_STORAGE_ROOT``` | Private directory used for prepared publications. The default is ```storage/publications```. | 1 - 2 | ```development```, ```production``` | ```.env``` file |
 | ```RS_PDF_DOWNLOAD_URL_TTL``` | Lifetime in seconds of a signed publication download URL. The default is 300.       | 1 - 2           | ```development```, ```production``` | ```.env``` file |
 | ```RS_AUTHENTICATION_RATE_LIMIT``` | Maximum authentication attempts from one IP address in three minutes. The default is 10. | 1 - 2 | ```development```, ```production``` | ```.env``` file |
+| ```RS_REGISTRATION_IP_RATE_LIMIT``` | Maximum registration attempts from one IP address in fifteen minutes. The default is 5. | 1 - 2 | ```development```, ```production``` | ```.env``` file |
+| ```RS_REGISTRATION_ACCOUNT_RATE_LIMIT``` | Maximum registration attempts for one normalized email address in thirty minutes. The default is 3. | 1 - 2 | ```development```, ```production``` | ```.env``` file |
 | ```RS_PASSWORD_RECOVERY_IP_RATE_LIMIT``` | Maximum password recovery requests from one IP address in fifteen minutes. The default is 5. | 1 - 2 | ```development```, ```production``` | ```.env``` file |
 | ```RS_PASSWORD_RECOVERY_ACCOUNT_RATE_LIMIT``` | Maximum password recovery requests for one normalized email address in thirty minutes. The default is 3. | 1 - 2 | ```development```, ```production``` | ```.env``` file |
 | ```RS_CONTACT_RATE_LIMIT``` | Maximum contact messages from one IP address in ten minutes. The default is 5.          | 1 - 2           | ```development```, ```production``` | ```.env``` file |
@@ -370,6 +372,17 @@ RS_Server supports any mail server compatible with SMTP to send emails for tasks
 or recovering forgotten passwords. Password recovery emails contain a link that remains valid for four hours and can be used
 once to choose a new password; passwords themselves are never sent by email. Production SMTP connections require a
 successful STARTTLS upgrade before authentication credentials are sent.
+
+Registration attempts are limited by IP address and normalized email address. HTTP `429` responses include `Retry-After`;
+displaying the registration form and following a confirmation link do not consume these budgets. Creating an account
+returns HTTP `201`. If the confirmation email cannot be sent, the account remains unconfirmed and the response reports
+`status: "confirmation_pending"`, with a message asking the reader to sign in with the same credentials later.
+The web interface and RS_Rate display that message on the login page. A login attempt with correct credentials for an
+unconfirmed account requests another confirmation email without replacing an existing confirmation token. It returns
+HTTP `401` after sending the email, or HTTP `503` with `status: "confirmation_delivery_failed"` if sending fails.
+Incorrect credentials do not send email or reveal whether the address is awaiting confirmation. These attempts remain
+subject to the authentication request limit, and no authentication token is issued until the address has been confirmed.
+Confirmation links use `PUBLIC_BASE_URL`; outside production, an omitted value uses the request origin.
 
 Understanding the values used to populate the `SMTP_` environment variables can sometimes lead to ambiguity. Let's consider
 the case of [Twilio Sendgrid](https://sendgrid.com/). After creating an account, you need to verify a single

@@ -70,6 +70,8 @@ The Compose file supplies initial CPU, memory, process, temporary file, and log 
 
 The supplied Puma configuration uses one process. Request counters consequently remain consistent in the in memory Rails cache. Before adding Puma workers or application replicas, configure a shared Active Support cache and validate that every instance uses it.
 
+Registration applies separate budgets to IP addresses and normalized email addresses. Review `RS_REGISTRATION_IP_RATE_LIMIT` and `RS_REGISTRATION_ACCOUNT_RATE_LIMIT` against the expected use of the public instance, including readers sharing one network. SMTP delivery failures retain the unconfirmed account rather than undoing a completed registration. The reader can request confirmation again by signing in with the same credentials; this does not authorize access before email confirmation.
+
 Run `bin/rails security:prune_expired_authentication_tokens` on a regular maintenance schedule. Token expiry is enforced when a token is used; this task removes expired database records that are no longer needed.
 
 ## Data recovery and security review

@@ -63,7 +63,7 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     refute_includes serialized_collection, "authTokenPaper"
 
     responses = @requests.flat_map { |item| item.fetch("response") }
-    assert_equal 19, responses.length
+    assert_equal 24, responses.length
     responses.each do |response|
       refute response.fetch("header").any? { |header| header.fetch("key").casecmp?("Set-Cookie") }
     end
@@ -165,6 +165,39 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     assert_equal 101, JSON.parse(invalid_example.dig("originalRequest", "body", "raw")).dig("rating", "score")
   end
 
+  test "collection distinguishes pending registration and confirmation delivery failure" do
+    examples = @requests.to_h do |item|
+      [item.fetch("name"), item.fetch("response").to_h { |response| [response.fetch("name"), response] }]
+    end
+    registered = examples.dig("Users (Create)", "Reader registered")
+    assert_equal 201, registered.fetch("code")
+    assert_equal({"message" => I18n.t("confirmations.messages.please_confirm")}, JSON.parse(registered.fetch("body")))
+
+    pending = examples.dig("Users (Create)", "Account created with confirmation pending")
+    assert_equal 201, pending.fetch("code")
+    assert_equal({
+      "status" => "confirmation_pending",
+      "message" => I18n.t("information.messages.registration_saved_without_confirmation")
+    }, JSON.parse(pending.fetch("body")))
+
+    limited = examples.dig("Users (Create)", "Registration rate limit reached")
+    assert_equal 429, limited.fetch("code")
+    assert_equal [I18n.t("errors.messages.too_many_requests")], JSON.parse(limited.fetch("body")).fetch("errors")
+    assert_equal RequestRateLimit::REGISTRATION_IP.period.to_i.to_s,
+      limited.fetch("header").find { |header| header.fetch("key") == "Retry-After" }.fetch("value")
+
+    sent = examples.dig("Authentication (Authenticate)", "Email confirmation required")
+    assert_equal 401, sent.fetch("code")
+    assert_equal [I18n.t("errors.messages.unconfirmed_mail")], JSON.parse(sent.fetch("body")).fetch("errors")
+
+    unavailable = examples.dig("Authentication (Authenticate)", "Confirmation delivery unavailable")
+    assert_equal 503, unavailable.fetch("code")
+    assert_equal({
+      "status" => "confirmation_delivery_failed",
+      "errors" => [I18n.t("errors.messages.confirmation_delivery_unavailable")]
+    }, JSON.parse(unavailable.fetch("body")))
+  end
+
   test "collection checks variables and principal API responses" do
     assert_equal "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
       @collection.dig("info", "schema")
@@ -178,10 +211,11 @@ class PostmanCollectionTest < ActiveSupport::TestCase
     collection_test = @collection.fetch("event").find do |event|
       event.fetch("listen") == "test"
     end.dig("script", "exec").join("\n")
-    assert_includes collection_test, "Response is not a server error"
+    assert_includes collection_test, "Response is not an unexpected server error"
+    assert_includes collection_test, "confirmation_delivery_failed"
     assert_includes collection_test, "Retry-After"
 
-    ["Authentication (Authenticate)", "Publications (Lookup)", "Ratings (Create)"].each do |name|
+    ["Authentication (Authenticate)", "Users (Create)", "Publications (Lookup)", "Ratings (Create)"].each do |name|
       request = @requests.find { |item| item.fetch("name") == name }
       assert_not_empty request.fetch("event"), "#{name} has no response checks"
     end

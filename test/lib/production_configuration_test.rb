@@ -90,6 +90,16 @@ class ProductionConfigurationTest < ActiveSupport::TestCase
 		end
 	end
 
+	test "requires positive integer budgets for both registration limits" do
+		%w[RS_REGISTRATION_IP_RATE_LIMIT RS_REGISTRATION_ACCOUNT_RATE_LIMIT].each do |name|
+			["0", "-1", "many"].each do |value|
+				@environment[name] = value
+				assert_includes ProductionConfiguration.new(@environment).errors, "#{name} must contain a positive integer"
+			end
+			@environment.delete(name)
+		end
+	end
+
 	test "rejects invalid Boolean, CORS, and SMTP settings" do
 		@environment["ASSUME_SSL"] = "true"
 		@environment["FORCE_SSL"] = "false"
