@@ -1,12 +1,30 @@
 # Container security assessment
 
-This record complements application dependency audits. It distinguishes the published image, the browser check
-image, and the replacement candidates. Scanner findings describe affected packages present in an image; they do
+This record complements application dependency audits. It distinguishes the previous published image, the browser check
+image, and the replacement images. Scanner findings describe affected packages present in an image; they do
 not, by themselves, establish whether an application request can reach the affected code.
+
+## Publication of October 9, 2026
+
+`miccighel/rs_server:v2.0.2` is available on Docker Hub for `linux/amd64` and `linux/arm64`. Its manifest digest is
+`sha256:83681bfe5a86642a316b1aee4d2f08a93f256cbc9f40ab14471dc9b688e17054`. The platform manifest digests are:
+
+- `linux/amd64`: `sha256:e4638b7da57b4a3125f24a1127614aaef9452ea4d6a12409753860760d2ee895`;
+- `linux/arm64`: `sha256:f6390c087d10215d4d0e4f6140d969c92ffeeae340115925d5159e25391403f3`.
+
+The registry configuration digests match the candidate image IDs assessed below. Publication retained those exact
+contents without rebuilding. No private environment file, master key, or reader PDF was present in either image.
+The previous `v2.0.1` manifest remains unchanged. No `latest` tag was created, and no public service was deployed.
+No build provenance or SBOM attestations were attached during this publication. The retained scan reports describe
+the matching image contents; their findings and coverage limits remain applicable.
+
+The [publication record](container-release-2026-10-09.json) records the registry digests and completed checks.
+Both platforms were pulled from the published version tag. JSON parsing and generation outside Bundler passed
+in each downloaded image, with version 2.21.2 matching the lockfile and no older JSON specification installed.
 
 ## Assessment of October 9, 2026
 
-The published `miccighel/rs_server:v2.0.1` multiarchitecture manifest still has digest
+The previous `miccighel/rs_server:v2.0.1` multiarchitecture manifest retains digest
 `sha256:de59229f1298338306124148f75f45ff371e74fbac5ac23d7e50d30928ec168e`. The platform digests assessed were:
 
 - `linux/amd64`: `sha256:0a3233279e361922e20187d2e42d062d4b0076b9f2351683f3143f54b6c69350`;
@@ -27,7 +45,8 @@ and the locked JSON library available both inside and outside Bundler:
   `sha256:23dd56d72c5d8b9c61c081b4b23fab3f4839c6c4f3202623e3489fc48ba48756`.
 
 Scout indexed 353 packages in each candidate and reported 46 distinct advisories affecting 19 packages. Trivy also
-assessed the operating system packages in each candidate. Neither candidate has replaced the published image.
+assessed the operating system packages in each candidate. These candidates were subsequently published as `v2.0.2`,
+as recorded above.
 
 The table counts distinct advisory identifiers within each report, rather than repeating an advisory for every
 affected package. Scout and Trivy use different advisory data and severity selection; their totals must not be
@@ -35,12 +54,12 @@ combined or treated as interchangeable. No advisory was excluded.
 
 | Image | Scanner and scope | Critical | High | Medium | Low | Unspecified or unknown |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| Published, each architecture | Scout, published SBOM | 6 | 16 | 13 | 63 | 7 |
-| Published, each architecture | Trivy, operating system only | 3 | 25 | 58 | 57 | 3 |
+| Published v2.0.1, each architecture | Scout, published SBOM | 6 | 16 | 13 | 63 | 7 |
+| Published v2.0.1, each architecture | Trivy, operating system only | 3 | 25 | 58 | 57 | 3 |
 | Browser check image | Scout, local SBOM | 0 | 4 | 4 | 51 | 2 |
 | Browser check image | Trivy, operating system only | 0 | 11 | 39 | 49 | 3 |
-| Replacement candidate, each architecture | Scout, local SBOM | 0 | 2 | 1 | 41 | 2 |
-| Replacement candidate, each architecture | Trivy, operating system only | 0 | 8 | 30 | 47 | 1 |
+| Published v2.0.2, each architecture | Scout, matching local SBOM | 0 | 2 | 1 | 41 | 2 |
+| Published v2.0.2, each architecture | Trivy, operating system only | 0 | 8 | 30 | 47 | 1 |
 
 The [machine readable assessment](security-report-2026-10-09.json) records image identities, per-package occurrence
 counts, distinct advisory counts, critical and high findings, application audit results, and hashes of the full
@@ -71,13 +90,13 @@ local Rails application use 2.21.2 through Bundler. Ruby commands outside Bundle
 as well. Image preparation removes the old default specification, Ruby implementation, and native extensions, rather
 than removing scanner metadata alone. Runtime checks verified JSON parsing and generation outside Bundler on both
 architectures; Scout no longer reported this application finding in either candidate. Dependency declarations are
-unchanged. The affected library remains present in the unchanged published and browser check images.
+unchanged. The affected library remains present in the unchanged `v2.0.1` and browser check images.
 
 The complete Rails suite passed against a disposable PostgreSQL database. Readiness, production configuration,
 restored PDF downloads, rating references, extraction, and logout passed in both candidate images, with `amd64`
 running under emulation. Database fingerprints and all restored PDF pairs were unchanged. These HTTP checks do not
 repeat every browser scenario recorded earlier. The results are recorded in
-[integration.md](integration.md#container-validation). No image was published during this check.
+[integration.md](integration.md#container-validation). Publication followed these checks using the same image IDs.
 
 ### Application audits and coverage
 

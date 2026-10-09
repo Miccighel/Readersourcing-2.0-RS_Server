@@ -124,9 +124,9 @@ preference overrides were found. Private window access was reported as disabled 
 automatic control could not confirm the updated setting. The complete login, PDF, restart, and logout checks with
 the installed XPI remain pending, separately from the temporary browser installations above.
 
-This check did not publish to Postman or Docker Hub, and no public service was deployed. The documented `node-forge`
-and `shell-quote` findings remain open in the RS_Rate development audit, without exceptions. Application dependency
-audits and the container assessment are recorded in [security.md](security.md). The local results do not replace
+The earlier browser and recovery checks did not publish to Postman or Docker Hub, and no public service was deployed.
+The documented `node-forge` and `shell-quote` findings remain open in the RS_Rate development audit, without exceptions.
+Application dependency audits and the container assessment are recorded in [security.md](security.md). The local results do not replace
 validation of the eventual production host, SMTP provider, external backup storage, or production recovery time.
 
 ## Container validation
@@ -144,6 +144,11 @@ access to the same rating reference required login again. The source database an
 all five restored PDF pairs were unchanged after the requests.
 
 The Rails suite passed 271 tests with 2,154 assertions against a separate disposable PostgreSQL database. The checks
-above were repeated for both candidates; they do not repeat every earlier browser scenario. The two image identities, scan results, and remaining
-findings are in [security.md](security.md). The original browser check services and published Docker Hub image were
-not replaced.
+above were repeated for both candidates; they do not repeat every earlier browser scenario. The two image identities,
+scan results, and remaining findings are in [security.md](security.md). The original browser check services were not replaced. The same candidate
+contents were subsequently published on Docker Hub as `v2.0.2`; the `v2.0.1` tag remains unchanged. Registry
+configuration digests match the assessed image IDs. No public service was deployed.
+
+Both platforms were pulled from the published version tag. Runtime JSON checks outside Bundler passed in each
+downloaded image, including the lockfile version, absence of older JSON specifications, and a parsing and generation
+round trip. The registry digests and checks are retained in [the publication record](container-release-2026-10-09.json).

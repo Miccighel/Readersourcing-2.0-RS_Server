@@ -91,3 +91,7 @@ docker buildx build --pull --no-cache-filter base --load --tag rs_server:check .
 ```
 
 Build and assess each intended architecture before publication. This local tag does not replace an image on Docker Hub.
+
+The published `miccighel/rs_server:v2.0.2` image supports `linux/amd64` and `linux/arm64`. Its manifest digest is
+`sha256:83681bfe5a86642a316b1aee4d2f08a93f256cbc9f40ab14471dc9b688e17054`. The publication record and remaining scanner
+findings are in [security.md](security.md). Named version tags are used by Compose; no `latest` tag is required.
