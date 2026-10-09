@@ -113,7 +113,7 @@ A modified database archive failed checksum validation. A publication archive co
 directory was also refused, even with a matching checksum. Both failures occurred before the restore wrote to the
 target service. The backup and recovery instructions are in [backups.md](backups.md).
 
-## Remaining validation
+## RS_Rate signed Firefox installation
 
 RS_Rate 2.0.0 was submitted to Mozilla on October 9, 2026 through the existing extension entry, retaining its original
 identifier `rs-rate@readersourcing.com`. The submission used the unlisted channel for Firefox desktop and included
@@ -121,8 +121,35 @@ the corresponding source archive. Mozilla reported no validation errors and 21 w
 returned a signed XPI. No new version was published in the public catalog. The signed package was installed through
 the Add-ons Manager in the separate regular Firefox 157.0.1 profile and appeared active. No signature enforcement
 preference overrides were found. Private window access was reported as disabled during manual configuration, but
-automatic control could not confirm the updated setting. The complete login, PDF, restart, and logout checks with
-the installed XPI remain pending, separately from the temporary browser installations above.
+automatic control could not confirm the updated setting.
+
+The signed package's functional check completed later on October 9. The user operated the temporary Firefox
+profile; HTTP responses, synthetic reader records, and publication copies were checked independently on the local
+server. Login created an active session and remained available after closing and reopening the toolbar popup.
+Original PDF upload returned HTTP 200 and opened an annotated copy containing eight pages rather than seven.
+The stored original matched the selected file byte for byte and remained associated with
+`http://127.0.0.1:38082/protected.pdf`.
+
+Extraction refused the original PDF with HTTP 422 and a textual explanation. The annotated copy returned HTTP 200
+and opened the corresponding publication's rating page. No rating was submitted. A complete Firefox restart cleared
+the extension login while retaining `http://127.0.0.1:3300` as the selected server. After a new login, logout returned
+HTTP 200 and removed that precise session record; reopening the popup displayed the login view. Both synthetic
+readers and all existing rating records remained unchanged.
+
+The check also identified overlapping popup and upload views, a narrow form in the normal tab, and loading icons
+that remained visible. The development source closes only an actual Firefox popup after opening the upload tab,
+centers the tab's form within its available width, and preserves the original icon elements while Font Awesome adds
+its SVGs. A browser fixture using the bundled library reproduced disconnected icon references with replacement and
+retained working show and hide operations with nesting. A synthetic API preview verified the form at widths of 300
+and 1,280 pixels, hidden idle indicators, and the unchanged 300 pixel popup width. These revisions are not part of the
+signed XPI just checked.
+
+## Remaining validation
+
+The revised interface still needs a native Firefox installation check and a new signed package before distribution.
+The retained signed XPI and the source submitted to Mozilla remain unchanged. Private window settings were confirmed
+by the user, not by automatic inspection. Neither the signed functional check nor the synthetic interface preview
+constitutes validation of a public deployment.
 
 The earlier browser and recovery checks did not publish to Postman or Docker Hub, and no public service was deployed.
 The documented `node-forge` and `shell-quote` findings remain open in the RS_Rate development audit, without exceptions.
