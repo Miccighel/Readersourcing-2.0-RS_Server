@@ -26,12 +26,124 @@ The SMTP simulator supported authentication and STARTTLS with a certificate trus
 | Password recovery | The reset form accepted the mailed link, consumed it once, and revoked previous credentials. Registered and unknown addresses received the same public response. |
 | Browser request protection | A form submission without a CSRF token was refused. |
 
-The web check found a preparation error that remained visible after a successful retry or upload. Both interfaces now clear that error in their existing success handler. Regression tests cover the handler, and the server correction was verified in the rebuilt production image. No errors were recorded in the web console during these checks.
+The web check found a preparation error that remained visible after a successful retry or upload. Both interfaces clear that error in their existing success handler. Regression tests cover the handler, and the server correction was verified in the rebuilt production image. No errors were recorded in the web console during these checks.
 
 The Rails suite passed 271 tests with 2,154 assertions. RS_Rate passed 38 tests; both browser builds passed the asset checks. Firefox lint reported no errors and retained its 21 documented warnings.
 
+## RS_Rate in Edge
+
+On 8 October 2026, RS_Rate 2.0.0 was loaded from the local Chromium build into a separate temporary Edge profile. The extension requested permission for the configured local server. The server used a new disposable database, publication storage, a local PDF publisher, and an SMTP simulator. Production configuration, readiness, and SMTP checks passed.
+
+The extension popup authenticated a test reader and retained the session when reopened. Preparing the publication displayed the processing state and opened an annotated PDF containing eight pages instead of the original seven. Reopening the popup on the source displayed `PDF ready` and the `Open` control. A rating of 51 submitted from the popup was verified in the database for that reader.
+
+A source returning HTTP 403 produced `Browser access required`, a retry control, and the original PDF upload area. The upload check identified a duplicated `Authorization` header and an error handler that displayed `[object Object]`. The duplicated value caused the server to refuse the multipart request with HTTP 422 because CSRF validation failed. A separate multipart request to the reader information endpoint confirmed HTTP 200 with a single token and HTTP 422 with the duplicated value.
+
+Dropzone configuration supplies the authentication header once for each upload. Repeated calls to `XMLHttpRequest.setRequestHeader` append values, as described in the [XMLHttpRequest documentation](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/setRequestHeader). Both upload error handlers select a textual server message or a message describing the failed operation. Numeric HTTP status values are not used as preparation states. Server CSRF protection was not changed.
+
+Selecting the original PDF through the native file chooser completed preparation with HTTP 201, opened the annotated copy containing eight pages, and displayed `PDF ready` when the popup was reopened on the source. Uploading a PDF without an annotation to the extraction control returned HTTP 422 and displayed `The PDF file does not contain a rating URL to extract.` Uploading the test reader's annotated PDF returned HTTP 200 and opened its rating URL; the server correctly reported the reader's existing rating. RS_Rate passed 67 tests, including 24 upload regression cases and five message style checks. Both builds passed the asset checks; Firefox lint retained its 21 warnings and reported no errors.
+
+A source returning HTML with HTTP 200 was refused during preparation with HTTP 415. The popup displayed `PDF not found`, the server's explanation, a retry control, and the original PDF upload area.
+
+A source taking 25 seconds to respond exceeded the configured 20 second processing budget. The request returned HTTP 422 after approximately 20 seconds. The popup displayed `PDF operation timed out`, explained that the operation had stopped, and offered a retry or an original PDF upload.
+
+Logout from the popup returned HTTP 200 and displayed the login form with empty fields. The server revoked the credential issued for that session. Both previously prepared PDFs remained available and retained their SHA-256 hashes; neither failed preparation attempt created a publication or replaced those copies.
+
+Popup messages use the corresponding dark Bootstrap text color for information, success, warning, and error states, including nested titles and descriptions. Their backgrounds and layout are unchanged. Stylesheet checks verified all four color pairs against the [4.5:1 text contrast threshold](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html). A local preview using the Chromium build styles confirmed the applied colors visually and through computed styles. The actual Edge popup also displayed readable information, success, warning, and error messages during the browser checks. The personal Edge profile was not used.
+
+On 9 October 2026, the current Chromium build was checked in a new temporary Edge profile against the retained test database and publication storage. Login through the toolbar popup succeeded, and reopening it retained the session. Uploading the original PDF for the protected publisher returned HTTP 200 and opened its annotated copy containing eight pages. Both file choosers worked in the existing popup.
+
+Extraction refused the original PDF with HTTP 422 and a textual explanation. The owning reader's annotated PDF returned HTTP 200 and opened the web page reporting the existing rating of 50. An HTML source returned HTTP 415 and displayed `PDF not found`. A slow source returned HTTP 422 after approximately 20 seconds and displayed `PDF operation timed out`, with retry and original upload controls.
+
+Logout displayed an empty login form and revoked that extension session's credential. The failed preparation attempts did not create publications. The original and annotated files for both tested publications retained their SHA-256 hashes after logout. Optional diagnostic data was disabled and verified in the temporary Edge profile; the personal profile was not used.
+
+## RS_Rate in Firefox
+
+On 8 October 2026, the local Firefox build was loaded temporarily into a separate Firefox 157.0.1 profile. It used the same isolated server and publisher as the Edge check. The personal Firefox profile was not used.
+
+Firefox refused the initial host permission pattern because it included a port. Its permission pattern now contains the selected protocol and hostname without a port, as required by the [Firefox match pattern rules](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns). Access to the local hostname on all ports was explicitly authorized for this check. API requests retained the configured server address on port 3300.
+
+Firefox did not retain the authentication token in the extension page's cookies when the popup was reopened. The token now uses the extension's [session storage](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/session). Controllers wait for token storage or removal before navigating. It is shared by extension pages during the browser session and is not synchronized or retained across browser restarts.
+
+A browser web session cookie also caused a subsequent login request to fail CSRF validation. Firefox API requests use an [anonymous XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/XMLHttpRequest) that omits automatic cookies and HTTP credentials while retaining the explicit extension token. Server CORS and CSRF protections were not changed.
+
+The test reader signed in through the extension's actual login view in a regular tab. The popup then retained the authenticated session when reopened on the publisher's PDF. A browser restart required a new login while preserving the configured server address. Preparation from the popup opened an annotated PDF containing eight pages instead of seven and displayed `PDF ready`. A rating of 50 submitted from the popup was verified in the database for that reader. A source returning HTTP 403 displayed `Browser access required` and offered an original PDF upload.
+
+A source returning HTML was refused with HTTP 415 and displayed `PDF not found`. A source exceeding the 20 second processing budget was stopped with HTTP 422 and displayed `PDF operation timed out`. Both states offered a retry and an original PDF upload. The warning text remained readable in the actual popup.
+
+The popup's file chooser did not open successfully with either automatic control or manual selection. An upload through the separate extension tab returned HTTP 201 and opened an annotated PDF, but it was associated with that tab rather than the publisher. That tab was closed before repeating the popup check. This behavior is consistent with the [reported Firefox panel limitation](https://bugzilla.mozilla.org/show_bug.cgi?id=1378527). Mozilla describes using a normal extension page as a [workaround](https://bugzilla.mozilla.org/show_bug.cgi?id=1658694).
+
+The Firefox upload controls open the existing forms in a normal extension tab. Original PDF uploads retain the publisher's address in session storage rather than selecting the active upload tab as the publication. Extraction does not look up a publisher address. Closing an upload tab removes its context without removing the authentication token. Tests cover separate publication contexts, cleanup, invalid references, and the existing publication actions.
+
+Logout from the actual popup displayed the login form with empty fields. The server removed the credential for that session. A new login issued a separate credential.
+
+On 9 October 2026, the check continued in a new temporary Firefox profile using the retained test database and publication storage. Both upload controls were opened from the actual toolbar popup. The native file chooser worked in the normal extension tabs without manual intervention.
+
+The original PDF upload returned HTTP 200 for the existing publication whose source was `http://127.0.0.1:38082/protected.pdf`. Its reader copy matched the source bytes, and the annotated PDF opened successfully. The upload tab displayed that publisher address and `PDF ready`. Closing the tab and reopening the popup on the source retained the authenticated session and displayed the prepared copy.
+
+Uploading the original PDF to extraction returned HTTP 422 and displayed `The PDF file does not contain a rating URL to extract.` Uploading the test reader's annotated PDF returned HTTP 200 and opened its rating URL. The web interface required login; reopening the extracted link after login correctly reported the reader's existing rating. The database retained the score of 50. Reloading the extraction tab retained its context, and a further annotated upload returned HTTP 200 while a web session cookie was present.
+
+After closing the upload tabs, logout from the actual popup displayed an empty login form and revoked that extension session's credential. The original and annotated files for both tested publications retained their SHA-256 hashes.
+
+Upload preview filenames and file sizes use dark gray text on their existing light surfaces. The correction applies to the details and their nested text without changing layout, backgrounds, or icons. The stylesheet check verified contrast of at least 4.5:1 against both preview surfaces. Actual file uploads confirmed readable preview text in a normal Firefox extension tab and the Edge toolbar popup.
+
+RS_Rate passed 92 tests, including session storage, authenticated requests, host permissions, upload tab contexts, message and preview contrast, and preservation of the Chromium storage and request behavior. Both builds passed the asset checks. Firefox lint reported no errors and retained its 21 documented warnings. Both extension archives matched their build assets and excluded development dependencies.
+
+## Backup and recovery
+
+On October 9, 2026, `bin/backup` created a database archive and a publication archive from the isolated browser check.
+`bin/restore_backup --confirm` restored them into a separate Compose project with a new database and new publication
+volume. The source contained only synthetic readers. No production data or public service was used.
+
+All six database table fingerprints and all 30 stored file hashes matched immediately after restoration. The restored
+data contained two readers, three publications, two ratings, and five pairs of original and annotated reader copies.
+The readiness endpoint returned HTTP 200, and `deployment:check` passed, including authenticated SMTP with the local
+simulator. No real email was sent.
+
+Recovery retained the original signing secret and canonical `PUBLIC_BASE_URL`. The restored web service was reached
+on a different loopback port for the check, without changing the public origin embedded in the prepared PDFs. The
+backup archives do not contain the secret; it was supplied through the private test configuration.
+
+An unauthenticated request to an existing paper rating reference required login. After authentication, four original
+and annotated PDF downloads returned HTTP 200 and matched the restored file hashes. Annotated PDF extraction returned
+HTTP 200 with the original rating reference. Its owning reader reached the existing rating of 50 without changing the
+score. Logout revoked the test credential, and the same reference required login again. The original database and
+storage remained unchanged; the restored database and all five PDF pairs also remained unchanged after these requests.
+
+A modified database archive failed checksum validation. A publication archive containing a path outside its extraction
+directory was also refused, even with a matching checksum. Both failures occurred before the restore wrote to the
+target service. The backup and recovery instructions are in [backups.md](backups.md).
+
 ## Remaining validation
 
-RS_Rate has not yet been exercised interactively in Chromium and Firefox during this check. Its builds and automated tests do not replace that validation. The intended browser test uses separate temporary profiles and access to the local server only.
+RS_Rate 2.0.0 was submitted to Mozilla on October 9, 2026 through the existing extension entry, retaining its original
+identifier `rs-rate@readersourcing.com`. The submission used the unlisted channel for Firefox desktop and included
+the corresponding source archive. Mozilla reported no validation errors and 21 warnings, approved the version, and
+returned a signed XPI. No new version was published in the public catalog. The signed package was installed through
+the Add-ons Manager in the separate regular Firefox 157.0.1 profile and appeared active. No signature enforcement
+preference overrides were found. Private window access was reported as disabled during manual configuration, but
+automatic control could not confirm the updated setting. The complete login, PDF, restart, and logout checks with
+the installed XPI remain pending, separately from the temporary browser installations above.
 
-Postman publication, Docker Hub publication, and a public deployment were not performed. The documented node-forge finding remains open, without an audit exception. The local check does not replace container vulnerability assessment, backup verification, or validation of the eventual production host and SMTP provider.
+This check did not publish to Postman or Docker Hub, and no public service was deployed. The documented `node-forge`
+and `shell-quote` findings remain open in the RS_Rate development audit, without exceptions. Application dependency
+audits and the container assessment are recorded in [security.md](security.md). The local results do not replace
+validation of the eventual production host, SMTP provider, external backup storage, or production recovery time.
+
+## Container validation
+
+On October 9, 2026, replacement production images were built for `linux/arm64` and `linux/amd64`. They retain Ruby
+3.4.10, Debian Trixie, the application dependency declarations, and the bundled RS_PDF JAR. Both contain current Debian
+packages and use the locked JSON version 2.21.2 for Ruby commands both inside and outside Bundler. The native JSON
+parser and generator were checked in each image, including the `amd64` image under emulation.
+
+Both candidates started successfully in the separate recovery project, with `amd64` running under emulation.
+Readiness and `deployment:check` passed in each, including authenticated SMTP with the local simulator. Four original and
+annotated downloads returned HTTP 200 and matched their stored hashes. Annotated PDF extraction returned the original
+rating reference; its reader reached the existing score of 50. Logout revoked the issued credential, and anonymous
+access to the same rating reference required login again. The source database and storage, the restored database, and
+all five restored PDF pairs were unchanged after the requests.
+
+The Rails suite passed 271 tests with 2,154 assertions against a separate disposable PostgreSQL database. The checks
+above were repeated for both candidates; they do not repeat every earlier browser scenario. The two image identities, scan results, and remaining
+findings are in [security.md](security.md). The original browser check services and published Docker Hub image were
+not replaced.

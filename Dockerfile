@@ -13,6 +13,7 @@ ENV RAILS_ENV="production" \
     BUNDLE_WITHOUT="development:test"
 
 RUN apt-get update -qq && \
+    apt-get upgrade --no-install-recommends -y && \
     apt-get install --no-install-recommends -y openjdk-21-jre-headless libpq5 && \
     rm -rf /var/lib/apt/lists/*
 
@@ -40,6 +41,8 @@ COPY --from=build /usr/local/bundle /usr/local/bundle
 RUN groupadd --system --gid 1000 rails && \
     useradd --uid 1000 --gid rails --create-home --shell /bin/sh rails
 COPY --from=build /rs_server/Gemfile /rs_server/Gemfile.lock /rs_server/Rakefile /rs_server/config.ru /rs_server/entrypoint.sh ./
+COPY bin/prepare_runtime_json.rb /tmp/prepare_runtime_json.rb
+RUN ruby /tmp/prepare_runtime_json.rb && rm /tmp/prepare_runtime_json.rb
 COPY --from=build /rs_server/app ./app
 COPY --from=build /rs_server/bin/rails /rs_server/bin/rake ./bin/
 COPY --from=build /rs_server/config ./config

@@ -19,6 +19,12 @@ The command creates a dated directory with:
 
 The files are created with access limited by the current user's file permissions. Copy the completed directory to encrypted storage that is independent from the application host. A named Docker volume protects data when a container is recreated, but it is not a backup.
 
+These archives do not include application configuration or secrets. Keep a separate protected recovery copy of the
+production settings, particularly `SECRET_PROD_KEY` and `PUBLIC_BASE_URL`. Restore the same signing secret and public
+origin when existing paper rating references must remain usable. A different secret prevents those references from
+being verified; a different public origin does not change links already printed or embedded in prepared PDFs. Never
+store secrets in the repository or attach them to a public recovery report.
+
 Remove maintenance mode only after both archives and `SHA256SUMS` have been written. This gives the database and publication archive a common, well defined maintenance period.
 
 Schedule backups according to the acceptable recovery point for the service. Remove copies that have exceeded `PRIVACY_BACKUP_RETENTION_DAYS`, unless an applicable legal obligation requires a documented exception. The application validates the declared period but cannot control the retention policy of an external backup provider.
@@ -45,3 +51,7 @@ After recovery:
 6. record the recovery time and any manual action.
 
 The backup must be restored only into a trusted environment. Database archives and PDFs can contain personal or confidential material and must never be attached to a public issue.
+
+The isolated recovery check performed on October 9, 2026 is recorded in [integration.md](integration.md#backup-and-recovery).
+It verifies the scripts and the restored application with synthetic data, not the availability or recovery time of
+a future production host or external backup provider.

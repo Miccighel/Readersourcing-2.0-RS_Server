@@ -64,7 +64,7 @@ After every deployment, exercise the following paths with a dedicated test reade
 6. annotated PDF download and QR Code rating;
 7. account deletion and removal of the reader's private PDF directory.
 
-The completed local checks and the remaining browser validation are recorded in [integration.md](integration.md). A local result does not replace verification of the production host and its external services.
+The local integration and recovery checks, together with the remaining validation, are recorded in [integration.md](integration.md). A local result does not replace verification of the production host and its external services.
 
 ## Capacity and process model
 
@@ -79,3 +79,15 @@ Run `bin/rails security:prune_expired_authentication_tokens` on a regular mainte
 ## Data recovery and security review
 
 Create and verify a backup before migrations or image changes. The complete procedure is in [backups.md](backups.md). Review the current container assessment in [security.md](security.md) before promoting an image. A successful application dependency audit does not replace a scan of the operating system packages contained in the image.
+
+The image uses the declared Ruby version and updates packages from the same Debian distribution during its base
+stage. Ruby commands outside Bundler use the compiled `json` version already specified by the application lockfile.
+The older default implementation is removed from the image. CI verifies that both contexts retain the same version.
+
+When rebuilding for a security assessment, refresh both the official base and its package indexes:
+
+```console
+docker buildx build --pull --no-cache-filter base --load --tag rs_server:check .
+```
+
+Build and assess each intended architecture before publication. This local tag does not replace an image on Docker Hub.
