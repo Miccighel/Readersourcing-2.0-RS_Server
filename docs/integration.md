@@ -177,7 +177,7 @@ inconsistent window observations and did not confirm reloading the revised tempo
 passed 125 tests and both build checks, with no Firefox lint errors and the same 21 library warnings. No server,
 dependency declaration, retained distribution archive, or signed package was changed by these interface corrections.
 
-## RS_Rate 2.0.1 preparation
+## RS_Rate 2.0.1 Firefox distribution
 
 On October 11, 2026, both RS_Rate manifests and `package.json` were aligned at version 2.0.1. The Firefox declaration
 omits the unsupported `version_name` field while Chromium retains it. Reloading the temporary Firefox build removed
@@ -193,16 +193,41 @@ when the popup was reopened, the long synthetic email wrapped within the profile
 PDF opened. Logout displayed the empty login form and revoked the issued credential. The complete user, publication,
 and rating fingerprints remained unchanged. This brief check did not repeat the earlier upload and extraction cases.
 
-Further native Firefox checks, Mozilla signing, and installation checks of the exact returned version 2.0.1 package
-remain to be completed. Packaging and local validation do not establish readiness for distribution.
+The submitted source was installed into a separate directory using the unchanged lockfile and local immutable
+cache with network access disabled. The new installation passed all 127 tests and reproduced the 90 assets in
+each unsigned package. All 47 bundled library assets matched version 2.0.0 byte for byte.
+
+Mozilla approved version 2.0.1 on the existing entry's unlisted channel for Firefox desktop. Its version identifier
+is `6565662`, and its file identifier is `5109799`. Validation reported no errors and the same 21 warnings. The source
+returned by Mozilla matched the submitted archive's hash. The signed package retained all application assets and
+manifest values, with Mozilla's signature files added. The exact files and their hashes are recorded in RS_Rate's
+`docs/firefox.md`. No new version was published in the public catalog.
+
+The returned XPI was installed through the Add-ons Manager in the separate regular Firefox 157.0.1 profile and
+appeared active as version 2.0.1. The manager confirmed that private window access was disabled. Login, reopening
+the authenticated popup, and profile reads completed with the synthetic reader. Original upload opened a centered
+extension tab, closed the popup, and retained the publisher address. The annotated copy opened with eight pages;
+the stored seven-page original matched the fixture's SHA-256 hash. Extraction refused the original with a readable
+explanation and extracted the prepared copy's rating URL for the same publication on the local server. The rating
+page required a separate web login; no rating or profile update was submitted.
+
+A complete restart cleared the extension's local authentication token while retaining the server address. The new
+login issued a separate credential, and logout revoked precisely that credential. The empty login form appeared,
+and reopening the popup displayed the actions for an unauthenticated reader. The browser restart did not revoke
+the earlier server credential; it remains subject to the server's expiry and revocation rules. The complete user,
+publication, and rating fingerprints remained unchanged. No signature enforcement preference overrides were found.
+
+Installation checks completed for the exact signed version 2.0.1. Some native controls required keyboard navigation
+or the user's assistance to focus the temporary Firefox window and confirm the file chooser. The extraction cases
+used separate form loads. These observations verify interactions and visible states rather than frame-by-frame
+timing of the popup.
 
 ## Remaining validation
 
-The development interface has been checked through temporary loading. Distribution still requires a new signed
-package and an installation check of that exact package in a regular Firefox release.
-The retained signed XPI and the source submitted to Mozilla remain unchanged. Private window settings were confirmed
-by the user, not by automatic inspection. Neither the signed functional check nor the synthetic interface preview
-constitutes validation of a public deployment.
+Version 2.0.1 has been signed and its installation checks completed in a regular Firefox release.
+The historical version 2.0.0 archives remain unchanged. The Firefox Add-ons Manager confirmed that private window
+access was disabled for the version 2.0.1 check. Neither the signed functional check nor the synthetic interface
+preview constitutes validation of a public deployment.
 
 The earlier browser and recovery checks did not publish to Postman or Docker Hub, and no public service was deployed.
 The documented `node-forge` and `shell-quote` findings remain open in the RS_Rate development audit, without exceptions.
