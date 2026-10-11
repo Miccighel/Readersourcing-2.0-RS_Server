@@ -144,9 +144,32 @@ retained working show and hide operations with nesting. A synthetic API preview 
 and 1,280 pixels, hidden idle indicators, and the unchanged 300 pixel popup width. These revisions are not part of the
 signed XPI just checked.
 
+## RS_Rate development interface in Firefox
+
+On 11 October 2026, the development build at commit `74d1740` was loaded through `about:debugging` in a separate
+Firefox 157.0.1 profile. API requests used the isolated server on port 3300. The personal profile, signature
+enforcement, retained signed XPI, and source submitted to Mozilla were not changed.
+
+Login remained active when the toolbar popup was reopened. The profile dialog displayed the synthetic reader's
+values, and the profile form retrieved its values without submitting an update. The original upload control opened
+a centered extension tab, closed the popup, and retained the publisher address on port 38082. During upload, the
+preparation section displayed `Preparing the PDF` while the rest of the view remained visible. Completion displayed
+`PDF ready` and opened the annotated copy containing eight pages. The original copy retained the fixture's SHA-256 hash.
+
+The extraction control opened only its own form. It refused the original PDF with a readable error and extracted
+the annotated copy's rating URL for the same publication on the local server. The rating page required a separate
+web login; no rating was submitted. Logout removed the checked authentication session, and reopening the popup
+displayed the signed-out actions. The users, publications, and ratings retained their complete database fingerprints.
+
+Native clicks on some popup controls were unreliable; keyboard navigation completed those checks. Screenshots
+record the visible states, but do not measure the first render frame by frame. The controller initialization tests
+cover the content gate, upload layout selection, redirects, and initialization errors. RS_Rate passed 120 tests;
+both builds passed the asset checks, and Firefox lint reported no errors with the 21 documented library warnings.
+
 ## Remaining validation
 
-The revised interface still needs a native Firefox installation check and a new signed package before distribution.
+The development interface has been checked through temporary loading. Distribution still requires a new signed
+package and an installation check of that exact package in a regular Firefox release.
 The retained signed XPI and the source submitted to Mozilla remain unchanged. Private window settings were confirmed
 by the user, not by automatic inspection. Neither the signed functional check nor the synthetic interface preview
 constitutes validation of a public deployment.
