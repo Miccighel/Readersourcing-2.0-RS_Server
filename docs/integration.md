@@ -166,6 +166,17 @@ record the visible states, but do not measure the first render frame by frame. T
 cover the content gate, upload layout selection, redirects, and initialization errors. RS_Rate passed 120 tests;
 both builds passed the asset checks, and Firefox lint reported no errors with the 21 documented library warnings.
 
+A separate rendering check on the same date used the built publication view and bundled libraries with synthetic
+responses rather than the server. Session retrieval, the active tab read, and the publication lookup were delayed
+to observe the intermediate frames. The checking section remained visible and rating controls stayed hidden until
+the lookup completed. Navigation remained available throughout initialization. At a width of 300 pixels, a long
+synthetic email wrapped within the profile box without changing or truncating its text.
+
+This check measures the controlled page, not the native Firefox toolbar popup. Automatic control returned
+inconsistent window observations and did not confirm reloading the revised temporary extension. The updated source
+passed 125 tests and both build checks, with no Firefox lint errors and the same 21 library warnings. No server,
+dependency declaration, retained distribution archive, or signed package was changed by these interface corrections.
+
 ## Remaining validation
 
 The development interface has been checked through temporary loading. Distribution still requires a new signed
