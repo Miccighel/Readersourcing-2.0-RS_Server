@@ -177,6 +177,25 @@ inconsistent window observations and did not confirm reloading the revised tempo
 passed 125 tests and both build checks, with no Firefox lint errors and the same 21 library warnings. No server,
 dependency declaration, retained distribution archive, or signed package was changed by these interface corrections.
 
+## RS_Rate 2.0.1 preparation
+
+On October 11, 2026, both RS_Rate manifests and `package.json` were aligned at version 2.0.1. The Firefox declaration
+omits the unsupported `version_name` field while Chromium retains it. Reloading the temporary Firefox build removed
+the manifest warning, and its background script appeared running. The extension identifier, dependency declarations,
+domain actions, and server interfaces remain unchanged.
+
+The versioned unsigned archives contain 90 assets each, matching their unpacked builds and excluding development
+dependencies. RS_Rate passed 127 tests and both build checks. Firefox lint reported no errors or notices and retained
+the 21 documented library warnings. The historical version 2.0.0 archives remain unchanged.
+
+The updated Chromium build was checked in a separate Edge profile against the isolated server. Login remained active
+when the popup was reopened, the long synthetic email wrapped within the profile box, and the verified eight-page
+PDF opened. Logout displayed the empty login form and revoked the issued credential. The complete user, publication,
+and rating fingerprints remained unchanged. This brief check did not repeat the earlier upload and extraction cases.
+
+Further native Firefox checks, Mozilla signing, and installation checks of the exact returned version 2.0.1 package
+remain to be completed. Packaging and local validation do not establish readiness for distribution.
+
 ## Remaining validation
 
 The development interface has been checked through temporary loading. Distribution still requires a new signed
