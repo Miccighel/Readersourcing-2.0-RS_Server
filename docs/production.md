@@ -2,6 +2,9 @@
 
 This document complements the deployment instructions in the main README. It describes the checks that must be completed before an RS_Server instance is exposed to the Internet.
 
+A [private trial](private_trial.md) can exercise the published image through an SSH tunnel with synthetic accounts,
+captured email, and PDF uploads. Its isolated configuration does not replace the requirements for public deployment below.
+
 ## Configuration
 
 Copy `.env.example` to `.env` and replace every example value. Generate `SECRET_PROD_KEY` with `bin/rails secret` and keep the value stable while issued references must remain valid. The production process refuses to start when a required secret, database, SMTP, privacy, or public origin setting is absent or still contains an example value.

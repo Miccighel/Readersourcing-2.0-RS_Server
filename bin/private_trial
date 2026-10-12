@@ -1,0 +1,64 @@
+#!/bin/sh
+set -eu
+
+if [ "$#" -ne 2 ]; then
+  echo "Usage: bin/private_trial prepare|start|status|check|stop DIRECTORY" >&2
+  exit 64
+fi
+
+operation=$1
+directory=$(cd "$2" && pwd -P)
+repository=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd -P)
+image=miccighel/rs_server@sha256:d35ad4383b7bf9a530390ade8e0b5dee1535d3933eb27174207b242028b38303
+
+case "$directory" in
+  "$repository"|"$repository"/*|/|/home|/var|/var/tmp|/tmp)
+    echo "Choose a dedicated empty directory outside the repository." >&2
+    exit 64
+    ;;
+esac
+case "$operation" in prepare|start|status|check|stop) ;; *) echo "Unknown trial operation." >&2; exit 64 ;; esac
+
+server_version=$(docker info --format '{{.ServerVersion}}')
+major_version=${server_version%%.*}
+case "$major_version" in ''|*[!0-9]*) echo "Cannot determine the Docker server version." >&2; exit 69 ;; esac
+if [ "$major_version" -lt 28 ]; then
+  echo "Docker Engine 28 or newer is required for loopback port isolation." >&2
+  exit 69
+fi
+docker compose version >/dev/null
+
+prepare_script="$repository/deploy/private/prepare.rb"
+if [ "$operation" = prepare ]; then
+  docker pull "$image"
+  owner=$(stat -c '%u:%g' "$directory")
+  docker run --rm --network none --read-only --cap-drop ALL --security-opt no-new-privileges:true \
+    --memory 128m --cpus 0.25 --pids-limit 64 --user "$owner" --entrypoint ruby \
+    --mount "type=bind,source=$directory,target=/trial" \
+    --mount "type=bind,source=$repository/deploy/private,target=/definition,readonly" \
+    --mount "type=bind,source=$repository/test/fixtures/files/Reader.pdf,target=/Reader.pdf,readonly" \
+    "$image" /definition/prepare.rb /trial /definition/compose.yml.erb /Reader.pdf
+  exit 0
+fi
+
+project=$(docker run --rm --network none --read-only --cap-drop ALL --security-opt no-new-privileges:true \
+  --memory 128m --cpus 0.25 --pids-limit 64 --user "$(stat -c '%u:%g' "$directory")" --entrypoint ruby \
+  --mount "type=bind,source=$directory,target=/trial,readonly" \
+  --mount "type=bind,source=$prepare_script,target=/prepare.rb,readonly" \
+  "$image" /prepare.rb validate /trial)
+
+compose() {
+  docker compose --project-name "$project" --project-directory "$directory" -f "$directory/compose.yml" "$@"
+}
+
+case "$operation" in
+  start)
+    compose config --quiet
+    compose pull
+    compose up --detach --no-build --wait --wait-timeout 180
+    compose exec -T rs_server_webapp bin/rails deployment:check
+    ;;
+  status) compose ps --all ;;
+  check) compose exec -T rs_server_webapp bin/rails deployment:check ;;
+  stop) compose stop ;;
+esac

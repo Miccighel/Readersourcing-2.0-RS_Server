@@ -154,7 +154,8 @@ The named volumes retain both the PostgreSQL data and the prepared publications 
 The application container runs as an unprivileged user with a read only root file system. Temporary directories and the
 private publication volume are the only writable application locations.
 The Compose file also supplies initial CPU, memory, process, and log limits and binds the application to the local host by
-default. The complete public deployment checklist is available in [`docs/production.md`](docs/production.md). Backup and
+default. A [private trial](docs/private_trial.md) uses a separate Compose project, captured email, and PDF uploads through
+an SSH tunnel. The complete public deployment checklist is available in [`docs/production.md`](docs/production.md). Backup and
 restore instructions are available in [`docs/backups.md`](docs/backups.md).
 
 <h4>Quick Cheatsheet</h4>
