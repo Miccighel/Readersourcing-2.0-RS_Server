@@ -4,6 +4,69 @@ This record complements application dependency audits. It distinguishes the prev
 image, and the replacement images. Scanner findings describe affected packages present in an image; they do
 not, by themselves, establish whether an application request can reach the affected code.
 
+## Assessment of October 12, 2026
+
+The published `v2.0.2` platform digests were scanned with Docker Scout 1.25.0 and Trivy 0.75.0. Scout indexed each
+registry image. Trivy included operating system packages and detected application libraries, with its Java index
+download completed. No advisory was excluded. Counts refer to distinct advisory identifiers within each scope;
+the results from different scanners must not be combined.
+
+| Image, each architecture | Scanner and scope | Critical | High | Medium | Low | Unspecified or unknown |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Published v2.0.2 | Scout, registry image | 0 | 2 | 1 | 41 | 2 |
+| Published v2.0.2 and local resolver candidates | Trivy, operating system | 0 | 8 | 32 | 47 | 1 |
+| Published v2.0.2 | Trivy, detected application libraries | 0 | 1 | 1 | 0 | 0 |
+| Local resolver candidates | Trivy, detected application libraries | 0 | 0 | 0 | 0 | 0 |
+
+The default `resolv` 0.7.1 library in the published image is affected by
+[CVE-2026-80212 and CVE-2026-80213](https://www.ruby-lang.org/en/news/2026/08/27/multiple-vulnerabilities-in-resolv/).
+`PdfFetcher` calls this resolver directly for publication hosts supplied by readers. It therefore uses the affected
+library, rather than merely loading it for address patterns. The default gem was absent from the application lockfile,
+so a successful lockfile audit did not cover it.
+
+The development branch declares `resolv` through the existing Gemfile and locks it at 0.7.2. Container preparation
+uses that same version outside Bundler and removes the old default implementation and specification. The official
+Ruby 3.4.10 and Debian Trixie base, the PDF retrieval logic, and the existing JSON preparation remain in place.
+The local candidates are:
+
+- `linux/amd64`, `rs-server-collaudo:resolv-amd64`:
+  `sha256:d0ee55f12451e47c1bef8292b9a40d0d9b85576d7004a731f1bc7659f57dc901`;
+- `linux/arm64`, `rs-server-collaudo:resolv-arm64`:
+  `sha256:e277ce744a99348c940245907387577e0e175aae6df58d1183f18b141c509816`.
+
+Both candidates passed JSON and DNS round trips inside and outside Bundler, as an unprivileged user with no network
+access and a read only root file system. Checks cover rejection of excessive DNS labels and the absence of permanent
+class growth for unknown DNS record types and service parameters. The complete Rails suite passed with 275 tests and
+2,192 assertions against a disposable PostgreSQL database. Autoloading and the Ruby and Yarn dependency audits passed.
+Trivy reported neither resolver advisory in these exact candidates. They have not been published: the affected
+`v2.0.2` image on Docker Hub remains unchanged, and no public service was deployed.
+
+Trivy identified 19 Java packages in each image without known advisories. A separate OSV query also reported no known
+advisories for the 20 library coordinates recorded in the earlier assessment. The bundled RS_PDF JAR remains unchanged.
+These checks extend the earlier operating system scan but do not guarantee that every shaded component was identified.
+
+Neither scanner reported a corrected Trixie package for its remaining operating system findings. Debian's tracker was
+checked for the critical and high findings: ncurses
+([CVE-2025-69720](https://security-tracker.debian.org/tracker/CVE-2025-69720)), systemd
+([CVE-2026-16742](https://security-tracker.debian.org/tracker/CVE-2026-16742)), ACL
+([CVE-2026-54369](https://security-tracker.debian.org/tracker/CVE-2026-54369)), util-linux
+([CVE-2026-76642](https://security-tracker.debian.org/tracker/CVE-2026-76642),
+[CVE-2026-78408](https://security-tracker.debian.org/tracker/CVE-2026-78408),
+[CVE-2026-78409](https://security-tracker.debian.org/tracker/CVE-2026-78409),
+[CVE-2026-78410](https://security-tracker.debian.org/tracker/CVE-2026-78410)), Perl
+([CVE-2026-9538](https://security-tracker.debian.org/tracker/CVE-2026-9538)), Cyrus SASL
+([CVE-2026-107161](https://security-tracker.debian.org/tracker/CVE-2026-107161)), and zlib
+([CVE-2026-85091](https://security-tracker.debian.org/tracker/CVE-2026-85091)). These findings remain open without
+exceptions. A corrected package in Debian unstable is not a correction for the Trixie image.
+
+RS_Rate's production audit and 127 tests passed; its 21 Firefox library warnings remain visible. Its complete
+development audit still reports `node-forge` and `shell-quote`. `fx-runner` 1.7.0 includes the corrected `shell-quote`,
+but the current `web-ext` 10.7.0 release still requires `fx-runner` 1.6.0 exactly. No dependency override or audit
+exception was introduced. The two distributed 2.0.1 archives retain all 90 matching assets each.
+
+The [machine readable assessment](security-report-2026-10-12.json) records the exact image identities, database dates,
+scanner report hashes, counts, application audits, and completed checks. The dated records below remain unchanged.
+
 ## Publication of October 9, 2026
 
 `miccighel/rs_server:v2.0.2` is available on Docker Hub for `linux/amd64` and `linux/arm64`. Its manifest digest is

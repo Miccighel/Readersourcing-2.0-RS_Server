@@ -84,3 +84,13 @@ jobs:
             abort "An older JSON library remains installed" unless Gem::Specification.find_all_by_name("json").all? { |spec| spec.version == locked.version }
             abort "JSON round trip failed" unless JSON.parse(JSON.generate({"reader" => [0, 50, 100]})) == {"reader" => [0, 50, 100]}
           '
+      - name: Verify runtime resolver outside Bundler
+        run: |
+          docker run --rm --network none --read-only --entrypoint ruby rs_server:ci -rresolv -rbundler -e '
+            locked = Bundler::LockfileParser.new(File.read("Gemfile.lock")).specs.find { |spec| spec.name == "resolv" }
+            abort "Runtime resolver differs from the lockfile" unless Resolv::VERSION == locked.version.to_s
+            abort "An older resolver remains installed" unless Gem::Specification.find_all_by_name("resolv").all? { |spec| spec.version == locked.version }
+            message = Resolv::DNS::Message.new(123)
+            message.add_question("example.test", Resolv::DNS::Resource::IN::A)
+            abort "DNS round trip failed" unless Resolv::DNS::Message.decode(message.encode).id == 123
+          '

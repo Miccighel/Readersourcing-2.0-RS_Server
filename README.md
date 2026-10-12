@@ -362,7 +362,7 @@ evaluation. The policy also prevents framing, external form targets, and object 
 Access to browser capabilities is disabled for the camera, screen capture, location, microphone, payment, and USB
 interfaces. Rails adds HSTS only when `FORCE_SSL=true`.
 
-The current operating system package assessment for the published image is recorded in
+The operating system and application library assessments for the published image and local candidates are recorded in
 [`docs/security.md`](docs/security.md). It must be reviewed again whenever the image digest or inherited package graph
 changes.
 

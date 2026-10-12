@@ -1,0 +1,649 @@
+{
+  "assessment_date": "2026-10-12",
+  "published_index_digest": "sha256:de59229f1298338306124148f75f45ff371e74fbac5ac23d7e50d30928ec168e",
+  "exclusions": [],
+  "published_image_changed": false,
+  "candidates_published": false,
+  "trivy_databases": {
+    "vulnerability": {
+      "Version": 2,
+      "NextUpdate": "2026-10-13T09:47:21.509022788Z",
+      "UpdatedAt": "2026-10-12T09:47:21.509023105Z",
+      "DownloadedAt": "2026-10-12T12:16:31.399665Z"
+    },
+    "java": {
+      "Version": 1,
+      "NextUpdate": "2026-10-15T01:00:58.130815315Z",
+      "UpdatedAt": "2026-10-12T01:00:58.130815836Z",
+      "DownloadedAt": "2026-10-12T12:17:02.042966Z"
+    }
+  },
+  "scout": [
+    {
+      "image": "miccighel/rs_server:v2.0.2",
+      "platform": "linux/amd64",
+      "manifest": "sha256:e4638b7da57b4a3125f24a1127614aaef9452ea4d6a12409753860760d2ee895",
+      "scanner": "Docker Scout 1.25.0",
+      "scope": "Registry image indexed without a local Docker daemon; no findings excluded.",
+      "raw_report_sha256": "aa2e47fb73600df537908452130b658fe7a9140973616ab4e1e086d1deabe4cb",
+      "detected_packages": 353,
+      "vulnerable_packages": 19,
+      "distinct_advisory_counts": {
+        "CRITICAL": 0,
+        "HIGH": 2,
+        "MEDIUM": 1,
+        "LOW": 41,
+        "UNSPECIFIED": 2
+      },
+      "critical_and_high": [
+        {
+          "id": "CVE-2026-107161",
+          "severity": "HIGH",
+          "packages": [
+            "pkg:deb/debian/cyrus-sasl2@2.1.28%2Bdfsg1-9?os_distro=trixie&os_name=debian&os_version=13"
+          ],
+          "fixed": "not fixed"
+        },
+        {
+          "id": "CVE-2026-85091",
+          "severity": "HIGH",
+          "packages": [
+            "pkg:deb/debian/zlib@1%3A1.3.dfsg%2Breally1.3.1-1?os_distro=trixie&os_name=debian&os_version=13"
+          ],
+          "fixed": "not fixed"
+        }
+      ],
+      "available_corrections": []
+    },
+    {
+      "image": "miccighel/rs_server:v2.0.2",
+      "platform": "linux/arm64",
+      "manifest": "sha256:f6390c087d10215d4d0e4f6140d969c92ffeeae340115925d5159e25391403f3",
+      "scanner": "Docker Scout 1.25.0",
+      "scope": "Registry image indexed without a local Docker daemon; no findings excluded.",
+      "raw_report_sha256": "c6ca8577a86a4e7615b237deb14f8ef63323e781cabe69baaf9a9bb02eafbecc",
+      "detected_packages": 353,
+      "vulnerable_packages": 19,
+      "distinct_advisory_counts": {
+        "CRITICAL": 0,
+        "HIGH": 2,
+        "MEDIUM": 1,
+        "LOW": 41,
+        "UNSPECIFIED": 2
+      },
+      "critical_and_high": [
+        {
+          "id": "CVE-2026-107161",
+          "severity": "HIGH",
+          "packages": [
+            "pkg:deb/debian/cyrus-sasl2@2.1.28%2Bdfsg1-9?os_distro=trixie&os_name=debian&os_version=13"
+          ],
+          "fixed": "not fixed"
+        },
+        {
+          "id": "CVE-2026-85091",
+          "severity": "HIGH",
+          "packages": [
+            "pkg:deb/debian/zlib@1%3A1.3.dfsg%2Breally1.3.1-1?os_distro=trixie&os_name=debian&os_version=13"
+          ],
+          "fixed": "not fixed"
+        }
+      ],
+      "available_corrections": []
+    }
+  ],
+  "trivy": [
+    {
+      "image": "miccighel/rs_server:v2.0.2",
+      "platform": "linux/amd64",
+      "published_manifest": "sha256:e4638b7da57b4a3125f24a1127614aaef9452ea4d6a12409753860760d2ee895",
+      "image_id": "sha256:23dd56d72c5d8b9c61c081b4b23fab3f4839c6c4f3202623e3489fc48ba48756",
+      "scanner": "Trivy 0.75.0",
+      "created_at": "2026-10-12T14:17:02.164353+02:00",
+      "raw_report_sha256": "c934b515b1e38e96ab8de8e83594d151c399d488e9c2c0e1419f140c96380ad1",
+      "scope": "Detected operating system and application library packages; no findings excluded.",
+      "offline_candidate_scan": false,
+      "sections": [
+        {
+          "type": "debian",
+          "class": "os-pkgs",
+          "detected_packages": 100,
+          "distinct_advisory_counts": {
+            "CRITICAL": 0,
+            "HIGH": 8,
+            "MEDIUM": 32,
+            "LOW": 47,
+            "UNKNOWN": 1
+          },
+          "critical_and_high": [
+            "CVE-2026-76642",
+            "CVE-2026-78408",
+            "CVE-2026-78409",
+            "CVE-2026-78410",
+            "CVE-2026-54369",
+            "CVE-2026-16742",
+            "CVE-2025-69720",
+            "CVE-2026-9538"
+          ],
+          "available_corrections": []
+        },
+        {
+          "type": "jar",
+          "class": "lang-pkgs",
+          "detected_packages": 19,
+          "distinct_advisory_counts": {
+            "CRITICAL": 0,
+            "HIGH": 0,
+            "MEDIUM": 0,
+            "LOW": 0,
+            "UNKNOWN": 0
+          },
+          "critical_and_high": [],
+          "available_corrections": []
+        },
+        {
+          "type": "node-pkg",
+          "class": "lang-pkgs",
+          "detected_packages": 1,
+          "distinct_advisory_counts": {
+            "CRITICAL": 0,
+            "HIGH": 0,
+            "MEDIUM": 0,
+            "LOW": 0,
+            "UNKNOWN": 0
+          },
+          "critical_and_high": [],
+          "available_corrections": []
+        },
+        {
+          "type": "gemspec",
+          "class": "lang-pkgs",
+          "detected_packages": 191,
+          "distinct_advisory_counts": {
+            "CRITICAL": 0,
+            "HIGH": 1,
+            "MEDIUM": 1,
+            "LOW": 0,
+            "UNKNOWN": 0
+          },
+          "critical_and_high": [
+            "CVE-2026-80212"
+          ],
+          "available_corrections": [
+            {
+              "id": "CVE-2026-80212",
+              "package": "resolv",
+              "installed": "0.7.1",
+              "fixed": "~> 0.3.2, >= 0.7.2",
+              "severity": "HIGH"
+            },
+            {
+              "id": "CVE-2026-80213",
+              "package": "resolv",
+              "installed": "0.7.1",
+              "fixed": "~> 0.3.2, >= 0.7.2",
+              "severity": "MEDIUM"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "image": "rs-server-collaudo:resolv-amd64",
+      "platform": "linux/amd64",
+      "published_manifest": null,
+      "image_id": "sha256:d0ee55f12451e47c1bef8292b9a40d0d9b85576d7004a731f1bc7659f57dc901",
+      "scanner": "Trivy 0.75.0",
+      "created_at": "2026-10-12T14:28:59.678013+02:00",
+      "raw_report_sha256": "2225a953ee138ff83e67e849d4f073c82da2b2b8f6e021080c9368c9fa78b706",
+      "scope": "Detected operating system and application library packages; no findings excluded.",
+      "offline_candidate_scan": true,
+      "sections": [
+        {
+          "type": "debian",
+          "class": "os-pkgs",
+          "detected_packages": 100,
+          "distinct_advisory_counts": {
+            "CRITICAL": 0,
+            "HIGH": 8,
+            "MEDIUM": 32,
+            "LOW": 47,
+            "UNKNOWN": 1
+          },
+          "critical_and_high": [
+            "CVE-2026-76642",
+            "CVE-2026-78408",
+            "CVE-2026-78409",
+            "CVE-2026-78410",
+            "CVE-2026-54369",
+            "CVE-2026-16742",
+            "CVE-2025-69720",
+            "CVE-2026-9538"
+          ],
+          "available_corrections": []
+        },
+        {
+          "type": "jar",
+          "class": "lang-pkgs",
+          "detected_packages": 19,
+          "distinct_advisory_counts": {
+            "CRITICAL": 0,
+            "HIGH": 0,
+            "MEDIUM": 0,
+            "LOW": 0,
+            "UNKNOWN": 0
+          },
+          "critical_and_high": [],
+          "available_corrections": []
+        },
+        {
+          "type": "node-pkg",
+          "class": "lang-pkgs",
+          "detected_packages": 1,
+          "distinct_advisory_counts": {
+            "CRITICAL": 0,
+            "HIGH": 0,
+            "MEDIUM": 0,
+            "LOW": 0,
+            "UNKNOWN": 0
+          },
+          "critical_and_high": [],
+          "available_corrections": []
+        },
+        {
+          "type": "gemspec",
+          "class": "lang-pkgs",
+          "detected_packages": 192,
+          "distinct_advisory_counts": {
+            "CRITICAL": 0,
+            "HIGH": 0,
+            "MEDIUM": 0,
+            "LOW": 0,
+            "UNKNOWN": 0
+          },
+          "critical_and_high": [],
+          "available_corrections": []
+        }
+      ]
+    },
+    {
+      "image": "miccighel/rs_server:v2.0.2",
+      "platform": "linux/arm64",
+      "published_manifest": "sha256:f6390c087d10215d4d0e4f6140d969c92ffeeae340115925d5159e25391403f3",
+      "image_id": "sha256:a645491e0016fc3bc4963813839be5506c605f5d5f9aef2136f2775155dcae4b",
+      "scanner": "Trivy 0.75.0",
+      "created_at": "2026-10-12T14:17:44.685089+02:00",
+      "raw_report_sha256": "d0b9b3be2d7ff7cbf1d5c98604761fb151b7f62cbe7bac2e30156399c57c546c",
+      "scope": "Detected operating system and application library packages; no findings excluded.",
+      "offline_candidate_scan": false,
+      "sections": [
+        {
+          "type": "debian",
+          "class": "os-pkgs",
+          "detected_packages": 100,
+          "distinct_advisory_counts": {
+            "CRITICAL": 0,
+            "HIGH": 8,
+            "MEDIUM": 32,
+            "LOW": 47,
+            "UNKNOWN": 1
+          },
+          "critical_and_high": [
+            "CVE-2026-76642",
+            "CVE-2026-78408",
+            "CVE-2026-78409",
+            "CVE-2026-78410",
+            "CVE-2026-54369",
+            "CVE-2026-16742",
+            "CVE-2025-69720",
+            "CVE-2026-9538"
+          ],
+          "available_corrections": []
+        },
+        {
+          "type": "jar",
+          "class": "lang-pkgs",
+          "detected_packages": 19,
+          "distinct_advisory_counts": {
+            "CRITICAL": 0,
+            "HIGH": 0,
+            "MEDIUM": 0,
+            "LOW": 0,
+            "UNKNOWN": 0
+          },
+          "critical_and_high": [],
+          "available_corrections": []
+        },
+        {
+          "type": "node-pkg",
+          "class": "lang-pkgs",
+          "detected_packages": 1,
+          "distinct_advisory_counts": {
+            "CRITICAL": 0,
+            "HIGH": 0,
+            "MEDIUM": 0,
+            "LOW": 0,
+            "UNKNOWN": 0
+          },
+          "critical_and_high": [],
+          "available_corrections": []
+        },
+        {
+          "type": "gemspec",
+          "class": "lang-pkgs",
+          "detected_packages": 191,
+          "distinct_advisory_counts": {
+            "CRITICAL": 0,
+            "HIGH": 1,
+            "MEDIUM": 1,
+            "LOW": 0,
+            "UNKNOWN": 0
+          },
+          "critical_and_high": [
+            "CVE-2026-80212"
+          ],
+          "available_corrections": [
+            {
+              "id": "CVE-2026-80212",
+              "package": "resolv",
+              "installed": "0.7.1",
+              "fixed": "~> 0.3.2, >= 0.7.2",
+              "severity": "HIGH"
+            },
+            {
+              "id": "CVE-2026-80213",
+              "package": "resolv",
+              "installed": "0.7.1",
+              "fixed": "~> 0.3.2, >= 0.7.2",
+              "severity": "MEDIUM"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "image": "rs-server-collaudo:resolv-arm64",
+      "platform": "linux/arm64",
+      "published_manifest": null,
+      "image_id": "sha256:e277ce744a99348c940245907387577e0e175aae6df58d1183f18b141c509816",
+      "scanner": "Trivy 0.75.0",
+      "created_at": "2026-10-12T14:28:54.45385+02:00",
+      "raw_report_sha256": "a2dd9e517ab10fb0defa3602dfdb30fd5667b38c88bd089d0dd37ca71d31e889",
+      "scope": "Detected operating system and application library packages; no findings excluded.",
+      "offline_candidate_scan": true,
+      "sections": [
+        {
+          "type": "debian",
+          "class": "os-pkgs",
+          "detected_packages": 100,
+          "distinct_advisory_counts": {
+            "CRITICAL": 0,
+            "HIGH": 8,
+            "MEDIUM": 32,
+            "LOW": 47,
+            "UNKNOWN": 1
+          },
+          "critical_and_high": [
+            "CVE-2026-76642",
+            "CVE-2026-78408",
+            "CVE-2026-78409",
+            "CVE-2026-78410",
+            "CVE-2026-54369",
+            "CVE-2026-16742",
+            "CVE-2025-69720",
+            "CVE-2026-9538"
+          ],
+          "available_corrections": []
+        },
+        {
+          "type": "jar",
+          "class": "lang-pkgs",
+          "detected_packages": 19,
+          "distinct_advisory_counts": {
+            "CRITICAL": 0,
+            "HIGH": 0,
+            "MEDIUM": 0,
+            "LOW": 0,
+            "UNKNOWN": 0
+          },
+          "critical_and_high": [],
+          "available_corrections": []
+        },
+        {
+          "type": "node-pkg",
+          "class": "lang-pkgs",
+          "detected_packages": 1,
+          "distinct_advisory_counts": {
+            "CRITICAL": 0,
+            "HIGH": 0,
+            "MEDIUM": 0,
+            "LOW": 0,
+            "UNKNOWN": 0
+          },
+          "critical_and_high": [],
+          "available_corrections": []
+        },
+        {
+          "type": "gemspec",
+          "class": "lang-pkgs",
+          "detected_packages": 192,
+          "distinct_advisory_counts": {
+            "CRITICAL": 0,
+            "HIGH": 0,
+            "MEDIUM": 0,
+            "LOW": 0,
+            "UNKNOWN": 0
+          },
+          "critical_and_high": [],
+          "available_corrections": []
+        }
+      ]
+    }
+  ],
+  "application_audits": {
+    "ruby": {
+      "result": "Passed",
+      "database_commit": "a6847b0651a702488f5844081e848dd1ec9dbf1d",
+      "lockfile_sha256": "077737adc6d0ba3aea87a3d9ccc20523a085c718248194c2b02757478396625e"
+    },
+    "server_yarn": {
+      "result": "Passed",
+      "dependencies": 98
+    },
+    "rate_production_yarn": {
+      "result": "Passed"
+    },
+    "rate_development_yarn": {
+      "result": "Failed",
+      "findings": [
+        {
+          "package": "node-forge",
+          "installed": "1.4.0",
+          "advisory": "GHSA-86w9-cpqp-85rv",
+          "severity": "HIGH",
+          "fixed": null
+        },
+        {
+          "package": "shell-quote",
+          "installed": "1.10.0",
+          "advisory": "GHSA-pqg4-j6r4-53mv",
+          "severity": "CRITICAL",
+          "fixed": "1.11.0"
+        }
+      ],
+      "upstream": {
+        "web-ext": {
+          "latest": "10.7.0",
+          "requires_fx_runner": "1.6.0"
+        },
+        "fx-runner": {
+          "latest": "1.7.0",
+          "requires_shell_quote": "1.11.0"
+        },
+        "node-forge": {
+          "latest": "1.4.0"
+        },
+        "@devicefarmer/adbkit": {
+          "latest": "3.3.9",
+          "requires_node_forge": "^1.3.1"
+        }
+      },
+      "override_added": false,
+      "audit_exception_added": false
+    },
+    "java_coordinates": {
+      "source": "https://api.osv.dev/v1/querybatch",
+      "checked_at": "2026-10-12T12:24:57.563Z",
+      "jar_sha256": "2a98fbcdecdcad30d0cc1c3f3faccf2588ef5c4d9092dbece9248b561a879317",
+      "packages": [
+        {
+          "name": "com.github.jai-imageio:jai-imageio-core",
+          "version": "1.4.0",
+          "vulnerabilities": []
+        },
+        {
+          "name": "com.google.zxing:core",
+          "version": "3.5.4",
+          "vulnerabilities": []
+        },
+        {
+          "name": "com.google.zxing:javase",
+          "version": "3.5.4",
+          "vulnerabilities": []
+        },
+        {
+          "name": "commons-beanutils:commons-beanutils",
+          "version": "1.11.0",
+          "vulnerabilities": []
+        },
+        {
+          "name": "commons-cli:commons-cli",
+          "version": "1.11.0",
+          "vulnerabilities": []
+        },
+        {
+          "name": "commons-codec:commons-codec",
+          "version": "1.11",
+          "vulnerabilities": []
+        },
+        {
+          "name": "commons-collections:commons-collections",
+          "version": "3.2.2",
+          "vulnerabilities": []
+        },
+        {
+          "name": "commons-digester:commons-digester",
+          "version": "2.1",
+          "vulnerabilities": []
+        },
+        {
+          "name": "commons-logging:commons-logging",
+          "version": "1.4.0",
+          "vulnerabilities": []
+        },
+        {
+          "name": "commons-validator:commons-validator",
+          "version": "1.10.1",
+          "vulnerabilities": []
+        },
+        {
+          "name": "org.apache.httpcomponents:httpclient",
+          "version": "4.5.14",
+          "vulnerabilities": []
+        },
+        {
+          "name": "org.apache.httpcomponents:httpcore",
+          "version": "4.4.16",
+          "vulnerabilities": []
+        },
+        {
+          "name": "org.apache.logging.log4j:log4j-api",
+          "version": "2.26.1",
+          "vulnerabilities": []
+        },
+        {
+          "name": "org.apache.logging.log4j:log4j-core",
+          "version": "2.26.1",
+          "vulnerabilities": []
+        },
+        {
+          "name": "org.apache.pdfbox:fontbox",
+          "version": "3.0.8",
+          "vulnerabilities": []
+        },
+        {
+          "name": "org.apache.pdfbox:pdfbox",
+          "version": "3.0.8",
+          "vulnerabilities": []
+        },
+        {
+          "name": "org.apache.pdfbox:pdfbox-io",
+          "version": "3.0.8",
+          "vulnerabilities": []
+        },
+        {
+          "name": "org.jetbrains:annotations",
+          "version": "13.0",
+          "vulnerabilities": []
+        },
+        {
+          "name": "org.jetbrains.kotlin:kotlin-reflect",
+          "version": "2.4.10",
+          "vulnerabilities": []
+        },
+        {
+          "name": "org.jetbrains.kotlin:kotlin-stdlib",
+          "version": "2.4.10",
+          "vulnerabilities": []
+        }
+      ],
+      "scope": "20 identified coordinates; complements Trivy library detection, not a guarantee that every shaded component was identified."
+    }
+  },
+  "verification": {
+    "rails": {
+      "tests": 275,
+      "assertions": 2192,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "database": "Disposable PostgreSQL 17 on tmpfs"
+    },
+    "zeitwerk": "Passed",
+    "rate": {
+      "tests": 127,
+      "failures": 0,
+      "firefox_warnings": 21,
+      "firefox_errors": 0,
+      "archives": {
+        "chromium_assets": 90,
+        "firefox_assets": 90
+      }
+    },
+    "runtime": {
+      "platforms": [
+        "linux/arm64",
+        "linux/amd64"
+      ],
+      "json": "2.21.2",
+      "resolv": "0.7.2",
+      "contexts": [
+        "Bundler",
+        "Without Bundler"
+      ],
+      "uid": 1000,
+      "checks": [
+        "Only locked gem specifications",
+        "Old default implementations removed",
+        "JSON round trip",
+        "DNS round trip",
+        "Long DNS labels rejected",
+        "Unknown DNS records not retained",
+        "Unknown DNS service parameters not retained"
+      ],
+      "result": "Passed",
+      "network": "Disabled",
+      "root_filesystem": "Read only"
+    }
+  }
+}

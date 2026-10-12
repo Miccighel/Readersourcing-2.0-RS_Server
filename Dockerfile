@@ -43,6 +43,8 @@ RUN groupadd --system --gid 1000 rails && \
 COPY --from=build /rs_server/Gemfile /rs_server/Gemfile.lock /rs_server/Rakefile /rs_server/config.ru /rs_server/entrypoint.sh ./
 COPY bin/prepare_runtime_json.rb /tmp/prepare_runtime_json.rb
 RUN ruby /tmp/prepare_runtime_json.rb && rm /tmp/prepare_runtime_json.rb
+COPY bin/prepare_runtime_resolv.rb /tmp/prepare_runtime_resolv.rb
+RUN ruby /tmp/prepare_runtime_resolv.rb && rm /tmp/prepare_runtime_resolv.rb
 COPY --from=build /rs_server/app ./app
 COPY --from=build /rs_server/bin/rails /rs_server/bin/rake ./bin/
 COPY --from=build /rs_server/config ./config

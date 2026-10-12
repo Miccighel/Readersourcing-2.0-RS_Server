@@ -23,6 +23,7 @@ gem "jwt", "~> 2.10", ">= 2.10.3"
 gem "lograge"
 gem "pdf-reader"
 gem "rack-cors"
+gem "resolv", "~> 0.7.2"
 gem "sendgrid-ruby"
 gem "simple_command"
 
