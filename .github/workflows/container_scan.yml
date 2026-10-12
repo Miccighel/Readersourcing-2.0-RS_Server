@@ -1,6 +1,9 @@
 name: Container scan
 
 on:
+  push:
+    branches:
+      - codex/development
   schedule:
     - cron: "30 4 * * 1"
   workflow_dispatch:
@@ -8,24 +11,54 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: container-scan-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   published-image:
+    name: Published image (${{ matrix.platform }})
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
     env:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      # Published v2.0.3; keep the report tied to these exact image contents.
+      SCAN_IMAGE: registry://miccighel/rs_server@sha256:d35ad4383b7bf9a530390ade8e0b5dee1535d3933eb27174207b242028b38303
+      SCAN_PLATFORM: ${{ matrix.platform }}
     steps:
-      - name: Explain missing Docker Hub credentials
-        if: env.DOCKERHUB_USERNAME == '' || env.DOCKERHUB_TOKEN == ''
-        run: echo "Configure DOCKERHUB_USERNAME and DOCKERHUB_TOKEN to enable the scheduled Docker Scout scan."
+      - name: Require Docker Hub credentials
+        run: |
+          if [ -z "$DOCKERHUB_USERNAME" ] || [ -z "$DOCKERHUB_TOKEN" ]; then
+            echo "::error::Container scan was not performed. Configure DOCKERHUB_USERNAME and DOCKERHUB_TOKEN as repository secrets."
+            exit 1
+          fi
       - name: Scan the published image
-        if: env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_TOKEN != ''
+        id: scan
         uses: docker/scout-action@v1
         with:
           command: cves,recommendations
-          image: miccighel/rs_server:v2.0.3
+          image: ${{ env.SCAN_IMAGE }}
+          platform: ${{ matrix.platform }}
           only-severities: critical,high
           exit-code: false
+          write-comment: false
           dockerhub-user: ${{ secrets.DOCKERHUB_USERNAME }}
           dockerhub-password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Record scan completion
+        if: always()
+        env:
+          SCAN_OUTCOME: ${{ steps.scan.outcome }}
+        run: |
+          printf '%s\n' "## Container scan: $SCAN_PLATFORM" "" "Image: $SCAN_IMAGE" "" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$SCAN_OUTCOME" = "success" ]; then
+            printf '%s\n' "The scan completed. Critical and high findings are reported above, including those without a correction. Findings do not make this workflow fail; success does not mean the image has no known vulnerabilities." >> "$GITHUB_STEP_SUMMARY"
+          else
+            printf '%s\n' "The scan did not complete. Consult the job errors; no successful vulnerability assessment is recorded for this platform." >> "$GITHUB_STEP_SUMMARY"
+          fi

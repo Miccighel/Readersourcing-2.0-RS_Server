@@ -251,6 +251,11 @@ Before promoting an image:
 The CI workflow runs `bundle-audit check --update` for the locked Ruby dependencies and the Yarn registry audit for the
 browser dependencies on pushes to `codex/development`. These checks are distinct from the periodic configurations below.
 
+The `Container scan` workflow also starts on every push to `codex/development`. It checks the published `v2.0.3` image
+by its immutable manifest digest, with separate jobs for `linux/amd64` and `linux/arm64`. It does not build or publish an
+image, and it does not scan the unpublished source changes in that push. A newer push cancels an older scan of the same
+branch. The Scout report and job summary distinguish a completed scan from one that could not run.
+
 The Dependabot configuration requests weekly updates for the Bundler, npm, Docker, and GitHub Actions dependency
 definitions. The `Container scan` workflow requests a Docker Scout report every Monday at 04:30 UTC and declares a
 manual trigger. Both configurations are present only on `codex/development`. The repository's default branch remains
@@ -259,9 +264,10 @@ currently active. GitHub requires the [Dependabot configuration](https://docs.gi
 and the [scheduled workflow](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)
 on the default branch. The standard manual workflow entry also requires that branch to contain the workflow.
 
-The Scout workflow additionally requires repository secrets named `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN`; without
-them, its steps explain why the scan was skipped. When run, its report includes critical and high findings with available
-corrections as well as those without a corrected version. It does not exclude individual advisories, and findings do
+The Scout workflow requires repository secrets named `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN`; without them, the job
+fails explicitly before scanning. This failure must not be treated as a vulnerability assessment. When run, its report
+includes critical and high findings with available corrections as well as those without a corrected version. It does
+not exclude individual advisories, and findings do
 not make the workflow fail. A successful workflow alone is not evidence of an image without known vulnerabilities.
 
 The runtime continues to reduce the possible impact through an unprivileged user, a read only root file system, dropped Linux capabilities, a process limit, a memory limit, private publication storage, and no direct database port. These controls reduce impact but do not turn a vulnerable package into a corrected package.
