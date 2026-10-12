@@ -257,3 +257,48 @@ configuration digests match the assessed image IDs. No public service was deploy
 Both platforms were pulled from the published version tag. Runtime JSON checks outside Bundler passed in each
 downloaded image, including the lockfile version, absence of older JSON specifications, and a parsing and generation
 round trip. The registry digests and checks are retained in [the publication record](container-release-2026-10-09.json).
+
+### Validation of October 12, 2026
+
+The local resolver candidates recorded in [security.md](security.md) passed 21 production rehearsal checks. Ruby
+remained at 3.4.10, with `json` 2.21.2 and `resolv` 0.7.2. The native `arm64` and emulated `amd64` application containers
+used an unprivileged user, a read only root file system, dropped capabilities, no new privileges, and the configured
+memory and process limits. The databases had no published host port. The preexisting browser check services and
+their volumes were not used or replaced.
+
+Requests reached Rails through a loopback HTTPS proxy with certificate verification, `FORCE_SSL=true`, and
+`ASSUME_SSL=true`. The local SMTP simulator required authenticated STARTTLS, with certificate verification active.
+Registration, email confirmation, authentication, private profile access, and password recovery passed. Session
+cookies carried Secure, HttpOnly, and SameSite=Lax attributes. Browser session requests without a CSRF token were
+refused, while requests with the token from the authenticated view succeeded. Password reset links were single use
+and password changes revoked earlier authentication tokens.
+
+The publisher simulator returned an accessible PDF, a document requiring browser authentication, and a response
+that was not a PDF. The API reported the corresponding availability states and rejected excessive DNS labels.
+Remote retrieval and the local upload alternative each prepared the committed Reader.pdf fixture from seven to
+eight pages. Extraction returned the embedded rating reference, while another reader could not use it. Logout and
+password recovery did not invalidate the paper reference; its owner could use it after authenticating again.
+
+The backup scripts captured the database and private publication archive while requests were blocked by the
+maintenance proxy. A restore into an empty, separate project retained the signing secret and application origin.
+The local restore completed in eight seconds. This measures the small synthetic rehearsal, not a production
+recovery time or the availability of an external backup provider.
+
+Readiness and `deployment:check` passed after restoration on both architectures. Original and annotated downloads
+matched the archived hashes, extraction retained the same paper references, and the existing rating remained 50.
+Reader, publication, and rating fingerprints were unchanged during these read, extraction, and logout checks. PDF
+contents and copy metadata also remained unchanged. Issuing new bounded download URLs renewed only their operational
+retention leases; the checks required monotonic deadlines within the configured lifetime and retirement grace.
+Authentication token issuance and revocation were expected operational changes, separate from domain fingerprints.
+The source database and private storage remained unchanged by recovery.
+
+A separate `amd64` case retrieved, annotated, and refreshed a PDF for the second synthetic reader. Deleting that
+account removed its private PDF directory and revoked its authentication. Private network access was enabled only
+for the local publisher cases. With the default restriction enabled, the API refused that same private destination
+and the local upload alternative still succeeded.
+
+The [validation record](production-check-2026-10-12.json) contains the image IDs, completed checks, backup hashes,
+domain fingerprints, and restored PDF hashes. The synthetic backup and its private configuration were retained
+outside the repository; the disposable services and volumes were removed after recording the results. No image was
+published and no public service was deployed. Production DNS, certificates, ingress capacity, SMTP, and external
+backup storage still require validation on the selected host. The remaining security findings stay open.

@@ -81,8 +81,10 @@ Run `bin/rails security:prune_expired_authentication_tokens` on a regular mainte
 Create and verify a backup before migrations or image changes. The complete procedure is in [backups.md](backups.md). Review the current container assessment in [security.md](security.md) before promoting an image. A successful application dependency audit does not replace a scan of the operating system packages contained in the image.
 
 The image uses the declared Ruby version and updates packages from the same Debian distribution during its base
-stage. Ruby commands outside Bundler use the compiled `json` version already specified by the application lockfile.
-The older default implementation is removed from the image. CI verifies that both contexts retain the same version.
+stage. Container preparation makes the locked `json` and `resolv` libraries available to Ruby commands both inside
+and outside Bundler. The older default implementations are removed. CI verifies the lockfile versions and library
+round trips in the resulting image. The published image and local candidates are assessed separately in
+[security.md](security.md).
 
 When rebuilding for a security assessment, refresh both the official base and its package indexes:
 

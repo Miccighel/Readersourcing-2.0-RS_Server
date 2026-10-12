@@ -1,0 +1,214 @@
+{
+  "checked_at": "2026-10-12T13:16:54.415Z",
+  "source_commit": "0015ff2cbc934a9c0022618da4a93efc1815f724",
+  "images": [
+    {
+      "platform": "linux/arm64",
+      "image": "rs-server-collaudo:resolv-arm64",
+      "id": "sha256:e277ce744a99348c940245907387577e0e175aae6df58d1183f18b141c509816"
+    },
+    {
+      "platform": "linux/amd64",
+      "image": "rs-server-collaudo:resolv-amd64",
+      "id": "sha256:d0ee55f12451e47c1bef8292b9a40d0d9b85576d7004a731f1bc7659f57dc901",
+      "execution": "Emulated"
+    }
+  ],
+  "versions": {
+    "ruby": "3.4.10",
+    "resolv": "0.7.2",
+    "json": "2.21.2"
+  },
+  "scope": {
+    "accounts": "Synthetic readers created through registration and email confirmation",
+    "data": "Committed Reader.pdf fixture and isolated PostgreSQL 17 databases",
+    "transport": "HTTPS loopback proxy with certificate verification and FORCE_SSL=true, ASSUME_SSL=true",
+    "smtp": "Local authenticated STARTTLS simulator; certificate and hostname verification enabled",
+    "cookies": "Secure, HttpOnly, SameSite=Lax",
+    "local_publisher_network_access": "Enabled only for local fixture checks; also verified with private network access disabled",
+    "download_url_ttl_seconds": 1800,
+    "retirement_grace_seconds": 60,
+    "runtime": {
+      "user": "rails:rails",
+      "read_only_root": true,
+      "capabilities_dropped": [
+        "ALL"
+      ],
+      "no_new_privileges": true,
+      "memory_bytes": 1073741824,
+      "pids_limit": 256
+    },
+    "source_project": "rs-prodcheck-3zcplq-source",
+    "restored_project": "rs-prodcheck-3zcplq-restored",
+    "public_deployment": false,
+    "image_publication": false
+  },
+  "checks": [
+    {
+      "name": "Readiness and production configuration: arm64",
+      "result": "Passed"
+    },
+    {
+      "name": "Registration and email confirmation: Synthetic Reader",
+      "result": "Passed"
+    },
+    {
+      "name": "Registration and email confirmation: Synthetic Other",
+      "result": "Passed"
+    },
+    {
+      "name": "HTTPS login and private profile",
+      "result": "Passed"
+    },
+    {
+      "name": "Browser session requests enforce CSRF protection",
+      "result": "Passed"
+    },
+    {
+      "name": "Remote PDF availability and explicit failure states",
+      "result": "Passed"
+    },
+    {
+      "name": "Remote retrieval and local PDF alternative",
+      "result": "Passed"
+    },
+    {
+      "name": "Annotated PDF reference owner enforcement",
+      "result": "Passed"
+    },
+    {
+      "name": "Logout revokes authentication but retains the paper reference",
+      "result": "Passed"
+    },
+    {
+      "name": "Password recovery is single use and preserves the paper reference",
+      "result": "Passed"
+    },
+    {
+      "name": "Paired backup with application writes blocked",
+      "result": "Passed"
+    },
+    {
+      "name": "Restore into an empty isolated project",
+      "result": "Passed"
+    },
+    {
+      "name": "Readiness and production configuration: arm64",
+      "result": "Passed"
+    },
+    {
+      "name": "Restored downloads, extraction, rating, logout, and domain integrity: arm64",
+      "result": "Passed"
+    },
+    {
+      "name": "Readiness and production configuration: amd64",
+      "result": "Passed"
+    },
+    {
+      "name": "Restored downloads, extraction, rating, logout, and domain integrity: amd64",
+      "result": "Passed"
+    },
+    {
+      "name": "Source database and private storage unchanged by recovery",
+      "result": "Passed"
+    },
+    {
+      "name": "All SMTP authentication took place after STARTTLS",
+      "result": "Passed"
+    },
+    {
+      "name": "Remote DNS retrieval, annotation, and refresh: amd64",
+      "result": "Passed"
+    },
+    {
+      "name": "Account deletion removes its private PDFs and revokes authentication",
+      "result": "Passed"
+    },
+    {
+      "name": "Default private network restriction and local upload alternative",
+      "result": "Passed"
+    }
+  ],
+  "backup": {
+    "created_at": "20261012T131547Z",
+    "files": [
+      {
+        "name": "database.dump",
+        "size": 17233,
+        "sha256": "d7307b9844c09bbd051ee8f5fb5764a04cb4b127190cdd45c2ea8b5f75dadbee"
+      },
+      {
+        "name": "publications.tar.gz",
+        "size": 1304325,
+        "sha256": "d254625c93c6af24e30a6de02c8a769e227462fe3d36ad5afbbc632254a1193c"
+      },
+      {
+        "name": "SHA256SUMS",
+        "size": 166,
+        "sha256": "f9284a0131f9b017c7482c76c1f14db86747f66dede2e6aff6383bbed1ddc5f3"
+      },
+      {
+        "name": "manifest.txt",
+        "size": 78,
+        "sha256": "0a8a77b4eb0cfecb4b4b26b8b03ef95d5a04f33faea70b4ddf7febd3db1bccbd"
+      }
+    ],
+    "restore_seconds": 8,
+    "configuration_archived": false,
+    "signing_secret_retained_separately": true,
+    "public_origin_preserved": true,
+    "note": "This elapsed time is a local rehearsal result, not a production recovery time guarantee."
+  },
+  "integrity": {
+    "source_domain": {
+      "users": {
+        "count": 2,
+        "sha256": "f0863bd01dd5d7478f7c092173b4d5eba2d9dfe80018a984b3cdda25fe855548"
+      },
+      "publications": {
+        "count": 2,
+        "sha256": "b94eafe0157e6bc5526326b9efb2f2fd36648a3512eb9ece8a3dd3865ad49763"
+      },
+      "ratings": {
+        "count": 1,
+        "sha256": "acdbbad04f826561d30269fdbd4930744db6c6cf24a33d0dad1b7be0ed452563"
+      }
+    },
+    "source_private_storage_unchanged": true,
+    "restored_domain_before_deliberate_mutations": "Matched source before and after read, extraction, and logout checks on both architectures",
+    "restored_pdf_pairs": [
+      {
+        "user_id": 1,
+        "publication_id": 1,
+        "original_pages": 7,
+        "annotated_pages": 8,
+        "original_sha256": "0804774bb87edd869a95141f00bc6c3559e4b6df3b7b94412c10c9a7f6e8dfab",
+        "annotated_sha256": "a96d509adf25f5b2e2467518b65b13bad11d706b40f9789eade5298ed477ca2c"
+      },
+      {
+        "user_id": 1,
+        "publication_id": 2,
+        "original_pages": 7,
+        "annotated_pages": 8,
+        "original_sha256": "0804774bb87edd869a95141f00bc6c3559e4b6df3b7b94412c10c9a7f6e8dfab",
+        "annotated_sha256": "9010d14619b51e0ec0b38358984e7ec900219dee424293758d497d51c2d2a09c"
+      }
+    ],
+    "restored_pdf_contents_and_copy_metadata": "Unchanged during read checks",
+    "expected_operational_changes": {
+      "authentication_tokens": "Issuance and revocation excluded from domain fingerprints",
+      "download_retention": "Lease deadlines may increase when new bounded download URLs are issued; checked for monotonic renewal within the configured TTL plus 60 seconds of retirement grace"
+    },
+    "deliberate_mutations_after_integrity_checks": [
+      "amd64 prepares and refreshes a separate publication for the second synthetic reader",
+      "Deleting that reader removes the private PDF directory and revokes authentication",
+      "With private network access disabled, remote retrieval is refused and local upload still succeeds"
+    ]
+  },
+  "limitations": [
+    "No external SMTP or hosting provider tested",
+    "No public DNS, production TLS certificate, ingress capacity, or production recovery time validated",
+    "Application HTTP checks do not repeat every native browser scenario",
+    "Operating system and development dependency findings in the security assessment remain open"
+  ]
+}

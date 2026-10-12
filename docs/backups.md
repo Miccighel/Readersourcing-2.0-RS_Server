@@ -52,6 +52,8 @@ After recovery:
 
 The backup must be restored only into a trusted environment. Database archives and PDFs can contain personal or confidential material and must never be attached to a public issue.
 
-The isolated recovery check performed on October 9, 2026 is recorded in [integration.md](integration.md#backup-and-recovery).
-It verifies the scripts and the restored application with synthetic data, not the availability or recovery time of
-a future production host or external backup provider.
+The isolated recovery checks of October 9 and October 12, 2026 are recorded in
+[integration.md](integration.md#backup-and-recovery) and the
+[latest container validation](integration.md#validation-of-october-12-2026). They verify the scripts and
+the restored application with synthetic data, not the availability or recovery time of a future production host or
+external backup provider.

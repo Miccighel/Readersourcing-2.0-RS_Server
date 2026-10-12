@@ -67,6 +67,10 @@ exception was introduced. The two distributed 2.0.1 archives retain all 90 match
 The [machine readable assessment](security-report-2026-10-12.json) records the exact image identities, database dates,
 scanner report hashes, counts, application audits, and completed checks. The dated records below remain unchanged.
 
+The same candidates subsequently passed the isolated production and recovery checks recorded in
+[integration.md](integration.md#validation-of-october-12-2026). That rehearsal does not resolve the remaining scanner
+findings and did not publish or deploy either candidate.
+
 ## Publication of October 9, 2026
 
 `miccighel/rs_server:v2.0.2` is available on Docker Hub for `linux/amd64` and `linux/arm64`. Its manifest digest is
