@@ -55,7 +55,10 @@ case "$operation" in
   start)
     compose config --quiet
     compose pull
-    compose up --detach --no-build --wait --wait-timeout 180
+    if ! compose up --detach --no-build --wait --wait-timeout 180; then
+      compose logs --no-color --tail 50 access >&2
+      exit 1
+    fi
     compose exec -T rs_server_webapp bin/rails deployment:check
     ;;
   status) compose ps --all ;;

@@ -86,7 +86,7 @@ services:
     user: "<%= uid %>:<%= gid %>"
     networks: [access, default]
     entrypoint: [nginx]
-    command: [-c, /trial/proxy.conf, -g, "daemon off;"]
+    command: [-e, stderr, -c, /trial/proxy.conf, -g, "daemon off;"]
     restart: "no"
     read_only: true
     cap_drop: [ALL]
