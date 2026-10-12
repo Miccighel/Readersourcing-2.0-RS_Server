@@ -32,12 +32,20 @@ class PrivateTrialTest < Minitest::Test
     assert_equal true, compose.fetch("networks").fetch("default").fetch("internal")
     services = compose.fetch("services")
     ports = services.values.flat_map { |service| service.fetch("ports", []) }
-    assert_equal ["127.0.0.1:33030:3000", "127.0.0.1:33031:8025"], ports.sort
+    assert_equal ["127.0.0.1:33030:8080", "127.0.0.1:33031:8081"], ports.sort
+    assert_equal ["access", "default"], services.fetch("access").fetch("networks")
+    assert_equal ["./runtime/proxy.conf:/trial/proxy.conf:ro"], services.fetch("access").fetch("volumes")
+    refute services.fetch("access").key?("env_file")
+    (services.keys - ["access"]).each do |name|
+      assert_equal ["default"], services.fetch(name).fetch("networks")
+      refute services.fetch(name).key?("ports")
+    end
     services.each_value do |service|
       refute service.key?("build")
       refute service.key?("network_mode")
       refute service.fetch("privileged", false)
       assert_equal "no", service.fetch("restart")
+      assert_equal "runc", service.fetch("runtime")
       assert service.key?("cpus")
       assert service.key?("mem_limit")
     end
@@ -66,6 +74,17 @@ class PrivateTrialTest < Minitest::Test
     end
     assert_equal PrivateTrial::READER_SHA256, Digest::SHA256.file(File.join(@directory, "fixtures/Reader.pdf")).hexdigest
     assert_equal "rs-trial", File.read(File.join(@directory, "runtime/ui.auth")).split(":").first
+  end
+
+  def test_copies_binary_fixture_without_transcoding_with_rails_internal_encoding
+    original_encoding = Encoding.default_internal
+    Encoding.default_internal = Encoding::UTF_8
+    prepare
+    assert_equal File.binread(@reader), File.binread(File.join(@directory, "fixtures/Reader.pdf"))
+    assert_equal PrivateTrial::READER_SHA256, Digest::SHA256.file(File.join(@directory, "fixtures/Reader.pdf")).hexdigest
+    assert_equal File.binread(File.join(File.dirname(@template), "proxy.conf")), File.binread(File.join(@directory, "runtime/proxy.conf"))
+  ensure
+    Encoding.default_internal = original_encoding
   end
 
   def test_certificate_is_valid_for_mailpit_and_matches_the_private_key

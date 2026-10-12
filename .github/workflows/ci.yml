@@ -73,8 +73,8 @@ jobs:
           sh bin/private_trial start "$trial_directory"
       - name: Verify loopback access and authenticated mail capture
         run: |
-          curl --fail --silent --output /dev/null http://127.0.0.1:33030/login
-          mail_status=$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:33031/)
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:33030/login
+          mail_status=$(curl --silent --show-error --output /dev/null --write-out '%{http_code}' http://127.0.0.1:33031/)
           test "$mail_status" = 401
           project=$(sed -n '1p' "$TRIAL_DIRECTORY/project-name")
           docker compose --project-name "$project" --project-directory "$TRIAL_DIRECTORY" -f "$TRIAL_DIRECTORY/compose.yml" \

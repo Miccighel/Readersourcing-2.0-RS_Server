@@ -13,12 +13,18 @@ Preparation requires registry access to pull the images; the running application
 
 The trial creates a unique Compose project, its own PostgreSQL and publication volumes, and a local Mailpit service.
 RS_Server is limited to one CPU and 1 GiB of memory, PostgreSQL to half a CPU and 512 MiB, and Mailpit to a quarter CPU
-and 128 MiB. Logs are bounded. None of these services starts automatically after a host reboot.
+and 128 MiB. A small NGINX access service is limited to a quarter CPU and 64 MiB. Logs are bounded. None of these services
+starts automatically after a host reboot.
+The trial selects the ordinary `runc` runtime explicitly and requests no GPU devices, including on hosts with an NVIDIA
+runtime configured for their research workloads.
 
 Only `127.0.0.1:33030` for RS_Server and `127.0.0.1:33031` for Mailpit are published. PostgreSQL and SMTP have no host
 ports. HTTP remains on loopback; SSH encrypts the connection between the browser's host and the Docker host. Public
 origins still require HTTPS under the application's existing configuration rules. Loopback is accessible to other
 users on the same host, so Mailpit requires a generated UI password and only synthetic data must be used.
+The access service forwards HTTP only to the application and Mailpit. It has no application secrets or database volume.
+The application, database, and Mailpit remain on a separate internal network with no external route; the access service
+alone joins the bridge used to publish the loopback ports. It does not provide a general purpose proxy or SMTP relay.
 
 Mailpit requires [STARTTLS and SMTP authentication](https://mailpit.axllent.org/docs/configuration/smtp/).
 Preparation creates a certificate valid for 30 days and trusts it only inside the application containers. It does not

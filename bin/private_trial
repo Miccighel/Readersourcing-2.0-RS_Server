@@ -32,7 +32,7 @@ prepare_script="$repository/deploy/private/prepare.rb"
 if [ "$operation" = prepare ]; then
   docker pull "$image"
   owner=$(stat -c '%u:%g' "$directory")
-  docker run --rm --network none --read-only --cap-drop ALL --security-opt no-new-privileges:true \
+  docker run --rm --runtime runc --network none --read-only --cap-drop ALL --security-opt no-new-privileges:true \
     --memory 128m --cpus 0.25 --pids-limit 64 --user "$owner" --entrypoint ruby \
     --mount "type=bind,source=$directory,target=/trial" \
     --mount "type=bind,source=$repository/deploy/private,target=/definition,readonly" \
@@ -41,7 +41,7 @@ if [ "$operation" = prepare ]; then
   exit 0
 fi
 
-project=$(docker run --rm --network none --read-only --cap-drop ALL --security-opt no-new-privileges:true \
+project=$(docker run --rm --runtime runc --network none --read-only --cap-drop ALL --security-opt no-new-privileges:true \
   --memory 128m --cpus 0.25 --pids-limit 64 --user "$(stat -c '%u:%g' "$directory")" --entrypoint ruby \
   --mount "type=bind,source=$directory,target=/trial,readonly" \
   --mount "type=bind,source=$prepare_script,target=/prepare.rb,readonly" \

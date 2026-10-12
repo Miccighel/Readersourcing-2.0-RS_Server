@@ -8,6 +8,8 @@ x-logging: &logging
 
 x-app: &app
   image: <%= application_image %>
+  runtime: runc
+  networks: [default]
   env_file: ./runtime/application.env
   environment:
     RAILS_ENV: production
@@ -39,6 +41,8 @@ x-app: &app
 services:
   database:
     image: postgres:17
+    runtime: runc
+    networks: [default]
     env_file: ./runtime/database.env
     restart: "no"
     cpus: 0.5
@@ -56,6 +60,8 @@ services:
 
   mailpit:
     image: axllent/mailpit:v1.31.5
+    runtime: runc
+    networks: [default]
     user: "<%= uid %>:<%= gid %>"
     env_file: ./runtime/mailpit.env
     restart: "no"
@@ -72,8 +78,37 @@ services:
       - ./runtime/smtp.key:/trial/smtp.key:ro
       - ./runtime/smtp.auth:/trial/smtp.auth:ro
       - ./runtime/ui.auth:/trial/ui.auth:ro
+    logging: *logging
+
+  access:
+    image: nginx:1.30.5-alpine
+    runtime: runc
+    user: "<%= uid %>:<%= gid %>"
+    networks: [access, default]
+    entrypoint: [nginx]
+    command: [-c, /trial/proxy.conf, -g, "daemon off;"]
+    restart: "no"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    cpus: 0.25
+    mem_limit: 64m
+    pids_limit: 32
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m,mode=1777
+    volumes:
+      - ./runtime/proxy.conf:/trial/proxy.conf:ro
     ports:
-      - "127.0.0.1:33031:8025"
+      - "127.0.0.1:33030:8080"
+      - "127.0.0.1:33031:8081"
+    depends_on:
+      rs_server_webapp: {condition: service_healthy}
+      mailpit: {condition: service_started}
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, "http://127.0.0.1:8080/login"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     logging: *logging
 
   rs_server_setup:
@@ -85,8 +120,6 @@ services:
   rs_server_webapp:
     <<: *app
     stop_grace_period: 30s
-    ports:
-      - "127.0.0.1:33030:3000"
     depends_on:
       database: {condition: service_healthy}
       mailpit: {condition: service_started}
@@ -100,7 +133,14 @@ services:
 
 networks:
   default:
+    driver: bridge
     internal: true
+    driver_opts:
+      com.docker.network.bridge.gateway_mode_ipv4: isolated
+  access:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
 
 volumes:
   database:

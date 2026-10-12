@@ -61,6 +61,7 @@ class PrivateTrial
     write_env("runtime/database.env", database)
     write_env("runtime/application.env", application)
     write_env("runtime/mailpit.env", mailpit)
+    write("runtime/proxy.conf", File.binread(File.join(File.dirname(@template), "proxy.conf")))
     write("fixtures/Reader.pdf", File.binread(@reader))
     write("compose.yml", ERB.new(File.read(@template)).result(binding))
     write("project-name", "#{@project_name}\n")
@@ -79,7 +80,7 @@ class PrivateTrial
     project_name = record.fetch("project_name")
     raise "Invalid private trial project" unless project_name.match?(/\Ars-private-[0-9a-f]{12}\z/)
     raise "Unexpected application image" unless record.fetch("application_image") == APPLICATION_IMAGE
-    required = %w[compose.yml project-name runtime/database.env runtime/application.env runtime/mailpit.env runtime/smtp.crt runtime/smtp.key runtime/smtp.auth runtime/ui.auth fixtures/Reader.pdf]
+    required = %w[compose.yml project-name runtime/database.env runtime/application.env runtime/mailpit.env runtime/proxy.conf runtime/smtp.crt runtime/smtp.key runtime/smtp.auth runtime/ui.auth fixtures/Reader.pdf]
     raise "Incomplete private trial record" unless record.fetch("files").keys.sort == required.sort
     record.fetch("files").each do |relative, expected|
       filename = File.join(directory, relative)
@@ -97,7 +98,7 @@ class PrivateTrial
   def gid = @gid
 
   def write(relative, contents, mode: 0o600)
-    File.open(File.join(@directory, relative), "wx", mode) { |file| file.write(contents) }
+    File.open(File.join(@directory, relative), "wbx", mode) { |file| file.write(contents) }
     @files << relative
   end
 
