@@ -18,7 +18,7 @@ This is the official repository of **RS_Server**, which is part of the **Readers
 This repository is a [Git Submodule](https://git-scm.com/book/it/v2/Git-Tools-Submodules) of the main project, 
 whose components can be found by taking advantage of the links below.
 
-The current development line is version **2.0.3**. The Docker image **v2.0.3** is available for `linux/amd64` and `linux/arm64`.
+The current container release is version **2.0.3**. The Docker image **v2.0.3** is available for `linux/amd64` and `linux/arm64`.
 The container release is described in [`docs/release-2.0.3.md`](docs/release-2.0.3.md).
 
 <h1>Useful Links</h1>
@@ -298,6 +298,7 @@ current domain state after acquiring the lock; a failed calculation rolls back t
 change. Editing retains the original score without recomputing the models. Confirmation mail is attempted after a new
 rating has been committed, when the reader is subscribed. An unavailable mail service does not undo the rating or turn
 a successful API response into a failure; the paper rating page reports that the rating was saved without its email.
+Readers who have disabled optional email notifications receive a saved rating notice without a promise of email delivery.
 
 Prepared publications are stored outside the public asset directory. The `pdf_download_url` and
 `pdf_download_url_link` response fields contain signed URLs that are bound to one reader, publication, copy generation,
@@ -305,6 +306,9 @@ variant, and file name. They expire after five minutes by default and are return
 headers. This keeps
 the existing browser and RS_Rate workflow, which opens the annotated file in a new tab without adding an authorization
 header. Logging out does not revoke a URL that has already been issued; its remaining lifetime is deliberately short.
+The web interface opens retained copies through `GET /publications/:id/open`. This browser route requires the reader's
+session and issues a fresh signed download URL when the document is opened, without downloading or annotating the source
+again. The API download fields keep their existing short lifetime and remain usable without a browser session until expiry.
 The publication path and filename fields describe the current reader's copy and are not public file paths. Each preparation
 retains the exact original bytes and the verified annotated PDF in a separate generation. Its names and paths do not alter
 those of another reader. The pair becomes current after the database transaction commits; failed preparation or rollback
@@ -341,6 +345,8 @@ Retrieval, inspection, annotation, and verification share one time budget measur
 can shorten the remaining time but do not renew it. The download limit includes DNS resolution, redirects, and continuous
 response streaming, in addition to the existing connection and read limits. PDF inspection runs in a separate Ruby
 process using the locked `pdf-reader` dependency; metadata bytes and encodings are preserved when its result is returned.
+Text fields imported into the publication record use valid UTF-8. Legacy PDFDocEncoding values are decoded for this
+purpose; the source PDF bytes and the embedded rating reference remain unchanged.
 The server stops and reaps an inspection or annotation process when its time expires. On Unix it also stops descendants
 in the same process group. Termination allows at most two additional seconds before a forced stop. Process output is
 bounded to 1 MiB per stream. A timeout returns HTTP `422` with `status: "processing_timeout"`, removes temporary files,

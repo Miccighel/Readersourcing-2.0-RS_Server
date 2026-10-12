@@ -37,6 +37,7 @@ en:
       rate_again: "Do you want to give a new rating?"
       mail_confirmation: "You will receive a confirmation email."
       rating_saved_without_confirmation: "Your rating was saved, but the confirmation email could not be sent."
+      rating_saved_without_subscription: "Your rating was saved. Email notifications are disabled in your profile."
       registration_saved_without_confirmation: "Your account was created, but the confirmation email could not be sent. Please sign in with the same credentials later to request another confirmation link."
       not_the_same_user: "Please save this publication for later to generate a new link."
       validate_user: "Verify your identity"

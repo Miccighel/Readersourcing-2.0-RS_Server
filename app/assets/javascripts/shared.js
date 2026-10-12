@@ -33,6 +33,17 @@ function paperRatingUrl(host, value) {
 	return url.toString();
 }
 
+function publicationOpenPath(value) {
+	if (typeof value !== "string" && !(Number.isSafeInteger(value) && value > 0)) {
+		throw new TypeError("The publication identifier is invalid.");
+	}
+	const identifier = String(value);
+	if (!/^[1-9]\d*$/.test(identifier)) {
+		throw new TypeError("The publication identifier is invalid.");
+	}
+	return `/publications/${identifier}/open`;
+}
+
 async function ajax(type, url, contentType, dataType, crossDomain, data, success, error) {
 	$.ajax({
 		type: type,

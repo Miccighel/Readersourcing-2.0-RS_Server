@@ -401,6 +401,7 @@ $(document).on("turbolinks:load", () => {
 	}
 
 	function showPreparedPublication(data, openPublication) {
+		const openPath = publicationOpenPath(data["id"]);
 		saveForLaterSection.find(errorsSection).hide();
 		saveForLaterSection.find(errorsSection).find(alert).empty();
 		saveForLaterCaptionFirst.hide();
@@ -408,8 +409,8 @@ $(document).on("turbolinks:load", () => {
 		downloadButton.find(reloadIcons).hide();
 		downloadButton.hide();
 		openButton.show();
-		openButton.attr("href", data["pdf_download_url_link"]);
-		openButton.off("click.preparation").on("click.preparation", () => window.open(data["pdf_download_url_link"], '_blank'));
+		openButton.attr("href", openPath);
+		openButton.off("click.preparation").on("click.preparation", () => window.open(openPath, '_blank'));
 		openButton.prop("disabled", false);
 		refreshButton.show();
 		refreshButton.prop("disabled", false);
@@ -417,7 +418,7 @@ $(document).on("turbolinks:load", () => {
 		sourceUploadError.hide();
 		showPreparationStatus("complete");
 		if (openPublication) {
-			let pdfWindow = window.open(data["pdf_download_url_link"], '_blank');
+			let pdfWindow = window.open(openPath, '_blank');
 			if (pdfWindow) pdfWindow.focus(); else modalAllow.modal('show');
 		}
 	}
@@ -775,6 +776,7 @@ $(document).on("turbolinks:load", () => {
 								ratingSlider.on("slide", slideEvt => ratingText.text(slideEvt.value));
 								// 3.1 The rated publication was also annotated
 								let thirdSuccessCallback = (data, status, jqXHR) => {
+									const openPath = publicationOpenPath(data["id"]);
 									// SAVE FOR LATER SECTION
 									saveForLaterSection.show();
 									loadSaveButton.hide();
@@ -782,8 +784,8 @@ $(document).on("turbolinks:load", () => {
 									saveForLaterCaptionFirst.hide();
 									saveForLaterCaptionSecond.show();
 									openButton.show();
-									openButton.attr("href", data["pdf_download_url_link"]);
-									openButton.on("click", () => window.open(data["pdf_download_url_link"], '_blank'));
+									openButton.attr("href", openPath);
+									openButton.off("click.preparation").on("click.preparation", () => window.open(openPath, '_blank'));
 									openButton.prop("disabled", false);
 									refreshButton.show();
 									refreshButton.prop("disabled", false);
@@ -1352,11 +1354,12 @@ $(document).on("turbolinks:load", () => {
 				downloadButton.find(reloadIcons).toggle();
 				downloadButton.hide();
 				openButton = downloadButton.parent().find(openListButton);
+				const openPath = publicationOpenPath(data["id"]);
 				openButton.removeClass("d-none");
 				openButton.prop("disabled", false);
-				openButton.attr("href", data["pdf_download_url_link"]);
-				openButton.on("click", () => window.open(data["pdf_download_url_link"], '_blank'));
-				let pdfWindow = window.open(data["pdf_download_url_link"], '_blank');
+				openButton.attr("href", openPath);
+				openButton.off("click.preparation").on("click.preparation", () => window.open(openPath, '_blank'));
+				let pdfWindow = window.open(openPath, '_blank');
 				if (pdfWindow) pdfWindow.focus(); else modalAllow.modal('show');
 			};
 			// 1.3 The fetch failed: hide the Download and Open buttons.

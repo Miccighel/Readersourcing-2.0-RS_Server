@@ -66,6 +66,30 @@ class PublicationCopiesTest < ActionDispatch::IntegrationTest
     assert_equal PDF::Reader.new(StringIO.new(@source)).page_count + 1, PDF::Reader.new(StringIO.new(response.body)).page_count
   end
 
+  test "the browser opening route renews access to the same verified copy after download expiry" do
+    result = upload("Reader.pdf", @source, @headers)
+    copy = PublicationCopy.current(publication: @publication, user: @user)
+    annotated = copy.path("annotated").binread
+    metadata = @publication.reload.attributes
+    post authenticate_path(format: :json),
+      params: {email: @user.email, password: "password"}, headers: {"REMOTE_ADDR" => "127.0.0.1"}, as: :json
+    assert_response :success
+    travel PublicationDownloadReference.ttl + 1.second
+    get URI.parse(result.fetch("pdf_download_url_link")).request_uri
+    assert_response :not_found
+
+    get publication_open_path(@publication), headers: {"REMOTE_ADDR" => "127.0.0.1"}
+
+    assert_response :redirect
+    follow_redirect!
+    assert_response :success
+    assert_equal "application/pdf", response.media_type
+    assert_equal annotated, response.body
+    assert_equal copy.generation, PublicationCopy.current(publication: @publication, user: @user).generation
+    assert_equal @source, copy.path("original").binread
+    assert_equal metadata, @publication.reload.attributes
+  end
+
   test "a rejected refresh leaves the published pair and the publication metadata unchanged" do
     first = upload("Reader.pdf", @source, @headers)
     before = @publication.reload.attributes

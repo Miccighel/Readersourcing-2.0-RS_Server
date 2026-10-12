@@ -208,6 +208,45 @@ class RatingsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "the paper rating result respects disabled optional email notifications" do
+    @user.update!(subscribe: false)
+    publication = publications(:two)
+    reference = PaperRatingReference.issue(user: @user, publication: publication)
+    authenticate_as(@user)
+    get rate_paper_path(publication.id, reference), headers: {"REMOTE_ADDR" => "127.0.0.1"}
+
+    assert_no_emails do
+      assert_difference("Rating.count") do
+        capture_io do
+          post load_path, params: {pubId: publication.id, rating: {score: 72}}, headers: {"REMOTE_ADDR" => "127.0.0.1"}
+        end
+      end
+    end
+
+    assert_response :success
+    assert_includes response.body, I18n.t("information.messages.rating_saved_without_subscription")
+    assert_not_includes response.body, I18n.t("information.messages.mail_confirmation")
+    assert_not_includes response.body, I18n.t("information.messages.rating_saved_without_confirmation")
+    assert_equal 72, Rating.find_by!(user: @user, publication: publication).score
+  end
+
+  test "the paper rating result retains the confirmation notice for subscribed readers" do
+    publication = publications(:two)
+    reference = PaperRatingReference.issue(user: @user, publication: publication)
+    authenticate_as(@user)
+    get rate_paper_path(publication.id, reference), headers: {"REMOTE_ADDR" => "127.0.0.1"}
+
+    assert_emails 1 do
+      capture_io do
+        post load_path, params: {pubId: publication.id, rating: {score: 72}}, headers: {"REMOTE_ADDR" => "127.0.0.1"}
+      end
+    end
+
+    assert_response :success
+    assert_includes response.body, I18n.t("information.messages.mail_confirmation")
+    assert_not_includes response.body, I18n.t("information.messages.rating_saved_without_subscription")
+  end
+
   test "rejects an invalid score from an annotated PDF without domain changes or confirmation mail" do
     publication = publications(:two)
     reference = PaperRatingReference.issue(user: @user, publication: publication)

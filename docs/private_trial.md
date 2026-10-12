@@ -81,11 +81,15 @@ in use, stop and resolve the conflict rather than forwarding a different port: g
 Use a synthetic email address such as `reader1@rs-trial.test` and a password that is not used for any real account.
 
 1. register and open the confirmation email in Mailpit;
-2. sign in and upload the copied PDF fixture;
-3. open the annotated PDF and exercise its QR Code rating;
+2. sign in, upload the copied PDF fixture, and check its title in the publication list;
+3. open the annotated PDF, exercise its QR Code rating, and check that the confirmation notice respects the reader's email preference;
 4. request password recovery and open the captured email;
-5. sign out, sign in again, and verify the prepared publication;
+5. sign out, sign in again, and reopen the prepared publication after the signed download URL's five minute lifetime;
 6. delete the synthetic account and check the removal of its private publications.
+
+The published 2.0.3 image can leave the fixture's title blank, keep an expired Open link, and show an email confirmation
+notice to an unsubscribed reader. Record these interface outcomes separately from PDF preparation, rating persistence,
+and actual mail delivery. Reloading the publication list obtains a fresh download link for an existing copy.
 
 Remote publication retrieval is intentionally unavailable in this trial because its network has no Internet access.
 The private address restriction remains enabled. These checks do not validate public DNS, HTTPS certificates, real SMTP

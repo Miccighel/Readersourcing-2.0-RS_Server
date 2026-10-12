@@ -89,7 +89,7 @@ class RatingsController < ApplicationController
 					if save_rating { send_rating_confirmation }
 						render "shared/success", locals: {
 							pubId: @rating.publication.id,
-							message: I18n.t(@rating_submission.confirmation_failed ? "information.messages.rating_saved_without_confirmation" : "information.messages.mail_confirmation"),
+							message: paper_rating_confirmation_message,
 							title: I18n.t("confirmations.messages.rating_successful")
 						}, status: :ok
 					else
@@ -145,6 +145,17 @@ class RatingsController < ApplicationController
 
 	def send_rating_confirmation
 		RatingMailer.confirm(@rating.user, @rating.score, @rating.publication.pdf_url, unsubscribe_url(@rating.user.id)).deliver_now
+	end
+
+	def paper_rating_confirmation_message
+		key = if @rating_submission.confirmation_failed
+			"information.messages.rating_saved_without_confirmation"
+		elsif @rating.user.is_subscribed
+			"information.messages.mail_confirmation"
+		else
+			"information.messages.rating_saved_without_subscription"
+		end
+		I18n.t(key)
 	end
 
 	def create_rating_params

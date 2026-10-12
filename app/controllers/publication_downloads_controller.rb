@@ -1,5 +1,19 @@
 class PublicationDownloadsController < ApplicationController
 
+	before_action :authorize_server_request, only: :open
+
+	def open
+		publication = Publication.find(params[:id])
+		download_url = publication.pdf_download_url_link(PublicBaseUrl.for(request), current_user)
+		return head :not_found unless download_url
+
+		response.set_header("Cache-Control", "private, no-store")
+		response.set_header("Referrer-Policy", "no-referrer")
+		redirect_to URI.parse(download_url).request_uri
+	rescue ActiveRecord::RecordNotFound, ArgumentError
+		head :not_found
+	end
+
 	def show
 		publication = Publication.find(params[:id])
 		filename = params[:filename].to_s

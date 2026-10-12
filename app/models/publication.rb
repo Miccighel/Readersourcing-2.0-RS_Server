@@ -236,7 +236,7 @@ class Publication < ApplicationRecord
 			creator: :Creator,
 			producer: :Producer
 		}.each do |attribute, metadata_key|
-			value = metadata[metadata_key]
+			value = PdfMetadataText.decode(metadata[metadata_key])
 			value = value.sub(/\Adoi:/i, "") if attribute == :doi && value.respond_to?(:sub)
 			logger.info "#{metadata_key} found" unless value.blank?
 			update_attribute(attribute, value.presence)

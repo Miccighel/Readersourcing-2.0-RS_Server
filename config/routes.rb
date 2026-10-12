@@ -45,6 +45,7 @@ Rails.application.routes.draw do
 	post 'authenticate', to: 'authentication#authenticate', as: :authenticate, constraints: {:format => :json}
 
 	get 'publications/list/', to: 'publications#list', as: :publications_list, constraints: {:format => 'html'}
+	get 'publications/:id/open', to: 'publication_downloads#open', as: :publication_open
 	get 'publications/:id/download/:variant/:reference/:filename',
 		to: 'publication_downloads#show',
 		as: :publication_download,

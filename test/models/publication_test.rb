@@ -67,6 +67,9 @@ class PublicationTest < ActiveSupport::TestCase
     assert_equal "Reader.pdf", copy.name("original")
     assert_equal "Reader-Link.pdf", copy.name("annotated")
     assert_equal previous_paths, publication.reload.attributes.slice(*previous_paths.keys)
+    assert_equal "Readersourcing—a manifesto", publication.title
+    assert_equal "XyEnterprise XPP 8.0C.1  Patch #3", publication.creator
+    assert_equal "Acrobat Distiller 7.0.5 (Windows)", publication.producer
     assert_path_exists publication.send(:absolute_pdf_download_path_link, user)
     assert publication.send(:absolute_pdf_download_path_link, user).to_s.start_with?(@storage_root)
     refute publication.send(:absolute_pdf_download_path_link, user).to_s.start_with?(Rails.public_path.to_s)
