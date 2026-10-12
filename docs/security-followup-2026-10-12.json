@@ -1,0 +1,113 @@
+{
+  "checked_at": "2026-10-12T15:25:16Z",
+  "scope": "Correction availability for remaining operating system findings; not a repeated vulnerability scan",
+  "image": "miccighel/rs_server:v2.0.3",
+  "published_manifest_digest": "sha256:d35ad4383b7bf9a530390ade8e0b5dee1535d3933eb27174207b242028b38303",
+  "previous_assessment": "security-report-2026-10-12.json",
+  "publication_record": "container-release-2026-10-12.json",
+  "declared_distribution": "Debian Trixie",
+  "package_update_checks": [
+    {
+      "platform": "linux/arm64",
+      "image_id": "sha256:e277ce744a99348c940245907387577e0e175aae6df58d1183f18b141c509816",
+      "package_indexes_refreshed": true,
+      "simulation": "apt-get -s upgrade",
+      "exit_code": 0,
+      "upgraded": 0,
+      "newly_installed": 0,
+      "removed": 0,
+      "not_upgraded": 0,
+      "packages_installed": false,
+      "note": "The cache cleanup hook emitted a non-fatal permission warning in the capability-restricted container; index update and upgrade simulation completed successfully."
+    },
+    {
+      "platform": "linux/amd64",
+      "image_id": "sha256:d0ee55f12451e47c1bef8292b9a40d0d9b85576d7004a731f1bc7659f57dc901",
+      "package_indexes_refreshed": true,
+      "simulation": "apt-get -s upgrade",
+      "exit_code": 0,
+      "upgraded": 0,
+      "newly_installed": 0,
+      "removed": 0,
+      "not_upgraded": 0,
+      "packages_installed": false,
+      "note": "The cache cleanup hook emitted a non-fatal permission warning in the capability-restricted container; index update and upgrade simulation completed successfully."
+    }
+  ],
+  "vendor_checks": [
+    {
+      "id": "CVE-2025-69720",
+      "url": "https://security-tracker.debian.org/tracker/CVE-2025-69720",
+      "trixie_status": "Vulnerable",
+      "trixie_correction_available": false
+    },
+    {
+      "id": "CVE-2026-76642",
+      "url": "https://security-tracker.debian.org/tracker/CVE-2026-76642",
+      "trixie_status": "Vulnerable",
+      "trixie_correction_available": false
+    },
+    {
+      "id": "CVE-2026-78408",
+      "url": "https://security-tracker.debian.org/tracker/CVE-2026-78408",
+      "trixie_status": "Vulnerable",
+      "trixie_correction_available": false
+    },
+    {
+      "id": "CVE-2026-78409",
+      "url": "https://security-tracker.debian.org/tracker/CVE-2026-78409",
+      "trixie_status": "Vulnerable",
+      "trixie_correction_available": false
+    },
+    {
+      "id": "CVE-2026-78410",
+      "url": "https://security-tracker.debian.org/tracker/CVE-2026-78410",
+      "trixie_status": "Vulnerable",
+      "trixie_correction_available": false
+    },
+    {
+      "id": "CVE-2026-16742",
+      "url": "https://security-tracker.debian.org/tracker/CVE-2026-16742",
+      "trixie_status": "Vulnerable",
+      "trixie_correction_available": false
+    },
+    {
+      "id": "CVE-2026-54369",
+      "url": "https://security-tracker.debian.org/tracker/CVE-2026-54369",
+      "trixie_status": "Vulnerable",
+      "trixie_correction_available": false
+    },
+    {
+      "id": "CVE-2026-9538",
+      "url": "https://security-tracker.debian.org/tracker/CVE-2026-9538",
+      "trixie_status": "Vulnerable",
+      "trixie_correction_available": false
+    },
+    {
+      "id": "CVE-2026-107161",
+      "url": "https://security-tracker.debian.org/tracker/CVE-2026-107161",
+      "trixie_status": "Vulnerable",
+      "trixie_correction_available": false
+    },
+    {
+      "id": "CVE-2026-85091",
+      "url": "https://security-tracker.debian.org/tracker/CVE-2026-85091",
+      "trixie_status": "Vulnerable",
+      "trixie_correction_available": false
+    }
+  ],
+  "outcome": "Open; no package correction installable from the declared distribution at the time of this check",
+  "safeguards": {
+    "exclusions": [],
+    "distribution_changed": false,
+    "dependency_requirements_changed": false,
+    "published_image_modified": false,
+    "image_rebuilt": false,
+    "containers_removed": true
+  },
+  "limitations": [
+    "This check does not reassess all advisory severities or package reachability",
+    "The previous scanner findings remain open",
+    "Corrections available only in another Debian distribution were not installed"
+  ]
+}

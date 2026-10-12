@@ -4,6 +4,19 @@ This record complements application dependency audits. It distinguishes the prev
 image, and the replacement images. Scanner findings describe affected packages present in an image; they do
 not, by themselves, establish whether an application request can reach the affected code.
 
+## Remediation check of October 12, 2026
+
+The published `v2.0.3` contents were checked for available operating system corrections. After refreshing the official
+Debian indexes in disposable containers, upgrade simulation reported no upgrades, installations, removals, or packages
+kept back on either architecture. No package was installed and no image was rebuilt. The Debian tracker entries listed
+in the assessment still report no correction for the corresponding Trixie packages. Versions corrected only in
+another distribution were not introduced into this image.
+
+The [remediation record](security-followup-2026-10-12.json) retains the exact image identities, package simulation
+results, and vendor references. This was an availability check, not a repeated vulnerability scan. The previous
+findings remain open without exclusions. The existing unprivileged user, read only root file system, dropped
+capabilities, and no new privileges remain runtime restrictions, not corrections for the affected libraries.
+
 ## Publication of October 12, 2026
 
 `miccighel/rs_server:v2.0.3` is available on Docker Hub for `linux/amd64` and `linux/arm64`. Its manifest digest is
