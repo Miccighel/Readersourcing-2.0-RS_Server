@@ -302,3 +302,18 @@ domain fingerprints, and restored PDF hashes. The synthetic backup and its priva
 outside the repository; the disposable services and volumes were removed after recording the results. No image was
 published and no public service was deployed. Production DNS, certificates, ingress capacity, SMTP, and external
 backup storage still require validation on the selected host. The remaining security findings stay open.
+
+### Container publication of October 12, 2026
+
+The same resolver candidates were published as `miccighel/rs_server:v2.0.3` without rebuilding. The registry
+configuration digests match the image IDs used for the production rehearsal. Both `linux/amd64` and `linux/arm64`
+were pulled from the common version tag. JSON and DNS checks passed inside and outside Bundler in the downloaded
+images, including the locked library versions, removal of the older default implementations, excessive DNS label
+rejection, and bounded handling of unknown DNS resource and service parameter types. The 180 tracked application
+files checked in each image matched the source. No private environment file, master key, or reader PDF was present
+in the checked locations.
+
+The previous `v2.0.2` and `v2.0.1` manifests remain unchanged. Compose and the scheduled scan now refer to `v2.0.3`.
+The [publication record](container-release-2026-10-12.json) retains registry digests and checks. Publication does not
+resolve the remaining operating system findings and does not validate an external production host. No public
+service was deployed, and `master` was not changed.

@@ -4,6 +4,23 @@ This record complements application dependency audits. It distinguishes the prev
 image, and the replacement images. Scanner findings describe affected packages present in an image; they do
 not, by themselves, establish whether an application request can reach the affected code.
 
+## Publication of October 12, 2026
+
+`miccighel/rs_server:v2.0.3` is available on Docker Hub for `linux/amd64` and `linux/arm64`. Its manifest digest is
+`sha256:d35ad4383b7bf9a530390ade8e0b5dee1535d3933eb27174207b242028b38303`. The platform manifest digests are:
+
+- `linux/amd64`: `sha256:e62fe2648bdf003fb1ad839c699a025d62d5196dcf85288eae5f27e7b3157ffc`;
+- `linux/arm64`: `sha256:deff56d21c03dd2e4b84be8dcae1601be87ab3f5f45e7e18bf81497d927b5a96`.
+
+The registry configuration digests match the resolver candidates assessed below. Publication retained those exact
+contents without rebuilding. Both platforms were pulled from the common version tag. JSON and DNS checks passed
+inside and outside Bundler, with `json` 2.21.2 and `resolv` 0.7.2. The 180 tracked application files checked in each
+image matched the source, and the private data checks passed. The remaining operating system findings stay open.
+
+The `v2.0.2` and `v2.0.1` manifests were checked again and remain unchanged. No `latest` tag, build provenance, or
+SBOM attestation was added, and no public service was deployed. The
+[publication record](container-release-2026-10-12.json) retains the digests and completed checks.
+
 ## Assessment of October 12, 2026
 
 The published `v2.0.2` platform digests were scanned with Docker Scout 1.25.0 and Trivy 0.75.0. Scout indexed each
@@ -38,8 +55,8 @@ Both candidates passed JSON and DNS round trips inside and outside Bundler, as a
 access and a read only root file system. Checks cover rejection of excessive DNS labels and the absence of permanent
 class growth for unknown DNS record types and service parameters. The complete Rails suite passed with 275 tests and
 2,192 assertions against a disposable PostgreSQL database. Autoloading and the Ruby and Yarn dependency audits passed.
-Trivy reported neither resolver advisory in these exact candidates. They have not been published: the affected
-`v2.0.2` image on Docker Hub remains unchanged, and no public service was deployed.
+Trivy reported neither resolver advisory in these exact candidates. These checks preceded their publication as
+`v2.0.3`; the affected `v2.0.2` image on Docker Hub remains unchanged, and no public service was deployed.
 
 Trivy identified 19 Java packages in each image without known advisories. A separate OSV query also reported no known
 advisories for the 20 library coordinates recorded in the earlier assessment. The bundled RS_PDF JAR remains unchanged.
