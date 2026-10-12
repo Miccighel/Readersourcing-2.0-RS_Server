@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "prepared_at": "2026-10-12T14:33:56Z",
+  "repository": "docker.io/miccighel/rs_server",
+  "version": "2.0.3",
+  "status": "Prepared locally; not published",
+  "intended_tag": "v2.0.3",
+  "assessed_source_commit": "0015ff2cbc934a9c0022618da4a93efc1815f724",
+  "preparation_parent_commit": "09fed841ef527b32962e5261e882fd58c5a37e85",
+  "platforms": [
+    {
+      "platform": "linux/arm64",
+      "execution": "Native",
+      "assessed_image": "rs-server-collaudo:resolv-arm64",
+      "local_tag": "rs-server-candidate:v2.0.3-arm64",
+      "intended_registry_tag": "v2.0.3-arm64",
+      "image_id": "sha256:e277ce744a99348c940245907387577e0e175aae6df58d1183f18b141c509816",
+      "runtime_checks": [
+        {
+          "context": "unbundled",
+          "result": "Passed",
+          "uid": 1000,
+          "json": "2.21.2",
+          "resolv": "0.7.2",
+          "application_files": 180,
+          "application_sha256": "f9e889c27e27b6d116a1fc8a3a3a9e2470982ff95b588d72f661fa3ccc529d3e",
+          "checked_private_and_development_paths_absent": true,
+          "package_manifest_in_final_image": false
+        },
+        {
+          "context": "bundled",
+          "result": "Passed",
+          "uid": 1000,
+          "json": "2.21.2",
+          "resolv": "0.7.2",
+          "application_files": 180,
+          "application_sha256": "f9e889c27e27b6d116a1fc8a3a3a9e2470982ff95b588d72f661fa3ccc529d3e",
+          "checked_private_and_development_paths_absent": true,
+          "package_manifest_in_final_image": false
+        }
+      ]
+    },
+    {
+      "platform": "linux/amd64",
+      "execution": "Emulated",
+      "assessed_image": "rs-server-collaudo:resolv-amd64",
+      "local_tag": "rs-server-candidate:v2.0.3-amd64",
+      "intended_registry_tag": "v2.0.3-amd64",
+      "image_id": "sha256:d0ee55f12451e47c1bef8292b9a40d0d9b85576d7004a731f1bc7659f57dc901",
+      "runtime_checks": [
+        {
+          "context": "unbundled",
+          "result": "Passed",
+          "uid": 1000,
+          "json": "2.21.2",
+          "resolv": "0.7.2",
+          "application_files": 180,
+          "application_sha256": "f9e889c27e27b6d116a1fc8a3a3a9e2470982ff95b588d72f661fa3ccc529d3e",
+          "checked_private_and_development_paths_absent": true,
+          "package_manifest_in_final_image": false
+        },
+        {
+          "context": "bundled",
+          "result": "Passed",
+          "uid": 1000,
+          "json": "2.21.2",
+          "resolv": "0.7.2",
+          "application_files": 180,
+          "application_sha256": "f9e889c27e27b6d116a1fc8a3a3a9e2470982ff95b588d72f661fa3ccc529d3e",
+          "checked_private_and_development_paths_absent": true,
+          "package_manifest_in_final_image": false
+        }
+      ]
+    }
+  ],
+  "source_manifest": {
+    "file": "package.json",
+    "version": "2.0.3",
+    "dependency_declarations_unchanged": true,
+    "tooling_unchanged": true,
+    "immutable_install": "Passed"
+  },
+  "lockfiles": {
+    "Gemfile.lock": "077737adc6d0ba3aea87a3d9ccc20523a085c718248194c2b02757478396625e",
+    "yarn.lock": "ed3628c799995bac59dbedaae7b55c6ff4418781a8789328c1c08642760cecf6"
+  },
+  "rs_pdf": {
+    "file": "lib/RS_PDF-v2.0.0-shaded.jar",
+    "sha256": "2a98fbcdecdcad30d0cc1c3f3faccf2588ef5c4d9092dbece9248b561a879317",
+    "unchanged": true
+  },
+  "source_file_verification": {
+    "paths": [
+      "app",
+      "config",
+      "db",
+      "lib",
+      "Gemfile",
+      "Gemfile.lock",
+      "Rakefile",
+      "config.ru",
+      "entrypoint.sh",
+      "bin/rails",
+      "bin/rake"
+    ],
+    "tracked_file_count": 180,
+    "sha256": "f9e889c27e27b6d116a1fc8a3a3a9e2470982ff95b588d72f661fa3ccc529d3e",
+    "compiled_assets_included": false
+  },
+  "evidence": {
+    "security_assessment": "security-report-2026-10-12.json",
+    "production_rehearsal": "production-check-2026-10-12.json",
+    "production_checks_passed": 21
+  },
+  "safeguards": {
+    "rebuilt_during_preparation": false,
+    "registry_images_modified": false,
+    "previous_release_tags_modified": false,
+    "compose_image": "miccighel/rs_server:v2.0.2",
+    "scheduled_scan_image": "miccighel/rs_server:v2.0.2",
+    "latest_tag_created": false,
+    "master_modified": false,
+    "public_service_deployed": false
+  },
+  "limitations": [
+    "Operating system findings remain open as recorded in the security assessment",
+    "Registry manifests and pulls will be verified only after publication",
+    "No public hosting or external production services validated"
+  ]
+}

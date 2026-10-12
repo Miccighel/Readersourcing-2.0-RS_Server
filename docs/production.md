@@ -97,3 +97,6 @@ Build and assess each intended architecture before publication. This local tag d
 The published `miccighel/rs_server:v2.0.2` image supports `linux/amd64` and `linux/arm64`. Its manifest digest is
 `sha256:83681bfe5a86642a316b1aee4d2f08a93f256cbc9f40ab14471dc9b688e17054`. The publication record and remaining scanner
 findings are in [security.md](security.md). Named version tags are used by Compose; no `latest` tag is required.
+
+Version 2.0.3 is prepared locally but has not been published. Its scope, assessed image identities, and publication
+checks are described in [release-2.0.3.md](release-2.0.3.md).

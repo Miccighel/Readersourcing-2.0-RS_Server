@@ -18,7 +18,8 @@ This is the official repository of **RS_Server**, which is part of the **Readers
 This repository is a [Git Submodule](https://git-scm.com/book/it/v2/Git-Tools-Submodules) of the main project, 
 whose components can be found by taking advantage of the links below.
 
-The current development line is version **2.0.2**.
+The current development line is version **2.0.3**. The published Docker image remains **v2.0.2**.
+Preparation of the next image is described in [`docs/release-2.0.3.md`](docs/release-2.0.3.md).
 
 <h1>Useful Links</h1>
 
