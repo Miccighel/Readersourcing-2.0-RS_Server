@@ -54,7 +54,7 @@
 						<td style="width:10%" class="text-center"><%= publication.pretty_score_trm %></td>
 						<td style="width:8%" class="text-center">
 							<% if publication.is_saved_for_later(@current_user) %>
-								<a href="<%= publication_open_path(publication.id) %>" id="open-list-btn" class="btn btn-primary">Open</a>
+								<a href="<%= publication_open_path(publication.id) %>" id="open-list-btn" class="btn btn-primary" data-turbolinks="false">Open</a>
 								<button type="button" class="download-list-btn btn btn-primary d-none" disabled>
 									<span>Download</span>
 									<i class="fas fa-sync-alt fa-spin reload-icon"></i>

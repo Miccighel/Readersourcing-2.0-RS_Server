@@ -108,12 +108,13 @@ class PublicationDownloadsControllerTest < ActionDispatch::IntegrationTest
 		assert_response :not_found
 	end
 
-	test "the publication list uses the authenticated opening path instead of caching a download reference" do
+	test "the publication list opens the authenticated PDF path without Turbolinks" do
 		authenticate_as(@user)
 		get publications_list_path, headers: {"REMOTE_ADDR" => "127.0.0.1"}
 
 		assert_response :success
 		assert_select "a#open-list-btn[href=?]", publication_open_path(@publication), count: 1
+		assert_select "a#open-list-btn[data-turbolinks=false]", count: 1
 	end
 
 	private
