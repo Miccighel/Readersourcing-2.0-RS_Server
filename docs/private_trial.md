@@ -3,6 +3,8 @@
 This procedure runs the published RS_Server 2.0.3 image with synthetic reader accounts and the repository's PDF fixture.
 It is a private functional trial, not a public deployment or a replacement for the production host security review.
 The application code, dependency declarations, and normal production Compose configuration are unchanged.
+An existing trial updated to a development candidate must use its verified candidate procedure instead of the
+published image's start command; see [candidate restarts](#candidate-restarts).
 
 ## Requirements
 
@@ -105,3 +107,33 @@ sudo sh bin/private_trial stop "$trial_directory"
 This stops only the identified trial project. Its database, publication volumes, configuration, and secrets remain
 available for inspection and recovery. It does not prune images, caches, or volumes, and it does not remove resources
 belonging to other projects. Permanent removal requires checking the exact project resources and a separate decision.
+
+## Candidate restarts
+
+An updated trial retains its generated configuration and a separate verified image override. The original
+`bin/private_trial start` still selects the published image and must not be used to restart that candidate.
+Earlier candidate activation scripts are not restart commands either.
+
+Use the host specific `restart_candidate.sh` wrapper prepared for the activated image and project. Retain that
+wrapper, its `RESTART-SHA256SUMS` manifest and helper files, the original trial directory, and the private activation
+plan. The shared implementation is in `deploy/private/candidate_restart.sh` and `deploy/private/restart_configuration.rb`.
+The wrapper fixes the exact image ID, source revision, project, and activation plan; it does not select an image tag.
+
+From its verified operations directory on the Docker host:
+
+```console
+sudo sh restart_candidate.sh check
+sudo sh restart_candidate.sh restart
+```
+
+`check` compares the original and effective configurations with the activated snapshot, then verifies existing
+container identities and readiness without stopping or starting a service. `restart` pauses access and restarts
+only the same application and access containers. It waits for the application, runs `deployment:check`, and repeats
+configuration and identity checks before reopening access. A failure during maintenance leaves access stopped for
+inspection; if access cannot be stopped, the command reports that operator attention is required.
+
+The database and Mailpit must already be running, and the setup container must have completed successfully.
+The procedure does not run setup or migrations, create containers, pull or build images, restore backups, or delete
+volumes. It can resume the same stopped application and access containers, but is not a full stack startup procedure
+after a host reboot. Database contents are not fingerprinted by a restart check. Diagnostics can contain private
+configuration and remain in a protected directory on the host; do not paste or upload them.

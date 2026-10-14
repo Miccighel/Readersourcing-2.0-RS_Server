@@ -20,8 +20,8 @@ whose components can be found by taking advantage of the links below.
 
 The current container release is version **2.0.3**. The Docker image **v2.0.3** is available for `linux/amd64` and `linux/arm64`.
 The container release is described in [`docs/release-2.0.3.md`](docs/release-2.0.3.md).
-The development candidate is **2.0.4**. Its [preparation record](docs/release-2.0.4.md) distinguishes the source
-corrections from the published image and the checks still required before replacing a private trial.
+The development candidate is **2.0.4**. Its [candidate record](docs/release-2.0.4.md) describes the interface corrections,
+runtime and security checks, and private trial. Candidate restarts use the [dedicated procedure](docs/private_trial.md#candidate-restarts).
 
 <h1>Useful Links</h1>
 

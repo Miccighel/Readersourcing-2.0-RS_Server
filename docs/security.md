@@ -4,6 +4,53 @@ This record complements application dependency audits. It distinguishes the prev
 image, and the replacement images. Scanner findings describe affected packages present in an image; they do
 not, by themselves, establish whether an application request can reach the affected code.
 
+## Candidate assessment of October 14, 2026
+
+The RS_Server 2.0.4 candidate was assessed on its native Linux amd64 host. The exact image ID is
+`sha256:5ced7d8dac465287e415c229126108ebcbfdbf5fb64e6abfe37a0cf46912a35b`; it has not been published. It was
+subsequently activated in the private trial after its backup and configuration and data checks passed. The
+[candidate record](container-candidate-2.0.4.json) retains its source identity, runtime checks, and activation evidence.
+
+Trivy 0.75.0 scanned an archive of that image with the vulnerability database and Java index updated on October 14.
+Database downloads ran separately without the image mounted. Analysis then ran without network access, host Docker
+socket, credentials, or trial volumes. No advisory was excluded, including those without a correction.
+
+| Scope | Critical | High | Medium | Low | Unknown |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Operating system packages | 0 | 8 | 32 | 47 | 1 |
+| Detected application libraries | 0 | 0 | 0 | 0 | 0 |
+
+The operating system result contains 198 package occurrences of 88 distinct advisory identifiers across 100 Debian
+packages. Each identifier is counted once per scope, using its highest reported severity. The library inventory
+contains 182 distinct Ruby name and version pairs, 19 Java packages, and one `@rails/actiontext` package record.
+No known advisory was reported for those detected libraries; this does not establish complete shaded JAR coverage.
+
+The scanner lists no corrected version for its remaining operating system findings. The Debian tracker entries for
+the eight high advisories were checked separately: ncurses, ACL, systemd, Perl, and four util-linux advisories remain
+vulnerable in Trixie. Corrections listed for another Debian release were not introduced into the candidate. The
+[assessment record](security-report-2026-10-14.json) retains each advisory, affected package versions, vendor link,
+database dates, and report hashes. These findings remain open without a severity downgrade or exception.
+
+This is an image assessment, not a new package upgrade simulation, a complete reachability review, or approval for
+public exposure. The scan itself did not change the private trial's configuration or data. The published 2.0.3 image
+and earlier dated records remain unchanged.
+
+The PDF navigation replacement image, `sha256:e52ed41e7a62a5447923ec02f0bef0b61f285232afb58c7bdfc80020381b5ad5`,
+was scanned separately at 15:25:56 UTC on October 14. It contains commit `d3f37ea`. Analysis reused the scanner's
+database cache, not the preceding report, and retained the same offline analysis restrictions. The full report
+checksum was verified and its detected package and advisory occurrences were compared with the initial scan.
+The inventories and findings match: the counts above also describe this exact replacement image. All eight high
+operating system findings remain open. The [assessment record](security-report-2026-10-14.json) retains the new
+image and report hashes and the comparison scope.
+
+Before activation, the operator completed an updated backup of the running candidate,
+including data added during the browser checks and its effective image configuration. The same containers returned
+to healthy status. The existing backup of version 2.0.3 is retained separately; it does not include those later test
+records. The replacement was activated privately at 15:39:44 UTC on October 14, with the backup and activation
+fingerprints matching and no change to logical database data or publication files during the update. PDF navigation
+was checked in the integrated browser and confirmed manually by the operator in Firefox. These checks do not resolve
+the open advisories or approve public exposure.
+
 ## Remediation check of October 12, 2026
 
 The published `v2.0.3` contents were checked for available operating system corrections. After refreshing the official

@@ -1,0 +1,314 @@
+{
+  "schema_version": 1,
+  "assessment_date": "2026-10-14",
+  "candidate_record": "container-candidate-2.0.4.json",
+  "scan": {
+    "status": "scan_completed",
+    "recorded_at": "2026-10-14T09:40:27Z",
+    "image_id": "sha256:5ced7d8dac465287e415c229126108ebcbfdbf5fb64e6abfe37a0cf46912a35b",
+    "platform": "linux/amd64",
+    "scanner": "Trivy 0.75.0",
+    "scanner_reference": "aquasec/trivy@sha256:9db099105405c648166e6b94155eb32f8da12673cf1f455207f7385cc9a77283",
+    "image_archive_sha256": "8f27ca0758cc20113bbf04a3eb2a359f16a682b0665ca755576f9f69a01eb518",
+    "full_report_sha256": "c21295a5707e7bc30cbab3fd24dbd416961a858d9b003f66e75ed26731c321f0",
+    "vulnerability_database": {
+      "Version": 2,
+      "NextUpdate": "2026-10-15T07:11:52.271767002Z",
+      "UpdatedAt": "2026-10-14T07:11:52.271767627Z",
+      "DownloadedAt": "2026-10-14T09:32:57.342120567Z"
+    },
+    "java_database": {
+      "Version": 1,
+      "NextUpdate": "2026-10-17T01:07:18.515664021Z",
+      "UpdatedAt": "2026-10-14T01:07:18.515664291Z",
+      "DownloadedAt": "2026-10-14T09:40:24.922626626Z"
+    },
+    "os": {
+      "Family": "debian",
+      "Name": "13.7"
+    },
+    "scopes": {
+      "os-pkgs": {
+        "unique_packages_by_type": {
+          "debian": 100
+        },
+        "finding_occurrences": 198,
+        "distinct_advisories": 88,
+        "severity_counts": {
+          "UNKNOWN": 1,
+          "LOW": 47,
+          "MEDIUM": 32,
+          "HIGH": 8,
+          "CRITICAL": 0
+        }
+      },
+      "lang-pkgs": {
+        "unique_packages_by_type": {
+          "jar": 19,
+          "node-pkg": 1,
+          "gemspec": 182
+        },
+        "finding_occurrences": 0,
+        "distinct_advisories": 0,
+        "severity_counts": {
+          "UNKNOWN": 0,
+          "LOW": 0,
+          "MEDIUM": 0,
+          "HIGH": 0,
+          "CRITICAL": 0
+        }
+      }
+    },
+    "severity_count_rule": "Highest reported severity per distinct advisory within each scope; scopes are not combined",
+    "advisories_excluded": false,
+    "unfixed_advisories_retained": true,
+    "image_inventory_uploaded": false,
+    "network_disabled_during_analysis": true,
+    "docker_socket_mounted_in_scanner": false,
+    "personal_files_or_trial_volumes_mounted": false,
+    "private_trial_replaced": false,
+    "coverage_limit": "Detected operating system, Ruby and Java packages; no guarantee that every shaded component was identified"
+  },
+  "pdf_navigation_replacement": {
+    "recorded_at": "2026-10-14T15:25:56Z",
+    "status": "scan_completed",
+    "image_id": "sha256:e52ed41e7a62a5447923ec02f0bef0b61f285232afb58c7bdfc80020381b5ad5",
+    "source_revision": "d3f37eabfd0ddcb55ccd049af55be80eda8c5a8b",
+    "platform": "linux/amd64",
+    "scanner": "Trivy 0.75.0",
+    "scanner_reference": "aquasec/trivy@sha256:9db099105405c648166e6b94155eb32f8da12673cf1f455207f7385cc9a77283",
+    "image_archive_sha256": "f44e5945aa3fdabb79a30d6fb6882f3463331ce1e67f4d9587cf94f51fdf35ae",
+    "full_report_sha256": "0f9206c7857c6e86e8ad8e8e9c61f4a3e2f6fa703d8b9011e9cee72709f41b93",
+    "summary_sha256": "bb4ea01d24749fc66fe6137557d988dc7cc1c77d09379676d8b51e7c7eba9865",
+    "full_report_checksum_verified": true,
+    "scanner_cache_reused": true,
+    "database_metadata_matches_initial_scan": true,
+    "detected_package_occurrences_match_initial_scan": true,
+    "advisory_occurrences_match_initial_scan": true,
+    "comparison_scope": "Detected package names and versions, source package versions and architectures; advisory identifiers, affected package versions, severities, correction versions, status and severity source within each package scope",
+    "operating_system_advisories": {"CRITICAL": 0, "HIGH": 8, "MEDIUM": 32, "LOW": 47, "UNKNOWN": 1},
+    "operating_system_advisory_occurrences": 198,
+    "operating_system_distinct_advisories": 88,
+    "detected_application_library_advisories": 0,
+    "advisories_excluded": false,
+    "security_findings_remain_open": true,
+    "public_deployment_approved": false,
+    "image_inventory_uploaded": false,
+    "network_disabled_during_analysis": true,
+    "docker_socket_mounted_in_scanner": false,
+    "personal_files_or_trial_volumes_mounted": false,
+    "private_trial_replaced": false,
+    "coverage_limit": "Detected operating system, Ruby and Java packages; no guarantee that every shaded component was identified"
+  },
+  "review": {
+    "full_report_checksum_verified": true,
+    "full_report_reviewed": true,
+    "scanner_fixed_version_entries": 0,
+    "critical_and_high_advisories": {
+      "CVE-2025-69720": {
+        "severity": [
+          "HIGH"
+        ],
+        "affected_packages": [
+          "libtinfo6",
+          "ncurses-base",
+          "ncurses-bin"
+        ],
+        "installed_versions": [
+          "6.5+20250216-2"
+        ],
+        "fixed_version_reported": false,
+        "scanner_status": [
+          "affected"
+        ],
+        "debian_tracker": "https://security-tracker.debian.org/tracker/CVE-2025-69720",
+        "trixie_status_checked_on_2026_10_14": "Vulnerable",
+        "correction_listed_for_trixie": false,
+        "finding_retained": true
+      },
+      "CVE-2026-16742": {
+        "severity": [
+          "HIGH"
+        ],
+        "affected_packages": [
+          "libsystemd0",
+          "libudev1"
+        ],
+        "installed_versions": [
+          "257.13-1~deb13u1"
+        ],
+        "fixed_version_reported": false,
+        "scanner_status": [
+          "affected"
+        ],
+        "debian_tracker": "https://security-tracker.debian.org/tracker/CVE-2026-16742",
+        "trixie_status_checked_on_2026_10_14": "Vulnerable",
+        "correction_listed_for_trixie": false,
+        "finding_retained": true
+      },
+      "CVE-2026-54369": {
+        "severity": [
+          "HIGH"
+        ],
+        "affected_packages": [
+          "libacl1"
+        ],
+        "installed_versions": [
+          "2.3.2-2+b1"
+        ],
+        "fixed_version_reported": false,
+        "scanner_status": [
+          "affected"
+        ],
+        "debian_tracker": "https://security-tracker.debian.org/tracker/CVE-2026-54369",
+        "trixie_status_checked_on_2026_10_14": "Vulnerable",
+        "correction_listed_for_trixie": false,
+        "finding_retained": true
+      },
+      "CVE-2026-76642": {
+        "severity": [
+          "HIGH"
+        ],
+        "affected_packages": [
+          "bsdutils",
+          "libblkid1",
+          "liblastlog2-2",
+          "libmount1",
+          "libsmartcols1",
+          "libuuid1",
+          "login",
+          "mount",
+          "util-linux"
+        ],
+        "installed_versions": [
+          "1:2.41.5-0+deb13u1",
+          "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "2.41.5-0+deb13u1"
+        ],
+        "fixed_version_reported": false,
+        "scanner_status": [
+          "affected"
+        ],
+        "debian_tracker": "https://security-tracker.debian.org/tracker/CVE-2026-76642",
+        "trixie_status_checked_on_2026_10_14": "Vulnerable",
+        "correction_listed_for_trixie": false,
+        "finding_retained": true
+      },
+      "CVE-2026-78408": {
+        "severity": [
+          "HIGH"
+        ],
+        "affected_packages": [
+          "bsdutils",
+          "libblkid1",
+          "liblastlog2-2",
+          "libmount1",
+          "libsmartcols1",
+          "libuuid1",
+          "login",
+          "mount",
+          "util-linux"
+        ],
+        "installed_versions": [
+          "1:2.41.5-0+deb13u1",
+          "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "2.41.5-0+deb13u1"
+        ],
+        "fixed_version_reported": false,
+        "scanner_status": [
+          "affected"
+        ],
+        "debian_tracker": "https://security-tracker.debian.org/tracker/CVE-2026-78408",
+        "trixie_status_checked_on_2026_10_14": "Vulnerable",
+        "correction_listed_for_trixie": false,
+        "finding_retained": true
+      },
+      "CVE-2026-78409": {
+        "severity": [
+          "HIGH"
+        ],
+        "affected_packages": [
+          "bsdutils",
+          "libblkid1",
+          "liblastlog2-2",
+          "libmount1",
+          "libsmartcols1",
+          "libuuid1",
+          "login",
+          "mount",
+          "util-linux"
+        ],
+        "installed_versions": [
+          "1:2.41.5-0+deb13u1",
+          "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "2.41.5-0+deb13u1"
+        ],
+        "fixed_version_reported": false,
+        "scanner_status": [
+          "affected"
+        ],
+        "debian_tracker": "https://security-tracker.debian.org/tracker/CVE-2026-78409",
+        "trixie_status_checked_on_2026_10_14": "Vulnerable",
+        "correction_listed_for_trixie": false,
+        "finding_retained": true
+      },
+      "CVE-2026-78410": {
+        "severity": [
+          "HIGH"
+        ],
+        "affected_packages": [
+          "bsdutils",
+          "libblkid1",
+          "liblastlog2-2",
+          "libmount1",
+          "libsmartcols1",
+          "libuuid1",
+          "login",
+          "mount",
+          "util-linux"
+        ],
+        "installed_versions": [
+          "1:2.41.5-0+deb13u1",
+          "1:4.16.0-2+really2.41.5-0+deb13u1",
+          "2.41.5-0+deb13u1"
+        ],
+        "fixed_version_reported": false,
+        "scanner_status": [
+          "affected"
+        ],
+        "debian_tracker": "https://security-tracker.debian.org/tracker/CVE-2026-78410",
+        "trixie_status_checked_on_2026_10_14": "Vulnerable",
+        "correction_listed_for_trixie": false,
+        "finding_retained": true
+      },
+      "CVE-2026-9538": {
+        "severity": [
+          "HIGH"
+        ],
+        "affected_packages": [
+          "perl-base"
+        ],
+        "installed_versions": [
+          "5.40.1-6+deb13u1"
+        ],
+        "fixed_version_reported": false,
+        "scanner_status": [
+          "fix_deferred"
+        ],
+        "debian_tracker": "https://security-tracker.debian.org/tracker/CVE-2026-9538",
+        "trixie_status_checked_on_2026_10_14": "Vulnerable",
+        "correction_listed_for_trixie": false,
+        "finding_retained": true
+      }
+    },
+    "package_upgrade_simulation": "Not performed",
+    "outcome": "Operating system findings remain open without exclusions; no public deployment approval"
+  },
+  "limitations": [
+    "Only the exact native linux/amd64 candidate was scanned",
+    "Debian tracker checks cover the eight high advisories, not every lower severity finding",
+    "Detection of 19 Java packages does not guarantee that every shaded component was identified",
+    "Host Ubuntu maintenance, public HTTPS, external SMTP and production exposure were not assessed",
+    "Scanning did not replace the trial; the separately verified private activation is recorded in container-candidate-2.0.4.json"
+  ]
+}
