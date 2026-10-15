@@ -92,6 +92,12 @@ Recovery containers are stopped after the checks, while their isolated volumes a
 There is no restore over the active deployment, Mailpit inbox restore or additional encrypted NAS copy. The original
 NAS copy is not overwritten.
 
+If activation stops, do not rerun the installer over the staged directories or start unchecked replacements.
+`deploy/private/deployment_layout_diagnostic.py` provides a read only diagnostic for the recorded stopped attempt.
+It compares the retained and current inspection inside the host, verifies backup archive checksums and reports only
+fixed schema field names, states, booleans and error categories. Environment values, unknown label names, private
+paths and log contents are not exported. Its Python tests cover expected relocation, redaction and source preservation.
+
 This procedure does not configure automatic startup or recurring backups, update host packages, restart Docker,
 reboot the host, publish an image or expose the application publicly.
 
