@@ -119,11 +119,14 @@ or recurring backups. The [private trial procedure](private_trial.md#complete-ca
 The combined startup, inventory, restart and configuration tests passed locally: 26 tests and 233 assertions.
 The wider standalone deployment suite also passed, with 63 tests and 536 assertions; the Rails dependent recovery
 probe was not rerun as part of that standalone suite.
-These are synthetic safety tests, not a completed rehearsal on Homer or proof of a real host reboot. Host installation
-and the live rehearsal remain pending. No host packages were changed and no host reboot was performed.
+These are synthetic safety tests, not a completed rehearsal on Homer or proof of a real host reboot. The verified
+helpers were installed separately on Homer and the operator completed `prepare`: configuration and inventory checks
+passed for the exact activated image without creating containers or running migrations. The live rehearsal remains
+pending. No host packages were changed and no host reboot was performed.
 The [maintenance procedure](host-maintenance.md) requires a coordinated interruption on the shared server.
-The [October 15 tracker review](security-followup-2026-10-15.json) leaves all eight previously recorded high image
-advisories open; a new image scan remains pending.
+The [October 15 assessment](security-followup-2026-10-15.json) includes a new scan with an updated vulnerability
+database. Its verified complete report retains the same detected package inventory and advisory occurrences as the
+October 14 replacement scan. All eight previously recorded high image advisories remain open.
 
 ## PDF navigation
 

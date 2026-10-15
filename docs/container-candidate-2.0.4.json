@@ -401,6 +401,29 @@
     "future_backup_schedule_and_retention_configured": false,
     "evidence": "Operator output, independent public report checksum verification, and ciphertext checksum, size and permission checks on the NAS without downloading the archive"
   },
+  "complete_startup_preparation": {
+    "date": "2026-10-15",
+    "source_revision": "210b1a2",
+    "status": "Preparation passed; live rehearsal pending",
+    "operation": "prepare",
+    "image_id": "sha256:e52ed41e7a62a5447923ec02f0bef0b61f285232afb58c7bdfc80020381b5ad5",
+    "configuration_and_inventory_verified": true,
+    "database_and_publication_fingerprints_checked": false,
+    "migrations_run": false,
+    "containers_created": false,
+    "automatic_startup_configured": false,
+    "host_reboot_tested": false,
+    "public_helper_manifest_sha256": "b580c17fae10572a329f3e7e71fb3253d7b6d131bd98bd061f5f4bd8f6057205",
+    "evidence": "Operator aggregate preparation output; helper checksum manifest verified independently before preparation; private inventory and diagnostics were not read or downloaded"
+  },
+  "refreshed_image_assessment": {
+    "record": "security-followup-2026-10-15.json",
+    "recorded_at": "2026-10-15T11:14:14Z",
+    "full_report_checksum_verified": true,
+    "detected_packages_and_advisory_occurrences_match_previous_scan": true,
+    "security_findings_remain_open": true,
+    "public_deployment_approved": false
+  },
   "safeguards": {
     "network_disabled_during_runtime_checks": true,
     "image_root_read_only_during_runtime_checks": true,

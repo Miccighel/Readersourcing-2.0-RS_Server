@@ -8,8 +8,12 @@ not, by themselves, establish whether an application request can reach the affec
 
 The official Debian tracker entries were checked again for the eight high advisories recorded in the candidate.
 They still list Trixie as vulnerable, without a corrected version for that release. All findings remain open.
-The [follow up record](security-followup-2026-10-15.json) retains the individual references. This review is not a new
-image scan: the latest completed scan remains the one recorded on October 14.
+The [follow up record](security-followup-2026-10-15.json) retains the individual references and the new scan completed
+at 11:14:14 UTC on October 15 for the exact activated replacement image. The vulnerability database was updated that
+day; the Java index remained within its recorded validity period. The complete report checksums were verified and
+the detected package inventory and advisory occurrences match the October 14 replacement scan. Counts are unchanged:
+eight high operating system advisories, no critical advisories, and no advisories in the application libraries detected
+by Trivy. No corrected package versions were reported and no advisory was excluded. This does not approve public exposure.
 
 Host package maintenance is separate from rebuilding the image. The [host maintenance procedure](host-maintenance.md)
 covers the shared server interruption, manual candidate startup, and checks required before and after a reboot.
