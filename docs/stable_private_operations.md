@@ -19,7 +19,9 @@ retained backup and shared lock. Its checksum manifest verifies all public input
 | `OPERATIONS.md` | Commands and recovery precautions for the operator |
 | `snapshots.json` | Private contents and permissions inventory of the retained copies |
 
-The installation and its parent directory are owned by root with mode `0700`. Operational files have mode `0600`.
+The installation and its parent directory are owned by root with mode `0700`. Wrappers and their context have mode
+`0600`. Public helper code has mode `0644` because selected scripts are mounted into containers running as the
+existing unprivileged users. The protected parent directory still prevents other host users from accessing them.
 Configuration copies preserve source ownership and permissions inside the protected installation. These files can
 contain credentials and reader data: never paste, commit, or upload the installation or its inventories.
 
@@ -37,6 +39,12 @@ and restart commands then run their nonmutating checks. The installer compares a
 images, running state, start timestamps and restart counts before and after installation. A successful aggregate
 report is printed; protected diagnostics remain on the host. A failure preserves the sources and any partial staging
 directory for inspection rather than removing data or retrying destructively.
+
+If installation has already published its destination but stopped at the command checks, do not rerun the installer
+or remove that directory. A reviewed completion procedure must verify the exact installed code and failure category,
+retain the existing snapshots, and repeat the command and container checks. Public helper read permissions inside
+containers are distinct from private host directory access; changing helper permissions must not relax access to
+configuration, credentials, or snapshot inventories.
 
 After installation, run the commands documented in the protected `OPERATIONS.md`, for example:
 

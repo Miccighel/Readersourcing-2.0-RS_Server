@@ -80,6 +80,42 @@ class PrivateTrialStableInstallationTest < Minitest::Test
     end
   end
 
+  def test_public_helper_code_is_readable_inside_unprivileged_containers_but_host_and_secrets_remain_private
+    installer.install!
+    operations = File.join(@target, "operations")
+    PrivateTrialStableInstallation::HELPERS.each do |name|
+      assert_equal 0o644, File.stat(File.join(operations, name)).mode & 0o777
+    end
+    PrivateTrialStableInstallation::TEMPLATES.each do |name|
+      assert_equal 0o600, File.stat(File.join(operations, name)).mode & 0o777
+    end
+    assert_equal 0o700, File.stat(operations).mode & 0o777
+    assert_equal 0o600, File.stat(File.join(@target, "configuration/trial/private.env")).mode & 0o777
+    assert_equal 0o600, File.stat(File.join(@target, "snapshots.json")).mode & 0o777
+  end
+
+  def test_read_only_snapshot_verification_rejects_changed_copies_or_sources
+    installer.install!
+    assert_equal "snapshots_verified", installer.verify_snapshots!.fetch("status")
+    retained = File.join(@target, "configuration/trial/private.env")
+    original = File.read(retained)
+    File.write(retained, "changed-copy")
+    assert_raises(PrivateTrialStableInstallation::Error) { installer.verify_snapshots! }
+    File.write(retained, original)
+    File.write(File.join(@source, "trial/private.env"), "changed-source")
+    assert_raises(PrivateTrialStableInstallation::Error) { installer.verify_snapshots! }
+    assert_equal original, File.read(retained)
+  end
+
+  def test_public_helper_permissions_are_explicit_even_with_a_private_process_umask
+    previous = File.umask(0o077)
+    installer.install!
+    assert_equal 0o644, File.stat(File.join(@target, "operations/validate_trial.rb")).mode & 0o777
+    assert_equal 0o600, File.stat(File.join(@target, "operations/context.sh")).mode & 0o777
+  ensure
+    File.umask(previous) if previous
+  end
+
   def test_cleanup_rules_exclude_only_active_paths_and_shared_lock
     installer.install!
     rules = File.readlines(File.join(@target, "cleanup-exclusions.conf")).reject { |line| line.start_with?("#") }

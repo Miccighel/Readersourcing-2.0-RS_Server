@@ -12,6 +12,10 @@ rs_source_operations=$rs_operations_directory
 for rs_name in <%= (HELPERS + TEMPLATES + ["OPERATIONS-SHA256SUMS"]).join(" ") %>; do
   test -f "$rs_operations_directory/$rs_name"
   test ! -L "$rs_operations_directory/$rs_name"
-  test "$(stat -c '%u:%a' "$rs_operations_directory/$rs_name")" = 0:600
+  case "$rs_name" in
+    <%= HELPERS.join("|") %>) rs_file_mode=644 ;;
+    *) rs_file_mode=600 ;;
+  esac
+  test "$(stat -c '%u:%a' "$rs_operations_directory/$rs_name")" = "0:$rs_file_mode"
 done
 (cd "$rs_operations_directory" && sha256sum --check --status OPERATIONS-SHA256SUMS)

@@ -461,6 +461,27 @@
     },
     "evidence": "Operator aggregate preparation output; helper checksum manifest verified independently before preparation; private inventory and diagnostics were not read or downloaded"
   },
+  "stable_operations_installation": {
+    "status": "Published destination and cleanup rule; final stable command verification pending",
+    "installation": "/srv/readersourcing/private-trial",
+    "initial_attempt_stopped_during": "stable_command_check",
+    "initial_source_startup_check": "passed",
+    "cleanup_rule_metadata_and_contents_checked_independently": true,
+    "login_http_status_after_attempt": 200,
+    "private_diagnostic_contents_read_by_agent": false,
+    "prepared_completion": {
+      "scope": "Confirm expected permission failure, correct only public helper modes and verified wrapper context, and repeat snapshot and container checks",
+      "configuration_recopied": false,
+      "trial_services_restarted": false,
+      "host_packages_changed": false,
+      "host_rebooted": false,
+      "standalone_deployment_tests": 75,
+      "standalone_deployment_assertions": 649,
+      "failures": 0,
+      "errors": 0,
+      "live_verification": "Pending"
+    }
+  },
   "refreshed_image_assessment": {
     "record": "security-followup-2026-10-15.json",
     "recorded_at": "2026-10-15T11:14:14Z",

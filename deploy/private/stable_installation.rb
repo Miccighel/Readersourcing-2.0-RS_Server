@@ -38,7 +38,9 @@ class PrivateTrialStableInstallation
     HELPERS.each do |name|
       path = File.join(@definition, name)
       regular_file!(path)
-      write(File.join(operations, name), File.binread(path))
+      # Some helpers run as the existing unprivileged container users. Their code is public;
+      # host access remains restricted by the root owned operations directory.
+      write(File.join(operations, name), File.binread(path), mode: 0o644)
     end
     TEMPLATES.each do |name|
       path = File.join(@definition, "stable_templates", "#{name}.erb")
@@ -61,6 +63,18 @@ class PrivateTrialStableInstallation
       "recurring_backups_configured" => false, "host_packages_changed" => false, "host_rebooted" => false}
     write(File.join(@destination, "installation.json"), JSON.pretty_generate(result) + "\n")
     result
+  end
+
+  def verify_snapshots!
+    record = File.join(@destination, "snapshots.json")
+    regular_file!(record)
+    snapshots = JSON.parse(File.read(record))
+    raise Error, "Unexpected snapshot record" unless snapshots.keys.sort == %w[activation backup trial]
+    snapshots.each do |name, expected|
+      raise Error, "Retained snapshot differs" unless inventory(File.join(@destination, "configuration", name)) == expected
+      raise Error, "Source configuration differs" unless inventory(File.join(@source, name)) == expected
+    end
+    {"status" => "snapshots_verified", "source_and_retained_configuration_match" => true}
   end
 
   private
@@ -140,8 +154,9 @@ class PrivateTrialStableInstallation
     File.chmod(info.mode & 0o7777, target)
   end
 
-  def write(path, contents)
-    File.open(path, "wx", 0o600) { |file| file.write(contents) }
+  def write(path, contents, mode: 0o600)
+    File.open(path, "wx", mode) { |file| file.write(contents) }
+    File.chmod(mode, path)
   end
 
   def shell(name) = Shellwords.escape(@settings.fetch(name))
