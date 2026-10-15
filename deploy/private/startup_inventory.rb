@@ -27,7 +27,7 @@ class PrivateTrialStartupInventory
       # Endpoint addresses and console size change when the same container restarts.
       [service, {"id" => container.fetch("Id"), "name" => container.fetch("Name"),
         "image" => container.fetch("Image"), "config" => config,
-        "host" => host.reject { |key, _| key == "ConsoleSize" }, "mounts" => container.fetch("Mounts"),
+        "host" => host.reject { |key, _| key == "ConsoleSize" }, "mounts" => ordered_mounts(container.fetch("Mounts")),
         "networks" => container.fetch("NetworkSettings").fetch("Networks").keys.sort}]
     end
     raise Error, "Trial service identities are not unique" unless result.keys.sort == SERVICES && result.values.map { |entry| entry.fetch("id") }.uniq.length == SERVICES.length
@@ -35,8 +35,22 @@ class PrivateTrialStartupInventory
   end
 
   def validate!(baseline)
-    raise Error, "Existing container inventory differs from preparation" unless snapshot == baseline
+    raise Error, "Unexpected prepared inventory" unless baseline.is_a?(Hash) && baseline.keys.sort == SERVICES
+    # Earlier inventories retain Docker's inspection order. Compare without rewriting them.
+    expected = baseline.transform_values { |entry| entry.merge("mounts" => ordered_mounts(entry.fetch("mounts"))) }
+    raise Error, "Existing container inventory differs from preparation" unless snapshot == expected
     {"status" => "passed", "containers_checked" => SERVICES.length}
+  end
+
+  private
+
+  def ordered_mounts(mounts)
+    raise Error, "Unexpected mount inventory" unless mounts.is_a?(Array) && mounts.all? do |mount|
+      mount.is_a?(Hash) && mount["Destination"].is_a?(String) && !mount["Destination"].empty?
+    end
+    destinations = mounts.map { |mount| mount.fetch("Destination") }
+    raise Error, "Mount destinations must be unique" unless destinations.uniq.length == destinations.length
+    mounts.sort_by { |mount| mount.fetch("Destination") }
   end
 
 end

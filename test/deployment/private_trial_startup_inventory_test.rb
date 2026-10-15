@@ -8,7 +8,7 @@ class PrivateTrialStartupInventoryTest < Minitest::Test
         "Config" => {"Env" => ["PRIVATE=synthetic"], "Labels" => {"com.docker.compose.project" => "trial",
           "com.docker.compose.service" => service, "org.opencontainers.image.revision" => "revision"}},
         "HostConfig" => {"ConsoleSize" => [0, 0], "RestartPolicy" => {"Name" => "no"}, "ReadonlyRootfs" => true},
-        "Mounts" => [{"Name" => "trial-data", "RW" => false}],
+        "Mounts" => [{"Name" => "trial-data", "Destination" => "/data", "RW" => false}],
         "State" => {"Running" => service != "rs_server_setup", "ExitCode" => 0, "Paused" => false, "Restarting" => false, "Dead" => false},
         "NetworkSettings" => {"Networks" => {"trial_default" => {"IPAddress" => "172.18.0.2"}}}}
     end
@@ -66,6 +66,51 @@ class PrivateTrialStartupInventoryTest < Minitest::Test
       entries = containers
       web = entries.last
       field == "Image" ? web[field] = "old" : web["Config"]["Labels"]["org.opencontainers.image.revision"] = "old"
+      assert_raises(PrivateTrialStartupInventory::Error) { inventory(entries).snapshot }
+    end
+  end
+
+  def test_mount_order_is_ignored_in_existing_and_new_inventories_without_rewriting_the_baseline
+    entries = containers
+    entries.each { |entry| entry["Mounts"] << {"Name" => "trial-config", "Destination" => "/config", "RW" => false} }
+    baseline = inventory(entries).snapshot
+    baseline.each_value { |entry| entry.fetch("mounts").reverse! }
+    retained_baseline = JSON.generate(baseline)
+    expected = inventory(entries).snapshot
+    entries.each { |entry| entry["Mounts"].reverse! }
+
+    assert_equal expected, inventory(entries).snapshot
+    assert_equal "passed", inventory(entries).validate!(baseline).fetch("status")
+    assert_equal retained_baseline, JSON.generate(baseline)
+  end
+
+  def test_mount_content_changes_are_still_rejected_after_reordering
+    [
+      ->(mounts) { mounts.first["Destination"] = "/other" },
+      ->(mounts) { mounts.first["Name"] = "another-volume" },
+      ->(mounts) { mounts.first["RW"] = true },
+      ->(mounts) { mounts.first["Source"] = "/another-source" },
+      ->(mounts) { mounts.first["Mode"] = "changed" },
+      ->(mounts) { mounts.first["Propagation"] = "shared" },
+      ->(mounts) { mounts.pop }
+    ].each do |change|
+      entries = containers
+      entries.first["Mounts"] << {"Destination" => "/config", "RW" => false}
+      baseline = inventory(entries).snapshot
+      entries.first["Mounts"].reverse!
+      change.call(entries.first["Mounts"])
+      assert_raises(PrivateTrialStartupInventory::Error) { inventory(entries).validate!(baseline) }
+    end
+  end
+
+  def test_missing_and_duplicate_mount_destinations_are_rejected
+    [
+      ->(mounts) { mounts.first.delete("Destination") },
+      ->(mounts) { mounts.first["Destination"] = "" },
+      ->(mounts) { mounts << mounts.first.dup }
+    ].each do |change|
+      entries = containers
+      change.call(entries.first["Mounts"])
       assert_raises(PrivateTrialStartupInventory::Error) { inventory(entries).snapshot }
     end
   end

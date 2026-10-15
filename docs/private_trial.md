@@ -158,6 +158,10 @@ It cannot be overwritten by a second preparation. The completed setup container 
 never started by this procedure. A replaced container or changed configuration requires review, not a new baseline
 that silently accepts it.
 
+Mounts are compared as complete entries ordered by their unique destination, independently of Docker's inspection
+order. Sources, volume names, permissions and all other recorded mount fields must still match. Existing inventories
+are compared without being rewritten; a repeated `prepare` is not needed for this ordering rule.
+
 `check` validates configuration and inventory even when the trial is stopped. Success means those checks passed,
 not that the application is ready. To resume the same containers manually after Docker is available:
 

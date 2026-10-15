@@ -123,6 +123,12 @@ These are synthetic safety tests, not a completed rehearsal on Homer or proof of
 helpers were installed separately on Homer and the operator completed `prepare`: configuration and inventory checks
 passed for the exact activated image without creating containers or running migrations. The live rehearsal remains
 pending. No host packages were changed and no host reboot was performed.
+The first rehearsal stopped before maintenance because Docker returned identical mount entries in a different order
+for the setup and application containers. The operator's read only diagnostic confirmed that configuration matched,
+no container had an unstable state, and only mount ordering differed. The inventory comparison now orders complete
+mount entries by destination on both sides without rewriting the retained inventory. Seven inventory tests passed
+with 29 assertions, including rejection of changed sources, permissions, volume names, and missing or duplicate mounts.
+The standalone deployment suite then passed with 66 tests and 549 assertions. The live rehearsal remains pending.
 The [maintenance procedure](host-maintenance.md) requires a coordinated interruption on the shared server.
 The [October 15 assessment](security-followup-2026-10-15.json) includes a new scan with an updated vulnerability
 database. Its verified complete report retains the same detected package inventory and advisory occurrences as the

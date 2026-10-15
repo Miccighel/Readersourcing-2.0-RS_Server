@@ -414,6 +414,28 @@
     "automatic_startup_configured": false,
     "host_reboot_tested": false,
     "public_helper_manifest_sha256": "b580c17fae10572a329f3e7e71fb3253d7b6d131bd98bd061f5f4bd8f6057205",
+    "first_rehearsal_attempt": {
+      "status": "Stopped before maintenance; no trial service was stopped or started",
+      "diagnostic_status": "read_only_diagnostic",
+      "configuration_check_passed": true,
+      "unstable_container_states_in_failed_snapshot": 0,
+      "differences": [
+        {"service": "rs_server_setup", "changed_sections": ["mounts"], "mount_entries_equal_when_sorted": true},
+        {"service": "rs_server_webapp", "changed_sections": ["mounts"], "mount_entries_equal_when_sorted": true}
+      ],
+      "diagnostic_changed_services_or_files": false,
+      "private_values_or_log_contents_displayed": false,
+      "evidence": "Operator aggregate diagnostic output; no private diagnostic or inventory contents were read by the agent"
+    },
+    "mount_order_correction": {
+      "comparison": "Complete mount entries sorted by unique destination on both sides; no mount fields excluded",
+      "existing_inventory_rewrite_required": false,
+      "standalone_deployment_tests": 66,
+      "standalone_deployment_assertions": 549,
+      "failures": 0,
+      "errors": 0,
+      "live_retest": "Pending"
+    },
     "evidence": "Operator aggregate preparation output; helper checksum manifest verified independently before preparation; private inventory and diagnostics were not read or downloaded"
   },
   "refreshed_image_assessment": {
