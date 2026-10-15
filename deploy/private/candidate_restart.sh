@@ -54,7 +54,15 @@ candidate_validate_configuration() {
   test -s "$rs_work_directory/configuration-check.json"
 }
 
-candidate_check_containers() {
+candidate_resolve_containers() {
+  rs_web_container=$(candidate_compose ps --all --quiet rs_server_webapp)
+  rs_access_container=$(candidate_compose ps --all --quiet access)
+  rs_database_container=$(candidate_compose ps --all --quiet database)
+  rs_mailpit_container=$(candidate_compose ps --all --quiet mailpit)
+  rs_setup_container=$(candidate_compose ps --all --quiet rs_server_setup)
+}
+
+candidate_check_identities() {
   candidate_validate_container "$rs_web_container" rs_server_webapp
   candidate_validate_container "$rs_access_container" access
   candidate_validate_container "$rs_database_container" database
@@ -67,9 +75,13 @@ candidate_check_containers() {
   test "$(candidate_compose ps --all --quiet database)" = "$rs_database_container"
   test "$(candidate_compose ps --all --quiet mailpit)" = "$rs_mailpit_container"
   test "$(candidate_compose ps --all --quiet rs_server_setup)" = "$rs_setup_container"
+  test "$(docker inspect --format '{{.State.Running}} {{.State.ExitCode}}' "$rs_setup_container")" = 'false 0'
+}
+
+candidate_check_containers() {
+  candidate_check_identities
   candidate_require_health "$rs_database_container"
   test "$(docker inspect --format '{{.State.Running}}' "$rs_mailpit_container")" = true
-  test "$(docker inspect --format '{{.State.Running}} {{.State.ExitCode}}' "$rs_setup_container")" = 'false 0'
 }
 
 candidate_restart_finish() {
@@ -92,11 +104,7 @@ candidate_restart_finish() {
 
 candidate_restart_execute() {
   candidate_validate_configuration
-  rs_web_container=$(candidate_compose ps --all --quiet rs_server_webapp)
-  rs_access_container=$(candidate_compose ps --all --quiet access)
-  rs_database_container=$(candidate_compose ps --all --quiet database)
-  rs_mailpit_container=$(candidate_compose ps --all --quiet mailpit)
-  rs_setup_container=$(candidate_compose ps --all --quiet rs_server_setup)
+  candidate_resolve_containers
   candidate_check_containers
 
   if [ "$rs_operation" = restart ]; then
@@ -117,11 +125,9 @@ candidate_restart_execute() {
   candidate_require_health "$rs_access_container"
 }
 
-candidate_restart_main() {
+candidate_prepare_context() {
   test "$(id -u)" = 0
   test "$(uname -s)" = Linux
-  test "$#" -eq 1
-  case "$1" in check|restart) rs_operation=$1 ;; *) return 64 ;; esac
   printf '%s\n' "$rs_expected_project" | LC_ALL=C grep -Eq '^rs-private-[0-9a-f]{12}$'
   printf '%s\n' "$rs_candidate_image" | LC_ALL=C grep -Eq '^sha256:[0-9a-f]{64}$'
   printf '%s\n' "$rs_source_revision" | LC_ALL=C grep -Eq '^[0-9a-f]{40}$'
@@ -143,6 +149,14 @@ candidate_restart_main() {
   flock -n 9
   test "$(docker image inspect --format '{{.Id}}' "$rs_candidate_image")" = "$rs_candidate_image"
   test "$(docker image inspect --format '{{index .Config.Labels "org.opencontainers.image.revision"}}' "$rs_candidate_image")" = "$rs_source_revision"
+}
+
+candidate_restart_main() {
+  test "$(id -u)" = 0
+  test "$(uname -s)" = Linux
+  test "$#" -eq 1
+  case "$1" in check|restart) rs_operation=$1 ;; *) return 64 ;; esac
+  candidate_prepare_context
 
   rs_work_directory=$(mktemp -d /var/tmp/rs-server-candidate-restart.XXXXXX)
   rs_maintenance_started=no

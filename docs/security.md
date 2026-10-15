@@ -4,6 +4,17 @@ This record complements application dependency audits. It distinguishes the prev
 image, and the replacement images. Scanner findings describe affected packages present in an image; they do
 not, by themselves, establish whether an application request can reach the affected code.
 
+## Follow up of October 15, 2026
+
+The official Debian tracker entries were checked again for the eight high advisories recorded in the candidate.
+They still list Trixie as vulnerable, without a corrected version for that release. All findings remain open.
+The [follow up record](security-followup-2026-10-15.json) retains the individual references. This review is not a new
+image scan: the latest completed scan remains the one recorded on October 14.
+
+Host package maintenance is separate from rebuilding the image. The [host maintenance procedure](host-maintenance.md)
+covers the shared server interruption, manual candidate startup, and checks required before and after a reboot.
+No host package changes, reboot, automatic startup, or recurring backup schedule have been performed by this review.
+
 ## Candidate assessment of October 14, 2026
 
 The RS_Server 2.0.4 candidate was assessed on its native Linux amd64 host. The exact image ID is

@@ -108,6 +108,23 @@ stated that the rating was saved and email notifications were disabled, without 
 These checks added a synthetic reader, two publications, and their ratings after the activation data comparison.
 They did not reset earlier readers or rewrite the titles of existing publication records.
 
+## Startup preparation of October 15, 2026
+
+The development branch adds a separate manual procedure for resuming all four existing trial services after Docker
+becomes available. It records a protected container inventory while the trial is healthy, retains the exact activated
+image and completed setup container, and checks configuration before reopening access. Its optional rehearsal compares
+logical database and publication fingerprints while the application is stopped. It does not enable automatic startup
+or recurring backups. The [private trial procedure](private_trial.md#complete-candidate-startup) documents its scope.
+
+The combined startup, inventory, restart and configuration tests passed locally: 26 tests and 233 assertions.
+The wider standalone deployment suite also passed, with 63 tests and 536 assertions; the Rails dependent recovery
+probe was not rerun as part of that standalone suite.
+These are synthetic safety tests, not a completed rehearsal on Homer or proof of a real host reboot. Host installation
+and the live rehearsal remain pending. No host packages were changed and no host reboot was performed.
+The [maintenance procedure](host-maintenance.md) requires a coordinated interruption on the shared server.
+The [October 15 tracker review](security-followup-2026-10-15.json) leaves all eight previously recorded high image
+advisories open; a new image scan remains pending.
+
 ## PDF navigation
 
 The publication list's Open link was also checked in an isolated Firefox profile. The click displayed the PDF bytes

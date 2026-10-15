@@ -1,0 +1,24 @@
+{
+  "assessment_date": "2026-10-15",
+  "previous_assessment": "security-report-2026-10-14.json",
+  "image_id": "sha256:e52ed41e7a62a5447923ec02f0bef0b61f285232afb58c7bdfc80020381b5ad5",
+  "new_image_scan_completed": false,
+  "review_scope": "Official Debian tracker status for the eight high advisories in the previous image report; not a new image scan or a complete host audit",
+  "debian_release": "trixie",
+  "tracker_review": [
+    {"id": "CVE-2025-69720", "source_package": "ncurses", "status": "vulnerable", "correction_listed_for_trixie": false, "source": "https://security-tracker.debian.org/tracker/CVE-2025-69720"},
+    {"id": "CVE-2026-16742", "source_package": "systemd", "status": "vulnerable", "correction_listed_for_trixie": false, "source": "https://security-tracker.debian.org/tracker/CVE-2026-16742"},
+    {"id": "CVE-2026-54369", "source_package": "acl", "status": "vulnerable", "correction_listed_for_trixie": false, "source": "https://security-tracker.debian.org/tracker/CVE-2026-54369"},
+    {"id": "CVE-2026-76642", "source_package": "util-linux", "status": "vulnerable", "correction_listed_for_trixie": false, "source": "https://security-tracker.debian.org/tracker/CVE-2026-76642"},
+    {"id": "CVE-2026-78408", "source_package": "util-linux", "status": "vulnerable", "correction_listed_for_trixie": false, "source": "https://security-tracker.debian.org/tracker/CVE-2026-78408"},
+    {"id": "CVE-2026-78409", "source_package": "util-linux", "status": "vulnerable", "correction_listed_for_trixie": false, "source": "https://security-tracker.debian.org/tracker/CVE-2026-78409"},
+    {"id": "CVE-2026-78410", "source_package": "util-linux", "status": "vulnerable", "correction_listed_for_trixie": false, "source": "https://security-tracker.debian.org/tracker/CVE-2026-78410"},
+    {"id": "CVE-2026-9538", "source_package": "perl", "status": "vulnerable", "correction_listed_for_trixie": false, "source": "https://security-tracker.debian.org/tracker/CVE-2026-9538"}
+  ],
+  "findings_remain_open": true,
+  "advisories_excluded": false,
+  "public_deployment_approved": false,
+  "host_packages_changed": false,
+  "host_rebooted": false,
+  "recurring_backups_configured": false
+}

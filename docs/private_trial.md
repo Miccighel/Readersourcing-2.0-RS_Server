@@ -138,6 +138,55 @@ volumes. It can resume the same stopped application and access containers, but i
 after a host reboot. Database contents are not fingerprinted by a restart check. Diagnostics can contain private
 configuration and remain in a protected directory on the host; do not paste or upload them.
 
+## Complete candidate startup
+
+The manual startup procedure extends the candidate restart checks to the database and Mailpit. It uses a separate
+host specific `startup_candidate.sh` wrapper with a verified `STARTUP-SHA256SUMS` manifest. The shared implementation
+is in `deploy/private/candidate_startup.sh` and `deploy/private/startup_inventory.rb`; it also uses the restart
+configuration checks. Preparing this procedure does not enable automatic startup after a host reboot.
+
+While the existing trial is healthy, prepare its private inventory once:
+
+```console
+sudo sh startup_candidate.sh prepare
+sudo sh startup_candidate.sh check
+```
+
+Preparation records all five existing container identities, exact images, runtime configuration, mounts, and network
+names in the root protected activation plan. This inventory contains private configuration and must not be shared.
+It cannot be overwritten by a second preparation. The completed setup container retains its existing image and is
+never started by this procedure. A replaced container or changed configuration requires review, not a new baseline
+that silently accepts it.
+
+`check` validates configuration and inventory even when the trial is stopped. Success means those checks passed,
+not that the application is ready. To resume the same containers manually after Docker is available:
+
+```console
+sudo sh startup_candidate.sh start
+```
+
+A healthy running trial is left undisturbed. For a stopped or partial trial, access and the application are closed
+first. Startup waits for PostgreSQL, starts Mailpit if needed, starts the application, and checks readiness and
+authenticated SMTP through `deployment:check` before reopening access. It reuses the existing containers and does
+not create containers, pull or build images, change restart policies, or run setup or migrations. Failure during
+startup keeps access closed; a failure to close it requires operator attention.
+
+Before a planned reboot, the operator can rehearse the trial's complete startup:
+
+```console
+sudo sh startup_candidate.sh rehearse
+```
+
+This interrupts only the four running trial services. It compares logical database tables and sequences and the
+publication inventory while the application is stopped, before and after stopping and starting PostgreSQL and
+Mailpit. Access reopens only after these comparisons and application checks pass. **Temporary Mailpit messages can
+be lost** when its container stops; only synthetic mail belongs in this trial. No backup is restored automatically.
+A rehearsal is not evidence of a real host reboot. A normal startup does not compare data with a historical backup.
+
+The helpers, original trial directory, activation plan and inventory, and exact images must remain available after
+reboot. Verify the host's temporary file cleanup policy before relying on paths under `/var/tmp`. See the
+[host maintenance procedure](host-maintenance.md) before updating or restarting a shared Docker host.
+
 ## Recovery rehearsal
 
 A protected trial backup can be rehearsed without replacing or pausing the running application. The host specific
