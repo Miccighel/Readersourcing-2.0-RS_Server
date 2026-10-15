@@ -119,16 +119,25 @@ or recurring backups. The [private trial procedure](private_trial.md#complete-ca
 The combined startup, inventory, restart and configuration tests passed locally: 26 tests and 233 assertions.
 The wider standalone deployment suite also passed, with 63 tests and 536 assertions; the Rails dependent recovery
 probe was not rerun as part of that standalone suite.
-These are synthetic safety tests, not a completed rehearsal on Homer or proof of a real host reboot. The verified
+These synthetic safety tests are separate from the live rehearsal and are not proof of a real host reboot. The verified
 helpers were installed separately on Homer and the operator completed `prepare`: configuration and inventory checks
-passed for the exact activated image without creating containers or running migrations. The live rehearsal remains
-pending. No host packages were changed and no host reboot was performed.
+passed for the exact activated image without creating containers or running migrations. No host packages were changed
+and no host reboot was performed.
 The first rehearsal stopped before maintenance because Docker returned identical mount entries in a different order
 for the setup and application containers. The operator's read only diagnostic confirmed that configuration matched,
 no container had an unstable state, and only mount ordering differed. The inventory comparison now orders complete
 mount entries by destination on both sides without rewriting the retained inventory. Seven inventory tests passed
 with 29 assertions, including rejection of changed sources, permissions, volume names, and missing or duplicate mounts.
-The standalone deployment suite then passed with 66 tests and 549 assertions. The live rehearsal remains pending.
+The standalone deployment suite then passed with 66 tests and 549 assertions.
+
+The operator then completed the live rehearsal with the corrected helpers from commit `25f637d`. The four trial
+services stopped and started using the existing containers and exact activated image. Configuration and inventory
+checks passed, and logical database and publication fingerprints matched across the stop and start. No migrations
+ran and no containers were created. The application readiness and deployment checks passed before access reopened.
+Independent HTTP requests on Homer subsequently returned 200 for the login page and 401 for unauthenticated Mailpit
+access. The helper manifest was checked again; private diagnostics and inventory contents were not read or downloaded.
+This verifies the trial service startup, not a reboot of Homer, a new browser regression, or public deployment approval.
+Automatic startup and recurring backups remain unconfigured.
 The [maintenance procedure](host-maintenance.md) requires a coordinated interruption on the shared server.
 The [October 15 assessment](security-followup-2026-10-15.json) includes a new scan with an updated vulnerability
 database. Its verified complete report retains the same detected package inventory and advisory occurrences as the

@@ -404,7 +404,7 @@
   "complete_startup_preparation": {
     "date": "2026-10-15",
     "source_revision": "210b1a2",
-    "status": "Preparation passed; live rehearsal pending",
+    "status": "Preparation and subsequent live service startup rehearsal passed; host reboot not tested",
     "operation": "prepare",
     "image_id": "sha256:e52ed41e7a62a5447923ec02f0bef0b61f285232afb58c7bdfc80020381b5ad5",
     "configuration_and_inventory_verified": true,
@@ -434,7 +434,30 @@
       "standalone_deployment_assertions": 549,
       "failures": 0,
       "errors": 0,
-      "live_retest": "Pending"
+      "live_retest": "Passed by operator execution with independent HTTP checks afterwards"
+    },
+    "live_rehearsal": {
+      "date": "2026-10-15",
+      "source_revision": "25f637d",
+      "status": "passed",
+      "operation": "rehearse",
+      "image_id": "sha256:e52ed41e7a62a5447923ec02f0bef0b61f285232afb58c7bdfc80020381b5ad5",
+      "configuration_and_inventory_verified": true,
+      "database_and_publication_fingerprints_checked": true,
+      "fingerprints_matched_across_stop_and_start": true,
+      "fingerprint_scope": "All public database tables and sequences; publication contents, directory entries, ownership and permissions; comparisons made while the application was stopped",
+      "existing_trial_containers_reused": true,
+      "setup_container_started": false,
+      "migrations_run": false,
+      "containers_created": false,
+      "automatic_startup_configured": false,
+      "host_reboot_tested": false,
+      "public_helper_manifest_sha256": "4057d37c0d0719833746d64ac19f7bcc5cff1e03c281e82c7f5bafcb73a4223c",
+      "helper_manifest_verified_independently_after_rehearsal": true,
+      "post_rehearsal_login_http_status": 200,
+      "post_rehearsal_unauthenticated_mailpit_http_status": 401,
+      "private_diagnostics_or_inventory_read_by_agent": false,
+      "evidence": "Operator aggregate success output and independent unauthenticated HTTP requests on Homer after the rehearsal; fingerprint matching follows the verified helper's required comparisons, not a separate read of private fingerprints"
     },
     "evidence": "Operator aggregate preparation output; helper checksum manifest verified independently before preparation; private inventory and diagnostics were not read or downloaded"
   },
