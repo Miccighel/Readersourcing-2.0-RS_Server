@@ -2,6 +2,7 @@ require "minitest/autorun"
 require "tmpdir"
 require "fileutils"
 require_relative "../../deploy/private/deployment_layout_files"
+require_relative "../../deploy/private/deployment_layout_resume"
 require_relative "../support/deployment_layout_fixtures"
 
 class DeploymentLayoutFilesTest < Minitest::Test
@@ -110,6 +111,76 @@ class DeploymentLayoutFilesTest < Minitest::Test
       File.rename(file, "#{file}.retained")
       File.symlink("#{file}.retained", file)
       assert_raises(DeploymentLayoutFiles::Error) { files.perform("preflight") }
+    end
+  end
+
+  def with_resume
+    with_files do |files, paths, source, planned|
+      files.perform("install")
+      checkpoint = File.join(paths[:checks], "checkpoint")
+      Dir.mkdir(checkpoint)
+      current = replacements(source)
+      write_json(checkpoint, "source-containers.json", source)
+      write_json(checkpoint, "replacement-containers.json", current)
+      write_json(paths[:checks], "replacement-containers.json", current)
+      write_json(paths[:checks], "effective.json", planned)
+      yield DeploymentLayoutResume.new(checkpoint: checkpoint, **paths), paths, current, checkpoint
+    end
+  end
+
+  def test_resume_validates_existing_checkpoint_without_writing_new_baselines
+    with_resume do |resume, paths, _current, _checkpoint|
+      before = Dir.glob("#{paths[:state]}/*").to_h { |path| [path, File.binread(path)] }
+      assert_equal "stopped_layout_checkpoint_verified", resume.validate!["status"]
+      assert_equal before, Dir.glob("#{paths[:state]}/*").to_h { |path| [path, File.binread(path)] }
+      refute File.exist?(File.join(paths[:state], "startup-inventory.json"))
+    end
+  end
+
+  def test_resume_rejects_started_recreated_changed_or_missing_checkpoint_containers
+    [
+      ->(current) { current.first["State"]["Running"] = true },
+      ->(current) { current.first["State"]["Status"] = "exited" },
+      ->(current) { current.first["State"]["StartedAt"] = "2026-10-15T16:00:00Z" },
+      ->(current) { current.first["RestartCount"] += 1 },
+      ->(current) { current.first["Id"] = "9" * 64 },
+      ->(current) { current.first["HostConfig"]["OomKillDisable"] = true },
+      ->(current) { current.first["HostConfig"]["Memory"] *= 2 },
+      ->(current) { current.pop }
+    ].each do |change|
+      with_resume do |resume, paths, current, _checkpoint|
+        change.call(current)
+        write_json(paths[:checks], "replacement-containers.json", current)
+        assert_raises(DeploymentLayoutFiles::Error, DeploymentLayoutInventory::Error, PrivateTrialStartupInventory::Error) { resume.validate! }
+        refute File.exist?(File.join(paths[:state], "startup-inventory.json"))
+      end
+    end
+  end
+
+  def test_resume_requires_original_evidence_configuration_and_no_installed_inventory
+    [
+      ->(paths, checkpoint) { write_json(checkpoint, "source-containers.json", []) },
+      ->(paths, _checkpoint) { write_json(paths[:checks], "effective.json", {}) },
+      ->(paths, _checkpoint) { write_json(paths[:state], "startup-inventory.json", {}) },
+      ->(paths, _checkpoint) { File.symlink("missing", File.join(paths[:state], "startup-inventory.json")) },
+      ->(paths, _checkpoint) { File.write(File.join(paths[:configuration], "runtime", "smtp.key"), "changed") }
+    ].each do |change|
+      with_resume do |resume, paths, _current, checkpoint|
+        change.call(paths, checkpoint)
+        assert_raises(DeploymentLayoutFiles::Error) { resume.validate! }
+      end
+    end
+  end
+
+  def test_resume_allows_fresh_database_health_history_but_not_a_restart
+    with_resume do |resume, paths, current, _checkpoint|
+      database = current.find { |entry| entry["Config"]["Labels"]["com.docker.compose.service"] == "database" }
+      database["State"]["Health"] = {"Status" => "healthy", "Log" => ["synthetic fresh probe"]}
+      write_json(paths[:checks], "replacement-containers.json", current)
+      assert_equal "stopped_layout_checkpoint_verified", resume.validate!["status"]
+      database["State"]["StartedAt"] = "2026-10-15T16:00:00Z"
+      write_json(paths[:checks], "replacement-containers.json", current)
+      assert_raises(DeploymentLayoutFiles::Error) { resume.validate! }
     end
   end
 end

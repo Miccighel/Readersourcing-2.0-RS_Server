@@ -101,9 +101,27 @@ Known top level host fields follow the [Moby HostConfig and resource schema](htt
 For differing fields, the diagnostic reports only whether a value is missing, null, empty or nonempty and its JSON
 type. This does not normalize or approve the difference, and it does not relax the activation checks.
 
+Docker may represent the default OOM setting as either `null` or `false`:
+[Moby assigns `false` to an unspecified `OomKillDisable`](https://github.com/moby/moby/blob/v28.3.2/daemon/daemon_unix.go#L351).
+The replacement comparison accepts only the transition from an explicit `null` source value to an explicit `false`
+replacement value, with `oom_kill_disable` absent or `false` in the approved definition. It does not accept `true`,
+a missing inspection field or changes to other resource and isolation settings. Retained database and setup
+containers and subsequent startup inventory checks still use their exact settings.
+
+A separately verified resume command can continue a recorded interruption after stopped replacements were created.
+It checks the original package, installed helper manifest, prepared plan, runtime files and retained checkpoint.
+The same replacement identities must still be in the `created` state and never started; retained containers must
+have the original lifecycle. Database and publication fingerprints must match both the interrupted attempt and its
+verified backup. The recovery definition is checked before any service starts. The command retains the previous
+validator and manifest, updates only the public replacement validator, freezes the verified existing inventory and
+performs the same readiness, data preservation and isolated recovery checks required by activation. It does not
+reinstall configuration, recreate service containers or restore over the active database. A rejected checkpoint is
+not automatically retried with a new baseline. Local test results do not establish that a host resume has succeeded.
+
 This procedure does not configure automatic startup or recurring backups, update host packages, restart Docker,
 reboot the host, publish an image or expose the application publicly.
 
-The standalone deployment suite passed on October 15 with 110 tests and 1,029 assertions. It covers both the
+The standalone deployment suite passed on October 15 with 120 tests and 1,146 assertions. It covers both the
 original recovery procedure and the new layout adapter, archive validation, stopped replacement checks and failure
-handling. These local results do not assert that the installation or recovery rehearsal has run on Homer.
+handling, the guarded resume checkpoint and the validator's default OOM comparison. The five read only diagnostic
+tests also passed. These local results do not assert that the installation, resume or recovery rehearsal has run on Homer.

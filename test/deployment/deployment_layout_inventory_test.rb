@@ -121,4 +121,33 @@ class DeploymentLayoutInventoryTest < Minitest::Test
       end
     end
   end
+
+  def test_only_the_explicit_false_replacement_of_an_unspecified_oom_default_is_equivalent
+    assert_equal "replacement_inventory_verified", checker.validate!["status"]
+    @definition["services"]["access"]["oom_kill_disable"] = false
+    checker.validate!
+    [true, 0, "false"].each do |value|
+      setup
+      @current.first["HostConfig"]["OomKillDisable"] = value
+      assert_raises(DeploymentLayoutInventory::Error) { checker.validate! }
+    end
+    setup
+    @current.first["HostConfig"].delete("OomKillDisable")
+    assert_raises(DeploymentLayoutInventory::Error) { checker.validate! }
+    setup
+    @source.first["HostConfig"].delete("OomKillDisable")
+    assert_raises(DeploymentLayoutInventory::Error) { checker.validate! }
+    [true, nil, 0, "false"].each do |value|
+      setup
+      @definition["services"]["access"]["oom_kill_disable"] = value
+      assert_raises(DeploymentLayoutInventory::Error) { checker.validate! }
+    end
+    setup
+    @source.first["HostConfig"]["OomKillDisable"] = false
+    @current.first["HostConfig"]["OomKillDisable"] = nil
+    assert_raises(DeploymentLayoutInventory::Error) { checker.validate! }
+    setup
+    @current.find { |entry| entry["Config"]["Labels"]["com.docker.compose.service"] == "database" }["HostConfig"]["OomKillDisable"] = false
+    assert_raises(DeploymentLayoutInventory::Error) { checker.validate! }
+  end
 end

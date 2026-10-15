@@ -28,7 +28,15 @@ class DeploymentLayoutInventory
         raise Error, "Replacement bind sources were not relocated" unless actual_binds == expected_binds
         validate_labels!(before, after, service)
         raise Error, "Container execution settings differ" unless config(before, service) == config(after, service)
-        raise Error, "Container isolation settings differ" unless host(before, service, false) == host(after, service, true)
+        previous_host, current_host = host(before, service, false), host(after, service, true)
+        # Moby sets an unspecified OomKillDisable to false when adapting HostConfig.
+        # Only this directed transition is allowed, and only for an approved default.
+        if previous_host.key?("OomKillDisable") && previous_host["OomKillDisable"].nil? &&
+            current_host.key?("OomKillDisable") && current_host["OomKillDisable"].equal?(false) &&
+            @definition.fetch("services").fetch(service).fetch("oom_kill_disable", false).equal?(false)
+          previous_host["OomKillDisable"] = false
+        end
+        raise Error, "Container isolation settings differ" unless previous_host == current_host
         raise Error, "Container mounts differ" unless mounts(before, service, false) == mounts(after, service, true)
       else
         raise Error, "Retained container identity differs" unless before.fetch("Id") == after.fetch("Id")

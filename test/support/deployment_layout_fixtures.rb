@@ -27,10 +27,10 @@ module DeploymentLayoutFixtures
             "com.docker.compose.config-hash" => "e" * 64, "com.docker.compose.depends_on" => service == "rs_server_webapp" ? "database:service_healthy:false,rs_server_setup:service_completed_successfully:false" : "",
             "org.opencontainers.image.revision" => REVISION}},
         "HostConfig" => {"ConsoleSize" => [0, 0], "RestartPolicy" => {"Name" => "no"}, "ReadonlyRootfs" => true,
-          "CapDrop" => ["ALL"], "SecurityOpt" => ["no-new-privileges:true"], "Memory" => 128 * 1024 * 1024,
+          "CapDrop" => ["ALL"], "SecurityOpt" => ["no-new-privileges:true"], "Memory" => 128 * 1024 * 1024, "OomKillDisable" => nil,
           "Mounts" => bindings.select { |mount| mount["Type"] == "bind" }.map { |mount| {"Type" => "bind", "Source" => mount["Source"], "Target" => mount["Destination"], "ReadOnly" => true} }},
         "Mounts" => bindings, "NetworkSettings" => {"Networks" => {"#{PROJECT}_default" => {"IPAddress" => "172.18.0.2"}}},
-        "State" => {"Running" => service != "rs_server_setup", "StartedAt" => "2026-10-15T10:00:00Z", "ExitCode" => 0,
+        "State" => {"Status" => service == "rs_server_setup" ? "exited" : "running", "Running" => service != "rs_server_setup", "StartedAt" => "2026-10-15T10:00:00Z", "ExitCode" => 0,
           "Paused" => false, "Restarting" => false, "Dead" => false}}
     end
   end
@@ -45,7 +45,9 @@ module DeploymentLayoutFixtures
       entry["Config"]["Hostname"] = entry["Id"][0, 12]
       entry["Config"]["Image"] = entry["Image"]
       entry["State"]["Running"] = false
+      entry["State"]["Status"] = "created"
       entry["State"]["StartedAt"] = "0001-01-01T00:00:00Z"
+      entry["HostConfig"]["OomKillDisable"] = false
       labels = entry["Config"]["Labels"]
       labels["com.docker.compose.config-hash"] = "f" * 64
       labels["com.docker.compose.project.config_files"] = "#{TARGET}/compose.json"

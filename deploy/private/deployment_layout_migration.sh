@@ -174,6 +174,10 @@ layout_activate() {
   layout_helper replacement
   layout_helper freeze
   layout_resolve
+  layout_complete_activation
+}
+
+layout_complete_activation() {
   rs_stage=verify_application_and_data
   docker start "$rs_mailpit_container" > /dev/null
   docker start "$rs_web_container" > /dev/null

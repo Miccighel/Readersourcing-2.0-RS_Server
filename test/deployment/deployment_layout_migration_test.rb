@@ -5,7 +5,7 @@ require "open3"
 class DeploymentLayoutMigrationTest < Minitest::Test
   SCRIPT = File.expand_path("../../deploy/private/deployment_layout_migration.sh", __dir__)
 
-  def run_migration(mode)
+  def run_migration(mode, resume: false)
     Dir.mktmpdir("rs-layout-migration-test.") do |directory|
       File.write(File.join(directory, "candidate.json"), "synthetic")
       File.write(File.join(directory, "source-candidate.json"), "synthetic")
@@ -18,6 +18,7 @@ class DeploymentLayoutMigrationTest < Minitest::Test
       script = <<~SH
         set -eu
         . '#{SCRIPT}'
+        #{resume ? ". '#{File.expand_path('../../deploy/private/deployment_layout_resume.sh', __dir__)}'" : ""}
         rs_work_directory='#{directory}'
         rs_source_activation='#{directory}'
         rs_prepared_plan='#{directory}'
@@ -29,6 +30,12 @@ class DeploymentLayoutMigrationTest < Minitest::Test
         mode='#{mode}'
         event() { printf '%s\\n' "$*" >> '#{directory}/events'; }
         layout_install() { event install; test "$mode" != install_failure; }
+        layout_resume_preflight() {
+          event resume-preflight
+          test "$mode" != checkpoint_failure
+          test "$mode" != checkpoint_data_change
+        }
+        layout_resume_patch_validator() { event patch-validator; test "$mode" != patch_failure; }
         layout_backup() {
           event backup
           test "$mode" != backup_failure
@@ -47,7 +54,8 @@ class DeploymentLayoutMigrationTest < Minitest::Test
         layout_resolve
         printf 'retained\\n' > "$rs_work_directory/retained-before.txt"
         trap layout_finish EXIT
-        layout_activate > "$rs_work_directory/output" 2> "$rs_work_directory/errors"
+        #{resume ? "printf database > \"$rs_work_directory/before-database.jsonl\"; printf publications > \"$rs_work_directory/before-publications.json\"" : ""}
+        #{resume ? "layout_resume_execute" : "layout_activate"} > "$rs_work_directory/output" 2> "$rs_work_directory/errors"
         rs_completed=yes
         printf 'SUCCESS\\n'
       SH
@@ -121,6 +129,42 @@ class DeploymentLayoutMigrationTest < Minitest::Test
       assert_includes errors, "isolated_recovery_rehearsal"
       assert_includes events, "installed-command restore-rehearsal --confirm-isolated-restore"
       assert_equal "docker stop -t 30 access web", events.last
+    end
+  end
+
+  def test_resume_reuses_stopped_containers_and_runs_the_same_final_acceptance_checks
+    run_migration("success", resume: true) do |output, errors, status, events|
+      assert status.success?, errors
+      assert_equal "SUCCESS\n", output
+      assert_operator events.index("resume-preflight"), :<, events.index("patch-validator")
+      assert_operator events.index("patch-validator"), :<, events.index("helper freeze")
+      assert_operator events.index("helper freeze"), :<, events.index("docker start mailpit")
+      assert_operator events.index("database-fingerprint"), :<, events.index("docker start access")
+      assert_includes events, "installed-command check"
+      assert_includes events, "installed-command restore-rehearsal --confirm-isolated-restore"
+      refute events.any? { |event| event.match?(/compose up|^install$|^backup$|docker (create|rm|volume|system)/) }
+      refute events.any? { |event| event.match?(/docker (start|stop).* (database|setup)\z/) }
+    end
+  end
+
+  def test_resume_checkpoint_or_patch_failure_does_not_start_any_service
+    %w[checkpoint_failure checkpoint_data_change patch_failure].each do |mode|
+      run_migration(mode, resume: true) do |_output, _errors, status, events|
+        refute status.success?
+        refute events.any? { |event| event.start_with?("docker stop", "docker start", "compose up") }
+        refute_includes events, "helper freeze"
+        refute_includes events, "patch-validator" unless mode == "patch_failure"
+      end
+    end
+  end
+
+  def test_resume_data_or_recovery_failure_closes_access_without_automatic_restore
+    %w[data_change recovery_failure command_failure].each do |mode|
+      run_migration(mode, resume: true) do |_output, _errors, status, events|
+        refute status.success?
+        assert_equal "docker stop -t 30 access web", events.last
+        refute events.any? { |event| event.include?("pg_restore") || event.include?("compose up") }
+      end
     end
   end
 end
