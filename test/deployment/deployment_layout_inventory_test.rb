@@ -9,10 +9,12 @@ class DeploymentLayoutInventoryTest < Minitest::Test
   def setup
     @source = source_containers
     @current = replacements(@source)
+    @definition = {"services" => DeploymentLayoutConfiguration::SERVICES.to_h { |name| [name, {}] }}
+    @definition["services"]["rs_server_webapp"]["depends_on"] = {"database" => {"condition" => "service_healthy"}}
   end
 
   def checker
-    DeploymentLayoutInventory.new(source: @source, current: @current, project: PROJECT, image: IMAGE, revision: REVISION,
+    DeploymentLayoutInventory.new(source: @source, current: @current, definition: @definition, project: PROJECT, image: IMAGE, revision: REVISION,
       source_directory: SOURCE, configuration_directory: TARGET)
   end
 
@@ -51,6 +53,25 @@ class DeploymentLayoutInventoryTest < Minitest::Test
       change.call(@current.first)
       assert_raises(DeploymentLayoutInventory::Error) { checker.validate! }
     end
+  end
+
+  def test_compose_replacement_names_and_selected_dependency_labels_match_the_approved_definition
+    @source.last["Config"]["Labels"]["com.docker.compose.depends_on"] = ""
+    @definition["services"]["rs_server_webapp"]["depends_on"]["mailpit"] = {"condition" => "service_started"}
+    @definition["services"]["access"]["depends_on"] = {"rs_server_webapp" => {"condition" => "service_healthy"}, "mailpit" => {"condition" => "service_started"}}
+    web = @current.last["Config"]["Labels"]
+    access = @current.first["Config"]["Labels"]
+    web["com.docker.compose.depends_on"] = "mailpit:service_started:false"
+    access["com.docker.compose.depends_on"] = "rs_server_webapp:service_healthy:false,mailpit:service_started:false"
+    assert_equal "replacement_inventory_verified", checker.validate!["status"]
+    web["com.docker.compose.depends_on"] += ",database:service_healthy:false"
+    assert_raises(DeploymentLayoutInventory::Error) { checker.validate! }
+    web["com.docker.compose.depends_on"] = "mailpit:service_started:false"
+    access["com.docker.compose.depends_on"] = "mailpit:service_started:true"
+    assert_raises(DeploymentLayoutInventory::Error) { checker.validate! }
+    access["com.docker.compose.depends_on"] = "rs_server_webapp:service_healthy:false,mailpit:service_started:false"
+    web["com.docker.compose.replace"] = @source.last["Id"]
+    assert_raises(DeploymentLayoutInventory::Error) { checker.validate! }
   end
 
   def test_labels_cannot_change_identity_dependencies_or_configuration_location

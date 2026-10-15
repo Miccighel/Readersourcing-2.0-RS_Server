@@ -68,7 +68,7 @@ class DeploymentLayoutFiles
       {"status" => "layout_configuration_verified"}
     when "replacement"
       settings = read(@definition, "settings.json")
-      DeploymentLayoutInventory.new(source: read(@checks, "source-containers.json"), current: read(@checks, "replacement-containers.json"),
+      DeploymentLayoutInventory.new(source: read(@checks, "source-containers.json"), current: read(@checks, "replacement-containers.json"), definition: read(@plan, "compose.json"),
         project: settings.fetch("project"), image: settings.fetch("application_image"), revision: settings.fetch("source_revision"),
         source_directory: settings.fetch("source_directory"), configuration_directory: settings.fetch("configuration_directory")).validate!
     when "freeze"

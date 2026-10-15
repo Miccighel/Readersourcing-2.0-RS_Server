@@ -75,6 +75,12 @@ approved bind sources and Compose bookkeeping may differ. Database and setup ide
 unchanged. Database and publication fingerprints are compared before access reopens. A failure during maintenance
 keeps access and the writer stopped where possible and requires inspection; it never restores a database by itself.
 
+Compose bookkeeping is checked against the approved definition and the services selected for recreation. In the
+installed Compose 2.39.1, the [replacement label records the service name and container number](https://github.com/docker/compose/blob/v2.39.1/pkg/compose/convergence.go#L595),
+while [`--no-deps` selects services before creation](https://github.com/docker/compose/blob/v2.39.1/cmd/compose/up.go#L60)
+and [prunes dependencies outside that selection](https://github.com/compose-spec/compose-go/blob/v2.8.1/types/project.go#L483).
+The comparison allows those exact metadata changes without relaxing environment, execution, storage or isolation checks.
+
 Mailpit's temporary inbox is archived before recreation. The new inbox is empty; the old messages remain in the
 protected point in time backup. Before replacing containers, the actual new backup is checked by generating a recovery
 definition without starting recovery services. Once the installed commands pass their checks, the activation wrapper
@@ -89,6 +95,6 @@ NAS copy is not overwritten.
 This procedure does not configure automatic startup or recurring backups, update host packages, restart Docker,
 reboot the host, publish an image or expose the application publicly.
 
-The standalone deployment suite passed on October 15 with 109 tests and 1,025 assertions. It covers both the
+The standalone deployment suite passed on October 15 with 110 tests and 1,029 assertions. It covers both the
 original recovery procedure and the new layout adapter, archive validation, stopped replacement checks and failure
 handling. These local results do not assert that the installation or recovery rehearsal has run on Homer.

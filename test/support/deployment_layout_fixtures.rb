@@ -22,6 +22,7 @@ module DeploymentLayoutFixtures
         "Config" => {"Hostname" => id[0, 12], "Image" => "original-tag", "Env" => ["PRIVATE=synthetic", "OTHER=value"],
           "User" => "1000:1000", "Cmd" => ["original-command"], "Labels" => {
             "com.docker.compose.project" => PROJECT, "com.docker.compose.service" => service,
+            "com.docker.compose.container-number" => "1",
             "com.docker.compose.project.config_files" => "#{SOURCE}/compose.yml", "com.docker.compose.project.working_dir" => SOURCE,
             "com.docker.compose.config-hash" => "e" * 64, "com.docker.compose.depends_on" => service == "rs_server_webapp" ? "database:service_healthy:false,rs_server_setup:service_completed_successfully:false" : "",
             "org.opencontainers.image.revision" => REVISION}},
@@ -49,8 +50,8 @@ module DeploymentLayoutFixtures
       labels["com.docker.compose.config-hash"] = "f" * 64
       labels["com.docker.compose.project.config_files"] = "#{TARGET}/compose.json"
       labels["com.docker.compose.project.working_dir"] = TARGET
-      labels["com.docker.compose.replace"] = original_id
-      labels["com.docker.compose.depends_on"] = "database:service_healthy:false" if service == "rs_server_webapp"
+      labels["com.docker.compose.replace"] = "#{service}-1"
+      labels["com.docker.compose.depends_on"] = ""
       (entry["Mounts"] + entry["HostConfig"]["Mounts"]).each do |mount|
         mount["Source"] = mount["Source"].sub(SOURCE, TARGET) if mount["Type"] == "bind"
       end

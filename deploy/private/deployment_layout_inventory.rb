@@ -8,8 +8,9 @@ class DeploymentLayoutInventory
   CONFIG_LABELS = %w[com.docker.compose.config-hash com.docker.compose.project.config_files
     com.docker.compose.project.working_dir com.docker.compose.replace].freeze
 
-  def initialize(source:, current:, project:, image:, revision:, source_directory:, configuration_directory:)
+  def initialize(source:, current:, definition:, project:, image:, revision:, source_directory:, configuration_directory:)
     @source, @current, @project, @image, @revision = source, current, project, image, revision
+    @definition = definition
     @source_directory, @configuration_directory = source_directory, configuration_directory
   end
 
@@ -61,11 +62,16 @@ class DeploymentLayoutInventory
     raise Error, "Unexpected configuration location label" unless current.fetch("com.docker.compose.project.config_files") == File.join(@configuration_directory, "compose.json") && current.fetch("com.docker.compose.project.working_dir") == @configuration_directory
     raise Error, "Invalid configuration hash" unless current.fetch("com.docker.compose.config-hash").match?(/\A[0-9a-f]{64}\z/)
     if current.key?("com.docker.compose.replace")
-      raise Error, "Unexpected replacement label" unless current.fetch("com.docker.compose.replace") == before.fetch("Id")
+      number = previous.fetch("com.docker.compose.container-number")
+      raise Error, "Unexpected container number" unless number.match?(/\A[1-9][0-9]*\z/)
+      expected = @definition.fetch("services").fetch(service).fetch("container_name", "#{service}-#{number}")
+      raise Error, "Unexpected replacement label" unless current.fetch("com.docker.compose.replace") == expected
     end
-    return unless service == "rs_server_webapp"
-    original = previous.fetch("com.docker.compose.depends_on").split(",")
-    expected = original.reject { |part| part.split(":").first == "rs_server_setup" }.sort
+    # Compose 2.39.1 selects these three services with --no-deps before preparing its labels.
+    dependencies = @definition.fetch("services").fetch(service).fetch("depends_on", {})
+    expected = dependencies.select { |name, _| REPLACED.include?(name) }.map do |name, options|
+      "#{name}:#{options.fetch('condition')}:#{options.fetch('restart', false)}"
+    end.sort
     raise Error, "Unexpected dependency label" unless current.fetch("com.docker.compose.depends_on").split(",").sort == expected
   end
 
@@ -76,7 +82,7 @@ class DeploymentLayoutInventory
     result["Hostname"] = "<container-id>" if hostname == container.fetch("Id")[0, 12]
     labels = result.fetch("Labels")
     CONFIG_LABELS.each { |label| labels.delete(label) }
-    labels.delete("com.docker.compose.depends_on") if service == "rs_server_webapp"
+    labels.delete("com.docker.compose.depends_on")
     environment = result.fetch("Env")
     raise Error, "Duplicate environment key" unless environment.map { |entry| entry.split("=", 2).first }.uniq.length == environment.length
     result["Env"] = environment.sort
