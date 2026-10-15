@@ -142,21 +142,30 @@ Automatic startup and recurring backups remain unconfigured.
 The [stable private operations procedure](stable_private_operations.md) prepares a protected installation outside the
 temporary operations directories, with verified configuration and backup copies. Existing bind mount paths are
 retained and receive narrowly scoped age based cleanup exclusions. Installation does not restart the host or trial
-services. Installation has begun on Homer and its final verification remains pending; no host maintenance or reboot
-is planned as part of it.
+services. Installation completed on Homer without host maintenance or a reboot.
 The standalone deployment suite passed with 72 tests and 625 assertions, including six installation tests with
 76 assertions for verified copies, source preservation, wrapper generation, cleanup scope, and refusal of unsafe inputs.
 
 The operator's first installation reached the final stable command check and stopped there without starting or
 stopping trial services. The cleanup rule was subsequently checked independently and the login page still returned
 200. The installer permission policy has been corrected so public helper code remains readable by the existing
-unprivileged container users, while its host directories and private configuration stay protected. Completion is
-prepared as a separate guarded operation: it checks the expected failure, preserves the configuration copies, and
-changes only public helper permissions, wrapper context and its checksum manifest. Final verification on Homer
-remains pending; the original installer must not be rerun over the existing destination.
+unprivileged container users, while its host directories and private configuration stay protected. A separate guarded
+completion confirmed that permission failure and changed only public helper permissions, wrapper context and its
+checksum manifest. The retained configuration copies were verified against their recorded inventories and original
+sources before and after completion, without being recopied. The original installer must not be rerun over the
+existing destination.
 The corrected standalone deployment suite passed with 75 tests and 649 assertions, including nine installation tests
 with 100 assertions. These cover explicit helper permissions under a restrictive process umask and verification of
 retained snapshots without changing their sources.
+
+The operator's aggregate completion report confirmed that the stable startup and restart checks passed with the same
+trial containers, images and lifecycle state as before installation. Configuration paths and private permissions were
+unchanged. Independent HTTP checks returned 200 for login and 401 for unauthenticated Mailpit access. The protected
+installation parent, narrow cleanup rule and public completion package checksums were also checked independently.
+The [installation record](stable-installation-2026-10-15.json) distinguishes those checks from the operator's protected
+snapshot comparisons. No host package changes, reboot, automatic startup or recurring backups were performed.
+Isolated recovery has not been repeated from the stable path; the earlier successful recovery rehearsal remains
+separate evidence. Active bind mount paths remain in place with cleanup exclusions, rather than being relocated.
 The [maintenance procedure](host-maintenance.md) requires a coordinated interruption on the shared server.
 The [October 15 assessment](security-followup-2026-10-15.json) includes a new scan with an updated vulnerability
 database. Its verified complete report retains the same detected package inventory and advisory occurrences as the

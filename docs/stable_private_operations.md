@@ -79,6 +79,11 @@ run the original published trial start command, or automatically restore a datab
 
 ## Scope
 
+The [October 15 installation record](stable-installation-2026-10-15.json) confirms successful installation on Homer.
+Stable startup and restart checks passed without restarting trial services. Configuration snapshots and permissions
+were verified by the operator's guarded completion, with independent HTTP and public cleanup rule checks afterwards.
+The earlier isolated recovery rehearsal has not been repeated from this stable installation path.
+
 No host package is installed or upgraded, no host or Docker service is restarted, no container restart policy changes,
 and no port is opened. The exact activated image, original configuration, active database, publication volumes and
 independent encrypted NAS copy remain unchanged. Existing backups and temporary operational directories are retained;

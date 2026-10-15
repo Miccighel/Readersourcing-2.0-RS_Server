@@ -462,7 +462,8 @@
     "evidence": "Operator aggregate preparation output; helper checksum manifest verified independently before preparation; private inventory and diagnostics were not read or downloaded"
   },
   "stable_operations_installation": {
-    "status": "Published destination and cleanup rule; final stable command verification pending",
+    "status": "Passed; stable command checks and configuration snapshot verification completed",
+    "record": "stable-installation-2026-10-15.json",
     "installation": "/srv/readersourcing/private-trial",
     "initial_attempt_stopped_during": "stable_command_check",
     "initial_source_startup_check": "passed",
@@ -479,7 +480,7 @@
       "standalone_deployment_assertions": 649,
       "failures": 0,
       "errors": 0,
-      "live_verification": "Pending"
+      "live_verification": "Passed by operator execution with independent HTTP and public artifact checks afterwards"
     }
   },
   "refreshed_image_assessment": {
