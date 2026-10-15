@@ -63,3 +63,18 @@ the protected 2.0.4 trial backup on Homer into fresh volumes without interruptin
 sequence, publication inventory, download, and existing paper reference checks passed. The 17 second rehearsal
 used synthetic data on the same host; it does not replace a protected backup copy outside that host. Its separate
 procedure is described in [the private trial instructions](private_trial.md#recovery-rehearsal).
+
+## Encrypted private trial copy
+
+On October 15, the verified 2.0.4 private trial backup, including its recovery configuration, was copied to a separate
+university NFS server. GnuPG encrypted the archive with OpenPGP AES256. The operator entered the passphrase only in
+the terminal; it was not stored by the script or sent to the NAS. Decryption was checked before transfer, and the
+NAS ciphertext checksum matched afterwards. The original backup was retained and the temporary plaintext archive
+removed. The [validation record](backup-nas-2026-10-15.json) contains only aggregate results, not private settings
+or archive contents.
+
+Keep the passphrase in a password manager independent from the backup destination. A lost passphrase makes the
+encrypted copy unusable. The NAS copy does not provide immutable storage or establish a backup schedule and
+retention policy; configure these separately before relying on it for a public service. A full application restore
+from the NAS copy has not been rehearsed. The separate restore of the source backup and the encrypted copy checks
+are described in [the candidate validation](release-2.0.4.md#encrypted-nas-copy).

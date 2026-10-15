@@ -1,0 +1,17 @@
+{
+  "status": "encrypted_nas_copy_verified",
+  "recorded_at": "2026-10-15T10:03:36Z",
+  "cipher": "OpenPGP AES256 symmetric encryption with GnuPG",
+  "ciphertext_sha256": "dc4b83cc62993cadb40c93602a4248f0d0780b0fdf5c325a4e869ca6ada831de",
+  "ciphertext_bytes": 2990163,
+  "decryption_round_trip_verified_before_transfer": true,
+  "nas_ciphertext_checksum_verified_after_transfer": true,
+  "separate_nfs_server_verified": true,
+  "off_host_copy": true,
+  "plaintext_or_passphrase_written_to_nas": false,
+  "passphrase_saved_by_script": false,
+  "temporary_plaintext_archive_removed": true,
+  "original_backup_integrity_rechecked_and_retained": true,
+  "application_services_stopped_or_replaced_by_export": false,
+  "automated_retention_or_future_backup_schedule_configured": false
+}

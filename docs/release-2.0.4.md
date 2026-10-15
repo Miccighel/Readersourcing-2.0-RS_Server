@@ -141,7 +141,7 @@ The operator completed an updated backup of the running candidate. It includes t
 and effective image configuration, with checksums and database and publication fingerprints recorded while the
 application was stopped. The same application and access containers returned to healthy status. The earlier
 2.0.3 backup is retained separately; it predates the browser test records. The updated backup's recovery rehearsal
-is recorded below. Neither backup has a recorded off host copy.
+is recorded below. Its encrypted NAS copy is recorded separately from the earlier 2.0.3 backup.
 
 The prepared replacement procedure repeats configuration and backup checks, requires the current data to match
 the updated backup, and recreates only the web application. It compares logical database and publication fingerprints
@@ -197,9 +197,25 @@ The successful rehearsal took 17 seconds and completed at 09:32:35 UTC. This mea
 on the same host, not a production recovery objective or an independent host recovery. The requests ran through
 Rack inside the restored application, not a browser or the active service. Recovery containers were stopped after
 the checks; their separate volumes and protected configuration were retained. No backup contents were transferred
-from Homer. The [aggregate report](recovery-2026-10-15.json) was read independently and its checksum verified.
-An encrypted backup copy outside Homer remains to be arranged. The security findings and public deployment
+from Homer during that rehearsal. The [aggregate report](recovery-2026-10-15.json) was read independently and its
+checksum verified. The subsequent encrypted copy is recorded below. The security findings and public deployment
 limitations are unchanged.
+
+## Encrypted NAS copy
+
+The updated 2.0.4 backup was copied to a separate university NFS server on October 15 at 10:03:36 UTC. The archive
+includes the verified database and publication backup and its private recovery configuration. GnuPG encrypted it
+with OpenPGP AES256 and a passphrase entered only in the operator's terminal. Decryption was verified locally
+before transfer, and the encrypted bytes were checked again on the NAS. The original backup remained intact;
+no application service was stopped or replaced. The temporary plaintext archive was removed, and neither it nor
+the passphrase was written to the NAS.
+
+The encrypted file contains 2,990,163 bytes. Its checksum, size, and permissions were checked independently on the
+NAS without downloading or decrypting it: the file mode is 0600 and its dedicated directory mode is 0700. The
+[aggregate report](backup-nas-2026-10-15.json) was also read independently and its checksum verified. The passphrase
+must remain available separately from the NAS. This confirms an encrypted copy outside Homer, not an additional
+full application restore from that copy, immutable storage, or a guarantee of NAS availability. Future backup
+frequency and retention still require configuration.
 
 ## Source validation
 
