@@ -1,0 +1,22 @@
+#!/bin/sh
+set -eu
+umask 077
+test "$(id -u)" = 0
+test "$#" -eq 1
+case "$1" in check|start|restart) ;; *) exit 64 ;; esac
+rs_operations_directory=/opt/readersourcing/rs-server
+for rs_directory in /opt/readersourcing "$rs_operations_directory"; do
+  test -d "$rs_directory" && test ! -L "$rs_directory"
+  test "$(stat -c '%u:%a' "$rs_directory")" = 0:755
+done
+test "$(stat -c '%u:%a' /etc/opt/readersourcing)" = 0:700
+test "$(stat -c '%u:%a' /etc/opt/readersourcing/rs-server)" = 0:700
+test -f /etc/opt/readersourcing/rs-server/context.sh
+test ! -L /etc/opt/readersourcing/rs-server/context.sh
+test "$(stat -c '%u:%a' /etc/opt/readersourcing/rs-server/context.sh)" = 0:600
+(cd "$rs_operations_directory" && sha256sum --check --status OPERATIONS-SHA256SUMS)
+. /etc/opt/readersourcing/rs-server/context.sh
+. "$rs_operations_directory/candidate_restart.sh"
+. "$rs_operations_directory/candidate_startup.sh"
+. "$rs_operations_directory/deployment_operations.sh"
+deployment_operations_main "$@"

@@ -36,6 +36,12 @@ Preparation uses short lived local helper containers without a network, pulling 
 stop, start or recreate the existing application services, install the active configuration, copy a live database,
 or activate the new operational commands. A preparation report is not evidence of a completed migration.
 
+The [October 15 preparation record](deployment-layout-preparation-2026-10-15.json) reports successful preparation
+on Homer. It does not record an installation or service interruption. The next host acceptance command performs
+only the activation preflight: it repeats the prepared configuration and container comparisons, exercises the read
+only database and publication probes and checks deployment readiness. No service replacement is requested by that
+command, and no active configuration or operational command is installed.
+
 ## Activation requirements
 
 Activation requires a separately verified procedure, a current point in time backup, and an explicit maintenance
@@ -48,6 +54,24 @@ The new commands must be checked against the installed definition and inventory.
 must refer to the retained old configuration, without automatically restoring a database or regenerating secrets.
 The existing installation under `/srv/readersourcing/private-trial` and its protected original inputs are retained
 until activation and operational checks have passed and their removal has been reviewed separately.
+
+The proposed command is `/opt/readersourcing/rs-server/rs-server`, with `check`, `start` and `restart` operations.
+Its implementation reuses the existing startup and restart functions with the new configuration and state paths;
+it does not require the old generated configuration to operate. Local tests cover the new configuration files and
+stopped replacement inventory, service ordering, and closing access after a failed check. The completed setup
+container is retained only for historical inventory checks. The isolated recovery entry point must also be verified
+for this layout before the activation wrapper is released.
+
+The activation implementation stages configuration before maintenance and takes a fresh protected backup while
+access and the application are stopped. It creates the three selected replacements without starting them, then
+compares their actual execution settings, mount contents and isolation to the retained source inspection. Only the
+approved bind sources and Compose bookkeeping may differ. Database and setup identities and lifecycle must be
+unchanged. Database and publication fingerprints are compared before access reopens. A failure during maintenance
+keeps access and the writer stopped where possible and requires inspection; it never restores a database by itself.
+
+Mailpit's temporary inbox is archived before recreation. The new inbox is empty; the old messages remain in the
+protected point in time backup. This new archive receives integrity checks, not an automatic full restore rehearsal
+or an additional encrypted NAS copy. The original NAS copy is not overwritten.
 
 This procedure does not configure automatic startup or recurring backups, update host packages, restart Docker,
 reboot the host, publish an image or expose the application publicly.
