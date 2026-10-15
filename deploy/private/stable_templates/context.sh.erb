@@ -1,0 +1,17 @@
+rs_trial_directory=<%= shell("trial_directory") %>
+rs_plan_directory=<%= shell("plan_directory") %>
+rs_expected_project=<%= shell("project") %>
+rs_candidate_image=<%= shell("candidate_image") %>
+rs_source_revision=<%= shell("source_revision") %>
+rs_published_image=<%= shell("published_image") %>
+rs_override_sha256=<%= shell("override_sha256") %>
+rs_lock_file=<%= shell("lock_file") %>
+rs_backup_directory=<%= shell("installation_root") %>/configuration/backup
+rs_backup_image=<%= shell("backup_image") %>
+rs_source_operations=$rs_operations_directory
+for rs_name in <%= (HELPERS + TEMPLATES + ["OPERATIONS-SHA256SUMS"]).join(" ") %>; do
+  test -f "$rs_operations_directory/$rs_name"
+  test ! -L "$rs_operations_directory/$rs_name"
+  test "$(stat -c '%u:%a' "$rs_operations_directory/$rs_name")" = 0:600
+done
+(cd "$rs_operations_directory" && sha256sum --check --status OPERATIONS-SHA256SUMS)

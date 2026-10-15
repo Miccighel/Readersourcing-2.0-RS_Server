@@ -138,6 +138,13 @@ Independent HTTP requests on Homer subsequently returned 200 for the login page 
 access. The helper manifest was checked again; private diagnostics and inventory contents were not read or downloaded.
 This verifies the trial service startup, not a reboot of Homer, a new browser regression, or public deployment approval.
 Automatic startup and recurring backups remain unconfigured.
+
+The [stable private operations procedure](stable_private_operations.md) prepares a protected installation outside the
+temporary operations directories, with verified configuration and backup copies. Existing bind mount paths are
+retained and receive narrowly scoped age based cleanup exclusions. Installation does not restart the host or trial
+services. Its execution and checks on Homer remain pending; no host maintenance or reboot is planned as part of it.
+The standalone deployment suite passed with 72 tests and 625 assertions, including six installation tests with
+76 assertions for verified copies, source preservation, wrapper generation, cleanup scope, and refusal of unsafe inputs.
 The [maintenance procedure](host-maintenance.md) requires a coordinated interruption on the shared server.
 The [October 15 assessment](security-followup-2026-10-15.json) includes a new scan with an updated vulnerability
 database. Its verified complete report retains the same detected package inventory and advisory occurrences as the

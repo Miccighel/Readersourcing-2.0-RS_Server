@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+umask 077
+test "$(id -u)" = 0
+test "$#" -eq 1
+case "$1" in check|start|rehearse) ;; *) exit 64 ;; esac
+rs_operations_directory=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
+test "$rs_operations_directory" = <%= shell("installation_root") %>/operations
+test "$(stat -c '%u:%a' "$rs_operations_directory")" = 0:700
+. "$rs_operations_directory/context.sh"
+. "$rs_operations_directory/candidate_restart.sh"
+. "$rs_operations_directory/candidate_startup.sh"
+candidate_startup_main "$@"

@@ -190,6 +190,8 @@ A rehearsal is not evidence of a real host reboot. A normal startup does not com
 The helpers, original trial directory, activation plan and inventory, and exact images must remain available after
 reboot. Verify the host's temporary file cleanup policy before relying on paths under `/var/tmp`. See the
 [host maintenance procedure](host-maintenance.md) before updating or restarting a shared Docker host.
+The [stable operations procedure](stable_private_operations.md) installs protected tools and configuration snapshots
+without relocating active bind mounts or changing container identities. It does not require a host reboot.
 
 ## Recovery rehearsal
 
