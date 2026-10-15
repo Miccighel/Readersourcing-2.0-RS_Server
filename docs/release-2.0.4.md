@@ -139,6 +139,10 @@ access. The helper manifest was checked again; private diagnostics and inventory
 This verifies the trial service startup, not a reboot of Homer, a new browser regression, or public deployment approval.
 Automatic startup and recurring backups remain unconfigured.
 
+The [server installation layout](deployment_layout.md) defines neutral software, configuration and state paths.
+Its preparation validates a proposed configuration without migrating the running services. Activation remains a
+separate operation; the existing installation and its original inputs are retained for rollback.
+
 The [stable private operations procedure](stable_private_operations.md) prepares a protected installation outside the
 temporary operations directories, with verified configuration and backup copies. Existing bind mount paths are
 retained and receive narrowly scoped age based cleanup exclusions. Installation does not restart the host or trial

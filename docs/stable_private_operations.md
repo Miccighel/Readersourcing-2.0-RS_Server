@@ -4,6 +4,9 @@ The private trial can retain its verified containers while its operational tools
 copies are installed under `/srv/readersourcing/private-trial`. This is a private operational installation, not a
 public deployment, host upgrade, or automatic startup service. Installation requires interactive root permission.
 
+The [server installation layout](deployment_layout.md) describes the separate migration to neutral installation
+paths and active configuration outside `/var/tmp`. That migration is not performed by this snapshot installer.
+
 The shared installer is `deploy/private/stable_installation.rb`; its shell wrappers and operations guide are in
 `deploy/private/stable_templates`. A host specific installer fixes the trial, activation plan, exact local image,
 retained backup and shared lock. Its checksum manifest verifies all public inputs before execution.
