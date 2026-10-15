@@ -9,7 +9,12 @@ class DeploymentLayoutMigrationTest < Minitest::Test
     Dir.mktmpdir("rs-layout-migration-test.") do |directory|
       File.write(File.join(directory, "candidate.json"), "synthetic")
       File.write(File.join(directory, "source-candidate.json"), "synthetic")
-      File.write(File.join(directory, "rs-server"), "exit #{mode == 'command_failure' ? 22 : 0}\n")
+      File.write(File.join(directory, "rs-server"), <<~SH)
+        set -e
+        printf 'installed-command %s\\n' "$*" >> '#{directory}/events'
+        test '#{mode}' != command_failure
+        test "#{mode}:$1" != recovery_failure:restore-rehearsal
+      SH
       script = <<~SH
         set -eu
         . '#{SCRIPT}'
@@ -59,10 +64,12 @@ class DeploymentLayoutMigrationTest < Minitest::Test
       creation = "compose up --no-start --no-deps --no-build --pull never --force-recreate mailpit rs_server_webapp access"
       assert_includes events, creation
       assert_operator events.index("backup"), :<, events.index(creation)
+      assert_operator events.index("helper recovery-preflight"), :<, events.index(creation)
       assert_operator events.index("helper replacement"), :<, events.index("docker start mailpit")
       assert_operator events.index("helper freeze"), :<, events.index("docker start web")
       assert_operator events.index("database-fingerprint"), :<, events.index("docker start access")
       assert_operator events.index("publication-fingerprint"), :<, events.index("docker start access")
+      assert_includes events, "installed-command restore-rehearsal --confirm-isolated-restore"
       refute events.any? { |event| event.match?(/docker (start|stop).* (database|setup)\z/) }
       refute events.any? { |event| event.include?("db:migrate") || event.include?("--pull always") || event.include?("compose down") }
     end
@@ -105,6 +112,15 @@ class DeploymentLayoutMigrationTest < Minitest::Test
       assert_includes events, "docker start access"
       assert_equal "docker stop -t 30 access web", events.last
       refute events.any? { |event| event.match?(/docker (rm|volume|system)/) }
+    end
+  end
+
+  def test_failed_isolated_recovery_prevents_a_successful_migration_report
+    run_migration("recovery_failure") do |_output, errors, status, events|
+      refute status.success?
+      assert_includes errors, "isolated_recovery_rehearsal"
+      assert_includes events, "installed-command restore-rehearsal --confirm-isolated-restore"
+      assert_equal "docker stop -t 30 access web", events.last
     end
   end
 end

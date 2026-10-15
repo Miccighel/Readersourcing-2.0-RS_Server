@@ -5,6 +5,24 @@ recovery_compose() {
     -f "$rs_work_directory/recovery/compose.json" "$@"
 }
 
+recovery_check_source() {
+  sh "$rs_source_operations/restart_candidate.sh" check
+}
+
+recovery_export_source_configuration() {
+  docker compose --project-name "$rs_expected_project" --project-directory "$rs_trial_directory" \
+    -f "$rs_trial_directory/compose.yml" config --format json > "$rs_work_directory/original.json"
+}
+
+recovery_runtime_owner() {
+  stat -c '%u:%g' "$rs_trial_directory"
+}
+
+recovery_export_report() {
+  install -m 644 "$rs_work_directory/report.json" "$rs_operations_directory/recovery-report.json"
+  cat "$rs_operations_directory/recovery-report.json"
+}
+
 recovery_source_ids() {
   docker ps --all --quiet --filter "label=com.docker.compose.project=$rs_expected_project" | LC_ALL=C sort
 }
@@ -75,16 +93,14 @@ recovery_finish() {
     printf 'Recovery not confirmed. Protected diagnostics: %s. Do not paste or upload their contents.\n' "$rs_work_directory" >&2
     exit 1
   fi
-  install -m 644 "$rs_work_directory/report.json" "$rs_operations_directory/recovery-report.json"
-  cat "$rs_operations_directory/recovery-report.json"
+  recovery_export_report
   printf '\nRecovery containers are stopped; their isolated volumes and protected configuration remain at %s\n' "$rs_work_directory"
   printf '%s\n' 'No off host backup was made. The active trial was not stopped or replaced.'
 }
 
 recovery_execute() {
   rs_stage=source_configuration
-  docker compose --project-name "$rs_expected_project" --project-directory "$rs_trial_directory" \
-    -f "$rs_trial_directory/compose.yml" config --format json > "$rs_work_directory/original.json"
+  recovery_export_source_configuration
   rs_source_database=$(docker ps --quiet --filter "label=com.docker.compose.project=$rs_expected_project" --filter label=com.docker.compose.service=database)
   rs_source_mailpit=$(docker ps --quiet --filter "label=com.docker.compose.project=$rs_expected_project" --filter label=com.docker.compose.service=mailpit)
   test -n "$rs_source_database" && test -n "$rs_source_mailpit"
@@ -114,9 +130,9 @@ recovery_execute() {
     --mount "type=bind,source=$rs_work_directory,target=$rs_work_directory" \
     --mount "type=bind,source=$rs_backup_directory,target=/backup,readonly" \
     --mount "type=bind,source=$rs_operations_directory,target=/definition,readonly" \
-    "$rs_candidate_image" -rbundler/setup /definition/recovery_configuration.rb "$rs_work_directory/options.json"
+    "$rs_candidate_image" -rbundler/setup "/definition/${rs_recovery_configuration_script:-recovery_configuration.rb}" "$rs_work_directory/options.json"
   for rs_name in smtp.crt smtp.key smtp.auth ui.auth; do
-    chown "$(stat -c '%u:%g' "$rs_trial_directory")" "$rs_work_directory/recovery/runtime/$rs_name"
+    chown "$(recovery_runtime_owner)" "$rs_work_directory/recovery/runtime/$rs_name"
   done
   chmod 644 "$rs_work_directory/recovery/runtime/smtp.crt"
   recovery_compose config --quiet
@@ -199,11 +215,11 @@ recovery_main() {
     test -d "$rs_directory" && test ! -L "$rs_directory"
   done
   test "$(stat -c '%u:%a' "$rs_backup_directory")" = 0:700
-  sh "$rs_source_operations/restart_candidate.sh" check
+  recovery_check_source
   exec 9> "$rs_lock_file"
   flock -n 9
   rs_started_seconds=$(date +%s)
-  rs_work_directory=$(mktemp -d /var/tmp/rs-server-recovery.XXXXXX)
+  rs_work_directory=$(mktemp -d "${rs_recovery_diagnostics_directory:-/var/tmp}/rs-server-recovery.XXXXXX")
   rs_target_created=no
   rs_completed=no
   recovery_source_ids > "$rs_work_directory/source-ids.txt"

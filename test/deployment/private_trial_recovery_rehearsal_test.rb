@@ -96,11 +96,20 @@ class PrivateTrialRecoveryRehearsalTest < Minitest::Test
     end
   RUBY
 
+  def recovery_fake
+    FAKE
+  end
+
+  def recovery_adapter
+    ""
+  end
+
   def run_recovery(mode)
     Dir.mktmpdir("rs-recovery-shell-test.") do |root|
-      File.write("#{root}/fake.rb", FAKE)
+      File.write("#{root}/fake.rb", recovery_fake)
       Dir.mkdir("#{root}/backup")
       Dir.mkdir("#{root}/operations")
+      Dir.mkdir("#{root}/state")
       %w[database.dump publications.tar.gz].each { |name| File.write("#{root}/backup/#{name}", "synthetic") }
       File.write("#{root}/backup/database-fingerprint.jsonl", "database-fingerprint\n")
       File.write("#{root}/backup/publication-fingerprint.json", "publication-fingerprint\n")
@@ -113,6 +122,7 @@ class PrivateTrialRecoveryRehearsalTest < Minitest::Test
         rs_backup_directory='#{root}/backup'
         rs_operations_directory='#{root}/operations'
         rs_trial_directory='#{root}/source'
+        rs_plan_directory='#{root}/state'
         rs_expected_project=rs-private-8955233c3d65
         rs_published_image=synthetic-published
         rs_backup_image=synthetic-backup
@@ -124,6 +134,7 @@ class PrivateTrialRecoveryRehearsalTest < Minitest::Test
         openssl() { printf '0123456789ab\\n'; }
         stat() { printf '1000:1000\\n'; }
         chown() { :; }
+        #{recovery_adapter}
         recovery_source_ids > "$rs_work_directory/source-ids.txt"
         recovery_source_state > "$rs_work_directory/source-before.txt"
         trap recovery_finish EXIT
@@ -131,7 +142,7 @@ class PrivateTrialRecoveryRehearsalTest < Minitest::Test
       SH
       output, errors, status = Open3.capture3({"RS_RECOVERY_TEST_ROOT" => root, "RS_RECOVERY_TEST_MODE" => mode}, "sh", "-c", script)
       commands = File.readlines("#{root}/commands.jsonl").map { |line| JSON.parse(line) }
-      yield output, errors, status, commands
+      yield output, errors, status, commands, root
     end
   end
 

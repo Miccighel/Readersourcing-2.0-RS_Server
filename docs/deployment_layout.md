@@ -42,6 +42,10 @@ only the activation preflight: it repeats the prepared configuration and contain
 only database and publication probes and checks deployment readiness. No service replacement is requested by that
 command, and no active configuration or operational command is installed.
 
+The [activation preflight record](deployment-layout-preflight-2026-10-15.json) reports that these checks passed on
+Homer without service interruption or configuration installation. This is distinct from activation and from a
+restore rehearsal using the new backup format.
+
 ## Activation requirements
 
 Activation requires a separately verified procedure, a current point in time backup, and an explicit maintenance
@@ -55,12 +59,14 @@ must refer to the retained old configuration, without automatically restoring a 
 The existing installation under `/srv/readersourcing/private-trial` and its protected original inputs are retained
 until activation and operational checks have passed and their removal has been reviewed separately.
 
-The proposed command is `/opt/readersourcing/rs-server/rs-server`, with `check`, `start` and `restart` operations.
+The proposed command is `/opt/readersourcing/rs-server/rs-server`, with `check`, `start`, `restart` and explicitly
+confirmed `restore-rehearsal` operations.
 Its implementation reuses the existing startup and restart functions with the new configuration and state paths;
 it does not require the old generated configuration to operate. Local tests cover the new configuration files and
 stopped replacement inventory, service ordering, and closing access after a failed check. The completed setup
-container is retained only for historical inventory checks. The isolated recovery entry point must also be verified
-for this layout before the activation wrapper is released.
+container is retained only for historical inventory checks. The recovery adapter reuses the tested isolated restore
+flow with the new definition, backup and protected state paths. Local tests check the archive format, isolation,
+runtime metadata and failure handling; host execution of the new recovery entry point remains part of activation.
 
 The activation implementation stages configuration before maintenance and takes a fresh protected backup while
 access and the application are stopped. It creates the three selected replacements without starting them, then
@@ -70,8 +76,19 @@ unchanged. Database and publication fingerprints are compared before access reop
 keeps access and the writer stopped where possible and requires inspection; it never restores a database by itself.
 
 Mailpit's temporary inbox is archived before recreation. The new inbox is empty; the old messages remain in the
-protected point in time backup. This new archive receives integrity checks, not an automatic full restore rehearsal
-or an additional encrypted NAS copy. The original NAS copy is not overwritten.
+protected point in time backup. Before replacing containers, the actual new backup is checked by generating a recovery
+definition without starting recovery services. Once the installed commands pass their checks, the activation wrapper
+rehearses database and publication restoration using that backup in an isolated project with new volumes, an internal
+network and no published ports. It compares restored data and runs the existing synthetic application probes. The
+source deployment's container identities and lifecycle must remain unchanged throughout the rehearsal. A successful
+activation report requires the rehearsal to pass; a failure stops access and the writer where possible for inspection.
+Recovery containers are stopped after the checks, while their isolated volumes and private diagnostics are retained.
+There is no restore over the active deployment, Mailpit inbox restore or additional encrypted NAS copy. The original
+NAS copy is not overwritten.
 
 This procedure does not configure automatic startup or recurring backups, update host packages, restart Docker,
 reboot the host, publish an image or expose the application publicly.
+
+The standalone deployment suite passed on October 15 with 109 tests and 1,025 assertions. It covers both the
+original recovery procedure and the new layout adapter, archive validation, stopped replacement checks and failure
+handling. These local results do not assert that the installation or recovery rehearsal has run on Homer.

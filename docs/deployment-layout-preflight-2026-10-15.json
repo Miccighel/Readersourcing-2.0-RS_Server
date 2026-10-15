@@ -1,0 +1,12 @@
+{
+  "status": "layout_activation_preflight_passed",
+  "reported_on": "2026-10-15",
+  "evidence": "Operator supplied aggregate report from the guarded check on Homer; protected diagnostic contents were not read or downloaded",
+  "services_interrupted": false,
+  "configuration_installed": false,
+  "read_only_data_probes_passed": true,
+  "host_packages_changed": false,
+  "host_rebooted": false,
+  "activation": "Not executed",
+  "recovery_using_new_backup_format": "Local tests pass; host rehearsal is required by the activation wrapper"
+}

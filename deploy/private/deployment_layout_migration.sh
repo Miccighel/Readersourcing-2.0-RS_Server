@@ -28,20 +28,25 @@ layout_resolve() {
 
 layout_helper() {
   rs_helper_operation=$1
+  rs_checks_mode=readonly
+  test "$rs_helper_operation" != recovery-preflight || rs_checks_mode=
   set -- docker run --rm --pull never --runtime runc --network none --read-only --cap-drop ALL --cap-add DAC_OVERRIDE \
     --security-opt no-new-privileges --memory 256m --cpus 0.5 --pids-limit 64 --user 0:0 --entrypoint ruby \
     --mount "type=bind,source=$rs_package,target=/definition,readonly" \
     --mount "type=bind,source=$rs_prepared_plan,target=/plan,readonly" \
     --mount "type=bind,source=$rs_source_directory,target=/source,readonly" \
-    --mount "type=bind,source=$rs_work_directory,target=/checks,readonly"
+    --mount "type=bind,source=$rs_work_directory,target=/checks${rs_checks_mode:+,$rs_checks_mode}"
   case "$rs_helper_operation" in
     install|freeze)
       set -- "$@" --mount "type=bind,source=$rs_configuration_directory,target=/configuration" \
         --mount "type=bind,source=$rs_active_directory,target=/state" ;;
-    configuration)
+    configuration|recovery-preflight)
       set -- "$@" --mount "type=bind,source=$rs_configuration_directory,target=/configuration,readonly" \
         --mount "type=bind,source=$rs_active_directory,target=/state,readonly" ;;
   esac
+  if [ "$rs_helper_operation" = recovery-preflight ]; then
+    set -- "$@" --mount "type=bind,source=$rs_backup_directory,target=/backup,readonly"
+  fi
   "$@" "$rs_candidate_image" -rbundler/setup /definition/deployment_layout_files.rb "$rs_helper_operation"
 }
 
@@ -53,6 +58,7 @@ layout_preflight() {
   cmp -s "$rs_source_activation/candidate.json" "$rs_prepared_plan/source-candidate.json"
   layout_inspect source
   layout_helper preflight
+  layout_helper recovery-code
   layout_resolve
   candidate_require_health "$rs_database_container"
   candidate_require_health "$rs_web_container"
@@ -82,13 +88,15 @@ layout_install() {
   mkdir -m 755 "$rs_installation_directory"
   mkdir -m 700 "$rs_configuration_directory" "$rs_configuration_directory/runtime" "$rs_active_directory"
   for rs_name in candidate_restart.sh candidate_startup.sh startup_inventory.rb publication_fingerprint.rb database_fingerprint.sql \
-    deployment_operations.sh deployment_layout_configuration.rb deployment_layout_inventory.rb deployment_layout_files.rb OPERATIONS.md; do
+    deployment_operations.sh deployment_layout_configuration.rb deployment_layout_inventory.rb deployment_layout_files.rb \
+    recovery_rehearsal.sh recovery_configuration.rb recovery_probe.rb candidate_configuration.rb deployment_recovery.sh deployment_recovery_configuration.rb OPERATIONS.md; do
     install -o root -g root -m 644 "$rs_package/$rs_name" "$rs_installation_directory/$rs_name"
   done
   install -o root -g root -m 755 "$rs_package/rs-server" "$rs_installation_directory/rs-server"
   (cd "$rs_installation_directory" && sha256sum candidate_restart.sh candidate_startup.sh startup_inventory.rb \
     publication_fingerprint.rb database_fingerprint.sql deployment_operations.sh deployment_layout_configuration.rb \
-    deployment_layout_inventory.rb deployment_layout_files.rb OPERATIONS.md rs-server > OPERATIONS-SHA256SUMS)
+    deployment_layout_inventory.rb deployment_layout_files.rb recovery_rehearsal.sh recovery_configuration.rb recovery_probe.rb \
+    candidate_configuration.rb deployment_recovery.sh deployment_recovery_configuration.rb OPERATIONS.md rs-server > OPERATIONS-SHA256SUMS)
   chmod 644 "$rs_installation_directory/OPERATIONS-SHA256SUMS"
   for rs_name in smtp.crt smtp.key smtp.auth ui.auth proxy.conf; do
     test -f "$rs_source_directory/runtime/$rs_name" && test ! -L "$rs_source_directory/runtime/$rs_name"
@@ -112,6 +120,7 @@ layout_backup() {
   cp "$rs_work_directory/before-publications.json" "$rs_backup_directory/publication-fingerprint.json"
   cp "$rs_prepared_plan/source-candidate.json" "$rs_backup_directory/source-definition.json"
   cp "$rs_work_directory/source-containers.json" "$rs_backup_directory/source-containers.json"
+  cp "$rs_active_directory/runtime-files.json" "$rs_backup_directory/runtime-files.json"
   docker exec -i "$rs_database_container" sh -c \
     'exec pg_dump --format=custom --no-owner --no-privileges --username="$POSTGRES_USER" "$POSTGRES_DB"' > "$rs_backup_directory/database.dump"
   test -s "$rs_backup_directory/database.dump"
@@ -131,20 +140,21 @@ layout_backup() {
   docker unpause "$rs_mailpit_container" > /dev/null
   rs_mailbox_paused=no
   tar -C "$rs_backup_directory/mailpit-tmp" -czf "$rs_backup_directory/mailpit-tmp.tar.gz" .
-  printf '{"project":"%s","application_image":"%s","source_revision":"%s","created_at":"%s","off_host_copy":false,"archive_integrity_only":true,"restore_rehearsed":false}\n' \
+  printf '{"project":"%s","application_image":"%s","source_revision":"%s","created_at":"%s","off_host_copy":false,"archive_integrity_at_creation":true,"restore_rehearsed_at_creation":false}\n' \
     "$rs_expected_project" "$rs_candidate_image" "$rs_source_revision" "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" > "$rs_backup_directory/manifest.json"
   gzip -t "$rs_backup_directory/publications.tar.gz" "$rs_backup_directory/source-configuration.tar.gz" \
     "$rs_backup_directory/new-configuration.tar.gz" "$rs_backup_directory/mailpit-tmp.tar.gz"
   (cd "$rs_backup_directory" && sha256sum database.dump publications.tar.gz source-configuration.tar.gz \
-    new-configuration.tar.gz mailpit-tmp.tar.gz source-definition.json source-containers.json manifest.json \
+    new-configuration.tar.gz mailpit-tmp.tar.gz source-definition.json source-containers.json manifest.json runtime-files.json \
     database-fingerprint.jsonl publication-fingerprint.json > SHA256SUMS && \
     sha256sum --check --status SHA256SUMS)
   startup_database_fingerprint "$rs_work_directory/backup-database.jsonl"
   startup_publication_fingerprint "$rs_work_directory/backup-publications.json"
   cmp -s "$rs_work_directory/before-database.jsonl" "$rs_work_directory/backup-database.jsonl"
   cmp -s "$rs_work_directory/before-publications.json" "$rs_work_directory/backup-publications.json"
-  printf '%s\n' 'Archive integrity verified; this new backup has not been restored in a separate rehearsal.' > "$rs_backup_directory/INCOMPLETE"
+  printf '%s\n' 'Archive integrity verified at creation. Subsequent recovery outcomes are recorded separately in protected operational state.' > "$rs_backup_directory/INCOMPLETE"
   mv "$rs_backup_directory/INCOMPLETE" "$rs_backup_directory/COMPLETE"
+  (set -C; printf '%s\n' "$rs_backup_directory" > "$rs_active_directory/backup-directory")
 }
 
 layout_activate() {
@@ -155,6 +165,8 @@ layout_activate() {
   docker stop -t 30 "$rs_access_container" > /dev/null
   docker stop -t 30 "$rs_web_container" > /dev/null
   layout_backup
+  rs_stage=backup_recovery_preparation
+  layout_helper recovery-preflight
   rs_stage=create_stopped_replacements
   docker stop -t 30 "$rs_mailpit_container" > /dev/null
   layout_compose up --no-start --no-deps --no-build --pull never --force-recreate mailpit rs_server_webapp access
@@ -186,6 +198,8 @@ layout_activate() {
   rs_stage=installed_command_check
   flock -u 9
   sh "$rs_installation_directory/rs-server" check
+  rs_stage=isolated_recovery_rehearsal
+  sh "$rs_installation_directory/rs-server" restore-rehearsal --confirm-isolated-restore
   flock -n 9
 }
 
@@ -238,9 +252,9 @@ deployment_layout_migration_main() {
   if [ "$rs_operation" = --check ]; then
     printf '{"status":"layout_activation_preflight_passed","services_interrupted":false,"configuration_installed":false,"read_only_data_probes_passed":true,"host_packages_changed":false,"host_rebooted":false}\n'
   else
-    printf '{"status":"deployment_layout_activated","image_id":"%s","operations":"%s","configuration":"%s","state":"%s","database_and_completed_setup_retained":true,"database_and_publication_fingerprints_match":true,"runtime_file_contents_and_permissions_preserved":true,"new_command_check_passed":true,"mailpit_messages_archived_before_recreation":true,"mailpit_active_inbox_recreated":true,"database_migrations_run":false,"images_pulled_or_built":false,"old_installation_retained":true,"host_packages_changed":false,"host_rebooted":false,"automatic_startup_configured":false,"recurring_backups_configured":false,"public_deployment":false}\n' \
+    printf '{"status":"deployment_layout_activated","image_id":"%s","operations":"%s","configuration":"%s","state":"%s","database_and_completed_setup_retained":true,"database_and_publication_fingerprints_match":true,"runtime_file_contents_and_permissions_preserved":true,"new_command_check_passed":true,"isolated_recovery_from_new_backup_passed":true,"mailpit_messages_archived_before_recreation":true,"mailpit_active_inbox_recreated":true,"database_migrations_run":false,"images_pulled_or_built":false,"old_installation_retained":true,"host_packages_changed":false,"host_rebooted":false,"automatic_startup_configured":false,"recurring_backups_configured":false,"public_deployment":false}\n' \
       "$rs_candidate_image" "$rs_installation_directory" "$rs_configuration_directory" "$rs_state_directory"
-    printf 'Protected point in time backup: %s; not a new NAS copy or a full restore rehearsal.\n' "$rs_backup_directory"
+    printf 'Protected point in time backup: %s; database and publication restore rehearsed in isolation, not a new NAS copy or mailbox restore.\n' "$rs_backup_directory"
   fi
   printf 'Protected diagnostics: %s; do not paste or upload their contents.\n' "$rs_work_directory"
 }

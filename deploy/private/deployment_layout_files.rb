@@ -6,12 +6,30 @@ class DeploymentLayoutFiles
 
   class Error < StandardError; end
 
-  def initialize(definition:, plan:, source:, checks:, configuration:, state:)
+  def initialize(definition:, plan:, source:, checks:, configuration:, state:, backup: "/backup")
     @definition, @plan, @source, @checks, @configuration, @state = definition, plan, source, checks, configuration, state
+    @backup = backup
   end
 
   def perform(operation)
     case operation
+    when "recovery-code"
+      require_relative "deployment_recovery_configuration"
+      {"status" => "layout_recovery_code_loaded"}
+    when "recovery-preflight"
+      require_relative "deployment_recovery_configuration"
+      require "securerandom"
+      settings = read(@definition, "settings.json")
+      original = read(@state, "definition.json")
+      raise Error, "Recovery input differs" unless original == read(@checks, "effective.json")
+      destination = File.join(@checks, "recovery-preflight")
+      Dir.mkdir(destination, 0o700)
+      DeploymentRecoveryConfiguration.new(backup: @backup, original: File.join(@checks, "effective.json"), destination: destination,
+        project: "rs-recovery-#{SecureRandom.hex(6)}", source_project: settings.fetch("project"), published_image: "",
+        backup_image: settings.fetch("application_image"), application_image: settings.fetch("application_image"),
+        database_image: original.fetch("services").fetch("database").fetch("image"),
+        mailpit_image: original.fetch("services").fetch("mailpit").fetch("image")).prepare!
+      {"status" => "layout_backup_recovery_definition_verified", "recovery_containers_created" => false}
     when "preflight"
       settings = read(@definition, "settings.json")
       original, current = read(@plan, "source-containers.json"), read(@checks, "source-containers.json")

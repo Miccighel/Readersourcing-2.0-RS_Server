@@ -24,27 +24,7 @@ class PrivateTrialRecoveryConfiguration
     raise Error, "Source and recovery identities overlap" if @project == @source_project
     raise Error, "Recovery images must be exact local IDs" unless @images.values.all? { |image| image.match?(/\Asha256:[0-9a-f]{64}\z/) }
     raise Error, "Recovery destination must be empty" unless File.directory?(@destination) && !File.symlink?(@destination) && Dir.empty?(@destination)
-    verify_backup!
-    baseline = JSON.parse(File.read(@original))
-    backed_up = JSON.parse(File.read(File.join(@backup, "effective-configuration.json")))
-    PrivateTrialCandidateConfiguration.new(
-      baseline: baseline, candidate: backed_up, project: @source_project,
-      published_image: @published_image, candidate_image: @backup_image
-    ).validate!
-    runtime = {}
-    visit_archive("configuration.tar.gz") do |entry, path|
-      runtime[path.delete_prefix("runtime/")] = entry.read if RUNTIME_FILES.any? { |name| path == "runtime/#{name}" } && entry.file?
-      if path == "trial.json" && entry.file?
-        record = JSON.parse(entry.read)
-        raise Error, "Wrong archived trial" unless record.fetch("project_name") == @source_project
-        @archived_files = record.fetch("files")
-      end
-    end
-    raise Error, "Missing archived runtime configuration" unless runtime.keys.sort == RUNTIME_FILES.sort && @archived_files
-    runtime.each do |name, contents|
-      raise Error, "Archived runtime does not match its record" unless Digest::SHA256.hexdigest(contents) == @archived_files.fetch("runtime/#{name}")
-    end
-    visit_archive("publications.tar.gz") { |_entry, _path| }
+    backed_up, runtime = verified_configuration
 
     FileUtils.mkdir(File.join(@destination, "runtime"), mode: 0o700)
     runtime.each { |name, contents| write("runtime/#{name}", contents) }
@@ -84,6 +64,31 @@ class PrivateTrialRecoveryConfiguration
   end
 
   private
+
+  def verified_configuration
+    verify_backup!
+    baseline = JSON.parse(File.read(@original))
+    backed_up = JSON.parse(File.read(File.join(@backup, "effective-configuration.json")))
+    PrivateTrialCandidateConfiguration.new(
+      baseline: baseline, candidate: backed_up, project: @source_project,
+      published_image: @published_image, candidate_image: @backup_image
+    ).validate!
+    runtime = {}
+    visit_archive("configuration.tar.gz") do |entry, path|
+      runtime[path.delete_prefix("runtime/")] = entry.read if RUNTIME_FILES.any? { |name| path == "runtime/#{name}" } && entry.file?
+      if path == "trial.json" && entry.file?
+        record = JSON.parse(entry.read)
+        raise Error, "Wrong archived trial" unless record.fetch("project_name") == @source_project
+        @archived_files = record.fetch("files")
+      end
+    end
+    raise Error, "Missing archived runtime configuration" unless runtime.keys.sort == RUNTIME_FILES.sort && @archived_files
+    runtime.each do |name, contents|
+      raise Error, "Archived runtime does not match its record" unless Digest::SHA256.hexdigest(contents) == @archived_files.fetch("runtime/#{name}")
+    end
+    visit_archive("publications.tar.gz") { |_entry, _path| }
+    [backed_up, runtime]
+  end
 
   def write(relative, contents)
     File.open(File.join(@destination, relative), "wbx", 0o600) { |file| file.write(contents) }

@@ -2,8 +2,12 @@
 set -eu
 umask 077
 test "$(id -u)" = 0
-test "$#" -eq 1
-case "$1" in check|start|restart) ;; *) exit 64 ;; esac
+test "$#" -ge 1
+case "$1" in
+  check|start|restart) test "$#" -eq 1 ;;
+  restore-rehearsal) test "$#" -eq 2 && test "$2" = --confirm-isolated-restore ;;
+  *) exit 64 ;;
+esac
 rs_operations_directory=/opt/readersourcing/rs-server
 for rs_directory in /opt/readersourcing "$rs_operations_directory"; do
   test -d "$rs_directory" && test ! -L "$rs_directory"
@@ -19,4 +23,10 @@ test "$(stat -c '%u:%a' /etc/opt/readersourcing/rs-server/context.sh)" = 0:600
 . "$rs_operations_directory/candidate_restart.sh"
 . "$rs_operations_directory/candidate_startup.sh"
 . "$rs_operations_directory/deployment_operations.sh"
-deployment_operations_main "$@"
+if [ "$1" = restore-rehearsal ]; then
+  . "$rs_operations_directory/recovery_rehearsal.sh"
+  . "$rs_operations_directory/deployment_recovery.sh"
+  deployment_recovery_main "$2"
+else
+  deployment_operations_main "$@"
+fi
