@@ -64,7 +64,8 @@ This assessment does not approve public exposure or replace the private trial ch
 
 The operator completed the protected local backup on October 14. It includes the PostgreSQL dump, publication files,
 and private trial configuration. Archive checks passed and the same 2.0.3 containers returned to healthy status.
-No backup content is attached to this record. An independent host copy and a restore rehearsal have not been recorded.
+No backup content is attached to this record. This original 2.0.3 backup has no recorded independent host copy or
+restore rehearsal; the updated 2.0.4 backup is covered in the recovery section below.
 
 For the trial update:
 
@@ -139,8 +140,8 @@ its vulnerability database cache, not its findings, and retained a separate repo
 The operator completed an updated backup of the running candidate. It includes the database, publication files,
 and effective image configuration, with checksums and database and publication fingerprints recorded while the
 application was stopped. The same application and access containers returned to healthy status. The earlier
-2.0.3 backup is retained separately; it predates the browser test records. Neither backup has a recorded off host
-copy or restore rehearsal.
+2.0.3 backup is retained separately; it predates the browser test records. The updated backup's recovery rehearsal
+is recorded below. Neither backup has a recorded off host copy.
 
 The prepared replacement procedure repeats configuration and backup checks, requires the current data to match
 the updated backup, and recreates only the web application. It compares logical database and publication fingerprints
@@ -177,13 +178,46 @@ database or Mailpit restarts occurred. An independent HTTP request through the S
 the login page afterwards. These restart checks did not compare logical database fingerprints; the earlier data
 integrity comparison remains evidence for the image activation, not a repeated measurement during restart.
 
+## Backup recovery of October 15, 2026
+
+The updated 2.0.4 backup was restored on Homer into a separate Compose project with new PostgreSQL and publication
+volumes. The recovery used the verified PDF navigation image, preserved the archived signing secret and public
+origin, and published no ports. No migrations ran, and no images were pulled or built. The active trial was not
+stopped or replaced; its container identities and lifecycle state matched before and after the rehearsal.
+
+All six public tables and four sequence states matched the backup fingerprints. The publication inventory also
+matched: 24 files in 24 directories, with their contents, ownership, and permissions checked before application
+probes. The restored application passed readiness and deployment checks. Original and annotated downloads returned
+HTTP 200 with matching file hashes, and the existing paper reference resolved with the retained signing key.
+Anonymous access to that reference required login. No authentication token was issued and no rating was submitted.
+All database fingerprints still matched after these requests. Download URL issuance can renew copy leases in the
+isolated publication volume; its complete inventory comparison preceded those requests.
+
+The successful rehearsal took 17 seconds and completed at 09:32:35 UTC. This measures the small synthetic backup
+on the same host, not a production recovery objective or an independent host recovery. The requests ran through
+Rack inside the restored application, not a browser or the active service. Recovery containers were stopped after
+the checks; their separate volumes and protected configuration were retained. No backup contents were transferred
+from Homer. The [aggregate report](recovery-2026-10-15.json) was read independently and its checksum verified.
+An encrypted backup copy outside Homer remains to be arranged. The security findings and public deployment
+limitations are unchanged.
+
 ## Source validation
 
-The complete local suite, including the shared configuration, publication fingerprint, and restart helpers, passed
-325 tests and 2,519 assertions with no failures, errors, or skipped tests. This check used Ruby 3.4.10 and a dedicated
-temporary PostgreSQL 11.22 database. The configured application autoload paths also passed `zeitwerk:check`.
+The complete local suite of October 14, including the shared configuration, publication fingerprint, and restart
+helpers, passed 325 tests and 2,519 assertions with no failures, errors, or skipped tests. This check used Ruby 3.4.10
+and a dedicated temporary PostgreSQL 11.22 database. The configured application autoload paths also passed `zeitwerk:check`.
 The application image on Homer remains the verified `d3f37ea` build; consolidating the host helpers and these records
 does not rebuild, restart, or publish it. The source CI checks on PostgreSQL 17 are separate from this local run.
+
+The recovery configuration and orchestration checks passed 15 synthetic tests and 173 assertions on October 15,
+including unsupported Compose options, transfer into a read only container, and failures that stop only the isolated
+recovery project. A separate Rails fixture test exercised the application probe with the real PDF fixture and
+confirmed unchanged reader, publication, rating, and authentication records. These helper tests are distinct from
+the successful backup restore recorded above.
+
+The complete local suite including the recovery helpers passed 341 tests and 2,701 assertions on October 15,
+with no failures, errors, or skipped tests. This run used Ruby 3.4.10 and a separate temporary PostgreSQL 11.22
+database; configured application autoload paths also passed. No private trial data was used for these tests.
 
 Preparation does not validate public DNS, HTTPS, external SMTP, host maintenance, or production exposure.
 The private trial activation does not publish the candidate or approve production use. The Docker Hub release remains

@@ -236,7 +236,8 @@
       "private_configuration_included": true,
       "same_application_and_access_containers_restarted_and_healthy": true,
       "off_host_copy": false,
-      "restore_rehearsal": false,
+      "restore_rehearsal": true,
+      "restore_rehearsal_record": "recovery-2026-10-15.json",
       "replacement_installed": false,
       "evidence": "Operator output from the prepared backup command; backup contents were not downloaded"
     },
@@ -358,6 +359,33 @@
     "published_image_changed": false,
     "ci_on_postgresql_17_is_a_separate_check": true
   },
+  "recovery_source_validation": {
+    "date": "2026-10-15",
+    "scope": "Complete local suite including recovery configuration, orchestration and real PDF fixture probe",
+    "ruby": "3.4.10",
+    "database": "Dedicated temporary PostgreSQL 11.22 database; no private trial data",
+    "tests": 341,
+    "assertions": 2701,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "configured_application_autoload_paths_checked": true,
+    "deployed_image_rebuilt_or_restarted": false,
+    "published_image_changed": false
+  },
+  "private_backup_recovery": {
+    "status": "Passed on the same Docker host in a separate isolated project",
+    "record": "recovery-2026-10-15.json",
+    "report_sha256": "b371115392839fd52cd92a7fcdb5423625d67a9856012e5dcaf4f9afdf42a331",
+    "recorded_at": "2026-10-15T09:32:35Z",
+    "elapsed_seconds": 17,
+    "source_application_interrupted_or_replaced": false,
+    "backup_contents_downloaded_or_uploaded": false,
+    "recovery_containers_stopped_and_volumes_retained": true,
+    "off_host_copy": false,
+    "production_recovery_time_established": false,
+    "evidence": "Operator output and independent reading and checksum verification of the aggregate public report on Homer"
+  },
   "safeguards": {
     "network_disabled_during_runtime_checks": true,
     "image_root_read_only_during_runtime_checks": true,
@@ -365,7 +393,7 @@
     "database_connected": true,
     "rails_or_database_used_during_offline_runtime_checks": false,
     "image_security_scan": "Completed; operating system findings remain open",
-    "backup_before_trial_update": "Verified on the Docker host; no off-host copy or restore rehearsal recorded",
+    "backup_before_trial_update": "Integrity verified on the Docker host; updated 2.0.4 backup restored in an isolated project on October 15; no off host copy recorded",
     "private_trial_replaced": true,
     "registry_image_published": false,
     "master_modified": false,

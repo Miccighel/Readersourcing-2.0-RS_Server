@@ -1,0 +1,52 @@
+{
+  "status": "recovery_rehearsal_passed",
+  "recorded_at": "2026-10-15T09:32:35Z",
+  "elapsed_seconds": 17,
+  "project": "rs-recovery-4d8b63abb60c",
+  "source_project": "rs-private-8955233c3d65",
+  "backup_image": "sha256:5ced7d8dac465287e415c229126108ebcbfdbf5fb64e6abfe37a0cf46912a35b",
+  "restored_application_image": "sha256:e52ed41e7a62a5447923ec02f0bef0b61f285232afb58c7bdfc80020381b5ad5",
+  "database_and_sequences_match_backup": true,
+  "publication_inventory_matches_backup_before_probes": true,
+  "database_fingerprint_sha256": "4550d6b0bb1530b508489f54d306e583579f366e242ad6ce9f3e794334bf7f54",
+  "database_tables_checked": 6,
+  "database_sequences_checked": 4,
+  "publication_inventory": {
+    "sha256": "b4ac1c74f5d1f1752aad39cdfb62ad7eadd04542b0a92d7e2c2601907ca9b4e8",
+    "files": 24,
+    "directories": 24,
+    "bytes": 2721340,
+    "scope": "All regular files and directories, including hidden entries; ownership and permissions; no timestamps"
+  },
+  "database_unchanged_after_probes": true,
+  "source_container_identities_and_lifecycle_unchanged": true,
+  "migrations_run": false,
+  "ports_published": false,
+  "images_pulled_or_built": false,
+  "recovery_services_stopped_after_checks": true,
+  "off_host_backup": false,
+  "security_approval": false,
+  "probe": {
+    "status": "passed",
+    "readiness": true,
+    "login_page": true,
+    "downloads": {
+      "original": {
+        "status": 200,
+        "sha256": "0804774bb87edd869a95141f00bc6c3559e4b6df3b7b94412c10c9a7f6e8dfab"
+      },
+      "annotated": {
+        "status": 200,
+        "sha256": "9058060edb05714a5581598f90a51c75f6db6242f5d9d4ad471c37ab7e3d0f99"
+      }
+    },
+    "existing_paper_reference_verified": true,
+    "paper_reference_requires_login": true,
+    "public_origin_preserved": true,
+    "external_http_requests": false,
+    "authentication_tokens_issued": false,
+    "ratings_submitted": false,
+    "scope": "Rack requests inside the restored application; not a browser test or access to the running source",
+    "publication_copy_leases": "May be renewed in the isolated volume by normal signed download URL issuance"
+  }
+}

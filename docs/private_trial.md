@@ -137,3 +137,37 @@ The procedure does not run setup or migrations, create containers, pull or build
 volumes. It can resume the same stopped application and access containers, but is not a full stack startup procedure
 after a host reboot. Database contents are not fingerprinted by a restart check. Diagnostics can contain private
 configuration and remain in a protected directory on the host; do not paste or upload them.
+
+## Recovery rehearsal
+
+A protected trial backup can be rehearsed without replacing or pausing the running application. The host specific
+`restore_rehearsal.sh` wrapper fixes the source project, backup directory, and exact local application image. Its
+`RECOVERY-SHA256SUMS` manifest verifies the shared helpers in `deploy/private` before they are used.
+
+From the verified operations directory on the Docker host:
+
+```console
+sudo sh restore_rehearsal.sh --confirm-isolated-restore
+```
+
+The procedure checks the activated trial, backup completeness and checksums, and the archived configuration. It
+rejects symbolic links and unsafe archive entries. It creates a separate Compose project with fresh PostgreSQL and
+publication volumes and an internal network, without publishing ports. Existing source volumes and containers are
+not recovery targets. The application uses the retained signing secret and public origin; Mailpit uses a private
+copy of the archived TLS and authentication files. No images are pulled or built, and no migrations are run.
+
+After restoring the empty target, the procedure compares every public table and sequence and the full publication
+inventory with the backup fingerprints. The fixture check uses the synthetic reader and publication selected for
+that host: it exercises readiness, login, original and annotated downloads, and the existing paper reference inside
+the restored application through Rack. It does not follow PDF links to the running source or submit a rating.
+Normal download URL issuance can renew copy leases in the isolated publication volume. Database fingerprints are
+compared again after these requests. These are application checks, not a browser compatibility test.
+
+The recovery containers are stopped after the checks, including on failure. Their volumes and protected diagnostics
+are retained for inspection; removal requires checking those exact resources separately. Source container identities
+and lifecycle state are compared before and after the rehearsal, but the live source database is not fingerprinted
+while users can write to it. Only a successful aggregate report is made available outside the protected directory.
+
+The rehearsal validates the selected synthetic backup on the same host. It does not provide an independent host
+copy, a production recovery time, or security approval for public deployment. The backup and generated recovery
+configuration contain private settings and must not be pasted into a chat, committed, or uploaded with the report.

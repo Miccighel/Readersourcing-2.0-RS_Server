@@ -57,3 +57,9 @@ The isolated recovery checks of October 9 and October 12, 2026 are recorded in
 [latest container validation](integration.md#validation-of-october-12-2026). They verify the scripts and
 the restored application with synthetic data, not the availability or recovery time of a future production host or
 external backup provider.
+
+The [private candidate recovery of October 15, 2026](release-2.0.4.md#backup-recovery-of-october-15-2026) restored
+the protected 2.0.4 trial backup on Homer into fresh volumes without interrupting the source application. Database,
+sequence, publication inventory, download, and existing paper reference checks passed. The 17 second rehearsal
+used synthetic data on the same host; it does not replace a protected backup copy outside that host. Its separate
+procedure is described in [the private trial instructions](private_trial.md#recovery-rehearsal).
