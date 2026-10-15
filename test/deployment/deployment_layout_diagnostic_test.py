@@ -66,6 +66,31 @@ class LayoutDiagnosticTest(unittest.TestCase):
         self.compare()
         self.assertEqual(original, json.dumps(self.source))
 
+    def test_known_schema_fields_report_null_and_empty_shapes_without_normalizing_them(self):
+        for field in ("Dns", "DnsOptions", "DnsSearch", "ExtraHosts", "Links", "Ulimits"):
+            self.source["HostConfig"][field] = []
+            self.current["HostConfig"][field] = None
+        result = self.compare()
+        self.assertEqual(["Dns", "DnsOptions", "DnsSearch", "ExtraHosts", "Links", "Ulimits"], result["host_difference_fields"])
+        self.assertEqual(6, len(result["host_difference_details"]))
+        for detail in result["host_difference_details"]:
+            self.assertEqual("empty_array", detail["source_shape"])
+            self.assertEqual("null", detail["replacement_shape"])
+            self.assertTrue(detail["null_empty_array_pair"])
+
+    def test_nonempty_settings_and_missing_fields_are_not_mistaken_for_null_empty_equivalence(self):
+        self.source["HostConfig"]["Dns"] = ["10.0.0.53"]
+        self.current["HostConfig"]["Dns"] = None
+        self.source["HostConfig"]["DnsSearch"] = ["private.example.invalid"]
+        self.current["HostConfig"]["DnsSearch"] = []
+        self.current["HostConfig"]["Ulimits"] = None
+        details = {item["field"]: item for item in self.compare()["host_difference_details"]}
+        self.assertEqual("nonempty_array", details["Dns"]["source_shape"])
+        self.assertEqual("missing", details["Ulimits"]["source_shape"])
+        self.assertTrue(all(not item["null_empty_array_pair"] for item in details.values()))
+        for private in ("10.0.0.53", "private.example.invalid"):
+            self.assertNotIn(private, json.dumps(details))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -16,6 +16,13 @@ class LayoutDiagnostic:
     GENERATED = ("com.docker.compose.config-hash", "com.docker.compose.project.config_files", "com.docker.compose.project.working_dir", "com.docker.compose.replace", "com.docker.compose.depends_on")
     CONFIG_FIELDS = {"Hostname", "Domainname", "User", "AttachStdin", "AttachStdout", "AttachStderr", "ExposedPorts", "Tty", "OpenStdin", "StdinOnce", "Env", "Cmd", "Healthcheck", "ArgsEscaped", "Image", "Volumes", "WorkingDir", "Entrypoint", "NetworkDisabled", "MacAddress", "OnBuild", "Labels", "StopSignal", "StopTimeout", "Shell"}
     HOST_FIELDS = {"Mounts", "Binds", "Runtime", "AutoRemove", "RestartPolicy", "ReadonlyRootfs", "Memory", "MemorySwap", "MemoryReservation", "NanoCpus", "PidsLimit", "SecurityOpt", "CapAdd", "CapDrop", "GroupAdd", "NetworkMode", "IpcMode", "CgroupnsMode", "PortBindings", "Tmpfs", "LogConfig", "ShmSize", "Privileged", "Devices", "DeviceRequests", "ConsoleSize", "Init", "MaskedPaths", "ReadonlyPaths"}
+    # Fixed top level JSON names from Moby's HostConfig and embedded Resources schema.
+    HOST_FIELDS |= {"ContainerIDFile", "VolumeDriver", "VolumesFrom", "Annotations", "Dns", "DnsOptions", "DnsSearch", "ExtraHosts",
+        "Cgroup", "Links", "OomScoreAdj", "PidMode", "PublishAllPorts", "StorageOpt", "UTSMode", "UsernsMode", "Sysctls", "Isolation",
+        "CpuShares", "CgroupParent", "BlkioWeight", "BlkioWeightDevice", "BlkioDeviceReadBps", "BlkioDeviceWriteBps",
+        "BlkioDeviceReadIOps", "BlkioDeviceWriteIOps", "CpuPeriod", "CpuQuota", "CpuRealtimePeriod", "CpuRealtimeRuntime",
+        "CpusetCpus", "CpusetMems", "DeviceCgroupRules", "KernelMemory", "KernelMemoryTCP", "MemorySwappiness", "OomKillDisable",
+        "Ulimits", "CpuCount", "CpuPercent", "IOMaximumIOps", "IOMaximumBandwidth"}
     MOUNT_FIELDS = {"Type", "Source", "Destination", "Mode", "RW", "Propagation", "Name", "Driver"}
     LABEL_FIELDS = set(GENERATED) | {"com.docker.compose.image", "com.docker.compose.version", "com.docker.compose.container-number", "com.docker.compose.project", "com.docker.compose.service", "com.docker.compose.oneoff", "org.opencontainers.image.revision", "org.opencontainers.image.version"}
     BACKUP_FILES = {"database.dump", "publications.tar.gz", "source-configuration.tar.gz", "new-configuration.tar.gz", "mailpit-tmp.tar.gz", "source-definition.json", "source-containers.json", "manifest.json", "runtime-files.json", "database-fingerprint.jsonl", "publication-fingerprint.json"}
@@ -27,6 +34,31 @@ class LayoutDiagnostic:
     def changed(before, after, allowed):
         keys = {key for key in before.keys() | after.keys() if before.get(key) != after.get(key) or (key in before) != (key in after)}
         return sorted(keys & allowed) + (["other_fields"] if keys - allowed else [])
+
+    @staticmethod
+    def shape(mapping, field):
+        if field not in mapping:
+            return "missing"
+        value = mapping[field]
+        if value is None:
+            return "null"
+        if isinstance(value, bool):
+            return "boolean"
+        if isinstance(value, (int, float)):
+            return "zero_number" if value == 0 else "nonzero_number"
+        if isinstance(value, str):
+            return "empty_string" if not value else "nonempty_string"
+        if isinstance(value, list):
+            return "empty_array" if not value else "nonempty_array"
+        if isinstance(value, dict):
+            return "empty_object" if not value else "nonempty_object"
+        return "other"
+
+    def host_details(self, before, after):
+        fields = self.changed(before, after, self.HOST_FIELDS)
+        return [{"field": field, "source_shape": self.shape(before, field), "replacement_shape": self.shape(after, field),
+            "null_empty_array_pair": {self.shape(before, field), self.shape(after, field)} == {"null", "empty_array"}}
+            for field in fields if field in self.HOST_FIELDS]
 
     def relocate(self, source, service):
         for name in self.FILES.get(service, ()):
@@ -81,6 +113,7 @@ class LayoutDiagnostic:
             "source_lifecycle_preserved": all(before["State"].get(key) == state.get(key) for key in ("Running", "StartedAt")) and before["RestartCount"] == after["RestartCount"],
             "config_difference_fields": self.changed(old["Config"], current["Config"], self.CONFIG_FIELDS),
             "host_difference_fields": self.changed(old["HostConfig"], current["HostConfig"], self.HOST_FIELDS),
+            "host_difference_details": self.host_details(old["HostConfig"], current["HostConfig"]),
             "mount_difference_fields": sorted(fields),
             "other_label_difference_fields": self.changed(old["Config"]["Labels"], current["Config"]["Labels"], self.LABEL_FIELDS),
             "networks_equal": sorted(before["NetworkSettings"]["Networks"]) == sorted(after["NetworkSettings"]["Networks"]),

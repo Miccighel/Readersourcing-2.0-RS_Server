@@ -97,6 +97,9 @@ If activation stops, do not rerun the installer over the staged directories or s
 It compares the retained and current inspection inside the host, verifies backup archive checksums and reports only
 fixed schema field names, states, booleans and error categories. Environment values, unknown label names, private
 paths and log contents are not exported. Its Python tests cover expected relocation, redaction and source preservation.
+Known top level host fields follow the [Moby HostConfig and resource schema](https://github.com/moby/moby/blob/v28.3.2/api/types/container/hostconfig.go#L342).
+For differing fields, the diagnostic reports only whether a value is missing, null, empty or nonempty and its JSON
+type. This does not normalize or approve the difference, and it does not relax the activation checks.
 
 This procedure does not configure automatic startup or recurring backups, update host packages, restart Docker,
 reboot the host, publish an image or expose the application publicly.
