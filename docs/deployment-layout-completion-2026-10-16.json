@@ -1,0 +1,22 @@
+{
+  "status": "deployment_layout_completed",
+  "reported_on": "2026-10-16",
+  "evidence": "Operator supplied aggregate completion report from Homer; protected diagnostic contents were not read or downloaded",
+  "image_id": "sha256:e52ed41e7a62a5447923ec02f0bef0b61f285232afb58c7bdfc80020381b5ad5",
+  "frozen_inventory_unchanged": true,
+  "configuration_not_reinstalled": true,
+  "existing_service_containers_reused": true,
+  "database_setup_and_mailpit_lifecycle_preserved": true,
+  "database_and_publication_fingerprints_match": true,
+  "installed_command_check_passed": true,
+  "isolated_restore_from_new_backup_passed": true,
+  "oom_killer_disabling_allowed": false,
+  "migrations_run": false,
+  "images_pulled_or_built": false,
+  "host_packages_changed": false,
+  "host_rebooted": false,
+  "automatic_startup_configured": false,
+  "recurring_backups_configured": false,
+  "public_deployment": false,
+  "new_layout_backup_nas_export": "Not yet confirmed"
+}

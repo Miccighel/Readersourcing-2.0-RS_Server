@@ -1,6 +1,6 @@
 # Server installation layout
 
-The planned server layout separates operational software, configuration and local state. The Rails application
+The server layout separates operational software, configuration and local state. The Rails application
 remains inside its verified container image; the host does not need a writable checkout of its source repository.
 
 | Location | Purpose |
@@ -19,6 +19,44 @@ Database and publication data remain in their existing Docker named volumes. The
 Docker, not moved into these directories. The encrypted NAS backup remains separate from the operational state.
 The internal Compose project identity is retained to preserve the existing volume and network identities; it is
 not the name of the installation directory or a change to the application's public identity.
+
+## Operational commands
+
+Installation completed on Homer on October 16, 2026. Run these commands on that host, not on the workstation
+which carries the SSH tunnel:
+
+```console
+sudo sh /opt/readersourcing/rs-server/rs-server check
+sudo sh /opt/readersourcing/rs-server/rs-server start
+sudo sh /opt/readersourcing/rs-server/rs-server restart
+sudo sh /opt/readersourcing/rs-server/rs-server restore-rehearsal --confirm-isolated-restore
+```
+
+`check` verifies configuration, the recorded container inventory and readiness without starting or stopping services.
+`start` resumes existing containers in dependency order when needed. `restart` restarts only the application and its
+access proxy. The completed setup container remains stopped. None of these operations creates service containers,
+runs migrations, pulls or builds images, changes host packages, reboots Homer or enables automatic startup.
+
+`restore-rehearsal` uses the recorded migration backup in a new isolated project with separate volumes and no
+published ports. It never restores over the active deployment. Recovery services are stopped after the checks;
+their protected diagnostics and volumes remain available for inspection. This operation is manual and explicit,
+not a recurring backup or an export to the NAS.
+
+Use these installed commands for the current deployment. Do not use `bin/private_trial start`, earlier candidate
+wrappers or the snapshot commands under `/srv/readersourcing/private-trial`: their retained configuration and
+container inventories describe earlier installations. Do not rerun the migration or its completion over the
+installed directories. Old inputs and backups remain retained; their removal requires a separate review.
+
+The [completion record](deployment-layout-completion-2026-10-16.json) reports that the frozen inventory and
+configuration were preserved, data fingerprints matched, and the installed command check and isolated restoration
+from the new backup passed. It records the operator's aggregate report, not access to protected diagnostics.
+
+The [browser checks of October 16](browser-regression-2026-10-16.json) cover login, publication listing and search,
+opening the prepared PDF in Firefox without reloading, and following its rating reference. The synthetic reader
+had already rated that publication, so the server showed the existing rating notice; no new rating was submitted.
+The integrated browser received a PDF document but displayed a blank viewer. Two older synthetic publication rows
+also had empty titles. These observations remain separate from the successful Firefox check and have not been
+diagnosed or corrected by this collation of operational records.
 
 ## Preparation
 
@@ -59,14 +97,14 @@ must refer to the retained old configuration, without automatically restoring a 
 The existing installation under `/srv/readersourcing/private-trial` and its protected original inputs are retained
 until activation and operational checks have passed and their removal has been reviewed separately.
 
-The proposed command is `/opt/readersourcing/rs-server/rs-server`, with `check`, `start`, `restart` and explicitly
+The installed command is `/opt/readersourcing/rs-server/rs-server`, with `check`, `start`, `restart` and explicitly
 confirmed `restore-rehearsal` operations.
 Its implementation reuses the existing startup and restart functions with the new configuration and state paths;
 it does not require the old generated configuration to operate. Local tests cover the new configuration files and
 stopped replacement inventory, service ordering, and closing access after a failed check. The completed setup
 container is retained only for historical inventory checks. The recovery adapter reuses the tested isolated restore
 flow with the new definition, backup and protected state paths. Local tests check the archive format, isolation,
-runtime metadata and failure handling; host execution of the new recovery entry point remains part of activation.
+runtime metadata and failure handling. Host execution of the new recovery entry point passed during completion.
 
 The activation implementation stages configuration before maintenance and takes a fresh protected backup while
 access and the application are stopped. It creates the three selected replacements without starting them, then
@@ -149,5 +187,5 @@ reboot the host, publish an image or expose the application publicly.
 The standalone deployment suite passed on October 16 with 133 tests and 1,261 assertions. It covers both the
 original recovery procedure and the new layout adapter, archive validation, stopped replacement checks and failure
 handling, the guarded resume and completion checkpoints and the validator's default OOM comparison. The fourteen
-read only diagnostic tests also passed. These local results do not assert that installation, completion or recovery
-rehearsal has succeeded on Homer.
+read only diagnostic tests also passed. These local results are separate from the operator's successful installation,
+completion and recovery report linked above. They do not establish public deployment approval.

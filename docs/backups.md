@@ -4,6 +4,10 @@ RS_Server persists two resources: the PostgreSQL database and the private public
 
 ## Creating a backup
 
+The generic Compose commands in this section do not operate the installed private candidate on Homer. For that
+deployment, use the [installed operational commands](deployment_layout.md#operational-commands) and the recorded
+migration backup described below. Do not run an older trial wrapper or the generic restore over its active volumes.
+
 Keep the database and application containers running, but prevent users from writing data for the duration of the backup. Put the reverse proxy in maintenance mode, wait for active requests to finish, then choose a directory outside the repository and run:
 
 ```console
@@ -78,3 +82,39 @@ encrypted copy unusable. The NAS copy does not provide immutable storage or esta
 retention policy; configure these separately before relying on it for a public service. A full application restore
 from the NAS copy has not been rehearsed. The separate restore of the source backup and the encrypted copy checks
 are described in [the candidate validation](release-2.0.4.md#encrypted-nas-copy).
+
+## Installed layout backup
+
+The completed layout migration retained a separate protected backup under `/var/opt/readersourcing/rs-server/backups`.
+It includes the database, publications, original and new configuration, runtime file metadata, data fingerprints and
+a snapshot of the former temporary Mailpit inbox. The installed `restore-rehearsal` operation restored its database
+and publications in an isolated project and checked the application without replacing the source deployment.
+The [completion record](deployment-layout-completion-2026-10-16.json) reports that these checks passed.
+
+This backup records the migration maintenance period. Exporting it later does not capture subsequent registrations,
+ratings, publications or configuration changes. The October 15 encrypted NAS copy predates this layout backup and
+remains retained separately.
+
+`deploy/private/deployment_backup_export.sh` and `deployment_backup_export.py` provide a manual encrypted export of
+the recorded layout backup. A host specific wrapper fixes the project, exact image and revision, installed state
+directory, NAS mount and destination user. The validator checks the complete marker, exact checksum file set and
+payloads, recorded backup pointer and identities, and the successful isolated recovery report and fingerprints.
+It prints no configuration, dump or diagnostic contents. The export uses the deployment lock but does not stop,
+start or replace any service and does not create a new live backup.
+
+Run the verified wrapper with Bash and `--confirm-encrypted-copy` from an interactive terminal on Homer. Enter the
+encryption passphrase only in that terminal and keep it separately in the password manager. GnuPG decrypts the
+archive locally for an independent checksum comparison before transfer. Only encrypted bytes are copied to a fresh
+NAS directory; the ciphertext checksum is checked again there. Earlier NAS copies and the original backup are not
+overwritten. The temporary plaintext archive is removed on success or failure. An interrupted export may retain
+an incomplete encrypted destination for inspection; it is not reported as a verified backup.
+
+Preparation and local tests are not evidence that this new NAS export has run. Until the operator returns a successful
+aggregate export report, the layout backup has no recorded independent host copy. Decryption and ciphertext checks
+are not a full application restore from the NAS copy. No backup schedule or automatic retention is configured.
+
+The October 16 export validation passed sixteen synthetic tests covering backup identity and integrity, matching
+recovery evidence, passphrase verification failures, incomplete transfers and temporary plaintext cleanup. Encryption
+and NFS are simulated in the orchestration tests; actual decryption and NAS verification belong to the operator's
+interactive execution. Together with the existing diagnostics, thirty Python tests passed. The unchanged standalone
+deployment suite also passed with 133 tests and 1,261 assertions.

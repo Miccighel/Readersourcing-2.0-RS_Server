@@ -5,6 +5,8 @@ container release. Docker Hub, the normal Compose configuration, and `bin/privat
 The dedicated private trial runs the verified 2.0.4 candidate with the PDF navigation correction. Its activation
 preserved the existing data and configuration. The three initial functional regression cases passed; subsequent
 navigation checks passed in the integrated browser and were confirmed manually in Firefox as described below.
+The subsequent installation under neutral server paths completed on October 16; current commands and the latest
+browser observations are recorded in the [server installation layout](deployment_layout.md#operational-commands).
 
 ## Scope
 
@@ -140,8 +142,9 @@ This verifies the trial service startup, not a reboot of Homer, a new browser re
 Automatic startup and recurring backups remain unconfigured.
 
 The [server installation layout](deployment_layout.md) defines neutral software, configuration and state paths.
-Its preparation validates a proposed configuration without migrating the running services. Activation remains a
-separate operation; the existing installation and its original inputs are retained for rollback.
+Its preparation validates a proposed configuration without migrating the running services. The separate activation
+and guarded completion have now passed, including the installed command check and an isolated restore from the
+migration backup. The previous installation and its original inputs remain retained for recovery preparation.
 
 The [stable private operations procedure](stable_private_operations.md) prepares a protected installation outside the
 temporary operations directories, with verified configuration and backup copies. Existing bind mount paths are

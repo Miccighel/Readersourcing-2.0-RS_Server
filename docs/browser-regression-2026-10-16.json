@@ -1,0 +1,20 @@
+{
+  "status": "targeted_browser_checks_completed",
+  "checked_on": "2026-10-16",
+  "deployment": "Private Homer application through loopback SSH forwarding",
+  "data": "Existing synthetic reader and publication fixture",
+  "login_in_isolated_firefox_profile": "passed",
+  "publication_list": "passed",
+  "publication_search_in_integrated_browser": "passed",
+  "firefox_annotated_pdf_first_click_without_reload": "passed",
+  "annotated_pdf_pages": 8,
+  "last_page_qr_and_rating_link_visible": true,
+  "rating_reference": "Recognized; existing rating notice displayed for the synthetic reader",
+  "ratings_submitted_or_modified": false,
+  "source_or_deployment_changed_by_browser_checks": false,
+  "observations": {
+    "integrated_browser_pdf_viewer": "Blank document although the response is application/pdf and the downloaded PDF opens in Firefox",
+    "older_synthetic_publications": "Two rows have empty titles; cause not established by these browser checks"
+  },
+  "scope": "Targeted browser regression, not complete compatibility coverage or public deployment approval"
+}

@@ -108,6 +108,13 @@ This stops only the identified trial project. Its database, publication volumes,
 available for inspection and recovery. It does not prune images, caches, or volumes, and it does not remove resources
 belonging to other projects. Permanent removal requires checking the exact project resources and a separate decision.
 
+## Installed candidate
+
+The current private deployment on Homer uses the [installed operational commands](deployment_layout.md#operational-commands)
+under `/opt/readersourcing/rs-server`, with active configuration under `/etc/opt/readersourcing/rs-server` and state
+under `/var/opt/readersourcing/rs-server`. The procedures below describe the earlier candidate stages. Their generated
+wrappers and original trial start command must not be used to operate the installed deployment.
+
 ## Candidate restarts
 
 An updated trial retains its generated configuration and a separate verified image override. The original

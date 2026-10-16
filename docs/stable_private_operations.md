@@ -1,5 +1,10 @@
 # Stable private operations
 
+This page describes the October 15 snapshot installation. The subsequent migration to the
+[server installation layout](deployment_layout.md#operational-commands) completed on October 16. Its installed
+commands replace the snapshot commands below for the active deployment. Keep the old installation as retained
+recovery material, not as a second way to start the application.
+
 The private trial can retain its verified containers while its operational tools and installation time configuration
 copies are installed under `/srv/readersourcing/private-trial`. This is a private operational installation, not a
 public deployment, host upgrade, or automatic startup service. Installation requires interactive root permission.
