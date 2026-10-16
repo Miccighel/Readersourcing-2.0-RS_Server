@@ -117,6 +117,31 @@ class PublicationDownloadsControllerTest < ActionDispatch::IntegrationTest
 		assert_select "a#open-list-btn[data-turbolinks=false]", count: 1
 	end
 
+	test "the publication list identifies missing titles without changing publication metadata" do
+		authenticate_as(@user)
+		[nil, "", "   "].each do |title|
+			@publication.update_columns(title: title)
+			assert_no_changes -> { @publication.reload.attributes } do
+				get publications_list_path, headers: {"REMOTE_ADDR" => "127.0.0.1"}
+			end
+
+			assert_response :success
+			assert_select "#publications-table tbody tr td:first-child", text: "Title not available", count: 1
+			assert_select "a#open-list-btn[href=?]", publication_open_path(@publication), count: 1
+		end
+	end
+
+	test "the publication list preserves and escapes an existing title" do
+		authenticate_as(@user)
+		@publication.update_columns(title: "<script>not a title</script>")
+		get publications_list_path, headers: {"REMOTE_ADDR" => "127.0.0.1"}
+
+		assert_response :success
+		assert_select "#publications-table tbody tr td:first-child", text: @publication.title, count: 1
+		assert_select "#publications-table tbody script", count: 0
+		assert_select "#publications-table tbody tr td:first-child", text: "Title not available", count: 0
+	end
+
 	private
 
 	def authenticate_as(user)

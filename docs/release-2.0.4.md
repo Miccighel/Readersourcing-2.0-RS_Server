@@ -7,6 +7,8 @@ preserved the existing data and configuration. The three initial functional regr
 navigation checks passed in the integrated browser and were confirmed manually in Firefox as described below.
 The subsequent installation under neutral server paths completed on October 16; current commands and the latest
 browser observations are recorded in the [server installation layout](deployment_layout.md#operational-commands).
+The development publication list also labels missing titles without modifying stored metadata. This later display
+change is not in the retained image running on Homer.
 
 ## Scope
 
@@ -311,6 +313,14 @@ the successful backup restore recorded above.
 The complete local suite including the recovery helpers passed 341 tests and 2,701 assertions on October 15,
 with no failures, errors, or skipped tests. This run used Ruby 3.4.10 and a separate temporary PostgreSQL 11.22
 database; configured application autoload paths also passed. No private trial data was used for these tests.
+
+The October 16 source validation passed 428 tests and 3,572 assertions with no failures, errors or skipped tests,
+including the missing title display, retained PDF opening and selected image component probe tests. This used
+Ruby 3.4.10 and a separate temporary PostgreSQL 11.22 database reached only through its local Unix socket.
+Configured application autoload paths passed; the development mailer preview directory is outside that eager load
+check. The temporary database was stopped afterwards. The thirty Python diagnostic and export tests also passed.
+These source checks did not change the image or data on Homer and do not replace CI's PostgreSQL 17 coverage,
+a new image assessment or the university deployment requirements.
 
 Preparation does not validate public DNS, HTTPS, external SMTP, host maintenance, or production exposure.
 The private trial activation does not publish the candidate or approve production use. The Docker Hub release remains

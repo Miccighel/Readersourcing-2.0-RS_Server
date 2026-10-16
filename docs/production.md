@@ -4,6 +4,8 @@ This document complements the deployment instructions in the main README. It des
 
 A [private trial](private_trial.md) can exercise the published image through an SSH tunnel with synthetic accounts,
 captured email, and PDF uploads. Its isolated configuration does not replace the requirements for public deployment below.
+For the intended `readersourcing.org` university service, DNS, VPN or Internet access, HTTPS and SMTP decisions are
+tracked separately in the [university deployment plan](university_deployment.md). No activation is requested yet.
 
 ## Configuration
 

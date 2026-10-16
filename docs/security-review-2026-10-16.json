@@ -1,0 +1,27 @@
+{
+  "assessment_date": "2026-10-16",
+  "image_id": "sha256:e52ed41e7a62a5447923ec02f0bef0b61f285232afb58c7bdfc80020381b5ad5",
+  "previous_scan": "security-followup-2026-10-15.json",
+  "fresh_image_scan_completed": false,
+  "review_scope": "Official Debian tracker status and prerequisites for the eight previously reported HIGH advisories, together with the operator's selected component inventory from the exact image on Homer",
+  "tracker_review": [
+    {"id": "CVE-2025-69720", "source_package": "ncurses", "trixie_status": "vulnerable", "correction_listed_for_trixie": false, "affected_component": "infocmp analyze_string processing", "source": "https://security-tracker.debian.org/tracker/CVE-2025-69720"},
+    {"id": "CVE-2026-16742", "source_package": "systemd", "trixie_status": "vulnerable", "correction_listed_for_trixie": false, "affected_component": "systemd-homed with an existing locally logged in homed managed user", "source": "https://security-tracker.debian.org/tracker/CVE-2026-16742"},
+    {"id": "CVE-2026-54369", "source_package": "acl", "trixie_status": "vulnerable", "correction_listed_for_trixie": false, "affected_component": "Privileged pathname based libacl operations with attacker controlled path components", "source": "https://security-tracker.debian.org/tracker/CVE-2026-54369"},
+    {"id": "CVE-2026-76642", "source_package": "util-linux", "trixie_status": "vulnerable", "correction_listed_for_trixie": false, "affected_component": "Privileged mount post hooks after a failed external mount helper", "source": "https://security-tracker.debian.org/tracker/CVE-2026-76642"},
+    {"id": "CVE-2026-78408", "source_package": "util-linux", "trixie_status": "vulnerable", "correction_listed_for_trixie": false, "affected_component": "Privileged nsenter --join-cgroup and inherited descriptor", "source": "https://security-tracker.debian.org/tracker/CVE-2026-78408"},
+    {"id": "CVE-2026-78409", "source_package": "util-linux", "trixie_status": "vulnerable", "correction_listed_for_trixie": false, "affected_component": "Authorized X-mount.subdir entry and detached tree path on Linux 6.15 or later", "source": "https://security-tracker.debian.org/tracker/CVE-2026-78409"},
+    {"id": "CVE-2026-78410", "source_package": "util-linux", "trixie_status": "vulnerable", "correction_listed_for_trixie": false, "affected_component": "Privileged restricted bind mount with an attacker controlled source or ancestor", "source": "https://security-tracker.debian.org/tracker/CVE-2026-78410"},
+    {"id": "CVE-2026-9538", "source_package": "perl", "trixie_status": "vulnerable", "correction_listed_for_trixie": false, "affected_component": "Perl Archive::Tar reading untrusted archive size headers", "source": "https://security-tracker.debian.org/tracker/CVE-2026-9538"}
+  ],
+  "component_probe_on_exact_image": "Completed; image-components-2026-10-16.json",
+  "complete_reachability_assessment": false,
+  "findings_remain_open": true,
+  "severity_downgrades_or_exclusions": false,
+  "runtime_restrictions_are_package_corrections": false,
+  "vpn_access_is_security_approval": false,
+  "host_packages_changed": false,
+  "host_rebooted": false,
+  "active_services_changed": false,
+  "deployment_approved": false
+}

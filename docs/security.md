@@ -4,6 +4,47 @@ This record complements application dependency audits. It distinguishes the prev
 image, and the replacement images. Scanner findings describe affected packages present in an image; they do
 not, by themselves, establish whether an application request can reach the affected code.
 
+## Review of October 16, 2026
+
+The eight previously reported HIGH advisories were checked against the official Debian tracker. Trixie remains
+listed as vulnerable for each one, with no corrected version listed for that release. The
+[review record](security-review-2026-10-16.json) retains their references and prerequisites. This is a review of the
+existing findings, not a fresh image scan; the latest completed scan remains the October 15 assessment below.
+
+The affected components differ from the source package labels reported by a scanner:
+
+| Advisory | Component or prerequisite to check |
+| --- | --- |
+| CVE-2025-69720 | `infocmp` processing, not every ncurses library call |
+| CVE-2026-16742 | `systemd-homed` and a locally authenticated user it manages |
+| CVE-2026-54369 | Privileged pathname based ACL operations on attacker controlled paths |
+| CVE-2026-76642 | Privileged mount hooks following a failed external helper |
+| CVE-2026-78408 | Privileged `nsenter --join-cgroup` and descriptor inheritance |
+| CVE-2026-78409 | An authorized `X-mount.subdir` entry and Linux 6.15 or later |
+| CVE-2026-78410 | A privileged restricted bind mount with a replaceable source path |
+| CVE-2026-9538 | Perl `Archive::Tar` processing a crafted archive |
+
+`deploy/private/image_component_probe.rb` inventories selected package versions and known locations for these
+components without executing them. Its host wrapper pins the current image and runs an unprivileged disposable
+container with no network, a read only root, dropped capabilities and no application or backup volumes. It does not
+start Rails, inspect private environment values or run exploits. The operator completed this probe on Homer with
+effective UID 1000. Its [aggregate record](image-components-2026-10-16.json) retains the selected inventory.
+Its three standalone tests passed with twenty assertions, covering selected inventory fields, component detection,
+permission bits and rejection of malformed package records without displaying file contents or unrelated packages.
+Absence at its checked locations is not a complete reachability proof, and library presence does not demonstrate
+that an application request reaches a vulnerable function. The existing runtime restrictions reduce particular
+attack paths but are not package corrections. No finding is excluded, downgraded or marked fixed by this review.
+
+The probe found `infocmp`, `mount`, `nsenter` and `libacl`; `mount` has a setuid or setgid bit at the checked locations.
+It did not find `systemd-homed`, `systemd-homework` or the Perl `Archive::Tar` module at the known locations tested.
+This narrows the evidence for the relevant prerequisites without proving that components cannot exist elsewhere
+or that every library call is unreachable. The application's recorded unprivileged user, dropped capabilities,
+read only root and no new privileges policy remain relevant restrictions, not a substitute for corrected packages.
+
+The university VPN limits network reachability but does not replace application authentication, HTTPS, upload
+validation or review of the remaining findings. Domain, proxy and SMTP preparation is recorded in the
+[university deployment plan](university_deployment.md). It does not authorize network or host changes.
+
 ## Follow up of October 15, 2026
 
 The official Debian tracker entries were checked again for the eight high advisories recorded in the candidate.

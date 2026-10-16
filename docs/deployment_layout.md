@@ -56,9 +56,17 @@ on the same date. The earlier NAS copy remains retained. No new live backup or r
 The [browser checks of October 16](browser-regression-2026-10-16.json) cover login, publication listing and search,
 opening the prepared PDF in Firefox without reloading, and following its rating reference. The synthetic reader
 had already rated that publication, so the server showed the existing rating notice; no new rating was submitted.
-The integrated browser received a PDF document but displayed a blank viewer. Two older synthetic publication rows
-also had empty titles. These observations remain separate from the successful Firefox check and have not been
-diagnosed or corrected by this collation of operational records.
+The integrated browser received a PDF document but displayed a blank viewer. A subsequent check confirmed an empty
+PDF document body without an embedded viewer. The PDF itself opens in Firefox; this does not establish a server
+generation failure or complete compatibility with other viewers. No PDF generation or response security policy
+was changed to accommodate that browser.
+
+Two older synthetic publication rows also had empty titles. The publication model permits missing metadata and the
+list originally rendered such titles as an empty cell. The development source now displays `Title not available`
+for a missing, empty or whitespace only title, without writing a replacement to the database, changing API metadata
+or preparing the PDF again. Tests check preservation of metadata, retained opening links and HTML escaping. This
+display correction has not been installed on Homer; it does not repair or establish the original cause of historical
+missing metadata.
 
 ## Preparation
 

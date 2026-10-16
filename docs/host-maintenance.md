@@ -36,9 +36,10 @@ Perform only the agreed package transaction in the agreed window. Resolve packag
 rebooting. Do not reset firewall, GPU, container, or SSH settings merely to make an application check pass.
 If the host does not return, use the agreed recovery access rather than weakening authentication.
 
-After boot, check the new kernel, failed services, Docker, NVIDIA workloads, storage mounts, and remote access.
-Do not automatically start or modify another project's containers. For the RS_Server candidate, use its verified
-manual `startup_candidate.sh check` and `startup_candidate.sh start`, not the original published trial command.
+After an explicitly authorized boot, check the new kernel, failed services, Docker, NVIDIA workloads, storage mounts,
+and remote access. Do not automatically start or modify another project's containers. For the installed RS_Server
+candidate, use `/opt/readersourcing/rs-server/rs-server check` and its `start` operation as described in the
+[installation layout](deployment_layout.md#operational-commands), not earlier trial or candidate wrappers.
 Verify the login page, a prepared PDF, and authenticated local SMTP capture afterwards. Record failures separately
 from a successful container health check. Mailpit messages are temporary and are not retained through a reboot.
 

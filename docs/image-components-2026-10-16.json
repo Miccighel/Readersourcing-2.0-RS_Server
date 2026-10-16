@@ -1,0 +1,42 @@
+{
+  "status": "image_component_probe_completed",
+  "reported_on": "2026-10-16",
+  "image_id": "sha256:e52ed41e7a62a5447923ec02f0bef0b61f285232afb58c7bdfc80020381b5ad5",
+  "source_revision": "d3f37eabfd0ddcb55ccd049af55be80eda8c5a8b",
+  "evidence": "Operator supplied aggregate output from the checksum verified wrapper, which pins the local image ID and revision; no private configuration or application volumes were accessed",
+  "packages": {
+    "bsdutils": "1:2.41.5-0+deb13u1",
+    "libacl1": "2.3.2-2+b1",
+    "libblkid1": "2.41.5-0+deb13u1",
+    "liblastlog2-2": "2.41.5-0+deb13u1",
+    "libmount1": "2.41.5-0+deb13u1",
+    "libsmartcols1": "2.41.5-0+deb13u1",
+    "libsystemd0": "257.13-1~deb13u1",
+    "libtinfo6": "6.5+20250216-2",
+    "libudev1": "257.13-1~deb13u1",
+    "libuuid1": "2.41.5-0+deb13u1",
+    "login": "1:4.16.0-2+really2.41.5-0+deb13u1",
+    "mount": "2.41.5-0+deb13u1",
+    "ncurses-base": "6.5+20250216-2",
+    "ncurses-bin": "6.5+20250216-2",
+    "perl-base": "5.40.1-6+deb13u1",
+    "util-linux": "2.41.5-0+deb13u1"
+  },
+  "components": {
+    "infocmp": {"present_at_checked_locations": true, "setuid_or_setgid_at_checked_locations": false},
+    "systemd_homed": {"present_at_checked_locations": false, "setuid_or_setgid_at_checked_locations": false},
+    "systemd_homework": {"present_at_checked_locations": false, "setuid_or_setgid_at_checked_locations": false},
+    "mount": {"present_at_checked_locations": true, "setuid_or_setgid_at_checked_locations": true},
+    "nsenter": {"present_at_checked_locations": true, "setuid_or_setgid_at_checked_locations": false},
+    "libacl": {"present_at_checked_locations": true, "setuid_or_setgid_at_checked_locations": false},
+    "perl_archive_tar": {"present_at_checked_locations": false, "setuid_or_setgid_at_checked_locations": false}
+  },
+  "effective_uid": 1000,
+  "scope": "Selected package versions and known component locations in the exact image; no component execution or exploit",
+  "fresh_vulnerability_scan": false,
+  "complete_reachability_assessment": false,
+  "advisories_excluded": false,
+  "security_approval": false,
+  "application_or_backup_volumes_mounted": false,
+  "network_enabled": false
+}

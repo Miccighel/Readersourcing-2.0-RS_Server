@@ -16,5 +16,23 @@
     "integrated_browser_pdf_viewer": "Blank document although the response is application/pdf and the downloaded PDF opens in Firefox",
     "older_synthetic_publications": "Two rows have empty titles; cause not established by these browser checks"
   },
-  "scope": "Targeted browser regression, not complete compatibility coverage or public deployment approval"
+  "scope": "Targeted browser regression, not complete compatibility coverage or public deployment approval",
+  "subsequent_source_review": {
+    "missing_title_display": "Development view shows Title not available for absent or blank metadata; no database or API replacement",
+    "integrated_pdf_document": "application/pdf with zero body children and no embed, object or iframe viewer",
+    "pdf_generation_changed": false,
+    "historical_metadata_repaired": false,
+    "display_change_deployed_on_homer": false,
+    "local_source_validation": {
+      "ruby": "3.4.10",
+      "postgresql": "11.22",
+      "database": "Separate temporary local database with Unix socket only; stopped after checks",
+      "tests": 428,
+      "assertions": 3572,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "configured_application_autoload_paths_passed": true
+    }
+  }
 }
