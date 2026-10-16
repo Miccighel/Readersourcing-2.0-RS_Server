@@ -109,9 +109,13 @@ NAS directory; the ciphertext checksum is checked again there. Earlier NAS copie
 overwritten. The temporary plaintext archive is removed on success or failure. An interrupted export may retain
 an incomplete encrypted destination for inspection; it is not reported as a verified backup.
 
-Preparation and local tests are not evidence that this new NAS export has run. Until the operator returns a successful
-aggregate export report, the layout backup has no recorded independent host copy. Decryption and ciphertext checks
-are not a full application restore from the NAS copy. No backup schedule or automatic retention is configured.
+The operator completed this export on October 16 at 14:58:19 UTC. The
+[aggregate record](backup-layout-nas-2026-10-16.json) confirms local decryption verification, a matching ciphertext
+checksum on the separate NAS and retention of the original backups. The encrypted file contains 3,072,083 bytes;
+an independent read only check confirmed its checksum, size, file mode 0600 and directory mode 0700 without
+downloading or decrypting it. This is an independent host copy of the migration backup, not a new live backup.
+Decryption and ciphertext checks are not a full application restore from the NAS copy. No backup schedule or
+automatic retention is configured.
 
 The October 16 export validation passed sixteen synthetic tests covering backup identity and integrity, matching
 recovery evidence, passphrase verification failures, incomplete transfers and temporary plaintext cleanup. Encryption

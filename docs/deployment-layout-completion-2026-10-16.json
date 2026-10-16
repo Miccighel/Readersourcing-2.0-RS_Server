@@ -18,5 +18,5 @@
   "automatic_startup_configured": false,
   "recurring_backups_configured": false,
   "public_deployment": false,
-  "new_layout_backup_nas_export": "Not yet confirmed"
+  "new_layout_backup_nas_export": "Confirmed separately in backup-layout-nas-2026-10-16.json"
 }

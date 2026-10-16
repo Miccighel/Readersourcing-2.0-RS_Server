@@ -287,6 +287,13 @@ must remain available separately from the NAS. This confirms an encrypted copy o
 full application restore from that copy, immutable storage, or a guarantee of NAS availability. Future backup
 frequency and retention still require configuration.
 
+The later backup of the completed server layout was exported separately on October 16 at 14:58:19 UTC. Its
+[aggregate record](backup-layout-nas-2026-10-16.json) confirms decryption verification before transfer and a matching
+NAS ciphertext checksum. An independent check confirmed its 3,072,083 bytes, checksum and restricted permissions
+without downloading or decrypting the file. Both earlier NAS and local backups remain retained. This export records
+the migration backup, not subsequent live data; a complete application restore from the NAS copy has not been
+rehearsed. No service was stopped or replaced and no recurring backup was configured.
+
 ## Source validation
 
 The complete local suite of October 14, including the shared configuration, publication fingerprint, and restart

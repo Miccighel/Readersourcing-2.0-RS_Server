@@ -50,6 +50,8 @@ installed directories. Old inputs and backups remain retained; their removal req
 The [completion record](deployment-layout-completion-2026-10-16.json) reports that the frozen inventory and
 configuration were preserved, data fingerprints matched, and the installed command check and isolated restoration
 from the new backup passed. It records the operator's aggregate report, not access to protected diagnostics.
+The [encrypted export of that backup](backup-layout-nas-2026-10-16.json) was verified on the separate university NAS
+on the same date. The earlier NAS copy remains retained. No new live backup or recurring schedule was created.
 
 The [browser checks of October 16](browser-regression-2026-10-16.json) cover login, publication listing and search,
 opening the prepared PDF in Firefox without reloading, and following its rating reference. The synthetic reader

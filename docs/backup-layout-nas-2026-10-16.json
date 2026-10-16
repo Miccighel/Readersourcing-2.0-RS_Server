@@ -1,0 +1,29 @@
+{
+  "status": "encrypted_layout_nas_copy_verified",
+  "recorded_at": "2026-10-16T14:58:19Z",
+  "evidence": "Operator supplied aggregate export report; private backup and diagnostic contents were not read or downloaded",
+  "cipher": "OpenPGP AES256 symmetric encryption with GnuPG",
+  "ciphertext_sha256": "073b5b381289965afa1f8f4328b350324ffa65b7fb96986c369b326d259af256",
+  "ciphertext_bytes": 3072083,
+  "recorded_isolated_restore_matches_backup": true,
+  "decryption_round_trip_verified_before_transfer": true,
+  "nas_ciphertext_checksum_verified_after_transfer": true,
+  "separate_nfs_server_verified": true,
+  "off_host_copy": true,
+  "plaintext_or_passphrase_written_to_nas": false,
+  "passphrase_saved_by_script": false,
+  "temporary_plaintext_archive_removed": true,
+  "original_backups_retained": true,
+  "application_services_stopped_or_replaced_by_export": false,
+  "new_live_backup_created": false,
+  "recurring_backups_configured": false,
+  "full_application_restore_from_nas_copy_rehearsed": false,
+  "independent_ciphertext_check": {
+    "checked_on": "2026-10-16",
+    "checksum_and_size_match_report": true,
+    "file_mode": "0600",
+    "directory_mode": "0700",
+    "separate_nfs_mount_confirmed": true,
+    "ciphertext_downloaded_or_decrypted": false
+  }
+}
