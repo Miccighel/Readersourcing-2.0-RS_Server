@@ -3,6 +3,7 @@ require "tmpdir"
 require "fileutils"
 require_relative "../../deploy/private/deployment_layout_files"
 require_relative "../../deploy/private/deployment_layout_resume"
+require_relative "../../deploy/private/deployment_layout_completion"
 require_relative "../support/deployment_layout_fixtures"
 
 class DeploymentLayoutFilesTest < Minitest::Test
@@ -181,6 +182,64 @@ class DeploymentLayoutFilesTest < Minitest::Test
       database["State"]["StartedAt"] = "2026-10-15T16:00:00Z"
       write_json(paths[:checks], "replacement-containers.json", current)
       assert_raises(DeploymentLayoutFiles::Error) { resume.validate! }
+    end
+  end
+
+  def with_completion
+    with_resume do |_resume, paths, current, checkpoint|
+      DeploymentLayoutFiles.new(**paths).perform("freeze")
+      current.each do |entry|
+        service = entry["Config"]["Labels"]["com.docker.compose.service"]
+        next unless DeploymentLayoutInventory::REPLACED.include?(service)
+        entry["HostConfig"]["OomKillDisable"] = nil
+        entry["State"]["Running"] = service == "mailpit"
+        entry["State"]["Status"] = service == "mailpit" ? "running" : "exited"
+        entry["State"]["StartedAt"] = "2026-10-15T16:00:00Z"
+      end
+      write_json(paths[:checks], "replacement-containers.json", current)
+      yield DeploymentLayoutCompletion.new(checkpoint: checkpoint, **paths), paths, current, checkpoint
+    end
+  end
+
+  def test_completion_accepts_only_the_preserved_frozen_checkpoint_without_rewriting_it
+    with_completion do |completion, paths, _current, _checkpoint|
+      inventory = File.join(paths[:state], "startup-inventory.json")
+      before = File.binread(inventory)
+      assert_equal "layout_completion_checkpoint_verified", completion.validate!["status"]
+      assert_equal before, File.binread(inventory)
+    end
+  end
+
+  def test_completion_rejects_unsafe_drift_started_writers_and_retained_lifecycle_changes
+    [
+      ->(entries) { entries.first["HostConfig"]["OomKillDisable"] = true },
+      ->(entries) { entries.first["HostConfig"]["Memory"] *= 2 },
+      ->(entries) { entries.first["State"]["Running"] = true },
+      ->(entries) { entries.first["State"]["OOMKilled"] = true },
+      ->(entries) { entries.first["RestartCount"] += 1 },
+      ->(entries) { entries.find { |entry| entry["Config"]["Labels"]["com.docker.compose.service"] == "database" }["State"]["StartedAt"] = "changed" },
+      ->(entries) { entries.find { |entry| entry["Config"]["Labels"]["com.docker.compose.service"] == "mailpit" }["State"]["Running"] = false }
+    ].each do |change|
+      with_completion do |completion, paths, current, _checkpoint|
+        change.call(current)
+        write_json(paths[:checks], "replacement-containers.json", current)
+        assert_raises(DeploymentLayoutFiles::Error, PrivateTrialStartupInventory::Error) { completion.validate! }
+      end
+    end
+  end
+
+  def test_completion_cannot_refresh_a_modified_frozen_inventory_or_recorded_replacement
+    with_completion do |completion, paths, _current, checkpoint|
+      value = JSON.parse(File.read(File.join(checkpoint, "replacement-containers.json")))
+      value.first["Id"] = "changed"
+      write_json(checkpoint, "replacement-containers.json", value)
+      assert_raises(PrivateTrialStartupInventory::Error) { completion.validate! }
+    end
+    with_completion do |completion, paths, _current, _checkpoint|
+      value = JSON.parse(File.read(File.join(paths[:state], "startup-inventory.json")))
+      value["access"]["host"]["OomKillDisable"] = nil
+      write_json(paths[:state], "startup-inventory.json", value)
+      assert_raises(PrivateTrialStartupInventory::Error) { completion.validate! }
     end
   end
 end

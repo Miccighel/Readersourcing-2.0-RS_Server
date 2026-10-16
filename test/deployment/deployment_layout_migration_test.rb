@@ -5,10 +5,11 @@ require "open3"
 class DeploymentLayoutMigrationTest < Minitest::Test
   SCRIPT = File.expand_path("../../deploy/private/deployment_layout_migration.sh", __dir__)
 
-  def run_migration(mode, resume: false)
+  def run_migration(mode, resume: false, completion: false)
     Dir.mktmpdir("rs-layout-migration-test.") do |directory|
       File.write(File.join(directory, "candidate.json"), "synthetic")
       File.write(File.join(directory, "source-candidate.json"), "synthetic")
+      File.write(File.join(directory, "startup-inventory.json"), "synthetic frozen inventory")
       File.write(File.join(directory, "rs-server"), <<~SH)
         set -e
         printf 'installed-command %s\\n' "$*" >> '#{directory}/events'
@@ -18,11 +19,13 @@ class DeploymentLayoutMigrationTest < Minitest::Test
       script = <<~SH
         set -eu
         . '#{SCRIPT}'
-        #{resume ? ". '#{File.expand_path('../../deploy/private/deployment_layout_resume.sh', __dir__)}'" : ""}
+        #{resume || completion ? ". '#{File.expand_path('../../deploy/private/deployment_layout_resume.sh', __dir__)}'" : ""}
+        #{completion ? ". '#{File.expand_path('../../deploy/private/deployment_layout_completion.sh', __dir__)}'" : ""}
         rs_work_directory='#{directory}'
         rs_source_activation='#{directory}'
         rs_prepared_plan='#{directory}'
         rs_installation_directory='#{directory}'
+        rs_active_directory='#{directory}'
         rs_stage=preflight
         rs_completed=no
         rs_maintenance_started=no
@@ -36,6 +39,14 @@ class DeploymentLayoutMigrationTest < Minitest::Test
           test "$mode" != checkpoint_data_change
         }
         layout_resume_patch_validator() { event patch-validator; test "$mode" != patch_failure; }
+        layout_completion_preflight() {
+          event completion-preflight
+          test "$mode" != checkpoint_failure
+          test "$mode" != checkpoint_data_change
+          printf 'retained\\n' > "$rs_work_directory/kept-before.txt"
+          cp "$rs_active_directory/startup-inventory.json" "$rs_work_directory/retained-inventory.json"
+        }
+        layout_completion_patch() { event patch-operations; test "$mode" != patch_failure; }
         layout_backup() {
           event backup
           test "$mode" != backup_failure
@@ -46,7 +57,12 @@ class DeploymentLayoutMigrationTest < Minitest::Test
         layout_inspect() { event inspect "$1"; }
         layout_helper() { event helper "$1"; test "$mode:$1" != inventory_failure:replacement; }
         layout_resolve() { rs_access_container=access; rs_web_container=web; rs_mailpit_container=mailpit; rs_database_container=database; rs_setup_container=setup; }
-        docker() { event docker "$@"; case "$1" in inspect) printf 'retained\\n' ;; esac; }
+        docker() {
+          event docker "$@"
+          if [ "$1" = inspect ]; then
+            case "$3" in '{{.State.Running}}') printf 'true\\n' ;; *) printf 'retained\\n' ;; esac
+          fi
+        }
         candidate_wait_for_health() { event health "$1"; test "$mode:$1" != health_failure:web; }
         startup_database_fingerprint() { event database-fingerprint; test "$mode" != data_change && printf database > "$1" || printf changed > "$1"; }
         startup_publication_fingerprint() { event publication-fingerprint; printf publications > "$1"; }
@@ -54,8 +70,8 @@ class DeploymentLayoutMigrationTest < Minitest::Test
         layout_resolve
         printf 'retained\\n' > "$rs_work_directory/retained-before.txt"
         trap layout_finish EXIT
-        #{resume ? "printf database > \"$rs_work_directory/before-database.jsonl\"; printf publications > \"$rs_work_directory/before-publications.json\"" : ""}
-        #{resume ? "layout_resume_execute" : "layout_activate"} > "$rs_work_directory/output" 2> "$rs_work_directory/errors"
+        #{resume || completion ? "printf database > \"$rs_work_directory/before-database.jsonl\"; printf publications > \"$rs_work_directory/before-publications.json\"" : ""}
+        #{completion ? "layout_completion_execute" : resume ? "layout_resume_execute" : "layout_activate"} > "$rs_work_directory/output" 2> "$rs_work_directory/errors"
         rs_completed=yes
         printf 'SUCCESS\\n'
       SH
@@ -164,6 +180,40 @@ class DeploymentLayoutMigrationTest < Minitest::Test
         refute status.success?
         assert_equal "docker stop -t 30 access web", events.last
         refute events.any? { |event| event.include?("pg_restore") || event.include?("compose up") }
+      end
+    end
+  end
+
+  def test_completion_preserves_the_database_setup_mail_and_frozen_inventory
+    run_migration("success", completion: true) do |output, errors, status, events|
+      assert status.success?, errors
+      assert_equal "SUCCESS\n", output
+      assert_operator events.index("completion-preflight"), :<, events.index("patch-operations")
+      assert_operator events.index("patch-operations"), :<, events.index("docker start web")
+      assert_operator events.index("database-fingerprint"), :<, events.index("docker start access")
+      assert_includes events, "installed-command check"
+      assert_includes events, "installed-command restore-rehearsal --confirm-isolated-restore"
+      refute events.any? { |event| event.match?(/compose up|helper freeze|^install$|^backup$|docker (create|rm|volume|system)/) }
+      refute events.any? { |event| event.match?(/docker (start|stop).* (database|setup|mailpit)\z/) }
+    end
+  end
+
+  def test_completion_checkpoint_or_patch_failure_does_not_change_service_lifecycle
+    %w[checkpoint_failure checkpoint_data_change patch_failure].each do |mode|
+      run_migration(mode, completion: true) do |_output, _errors, status, events|
+        refute status.success?
+        refute events.any? { |event| event.start_with?("docker stop", "docker start", "compose up") }
+      end
+    end
+  end
+
+  def test_completion_application_data_command_or_recovery_failure_keeps_access_closed
+    %w[health_failure data_change command_failure recovery_failure].each do |mode|
+      run_migration(mode, completion: true) do |_output, _errors, status, events|
+        refute status.success?
+        assert_equal "docker stop -t 30 access web", events.last
+        refute events.any? { |event| event.match?(/docker (start|stop).* (database|setup|mailpit)\z/) }
+        refute events.any? { |event| event.include?("pg_restore") || event.include?("helper freeze") }
       end
     end
   end

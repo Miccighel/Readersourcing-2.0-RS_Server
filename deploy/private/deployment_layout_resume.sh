@@ -26,6 +26,8 @@ layout_resume_package_check() {
 }
 
 layout_resume_helper() {
+  rs_resume_checker=${1:-deployment_layout_resume.rb}
+  case "$rs_resume_checker" in deployment_layout_resume.rb|deployment_layout_completion.rb) ;; *) return 64 ;; esac
   docker run --rm --pull never --runtime runc --network none --read-only --cap-drop ALL --cap-add DAC_OVERRIDE \
     --security-opt no-new-privileges --memory 256m --cpus 0.5 --pids-limit 64 --user 0:0 --entrypoint ruby \
     --mount "type=bind,source=$rs_package,target=/definition,readonly" \
@@ -35,7 +37,7 @@ layout_resume_helper() {
     --mount "type=bind,source=$rs_checkpoint_directory,target=/checkpoint,readonly" \
     --mount "type=bind,source=$rs_configuration_directory,target=/configuration,readonly" \
     --mount "type=bind,source=$rs_active_directory,target=/state,readonly" \
-    "$rs_candidate_image" -rbundler/setup /definition/deployment_layout_resume.rb
+    "$rs_candidate_image" -rbundler/setup "/definition/$rs_resume_checker"
 }
 
 layout_resume_preflight() {

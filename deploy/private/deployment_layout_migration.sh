@@ -89,14 +89,14 @@ layout_install() {
   mkdir -m 700 "$rs_configuration_directory" "$rs_configuration_directory/runtime" "$rs_active_directory"
   for rs_name in candidate_restart.sh candidate_startup.sh startup_inventory.rb publication_fingerprint.rb database_fingerprint.sql \
     deployment_operations.sh deployment_layout_configuration.rb deployment_layout_inventory.rb deployment_layout_files.rb \
-    recovery_rehearsal.sh recovery_configuration.rb recovery_probe.rb candidate_configuration.rb deployment_recovery.sh deployment_recovery_configuration.rb OPERATIONS.md; do
+    recovery_rehearsal.sh recovery_configuration.rb recovery_probe.rb candidate_configuration.rb deployment_recovery.sh deployment_recovery_configuration.rb deployment_startup_inventory.rb OPERATIONS.md; do
     install -o root -g root -m 644 "$rs_package/$rs_name" "$rs_installation_directory/$rs_name"
   done
   install -o root -g root -m 755 "$rs_package/rs-server" "$rs_installation_directory/rs-server"
   (cd "$rs_installation_directory" && sha256sum candidate_restart.sh candidate_startup.sh startup_inventory.rb \
     publication_fingerprint.rb database_fingerprint.sql deployment_operations.sh deployment_layout_configuration.rb \
     deployment_layout_inventory.rb deployment_layout_files.rb recovery_rehearsal.sh recovery_configuration.rb recovery_probe.rb \
-    candidate_configuration.rb deployment_recovery.sh deployment_recovery_configuration.rb OPERATIONS.md rs-server > OPERATIONS-SHA256SUMS)
+    candidate_configuration.rb deployment_recovery.sh deployment_recovery_configuration.rb OPERATIONS.md rs-server deployment_startup_inventory.rb > OPERATIONS-SHA256SUMS)
   chmod 644 "$rs_installation_directory/OPERATIONS-SHA256SUMS"
   for rs_name in smtp.crt smtp.key smtp.auth ui.auth proxy.conf; do
     test -f "$rs_source_directory/runtime/$rs_name" && test ! -L "$rs_source_directory/runtime/$rs_name"
@@ -179,7 +179,11 @@ layout_activate() {
 
 layout_complete_activation() {
   rs_stage=verify_application_and_data
-  docker start "$rs_mailpit_container" > /dev/null
+  if [ "${rs_preserve_mailpit_lifecycle:-no}" = yes ]; then
+    test "$(docker inspect --format '{{.State.Running}}' "$rs_mailpit_container")" = true
+  else
+    docker start "$rs_mailpit_container" > /dev/null
+  fi
   docker start "$rs_web_container" > /dev/null
   candidate_wait_for_health "$rs_web_container"
   docker exec "$rs_web_container" ./bin/rails deployment:check

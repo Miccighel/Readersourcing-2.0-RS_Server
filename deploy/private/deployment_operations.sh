@@ -1,5 +1,18 @@
 # Loaded after the verified restart and startup functions. Configuration and locks use only the final paths.
 
+startup_inventory() {
+  test "$1" = check
+  docker inspect "$rs_access_container" "$rs_database_container" "$rs_mailpit_container" \
+    "$rs_setup_container" "$rs_web_container" > "$rs_work_directory/inspection.json"
+  docker run --rm --pull never --runtime runc --network none --read-only --cap-drop ALL \
+    --security-opt no-new-privileges --memory 256m --cpus 0.5 --pids-limit 64 --user 0:0 --entrypoint ruby \
+    --mount "type=bind,source=$rs_work_directory,target=/checks,readonly" \
+    --mount "type=bind,source=$rs_plan_directory,target=/plan,readonly" \
+    --mount "type=bind,source=$rs_operations_directory,target=/definition,readonly" \
+    "$rs_candidate_image" -rbundler/setup /definition/deployment_startup_inventory.rb /checks/inspection.json "$2" \
+    /plan/definition.json "$rs_expected_project" "$rs_candidate_image" "$rs_source_revision"
+}
+
 candidate_compose() {
   docker compose --project-name "$rs_expected_project" --project-directory "$rs_trial_directory" \
     -f "$rs_trial_directory/compose.json" "$@"

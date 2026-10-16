@@ -11,10 +11,11 @@ SPEC = importlib.util.spec_from_file_location("layout_diagnostic", Path(__file__
 LAYOUT = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(LAYOUT)
 
-PUBLIC_FILES = {"candidate_restart.sh", "candidate_startup.sh", "startup_inventory.rb", "publication_fingerprint.rb",
+ORIGINAL_PUBLIC_FILES = {"candidate_restart.sh", "candidate_startup.sh", "startup_inventory.rb", "publication_fingerprint.rb",
     "database_fingerprint.sql", "deployment_operations.sh", "deployment_layout_configuration.rb", "deployment_layout_inventory.rb",
     "deployment_layout_files.rb", "recovery_rehearsal.sh", "recovery_configuration.rb", "recovery_probe.rb",
     "candidate_configuration.rb", "deployment_recovery.sh", "deployment_recovery_configuration.rb", "OPERATIONS.md", "rs-server"}
+PUBLIC_FILES = ORIGINAL_PUBLIC_FILES | {"deployment_startup_inventory.rb"}
 PATTERNS = {"inventory_validation": r"Startup inventory check failed|Layout check failed",
     "permission_denied": r"permission denied|PermissionError", "read_only_filesystem": r"read.only file system|rootfs is marked read.only",
     "missing_shell_variable": r"parameter not set|unbound variable", "missing_file": r"No such file or directory|Errno::ENOENT",
@@ -108,7 +109,7 @@ def public_manifest_verified(directory):
         if not match or match[2] not in PUBLIC_FILES or match[2] in hashes:
             return False
         hashes[match[2]] = match[1]
-    return set(hashes) == PUBLIC_FILES and all(LAYOUT.regular(directory / name) and hashlib.sha256((directory / name).read_bytes()).hexdigest() == digest for name, digest in hashes.items())
+    return set(hashes) in (ORIGINAL_PUBLIC_FILES, PUBLIC_FILES) and all(LAYOUT.regular(directory / name) and hashlib.sha256((directory / name).read_bytes()).hexdigest() == digest for name, digest in hashes.items())
 
 
 def recorded_equal(work, first, second):

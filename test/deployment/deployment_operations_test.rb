@@ -12,7 +12,7 @@ class DeploymentOperationsTest < Minitest::Test
       if ARGV.include?("/definition/deployment_layout_files.rb")
         output = "{}"
         status = 13 if mode == "configuration_failure"
-      elsif ARGV.include?("/inventory.rb")
+      elsif ARGV.include?("/inventory.rb") || ARGV.include?("/definition/deployment_startup_inventory.rb")
     RUBY
 
   def run_operation(mode, operation)
@@ -50,6 +50,8 @@ class DeploymentOperationsTest < Minitest::Test
       assert status.success?, errors
       refute commands.any? { |args| %w[start stop].include?(args.first) }
       assert commands.any? { |args| args.include?("/definition/deployment_layout_files.rb") }
+      assert commands.any? { |args| args.include?("/definition/deployment_startup_inventory.rb") && args.include?("/plan/definition.json") }
+      refute commands.any? { |args| args.include?("/inventory.rb") }
       refute commands.any? { |args| args.include?("/prepare.rb") || args.include?("candidate-images.yml") }
       refute commands.any? { |args| args.first == "compose" && args.last == "rs_server_setup" }
     end

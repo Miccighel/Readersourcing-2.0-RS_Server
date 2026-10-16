@@ -95,6 +95,9 @@ class DeploymentOperationDiagnosticTest(unittest.TestCase):
             manifest = root / "OPERATIONS-SHA256SUMS"
             manifest.write_text("".join(lines))
             self.assertTrue(MODULE.public_manifest_verified(root))
+            manifest.write_text("".join(line for line in lines if not line.endswith("  deployment_startup_inventory.rb\n")))
+            self.assertTrue(MODULE.public_manifest_verified(root))
+            manifest.write_text("".join(lines))
             (root / "startup_inventory.rb").write_text("changed")
             self.assertFalse(MODULE.public_manifest_verified(root))
             (root / "startup_inventory.rb").unlink()

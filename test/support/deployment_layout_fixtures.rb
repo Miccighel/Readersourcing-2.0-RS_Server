@@ -31,7 +31,7 @@ module DeploymentLayoutFixtures
           "Mounts" => bindings.select { |mount| mount["Type"] == "bind" }.map { |mount| {"Type" => "bind", "Source" => mount["Source"], "Target" => mount["Destination"], "ReadOnly" => true} }},
         "Mounts" => bindings, "NetworkSettings" => {"Networks" => {"#{PROJECT}_default" => {"IPAddress" => "172.18.0.2"}}},
         "State" => {"Status" => service == "rs_server_setup" ? "exited" : "running", "Running" => service != "rs_server_setup", "StartedAt" => "2026-10-15T10:00:00Z", "ExitCode" => 0,
-          "Paused" => false, "Restarting" => false, "Dead" => false}}
+          "Paused" => false, "Restarting" => false, "Dead" => false, "OOMKilled" => false}}
     end
   end
 

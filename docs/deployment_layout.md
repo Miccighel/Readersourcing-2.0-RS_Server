@@ -106,7 +106,14 @@ Docker may represent the default OOM setting as either `null` or `false`:
 The replacement comparison accepts only the transition from an explicit `null` source value to an explicit `false`
 replacement value, with `oom_kill_disable` absent or `false` in the approved definition. It does not accept `true`,
 a missing inspection field or changes to other resource and isolation settings. Retained database and setup
-containers and subsequent startup inventory checks still use their exact settings.
+containers still use their exact settings.
+
+At runtime, [Moby may clear the OOM flag when the kernel does not support that option](https://github.com/moby/moby/blob/v28.3.2/daemon/daemon_unix.go#L441).
+The final operational commands therefore use `deployment_startup_inventory.rb`, a restricted adapter over the
+original inventory checker. For the three replacement services only, it compares an explicit `false` or `null` as
+the same default, provided the checked definition leaves `oom_kill_disable` absent or `false`. It rejects `true`,
+missing fields and other JSON types in both the frozen and current inventories. All other settings and the retained
+database and setup inventories remain exact. The original checker and the stored inventory are not rewritten.
 
 A separately verified resume command can continue a recorded interruption after stopped replacements were created.
 It checks the original package, installed helper manifest, prepared plan, runtime files and retained checkpoint.
@@ -125,10 +132,22 @@ Only fixed field names, value shapes, comparison results and predefined error ca
 approve inventory differences, change the frozen baseline, execute the installed operational commands or start
 services. Its nine dedicated tests cover redaction, exact boolean handling, path selection and helper integrity.
 
+A guarded completion procedure handles the recorded interruption after the replacements have already started.
+It checks the installed software against the verified resume package and its retained manifest, proves that the
+frozen inventory is still the one prepared before the first start, and validates the current containers with the
+restricted runtime adapter. Access and the application must remain stopped, while the database and mail service
+must remain running. Recorded data fingerprints must agree before and after the interrupted attempt and with fresh
+read only probes and the verified backup. Only the operational adapter, its new inventory helper and the public
+helper manifest are installed. Configuration, secrets, images and the frozen inventory remain unchanged.
+The continuation checks application readiness and data preservation before reopening access, then runs the
+installed command check and isolated recovery rehearsal. It preserves database, completed setup and Mailpit
+identities and lifecycle. A failure does not automatically restore data or refresh the acceptance baseline.
+
 This procedure does not configure automatic startup or recurring backups, update host packages, restart Docker,
 reboot the host, publish an image or expose the application publicly.
 
-The standalone deployment suite passed on October 15 with 120 tests and 1,146 assertions. It covers both the
+The standalone deployment suite passed on October 16 with 133 tests and 1,261 assertions. It covers both the
 original recovery procedure and the new layout adapter, archive validation, stopped replacement checks and failure
-handling, the guarded resume checkpoint and the validator's default OOM comparison. The five read only diagnostic
-tests also passed. These local results do not assert that the installation, resume or recovery rehearsal has run on Homer.
+handling, the guarded resume and completion checkpoints and the validator's default OOM comparison. The fourteen
+read only diagnostic tests also passed. These local results do not assert that installation, completion or recovery
+rehearsal has succeeded on Homer.
