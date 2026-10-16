@@ -28,6 +28,13 @@ expired and renewed download links, and subscribed and unsubscribed rating notic
 
 ## Image preparation
 
+The [publication list candidate record](container-ui-candidate-2.0.4.json) fixes the source revision and reference
+archive for the missing title display. Its separate local tag is `rs-server-candidate:v2.0.4-ui-7779c5a-amd64`.
+The public build and verification package was checksum checked locally and on Homer. Native build, runtime
+verification, a separate image scan and isolated application acceptance are still pending; preparing those inputs
+does not change the active image or approve a release. The candidate retains version 2.0.4 because that version
+has not been published. Earlier candidate tags and the image running on Homer are not overwritten.
+
 Use a dedicated checkout or a clean source snapshot from `codex/development`, with no private configuration,
 reader files, or credentials. On a Linux amd64 host, build a new local tag from the existing Dockerfile:
 
