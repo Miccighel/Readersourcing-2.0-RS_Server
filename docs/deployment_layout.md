@@ -118,6 +118,13 @@ performs the same readiness, data preservation and isolated recovery checks requ
 reinstall configuration, recreate service containers or restore over the active database. A rejected checkpoint is
 not automatically retried with a new baseline. Local test results do not establish that a host resume has succeeded.
 
+If a resumed activation stops at the installed command check, `deploy/private/deployment_operation_diagnostic.py`
+provides a separate read only diagnosis of that recorded attempt. It checks public helper hashes, context and
+configuration records, expected path permissions, backup archive integrity and the frozen container inventory.
+Only fixed field names, value shapes, comparison results and predefined error categories are reported. It does not
+approve inventory differences, change the frozen baseline, execute the installed operational commands or start
+services. Its nine dedicated tests cover redaction, exact boolean handling, path selection and helper integrity.
+
 This procedure does not configure automatic startup or recurring backups, update host packages, restart Docker,
 reboot the host, publish an image or expose the application publicly.
 
