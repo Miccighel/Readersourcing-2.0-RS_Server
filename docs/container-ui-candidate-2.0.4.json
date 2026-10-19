@@ -29,14 +29,24 @@
   "runtime_verification_report_sha256": "52dd82cabbe73b04d786a273899422843df93abbcfef95b0464c5015d34e8f0e",
   "source_ci": "https://github.com/Miccighel/Readersourcing-2.0-RS_Server/actions/runs/38923574204",
   "new_image_security_scan": "Completed on 2026-10-16T15:37:19Z; security-ui-candidate-2026-10-16.json; eight HIGH operating system advisories remain open, no CRITICAL and no advisories in the application libraries detected by Trivy",
-  "isolated_application_acceptance": "Pending operator execution of the isolated application check; no access to active data or installation is authorized by this preparation",
+  "isolated_application_acceptance": "Not confirmed: the first operator attempt stopped during fresh_configuration; active container identities and lifecycle were verified unchanged; read only diagnosis pending",
   "isolated_acceptance_package": {
     "prepared_on": "2026-10-19",
     "manifest_sha256": "a79219590140017d8094939e44ce4f1478d5f4a05c99d8c53bac00452ddcd19d",
     "checksums_verified_locally_and_on_homer": true,
     "configuration_tests": "Five Ruby tests, 37 assertions; five Python orchestration guard tests",
     "real_compose_configuration_round_trip": "Passed with generated synthetic configuration, without starting services",
-    "operator_execution": "Pending"
+    "operator_execution": "Stopped during fresh_configuration; application acceptance has not passed"
+  },
+  "acceptance_helper_validation": {
+    "revision": "82ba1c480449e393f70f989643ecf0c60655b737",
+    "local_ruby_tests": 433,
+    "local_ruby_assertions": 3609,
+    "local_python_tests": 35,
+    "failures_errors_or_skips": 0,
+    "temporary_local_database_stopped_after_tests": true,
+    "ci": "https://github.com/Miccighel/Readersourcing-2.0-RS_Server/actions/runs/39234302458",
+    "ci_result": "All jobs passed; source tests, operational helper tests, dependency audits, image build, and separate private trial checks; not an acceptance result for the Homer image"
   },
   "private_trial_replaced": false,
   "registry_image_published": false,
