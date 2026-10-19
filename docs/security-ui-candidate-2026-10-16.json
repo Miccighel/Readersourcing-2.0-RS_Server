@@ -1,0 +1,73 @@
+{
+  "status": "scan_completed",
+  "recorded_at": "2026-10-16T15:37:19Z",
+  "image_id": "sha256:8304d4b3f8aa7cdbf96fa0929d0282bf95cb9448854200db4bce8810786a0a5c",
+  "source_revision": "7779c5a3bde017e0f374b17ff33b72427a58b5e6",
+  "platform": "linux/amd64",
+  "scanner": "Trivy 0.75.0",
+  "scanner_reference": "aquasec/trivy@sha256:9db099105405c648166e6b94155eb32f8da12673cf1f455207f7385cc9a77283",
+  "image_archive_sha256": "73b5f732d7e4c31b26e6e17f1529c0ea1a5ee3df6d99f673ec193a653a3818ba",
+  "full_report_sha256": "4df9b2da9780d8e36e6cea63147e1f47c8c73e38a6df18a09f482640502c1b09",
+  "vulnerability_database": {
+    "Version": 2,
+    "NextUpdate": "2026-10-17T01:13:54.947090202Z",
+    "UpdatedAt": "2026-10-16T01:13:54.947090392Z",
+    "DownloadedAt": "2026-10-16T15:37:16.241054578Z"
+  },
+  "java_database": {
+    "Version": 1,
+    "NextUpdate": "2026-10-17T01:07:18.515664021Z",
+    "UpdatedAt": "2026-10-14T01:07:18.515664291Z",
+    "DownloadedAt": "2026-10-14T09:40:24.922626626Z"
+  },
+  "os": {
+    "Family": "debian",
+    "Name": "13.7"
+  },
+  "scopes": {
+    "os-pkgs": {
+      "unique_packages_by_type": {
+        "debian": 100
+      },
+      "finding_occurrences": 198,
+      "distinct_advisories": 88,
+      "severity_counts": {
+        "UNKNOWN": 1,
+        "LOW": 47,
+        "MEDIUM": 32,
+        "HIGH": 8,
+        "CRITICAL": 0
+      }
+    },
+    "lang-pkgs": {
+      "unique_packages_by_type": {
+        "jar": 19,
+        "node-pkg": 1,
+        "gemspec": 182
+      },
+      "finding_occurrences": 0,
+      "distinct_advisories": 0,
+      "severity_counts": {
+        "UNKNOWN": 0,
+        "LOW": 0,
+        "MEDIUM": 0,
+        "HIGH": 0,
+        "CRITICAL": 0
+      }
+    }
+  },
+  "severity_count_rule": "Highest reported severity per distinct advisory within each scope; scopes are not combined",
+  "advisories_excluded": false,
+  "unfixed_advisories_retained": true,
+  "image_inventory_uploaded": false,
+  "network_disabled_during_analysis": true,
+  "docker_socket_mounted_in_scanner": false,
+  "personal_files_or_trial_volumes_mounted": false,
+  "private_trial_replaced": false,
+  "security_approval": "Pending review of the full report",
+  "coverage_limit": "Detected operating system, Ruby and Java packages; no guarantee that every shaded component was identified",
+  "full_report_checksum_independently_verified": true,
+  "finding_inventory_matches_oct14_pdf_candidate": true,
+  "verification_recorded_on": "2026-10-19",
+  "historical_scan_not_a_current_security_approval": true
+}

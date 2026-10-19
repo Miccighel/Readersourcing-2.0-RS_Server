@@ -30,10 +30,20 @@ expired and renewed download links, and subscribed and unsubscribed rating notic
 
 The [publication list candidate record](container-ui-candidate-2.0.4.json) fixes the source revision and reference
 archive for the missing title display. Its separate local tag is `rs-server-candidate:v2.0.4-ui-7779c5a-amd64`.
-The public build and verification package was checksum checked locally and on Homer. Native build, runtime
-verification, a separate image scan and isolated application acceptance are still pending; preparing those inputs
-does not change the active image or approve a release. The candidate retains version 2.0.4 because that version
+The public build and verification package was checksum checked locally and on Homer. Native build and runtime
+verification passed on October 16, including all 181 compared source files. The separate
+[image scan](security-ui-candidate-2026-10-16.json) completed that day; eight HIGH operating system advisories remain
+open. Isolated application acceptance is still pending. These checks do not change the active image or approve
+a release. The candidate retains version 2.0.4 because that version
 has not been published. Earlier candidate tags and the image running on Homer are not overwritten.
+
+The operator's isolated acceptance package creates a new database and synthetic reader, with no published ports
+or reused application volumes. It checks production readiness, authentication, the missing title label, PDF upload
+and annotation, downloads, opening a reader copy, and the paper rating reference after logout. It stops its own
+services afterward and retains their synthetic volumes and protected diagnostics. It does not install the image,
+read active configuration or backups, or replace a browser test. The shared implementation is in
+`deploy/private/image_acceptance.py`, with an exact resolved configuration check and a Rails probe sent on stdin.
+Only the operator's completed acceptance report can confirm that these application checks passed.
 
 Use a dedicated checkout or a clean source snapshot from `codex/development`, with no private configuration,
 reader files, or credentials. On a Linux amd64 host, build a new local tag from the existing Dockerfile:

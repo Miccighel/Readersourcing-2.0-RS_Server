@@ -9,7 +9,16 @@ not, by themselves, establish whether an application request can reach the affec
 The eight previously reported HIGH advisories were checked against the official Debian tracker. Trixie remains
 listed as vulnerable for each one, with no corrected version listed for that release. The
 [review record](security-review-2026-10-16.json) retains their references and prerequisites. This is a review of the
-existing findings, not a fresh image scan; the latest completed scan remains the October 15 assessment below.
+existing findings, not a fresh scan of the retained active image. The separate publication list candidate was
+subsequently scanned on October 16, as recorded below.
+
+The [publication list candidate scan](security-ui-candidate-2026-10-16.json) covers image
+`sha256:8304d4b3f8aa7cdbf96fa0929d0282bf95cb9448854200db4bce8810786a0a5c`, built from commit
+`7779c5a3bde017e0f374b17ff33b72427a58b5e6`. Its full report checksum was independently verified. Its 198 advisory
+occurrences, including installed package versions, reported severities and correction fields, match the October 14
+PDF navigation candidate report: eight distinct HIGH operating system advisories, no CRITICAL advisories and none
+in the application libraries detected by Trivy. No finding was excluded. This is a dated scan, not a current
+security approval or evidence of complete shaded component coverage. The new image has not replaced the active trial.
 
 The affected components differ from the source package labels reported by a scanner:
 

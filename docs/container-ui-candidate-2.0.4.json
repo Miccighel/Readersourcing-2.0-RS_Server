@@ -1,5 +1,5 @@
 {
-  "status": "Source and verification package prepared; native image build requires operator execution",
+  "status": "Native image build and runtime verification passed; scan completed with open findings; isolated application acceptance pending",
   "prepared_on": "2026-10-16",
   "version": "2.0.4",
   "source_revision": "7779c5a3bde017e0f374b17ff33b72427a58b5e6",
@@ -10,7 +10,7 @@
   "target": {
     "platform": "linux/amd64",
     "local_tag": "rs-server-candidate:v2.0.4-ui-7779c5a-amd64",
-    "image_id": null,
+    "image_id": "sha256:8304d4b3f8aa7cdbf96fa0929d0282bf95cb9448854200db4bce8810786a0a5c",
     "retained_active_image_id": "sha256:e52ed41e7a62a5447923ec02f0bef0b61f285232afb58c7bdfc80020381b5ad5"
   },
   "application_difference_from_retained_image": "Missing publication titles display Title not available; no stored metadata replacement",
@@ -24,10 +24,20 @@
   "package_checksums_verified_locally_and_on_homer": true,
   "shell_and_ruby_syntax_checks_passed": true,
   "synthetic_scan_summary_cases_passed": 4,
-  "image_built": false,
-  "image_runtime_verification": "Pending native build",
-  "new_image_security_scan": "Pending verified image identity; previous advisory counts must not be reused as a new result",
-  "isolated_application_acceptance": "Pending verified image and scan review; no access to active data or installation is authorized by this preparation",
+  "image_built": true,
+  "image_runtime_verification": "Passed on 2026-10-16T15:33:41Z; 181 exact Git source files, locked inputs, bundled and unbundled runtimes, PDF fixture and compiled assets verified; Rails and database not started by this check",
+  "runtime_verification_report_sha256": "52dd82cabbe73b04d786a273899422843df93abbcfef95b0464c5015d34e8f0e",
+  "source_ci": "https://github.com/Miccighel/Readersourcing-2.0-RS_Server/actions/runs/38923574204",
+  "new_image_security_scan": "Completed on 2026-10-16T15:37:19Z; security-ui-candidate-2026-10-16.json; eight HIGH operating system advisories remain open, no CRITICAL and no advisories in the application libraries detected by Trivy",
+  "isolated_application_acceptance": "Pending operator execution of the isolated application check; no access to active data or installation is authorized by this preparation",
+  "isolated_acceptance_package": {
+    "prepared_on": "2026-10-19",
+    "manifest_sha256": "a79219590140017d8094939e44ce4f1478d5f4a05c99d8c53bac00452ddcd19d",
+    "checksums_verified_locally_and_on_homer": true,
+    "configuration_tests": "Five Ruby tests, 37 assertions; five Python orchestration guard tests",
+    "real_compose_configuration_round_trip": "Passed with generated synthetic configuration, without starting services",
+    "operator_execution": "Pending"
+  },
   "private_trial_replaced": false,
   "registry_image_published": false,
   "host_packages_changed": false,
