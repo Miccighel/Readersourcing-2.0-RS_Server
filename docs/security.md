@@ -19,6 +19,8 @@ occurrences, including installed package versions, reported severities and corre
 PDF navigation candidate report: eight distinct HIGH operating system advisories, no CRITICAL advisories and none
 in the application libraries detected by Trivy. No finding was excluded. This is a dated scan, not a current
 security approval or evidence of complete shaded component coverage. The new image has not replaced the active trial.
+Its [isolated application acceptance](image-acceptance-2026-10-19.json) passed on October 19 with synthetic data and
+no published ports. Functional acceptance does not correct the affected packages or approve public exposure.
 
 The affected components differ from the source package labels reported by a scanner:
 

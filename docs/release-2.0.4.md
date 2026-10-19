@@ -33,8 +33,8 @@ archive for the missing title display. Its separate local tag is `rs-server-cand
 The public build and verification package was checksum checked locally and on Homer. Native build and runtime
 verification passed on October 16, including all 181 compared source files. The separate
 [image scan](security-ui-candidate-2026-10-16.json) completed that day; eight HIGH operating system advisories remain
-open. Isolated application acceptance is still pending. These checks do not change the active image or approve
-a release. The candidate retains version 2.0.4 because that version
+open. [Isolated application acceptance](image-acceptance-2026-10-19.json) passed on October 19. These checks do not
+change the active image or approve a release. The candidate retains version 2.0.4 because that version
 has not been published. Earlier candidate tags and the image running on Homer are not overwritten.
 
 The operator's isolated acceptance package creates a new database and synthetic reader, with no published ports
@@ -43,14 +43,23 @@ and annotation, downloads, opening a reader copy, and the paper rating reference
 services afterward and retains their synthetic volumes and protected diagnostics. It does not install the image,
 read active configuration or backups, or replace a browser test. The shared implementation is in
 `deploy/private/image_acceptance.py`, with an exact resolved configuration check and a Rails probe sent on stdin.
-Only the operator's completed acceptance report can confirm that these application checks passed.
+The operator's completed aggregate report confirms that these application checks passed on the exact image.
 
 The first operator attempt stopped before application startup because Compose 2.39.1 on Homer omits
 `create_host_path: false` when serializing the public PDF fixture bind. This omission was reproduced with synthetic
 configuration and no services started. The comparison accepts only that omitted false field for the exact read
 only fixture bind; the input retains explicit false. A true value or any other configuration difference still
-blocks startup. The corrected comparison passed on Homer with synthetic inputs. Application acceptance remains
-pending until the operator completes the isolated run.
+blocks startup. The corrected comparison passed on Homer with synthetic inputs, followed by successful application
+acceptance in a new isolated project.
+
+The accepted image passed production readiness, login and token revocation, the missing title label without a
+stored metadata rewrite, upload and annotation of the synthetic PDF, both PDF downloads, copy opening, and the
+authenticated paper rating page. The paper reference and prepared download remained valid after logout while
+the authentication token was rejected. No rating was submitted. These were Rack requests inside the isolated
+production application, not a browser test; registration and password reset were not repeated by this probe.
+The existing deployment's container identities and lifecycle were unchanged. Only the new database ran migrations,
+and the isolated services were stopped after checks, retaining their synthetic volumes and protected diagnostics.
+The image was neither installed nor published, and the remaining security findings are not closed by this result.
 
 Use a dedicated checkout or a clean source snapshot from `codex/development`, with no private configuration,
 reader files, or credentials. On a Linux amd64 host, build a new local tag from the existing Dockerfile:

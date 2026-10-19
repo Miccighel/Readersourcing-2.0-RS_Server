@@ -1,5 +1,5 @@
 {
-  "status": "Native image build and runtime verification passed; scan completed with open findings; isolated application acceptance pending",
+  "status": "Native image build, runtime verification and isolated application acceptance passed; scan completed with open findings; candidate not installed or published",
   "prepared_on": "2026-10-16",
   "version": "2.0.4",
   "source_revision": "7779c5a3bde017e0f374b17ff33b72427a58b5e6",
@@ -29,7 +29,7 @@
   "runtime_verification_report_sha256": "52dd82cabbe73b04d786a273899422843df93abbcfef95b0464c5015d34e8f0e",
   "source_ci": "https://github.com/Miccighel/Readersourcing-2.0-RS_Server/actions/runs/38923574204",
   "new_image_security_scan": "Completed on 2026-10-16T15:37:19Z; security-ui-candidate-2026-10-16.json; eight HIGH operating system advisories remain open, no CRITICAL and no advisories in the application libraries detected by Trivy",
-  "isolated_application_acceptance": "Not confirmed: first attempt stopped during fresh_configuration with active lifecycle unchanged; Compose 2.39 false field omission reproduced on synthetic inputs and comparison corrected; new isolated operator run pending",
+  "isolated_application_acceptance": "Passed on 2026-10-19T10:55:52Z; image-acceptance-2026-10-19.json; new production application and database only, active deployment unchanged, no browser test or security approval",
   "isolated_acceptance_package": {
     "prepared_on": "2026-10-19",
     "manifest_sha256": "05e99a8b74e7840a7a3d89280d1e8f7ca64afb3f190de3cb8ac6fe5d92fe8b6c",
@@ -38,7 +38,7 @@
     "real_compose_configuration_round_trip": "Passed with synthetic configuration on local Compose 5.6.0 and Homer Compose 2.39.1; no services started",
     "compatibility_scope": "Only omission of create_host_path: false in the resolved public Reader.pdf bind; explicit false remains in the input and true or any other change is rejected",
     "previous_attempt_manifest_sha256": "a79219590140017d8094939e44ce4f1478d5f4a05c99d8c53bac00452ddcd19d",
-    "operator_execution": "Corrected package verified locally and on Homer; new isolated application run pending"
+    "operator_execution": "Passed on 2026-10-19T10:55:52Z; isolated services stopped, synthetic volumes retained; previous attempt retained without modification"
   },
   "acceptance_helper_validation": {
     "revision": "82ba1c480449e393f70f989643ecf0c60655b737",
