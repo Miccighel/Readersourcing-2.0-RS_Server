@@ -45,6 +45,13 @@ read active configuration or backups, or replace a browser test. The shared impl
 `deploy/private/image_acceptance.py`, with an exact resolved configuration check and a Rails probe sent on stdin.
 Only the operator's completed acceptance report can confirm that these application checks passed.
 
+The first operator attempt stopped before application startup because Compose 2.39.1 on Homer omits
+`create_host_path: false` when serializing the public PDF fixture bind. This omission was reproduced with synthetic
+configuration and no services started. The comparison accepts only that omitted false field for the exact read
+only fixture bind; the input retains explicit false. A true value or any other configuration difference still
+blocks startup. The corrected comparison passed on Homer with synthetic inputs. Application acceptance remains
+pending until the operator completes the isolated run.
+
 Use a dedicated checkout or a clean source snapshot from `codex/development`, with no private configuration,
 reader files, or credentials. On a Linux amd64 host, build a new local tag from the existing Dockerfile:
 

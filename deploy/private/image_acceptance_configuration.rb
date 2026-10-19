@@ -31,12 +31,27 @@ class ImageAcceptanceConfiguration
   end
 
   def validate!(resolved)
-    raise Error, "Resolved acceptance configuration differs" unless resolved == definition
+    raise Error, "Resolved acceptance configuration differs" unless comparable(resolved) == comparable(definition)
     {"status" => "isolated_image_definition_verified", "published_ports" => false,
       "active_volumes_reused" => false, "images_pinned" => true}
   end
 
   private
+
+  # Compose 2.39 omits this false field in config output; the input keeps it explicit.
+  # Restrict the equivalence to the one public fixture bind. True remains a difference.
+  def comparable(configuration)
+    result = JSON.parse(JSON.generate(configuration))
+    mounts = result.fetch("services").fetch("rs_server_webapp").fetch("volumes")
+    mounts.each do |mount|
+      next unless mount["type"] == "bind" && mount["source"] == File.join(@base, "fixtures/Reader.pdf") &&
+        mount["target"] == "/acceptance/Reader.pdf" && mount["read_only"] == true && mount["bind"].is_a?(Hash)
+      mount["bind"].delete("create_host_path") if mount["bind"]["create_host_path"] == false
+    end
+    result
+  rescue KeyError, TypeError, NoMethodError
+    raise Error, "Incomplete isolated acceptance input"
+  end
 
   def validate_source!
     raise Error, "Unsafe acceptance identity" unless @project.match?(/\Ars-private-[0-9a-f]{12}\z/) &&

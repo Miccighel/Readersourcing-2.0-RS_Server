@@ -92,6 +92,32 @@ class ImageAcceptanceConfigurationTest < Minitest::Test
     refute_includes error.message, "synthetic-secret"
   end
 
+  def test_accepts_only_the_fixture_false_field_elision_observed_in_compose_239
+    resolved = checker.definition
+    resolved["services"]["rs_server_webapp"]["volumes"].last.fetch("bind").delete("create_host_path")
+    original = JSON.generate(resolved)
+    assert_equal "isolated_image_definition_verified", checker.validate!(resolved).fetch("status")
+    assert_equal original, JSON.generate(resolved)
+    assert_equal false, checker.definition.dig("services", "rs_server_webapp", "volumes").last.dig("bind", "create_host_path")
+  end
+
+  def test_false_field_compatibility_does_not_relax_other_bind_or_volume_checks
+    [
+      ->(mount) { mount["bind"]["create_host_path"] = true },
+      ->(mount) { mount["source"] = "/unrelated/private/file" },
+      ->(mount) { mount["target"] = "/another/target" },
+      ->(mount) { mount["read_only"] = false },
+      ->(mount) { mount["bind"]["unrecognized_option"] = true }
+    ].each do |change|
+      resolved = checker.definition
+      change.call(resolved["services"]["rs_server_webapp"]["volumes"].last)
+      assert_raises(ImageAcceptanceConfiguration::Error) { checker.validate!(resolved) }
+    end
+    resolved = checker.definition
+    resolved["services"]["rs_server_setup"]["volumes"].last["bind"] = {"create_host_path" => false}
+    assert_raises(ImageAcceptanceConfiguration::Error) { checker.validate!(resolved) }
+  end
+
   private
 
   def checker(**overrides)
